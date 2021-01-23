@@ -351,3 +351,20 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+intermediate/gaUtilities/Win32/Debug_DLL/gaUtilities.tlog/CL.command.1.tlog
+intermediate/gaUtilities/Win32/Debug_DLL/gaUtilities.tlog/CL.read.1.tlog
+intermediate/gaUtilities/Win32/Debug_DLL/gaUtilities.tlog/CL.write.1.tlog
+intermediate/gaUtilities/Win32/Debug_DLL/gaUtilities.tlog/gaUtilities.lastbuildstate
+intermediate/gaUtilities/Win32/Debug_DLL/gaUtilities.tlog/link.command.1.tlog
+intermediate/gaUtilities/Win32/Debug_DLL/gaUtilities.tlog/link.read.1.tlog
+intermediate/gaUtilities/Win32/Debug_DLL/gaUtilities.tlog/link.write.1.tlog
+intermediate/gaUtilities/Win32/Debug_DLL/gaUtilities_d.dll.recipe
+intermediate/gaUtilities/Win32/Debug_DLL/vc142.idb
+intermediate/gaUtilities/Win32/Release_DLL/gaUtilities.dll.recipe
+intermediate/gaUtilities/Win32/Release_DLL/gaUtilities.tlog/CL.command.1.tlog
+intermediate/gaUtilities/Win32/Release_DLL/gaUtilities.tlog/CL.read.1.tlog
+intermediate/gaUtilities/Win32/Release_DLL/gaUtilities.tlog/CL.write.1.tlog
+intermediate/gaUtilities/Win32/Release_DLL/gaUtilities.tlog/gaUtilities.lastbuildstate
+intermediate/gaUtilities/Win32/Release_DLL/gaUtilities.tlog/link.command.1.tlog
+intermediate/gaUtilities/Win32/Release_DLL/gaUtilities.tlog/link.read.1.tlog
+intermediate/gaUtilities/Win32/Release_DLL/gaUtilities.tlog/link.write.1.tlog

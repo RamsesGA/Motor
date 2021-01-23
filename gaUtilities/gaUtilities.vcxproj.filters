@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Archivos de origen">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;hpp;h;</Extensions>
+    </Filter>
+    <Filter Include="Archivos de origen\Prerequisites">
+      <UniqueIdentifier>{696a0d10-d413-450e-8c5c-f6cf1565fc7f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\deleteme.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\gaPlatformDefines.h">
+      <Filter>Archivos de origen\Prerequisites</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaPlatformTypes.h">
+      <Filter>Archivos de origen</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
