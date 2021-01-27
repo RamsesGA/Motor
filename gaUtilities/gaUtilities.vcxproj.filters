@@ -8,18 +8,27 @@
     <Filter Include="Archivos de origen\Prerequisites">
       <UniqueIdentifier>{696a0d10-d413-450e-8c5c-f6cf1565fc7f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Math">
+      <UniqueIdentifier>{e5725446-f8be-436e-b77f-44f59e16af3c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\deleteme.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="src\gaVector2I.cpp">
+      <Filter>Archivos de origen\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\gaPlatformDefines.h">
-      <Filter>Archivos de origen\Prerequisites</Filter>
-    </ClInclude>
     <ClInclude Include="include\gaPlatformTypes.h">
       <Filter>Archivos de origen</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaPlatformDefines.h">
+      <Filter>Archivos de origen</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaVector2I.h">
+      <Filter>Archivos de origen\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

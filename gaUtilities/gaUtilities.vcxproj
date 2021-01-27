@@ -170,10 +170,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\deleteme.cpp" />
+    <ClCompile Include="src\gaVector2I.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gaPlatformDefines.h" />
     <ClInclude Include="include\gaPlatformTypes.h" />
+    <ClInclude Include="include\gaVector2I.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
