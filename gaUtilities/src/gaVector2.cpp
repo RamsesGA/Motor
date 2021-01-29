@@ -1,9 +1,9 @@
 
 #include <cmath>
 
-#include <gaVector2I.h>
+#include <gaVector2.h>
 
-Vector2I::Vector2I(int32 x, int32 y){
+Vector2::Vector2(float x, float y){
   m_x = x;
   m_y = y;
 }
@@ -14,25 +14,23 @@ Vector2I::Vector2I(int32 x, int32 y){
 */
 /*************************************************************************/
 
-int32 Vector2I::magnitude(){
+float Vector2::magnitude() {
   return (std::sqrtf((m_x * m_x) + (m_y * m_y)));
 }
 
-void Vector2I::normalize(){
+void Vector2::normalize() {
   float magn = magnitude();
 
   if (magn > 0.0f) {
     float oneOverMag = 1.0f / magn;
-
     m_x = m_x * oneOverMag;
     m_y = m_y * oneOverMag;
   }
-
   m_x = 0.0f;
   m_y = 0.0f;
 }
 
-int32 Vector2I::dotProduct(const Vector2I& vector) const{
+float Vector2::dotProduct(const Vector2& vector) const {
   return (m_x * vector.m_x) + (m_y * vector.m_y);
 }
 
@@ -42,92 +40,92 @@ int32 Vector2I::dotProduct(const Vector2I& vector) const{
 */
 /*************************************************************************/
 
-bool Vector2I::operator<(const Vector2I& vector){
+bool Vector2::operator<(const Vector2& vector) {
   if (m_x < vector.m_x && m_y < vector.m_y) {
     return true;
   }
   return false;
 }
 
-bool Vector2I::operator<=(const Vector2I& vector){
+bool Vector2::operator<=(const Vector2& vector) {
   if (m_x <= vector.m_x && m_y <= vector.m_y) {
     return true;
   }
   return false;
 }
 
-bool Vector2I::operator>(const Vector2I& vector){
+bool Vector2::operator>(const Vector2& vector) {
   if (m_x > vector.m_x && m_y > vector.m_y) {
     return true;
   }
   return false;
 }
 
-bool Vector2I::operator>=(const Vector2I& vector){
+bool Vector2::operator>=(const Vector2& vector) {
   if (m_x >= vector.m_x && m_y >= vector.m_y) {
     return true;
   }
   return false;
 }
 
-Vector2I& Vector2I::operator=(const Vector2I& vector){
+Vector2& Vector2::operator=(const Vector2& vector) {
   m_x = vector.m_x;
   m_y = vector.m_y;
   return *this;
 }
 
-bool Vector2I::operator==(const Vector2I& vector){
+bool Vector2::operator==(const Vector2& vector) {
   if (m_x == vector.m_x && m_y == vector.m_y) {
     return true;
   }
   return false;
 }
 
-Vector2I Vector2I::operator+(const Vector2I& vector) const{
-  return Vector2I(m_x + vector.m_x, m_y + vector.m_y);
+Vector2 Vector2::operator+(const Vector2& vector) const {
+  return Vector2(m_x + vector.m_x, m_y + vector.m_y);
 }
 
-Vector2I& Vector2I::operator+=(const Vector2I& vector){
+Vector2& Vector2::operator+=(const Vector2& vector) {
   m_x += vector.m_x;
   m_y += vector.m_y;
   return *this;
 }
 
-Vector2I Vector2I::operator-(const Vector2I& vector) const{
-  return Vector2I(m_x - vector.m_x, m_y - vector.m_y);
+Vector2 Vector2::operator-(const Vector2& vector) const {
+  return Vector2(m_x - vector.m_x, m_y - vector.m_y);
 }
 
-Vector2I& Vector2I::operator-=(const Vector2I& vector){
+Vector2& Vector2::operator-=(const Vector2& vector) {
   m_x -= vector.m_x;
   m_y -= vector.m_y;
   return *this;
 }
 
-Vector2I Vector2I::operator*(const int32 vector) const{
-  return Vector2I(vector * m_x, vector * m_y);
+Vector2 Vector2::operator*(const float vector) const {
+  return Vector2(vector * m_x, vector * m_y);
 }
 
-Vector2I& Vector2I::operator*=(const int32 vector){
+Vector2& Vector2::operator*=(const float vector) {
   m_x *= vector;
   m_y *= vector;
   return *this;
 }
 
-Vector2I Vector2I::operator/(const int32 vector) const{
-  return Vector2I(m_x / vector, m_y / vector);
+Vector2 Vector2::operator/(const float vector) const {
+  return Vector2(m_x / vector, m_y / vector);
 }
 
-Vector2I& Vector2I::operator/=(const int32 vector){
+Vector2& Vector2::operator/=(const float vector) {
   m_x = m_x / vector;
   m_y = m_y / vector;
   return *this;
 }
 
-Vector2I Vector2I::operator*(const Vector2I& vector) const{
-  Vector2I vectorTemp;
+Vector2 Vector2::operator*(const Vector2& vector) const {
+  Vector2 vectorTemp;
 
-  return Vector2I(vectorTemp.m_x = m_x * vector.m_x,
-                  vectorTemp.m_y = m_y * vector.m_y);
+  return Vector2(vectorTemp.m_x = m_x * vector.m_x,
+    vectorTemp.m_y = m_y * vector.m_y);
 }
 
 /*************************************************************************/
@@ -136,10 +134,10 @@ Vector2I Vector2I::operator*(const Vector2I& vector) const{
 */
 /*************************************************************************/
 
-int32 Vector2I::getX(){
+float Vector2::getX(){
   return m_x;
 }
 
-int32 Vector2I::getY(){
+float Vector2::getY() {
   return m_y;
 }
