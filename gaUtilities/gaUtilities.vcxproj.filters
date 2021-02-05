@@ -19,6 +19,24 @@
     <ClCompile Include="src\gaVector2I.cpp">
       <Filter>Archivos de origen\Math</Filter>
     </ClCompile>
+    <ClCompile Include="src\gaVector2.cpp">
+      <Filter>Archivos de origen\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaVector3.cpp">
+      <Filter>Archivos de origen\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaVector4.cpp">
+      <Filter>Archivos de origen\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaMath.cpp">
+      <Filter>Archivos de origen\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaRadians.cpp">
+      <Filter>Archivos de origen\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaDegrees.cpp">
+      <Filter>Archivos de origen\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gaPlatformTypes.h">
@@ -28,6 +46,24 @@
       <Filter>Archivos de origen</Filter>
     </ClInclude>
     <ClInclude Include="include\gaVector2I.h">
+      <Filter>Archivos de origen\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaVector2.h">
+      <Filter>Archivos de origen\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaVector3.h">
+      <Filter>Archivos de origen\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaVector4.h">
+      <Filter>Archivos de origen\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaMath.h">
+      <Filter>Archivos de origen\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaRadians.h">
+      <Filter>Archivos de origen\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaDegrees.h">
       <Filter>Archivos de origen\Math</Filter>
     </ClInclude>
   </ItemGroup>

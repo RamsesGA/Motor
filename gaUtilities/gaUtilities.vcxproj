@@ -170,12 +170,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\deleteme.cpp" />
+    <ClCompile Include="src\gaDegrees.cpp" />
+    <ClCompile Include="src\gaMath.cpp" />
+    <ClCompile Include="src\gaRadians.cpp" />
+    <ClCompile Include="src\gaVector2.cpp" />
     <ClCompile Include="src\gaVector2I.cpp" />
+    <ClCompile Include="src\gaVector3.cpp" />
+    <ClCompile Include="src\gaVector4.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\gaDegrees.h" />
+    <ClInclude Include="include\gaMath.h" />
     <ClInclude Include="include\gaPlatformDefines.h" />
     <ClInclude Include="include\gaPlatformTypes.h" />
+    <ClInclude Include="include\gaRadians.h" />
+    <ClInclude Include="include\gaVector2.h" />
     <ClInclude Include="include\gaVector2I.h" />
+    <ClInclude Include="include\gaVector3.h" />
+    <ClInclude Include="include\gaVector4.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
