@@ -8,11 +8,6 @@ class Vector2I
 {
   public:
     /**
-    * @brief Constructor.
-    */
-    Vector2I() = default;
-
-    /**
     * @brief Constructor to start a vector with x and y.
     */
     Vector2I(int32 x = 0, int32 y = 0);

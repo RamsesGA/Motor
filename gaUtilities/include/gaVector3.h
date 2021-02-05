@@ -4,11 +4,6 @@ class Vector3
 {
   public:
     /**
-    * @brief Constructor.
-    */
-    Vector3() = default;
-  
-    /**
     * @brief Constructor to start a vector with x and y.
     */
     Vector3(float x = 0.0f, 

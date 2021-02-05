@@ -4,11 +4,6 @@ class Vector2
 {
   public:
     /**
-    * @brief Constructor.
-    */
-    Vector2() = default;
-  
-    /**
     * @brief Constructor to start a vector with x and y.
     */
     Vector2(float x = 0.0f, float y = 0.0f);
