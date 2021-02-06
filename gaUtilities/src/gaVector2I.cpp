@@ -15,21 +15,22 @@ Vector2I::Vector2I(int32 x, int32 y){
 /*************************************************************************/
 
 int32 Vector2I::magnitude(){
-  return (std::sqrtf((m_x * m_x) + (m_y * m_y)));
+  int32 temp = (int32)(std::sqrt((m_x * m_x) + (m_y * m_y)) + 0.5);
+  return temp;
 }
 
 void Vector2I::normalize(){
-  float magn = magnitude();
+  int32 magn = magnitude();
 
-  if (magn > 0.0f) {
-    float oneOverMag = 1.0f / magn;
+  if (magn > 0) {
+    int32 oneOverMag = 1 / magn;
 
     m_x = m_x * oneOverMag;
     m_y = m_y * oneOverMag;
   }
 
-  m_x = 0.0f;
-  m_y = 0.0f;
+  m_x = 0;
+  m_y = 0;
 }
 
 int32 Vector2I::dotProduct(const Vector2I& vector) const{
