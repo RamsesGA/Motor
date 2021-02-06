@@ -15,8 +15,7 @@ Vector2I::Vector2I(int32 x, int32 y){
 /*************************************************************************/
 
 int32 Vector2I::magnitude(){
-  int32 temp = (int32)(std::sqrt((m_x * m_x) + (m_y * m_y)) + 0.5);
-  return temp;
+  return static_cast<int32>(std::sqrt((m_x * m_x) + (m_y * m_y)));
 }
 
 void Vector2I::normalize(){

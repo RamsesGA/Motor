@@ -37,6 +37,12 @@
     <ClCompile Include="src\gaDegrees.cpp">
       <Filter>Archivos de origen\Math</Filter>
     </ClCompile>
+    <ClCompile Include="src\gaVector3I.cpp">
+      <Filter>Archivos de origen\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaVector4I.cpp">
+      <Filter>Archivos de origen\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gaPlatformTypes.h">
@@ -64,6 +70,12 @@
       <Filter>Archivos de origen\Math</Filter>
     </ClInclude>
     <ClInclude Include="include\gaDegrees.h">
+      <Filter>Archivos de origen\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaVector3I.h">
+      <Filter>Archivos de origen\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaVector4I.h">
       <Filter>Archivos de origen\Math</Filter>
     </ClInclude>
   </ItemGroup>
