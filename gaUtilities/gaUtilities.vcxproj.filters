@@ -43,6 +43,9 @@
     <ClCompile Include="src\gaVector4I.cpp">
       <Filter>Archivos de origen\Math</Filter>
     </ClCompile>
+    <ClCompile Include="src\gaMatrix4x4.cpp">
+      <Filter>Archivos de origen\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gaPlatformTypes.h">
@@ -76,6 +79,9 @@
       <Filter>Archivos de origen\Math</Filter>
     </ClInclude>
     <ClInclude Include="include\gaVector4I.h">
+      <Filter>Archivos de origen\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaMatrix4x4.h">
       <Filter>Archivos de origen\Math</Filter>
     </ClInclude>
   </ItemGroup>
