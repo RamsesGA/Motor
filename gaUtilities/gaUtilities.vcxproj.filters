@@ -43,7 +43,7 @@
     <ClCompile Include="src\gaVector4I.cpp">
       <Filter>Archivos de origen\Math</Filter>
     </ClCompile>
-    <ClCompile Include="src\gaMatrix4x4.cpp">
+    <ClCompile Include="src\gaMatrix.cpp">
       <Filter>Archivos de origen\Math</Filter>
     </ClCompile>
   </ItemGroup>
@@ -81,7 +81,7 @@
     <ClInclude Include="include\gaVector4I.h">
       <Filter>Archivos de origen\Math</Filter>
     </ClInclude>
-    <ClInclude Include="include\gaMatrix4x4.h">
+    <ClInclude Include="include\gaMatrix.h">
       <Filter>Archivos de origen\Math</Filter>
     </ClInclude>
   </ItemGroup>
