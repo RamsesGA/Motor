@@ -3,143 +3,146 @@
 
 #include <gaVector2I.h>
 
-Vector2I::Vector2I(int32 x, int32 y){
-  m_x = x;
-  m_y = y;
-}
+namespace gaEngineSDK {
 
-/*************************************************************************/
-/**
-* Mathematical normal methods.
-*/
-/*************************************************************************/
-
-int32 Vector2I::magnitude(){
-  return static_cast<int32>(std::sqrt((m_x * m_x) + (m_y * m_y)));
-}
-
-void Vector2I::normalize(){
-  int32 magn = magnitude();
-
-  if (magn > 0) {
-    int32 oneOverMag = 1 / magn;
-
-    m_x = m_x * oneOverMag;
-    m_y = m_y * oneOverMag;
+  Vector2I::Vector2I(int32 x, int32 y) {
+    m_x = x;
+    m_y = y;
   }
 
-  m_x = 0;
-  m_y = 0;
-}
+  /*************************************************************************/
+  /**
+  * Mathematical normal methods.
+  */
+  /*************************************************************************/
 
-int32 Vector2I::dotProduct(const Vector2I& vector) const{
-  return (m_x * vector.m_x) + (m_y * vector.m_y);
-}
-
-/*************************************************************************/
-/**
-* Operator overload.
-*/
-/*************************************************************************/
-
-bool Vector2I::operator<(const Vector2I& vector){
-  if (m_x < vector.m_x && m_y < vector.m_y) {
-    return true;
+  int32 Vector2I::magnitude() {
+    return static_cast<int32>(std::sqrt((m_x * m_x) + (m_y * m_y)));
   }
-  return false;
-}
 
-bool Vector2I::operator<=(const Vector2I& vector){
-  if (m_x <= vector.m_x && m_y <= vector.m_y) {
-    return true;
+  void Vector2I::normalize() {
+    int32 magn = magnitude();
+
+    if (magn > 0) {
+      int32 oneOverMag = 1 / magn;
+
+      m_x = m_x * oneOverMag;
+      m_y = m_y * oneOverMag;
+    }
+
+    m_x = 0;
+    m_y = 0;
   }
-  return false;
-}
 
-bool Vector2I::operator>(const Vector2I& vector){
-  if (m_x > vector.m_x && m_y > vector.m_y) {
-    return true;
+  int32 Vector2I::dotProduct(const Vector2I& vector) const {
+    return (m_x * vector.m_x) + (m_y * vector.m_y);
   }
-  return false;
-}
 
-bool Vector2I::operator>=(const Vector2I& vector){
-  if (m_x >= vector.m_x && m_y >= vector.m_y) {
-    return true;
+  /*************************************************************************/
+  /**
+  * Operator overload.
+  */
+  /*************************************************************************/
+
+  bool Vector2I::operator<(const Vector2I& vector) {
+    if (m_x < vector.m_x && m_y < vector.m_y) {
+      return true;
+    }
+    return false;
   }
-  return false;
-}
 
-Vector2I& Vector2I::operator=(const Vector2I& vector){
-  m_x = vector.m_x;
-  m_y = vector.m_y;
-  return *this;
-}
-
-bool Vector2I::operator==(const Vector2I& vector){
-  if (m_x == vector.m_x && m_y == vector.m_y) {
-    return true;
+  bool Vector2I::operator<=(const Vector2I& vector) {
+    if (m_x <= vector.m_x && m_y <= vector.m_y) {
+      return true;
+    }
+    return false;
   }
-  return false;
-}
 
-Vector2I Vector2I::operator+(const Vector2I& vector) const{
-  return Vector2I(m_x + vector.m_x, m_y + vector.m_y);
-}
+  bool Vector2I::operator>(const Vector2I& vector) {
+    if (m_x > vector.m_x && m_y > vector.m_y) {
+      return true;
+    }
+    return false;
+  }
 
-Vector2I& Vector2I::operator+=(const Vector2I& vector){
-  m_x += vector.m_x;
-  m_y += vector.m_y;
-  return *this;
-}
+  bool Vector2I::operator>=(const Vector2I& vector) {
+    if (m_x >= vector.m_x && m_y >= vector.m_y) {
+      return true;
+    }
+    return false;
+  }
 
-Vector2I Vector2I::operator-(const Vector2I& vector) const{
-  return Vector2I(m_x - vector.m_x, m_y - vector.m_y);
-}
+  Vector2I& Vector2I::operator=(const Vector2I& vector) {
+    m_x = vector.m_x;
+    m_y = vector.m_y;
+    return *this;
+  }
 
-Vector2I& Vector2I::operator-=(const Vector2I& vector){
-  m_x -= vector.m_x;
-  m_y -= vector.m_y;
-  return *this;
-}
+  bool Vector2I::operator==(const Vector2I& vector) {
+    if (m_x == vector.m_x && m_y == vector.m_y) {
+      return true;
+    }
+    return false;
+  }
 
-Vector2I Vector2I::operator*(const int32 vector) const{
-  return Vector2I(vector * m_x, vector * m_y);
-}
+  Vector2I Vector2I::operator+(const Vector2I& vector) const {
+    return Vector2I(m_x + vector.m_x, m_y + vector.m_y);
+  }
 
-Vector2I& Vector2I::operator*=(const int32 vector){
-  m_x *= vector;
-  m_y *= vector;
-  return *this;
-}
+  Vector2I& Vector2I::operator+=(const Vector2I& vector) {
+    m_x += vector.m_x;
+    m_y += vector.m_y;
+    return *this;
+  }
 
-Vector2I Vector2I::operator/(const int32 vector) const{
-  return Vector2I(m_x / vector, m_y / vector);
-}
+  Vector2I Vector2I::operator-(const Vector2I& vector) const {
+    return Vector2I(m_x - vector.m_x, m_y - vector.m_y);
+  }
 
-Vector2I& Vector2I::operator/=(const int32 vector){
-  m_x = m_x / vector;
-  m_y = m_y / vector;
-  return *this;
-}
+  Vector2I& Vector2I::operator-=(const Vector2I& vector) {
+    m_x -= vector.m_x;
+    m_y -= vector.m_y;
+    return *this;
+  }
 
-Vector2I Vector2I::operator*(const Vector2I& vector) const{
-  Vector2I vectorTemp;
+  Vector2I Vector2I::operator*(const int32 vector) const {
+    return Vector2I(vector * m_x, vector * m_y);
+  }
 
-  return Vector2I(vectorTemp.m_x = m_x * vector.m_x,
-                  vectorTemp.m_y = m_y * vector.m_y);
-}
+  Vector2I& Vector2I::operator*=(const int32 vector) {
+    m_x *= vector;
+    m_y *= vector;
+    return *this;
+  }
 
-/*************************************************************************/
-/**
-* Gets.
-*/
-/*************************************************************************/
+  Vector2I Vector2I::operator/(const int32 vector) const {
+    return Vector2I(m_x / vector, m_y / vector);
+  }
 
-int32 Vector2I::getX(){
-  return m_x;
-}
+  Vector2I& Vector2I::operator/=(const int32 vector) {
+    m_x = m_x / vector;
+    m_y = m_y / vector;
+    return *this;
+  }
 
-int32 Vector2I::getY(){
-  return m_y;
+  Vector2I Vector2I::operator*(const Vector2I& vector) const {
+    Vector2I vectorTemp;
+
+    return Vector2I(vectorTemp.m_x = m_x * vector.m_x,
+      vectorTemp.m_y = m_y * vector.m_y);
+  }
+
+  /*************************************************************************/
+  /**
+  * Gets.
+  */
+  /*************************************************************************/
+
+  int32 Vector2I::getX() {
+    return m_x;
+  }
+
+  int32 Vector2I::getY() {
+    return m_y;
+  }
 }
