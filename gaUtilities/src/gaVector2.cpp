@@ -129,18 +129,4 @@ namespace gaEngineSDK {
     return Vector2(vectorTemp.m_x = m_x * vector.m_x,
       vectorTemp.m_y = m_y * vector.m_y);
   }
-
-  /*************************************************************************/
-  /**
-  * Gets.
-  */
-  /*************************************************************************/
-
-  float Vector2::getX() {
-    return m_x;
-  }
-
-  float Vector2::getY() {
-    return m_y;
-  }
 }

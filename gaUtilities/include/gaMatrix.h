@@ -3,6 +3,8 @@
 #include <vector>
 
 #include "gaPlatformTypes.h"
+#include "gaVector3.h"
+#include "gaVector2.h"
 
 namespace gaEngineSDK{
 
@@ -16,15 +18,28 @@ namespace gaEngineSDK{
       /*************************************************************************/
   
       /**
-      * @brief Take the column size, row size and an initial value for each cell.
-      *        This will let you create any matrix.
+      * @brief Take the column size, row size and generates automatically
+      *        identity matrix
       */
-      Matrix(int32 columnSize = 4, int32 rowSize = 4, float value = 0.0f);
+      Matrix(int32 columnSize = 3, int32 rowSize = 3);
   
       /**
       * @brief Copy the members of one class instance to another.
       */
       Matrix(const Matrix& matrix);
+
+      /**
+      * @brief Let you crate a matrix with only 3 vectors 3.
+      */
+      Matrix(const Vector3& vecX,
+             const Vector3& vecY,
+             const Vector3& vecZ);
+
+      /**
+      * @brief Let you crate a matrix with only 2 vectors 2.
+      */
+      Matrix(const Vector2& vecX,
+             const Vector2& vecY);
   
       ~Matrix() = default;
   
@@ -39,6 +54,12 @@ namespace gaEngineSDK{
       */
       Matrix&
       transpose();
+
+      Matrix&
+      transpose3x3();
+
+      Matrix&
+      transpose2x2();
   
       /*************************************************************************/
       /**
@@ -115,6 +136,9 @@ namespace gaEngineSDK{
     private:
       int32 m_rowSize;
       int32 m_columnSize;
+      float m_mat3x3[3][3];
+      float m_mat2x2[2][2];
       std::vector<std::vector<float> > m_matrix;
+      
   };
 }

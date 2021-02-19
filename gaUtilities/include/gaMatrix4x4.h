@@ -1,81 +1,139 @@
 #pragma once
 
-template<class T, int rows, int columns>
-class Matrix4x4
-{
-  public:
-    /*************************************************************************/
-    /**
-    * Constructor and Destructor
-    */
-    /*************************************************************************/
+#include <vector>
 
-    Matrix4x4() {}
+#include "gaPlatformTypes.h"
+#include "gaVector3.h"
 
-    /**
-    * @brief Construct a Matrix from another Matrix copying each element.
-    * @param m Matrix that the data will be copied from.
-    */
-    Matrix4x4(const Matrix4x4<T, rows, columns>& m);
+namespace gaEngineSDK {
 
-    /**
-    * @brief Create 4x4 Matrix from 4, 4 element vectors.
-    * @param column0 Vector used for the first column.
-    * @param column1 Vector used for the second column.
-    * @param column2 Vector used for the third column.
-    * @param column3 Vector used for the fourth column.
-    */
-    Matrix4x4(const Vector<T, 4>& column0, const Vector<T, 4>& column1,
-              const Vector<T, 4>& column2, const Vector<T, 4>& column3);
+  class GA_UTILITY_EXPORT Matrix4x4
+  {
+    public:
+      /*************************************************************************/
+      /**
+      * Constructor and Destructor
+      */
+      /*************************************************************************/
+    
+      Matrix4x4(int32 columnSize, int32 rowSize);
 
-    ~Matrix4x4() = default;
+      /**
+      * @brief Define the value of the matrix in column major.
+      */
+      Matrix4x4(float x1, float y1, float z1, float w1,
+                float x2, float y2, float z2, float w2, 
+                float x3, float y3, float z3, float w3, 
+                float x4, float y4, float z4, float w4);
+    
+      /**
+      * @brief Copy the members of one class instance to another.
+      */
+      Matrix4x4(const Matrix4x4& matrix);
 
-    /*************************************************************************/
-    /**
-    * Operator overload
-    */
-    /*************************************************************************/
-  
-    /**
-    * @brief Access an element of the Matrix.
-    * @param row Index of the row to access.
-    * @param column Index of the column to access.
-    * @return Reference to the data that can be modified by the caller.
-    */
-    T& 
-    operator()(const int row, const int column);
+      /**
+      * @brief Let you crate a matrix with only 3 vectors 3.
+      */
+      Matrix4x4(const Vector3& vecX,
+                const Vector3& vecY,
+                const Vector3& vecZ,
+                const Vector3& vecW);
+    
+      ~Matrix4x4() = default;
+    
+      /*************************************************************************/
+      /**
+      * Normal methods.
+      */
+      /*************************************************************************/
+    
+      /**
+      * @brief Let us convert our row in column and column in row.
+      */
+      Matrix4x4&
+      transpose();
+    
+      /*************************************************************************/
+      /**
+      * Operators overloads.
+      */
+      /*************************************************************************/
+    
+      /**
+      * @brief Let us add the data of one matrix with another one.
+      */
+      Matrix4x4
+      operator+(Matrix4x4& matrix)const;
 
-    /**
-    * @brief Access an element of the Matrix, where
-    *        the column accessed is i / Rows.
-    * @param i Index of the element to access in memory.
-    * @return Reference to the data that can be modified by the caller.
-    */
-    T&
-    operator()(const int i);
+      void
+      operator+=(Matrix4x4& matrix);
+    
+      /**
+      * @brief Let us substract the data of one matrix with another one.
+      */
+      Matrix4x4
+      operator-(Matrix4x4& matrix)const;
+    
+      /**
+      * @brief Let us multiply the data of one matrix with another one.
+      */
+      Matrix4x4
+      operator*(Matrix4x4& matrix)const;
+    
+      /**
+      * @brief Let us add the data of one matrix with one data.
+      */
+      Matrix4x4
+      operator+(float data)const;
+    
+      /**
+      * @brief Let us substract the data of one matrix with one data.
+      */
+      Matrix4x4
+      operator-(float data)const;
+    
+      /**
+      * @brief Let us multiply the data of one matrix with one data.
+      */
+      Matrix4x4
+      operator*(float data)const;
 
-    /*************************************************************************/
-    /**
-    * Mathematical normal methods..
-    */
-    /*************************************************************************/
-
-
-
-    /*************************************************************************/
-    /**
-    * Gets.
-    */
-    /*************************************************************************/
-
-    /**
-    * @brief Access a column vector of the Matrix.
-    * @param i Index of the column to access.
-    * @return Reference to the data that can be modified by the caller.
-    */
-    Vector<T, Rows>&
-    GetColumn(const int i);
-
-  private:
-  
-};
+      void
+      operator*=(float data);
+    
+      /**
+      * @brief Let us divide the data of one matrix with one data.
+      */
+      Matrix4x4
+      operator/(float data)const;
+    
+      /**
+      * @brief You can access to a specific position.
+      */
+      float&
+      operator()(const int32 & row, const int32 & column);
+    
+      /*************************************************************************/
+      /**
+      * Gets.
+      */
+      /*************************************************************************/
+    
+      /**
+      * @brief Get the value of the row.
+      */
+      int32
+      getRows() const;
+    
+      /**
+      * @brief Get the value of the column.
+      */
+      int32
+      getColumns() const;
+    
+    private:
+      int32 m_rowSize;
+      int32 m_columnSize;
+      float m_mat4x4[4][4];
+  };
+}

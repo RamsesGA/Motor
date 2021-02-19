@@ -178,32 +178,7 @@ namespace gaEngineSDK {
       */
       Vector3
       operator *(const Vector3& vector)const;
-    
-      /*************************************************************************/
-      /**
-      * Gets.
-      */
-      /*************************************************************************/
-    
-      /**
-      * @brief Method to obtain the member X.
-      */
-      float
-      getX();
-    
-      /**
-      * @brief Member to obtain the member Y.
-      */
-      float
-      getY();
-    
-      /**
-      * @brief Member to obtain the member Z.
-      */
-      float
-      getZ();
-    
-    private:
+
       /*************************************************************************/
       /**
       * Member.
