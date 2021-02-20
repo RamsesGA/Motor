@@ -1,8 +1,6 @@
 #pragma once
 
-#include <vector>
-
-#include "gaPlatformTypes.h"
+#include "gaPrerequisitesUtilities.h"
 #include "gaVector3.h"
 
 namespace gaEngineSDK {
@@ -50,8 +48,11 @@ namespace gaEngineSDK {
       /**
       * @brief Let us convert our row in column and column in row.
       */
-      Matrix4x4&
+      Matrix4x4
       transpose();
+
+      Matrix4x4&
+      perspectiveFovLH();
     
       /*************************************************************************/
       /**

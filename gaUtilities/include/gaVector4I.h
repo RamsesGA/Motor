@@ -1,6 +1,8 @@
 #pragma once
 
-#include "gaPlatformTypes.h"
+#include "gaPrerequisitesUtilities.h"
+#include "gaMath.h"
+#include "gaVector3I.h"
 
 namespace gaEngineSDK {
 
@@ -14,15 +16,32 @@ namespace gaEngineSDK {
                int32 y = 0,
                int32 z = 0,
                int32 w = 1);
-    
+
+      /**
+      * @brief Constructor where can be initialized with a vector 3.
+      */
+      Vector4I(const Vector3I & vector3, int32 w = 1);
+
       /**
       * @brief Constructor.
       */
       ~Vector4I() = default;
+
+      /***********************************************************************/
+      /**
+      * Methods.
+      */
+      /***********************************************************************/
+
+      /**
+      * @brief Set new data in your vector.
+      */
+      void
+      setNewValues(int32 x, int32 y, int32 z, int32 w);
     
       /*************************************************************************/
       /**
-      * Mathematical normal methods.
+      * Mathematical methods.
       */
       /*************************************************************************/
     
@@ -171,68 +190,15 @@ namespace gaEngineSDK {
       */
       Vector4I
       operator*(const Vector4I& vector)const;
-    
-      /*************************************************************************/
+
       /**
-      * Sets.
+      * @brief Obtain a specific component.
+      * @param index Specific position to enter in the vector.
+      * @return Copy of that component.
       */
-      /*************************************************************************/
+      int32&
+      operator[](uint32 index);
     
-      /**
-      * @brief Method to save the member X.
-      */
-      void
-      setX(int32 x);
-    
-      /**
-      * @brief Member to save the member Y.
-      */
-      void
-      setY(int32 y);
-    
-      /**
-      * @brief Member to save the member Z.
-      */
-      void
-      setZ(int32 z);
-    
-      /**
-      * @brief Member to save the member Z.
-      */
-      void
-      setW(int32 w);
-    
-      /*************************************************************************/
-      /**
-      * Gets.
-      */
-      /*************************************************************************/
-    
-      /**
-      * @brief Method to obtain the member X.
-      */
-      int32
-      getX();
-    
-      /**
-      * @brief Member to obtain the member Y.
-      */
-      int32
-      getY();
-    
-      /**
-      * @brief Member to obtain the member Z.
-      */
-      int32
-      getZ();
-    
-      /**
-      * @brief Member to obtain the member Z.
-      */
-      int32
-      getW();
-    
-    private:
       /*************************************************************************/
       /**
       * Members.

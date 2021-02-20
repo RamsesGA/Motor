@@ -1,6 +1,5 @@
 
-#include <cmath>
-#include <gaMath.h>
+#include "gaMath.h"
 
 namespace gaEngineSDK {
 
@@ -104,13 +103,19 @@ namespace gaEngineSDK {
     return std::pow(data, exponent);
   }
 
-  template<typename type>
-  type& Math::sqrt(type data) {
-    return std::sqrt(data);
+  float Math::sqrtf(float data) {
+    return std::sqrtf(data);
+  }
+
+  int32 Math::sqrti(int32 data){
+    return static_cast<int32>(std::sqrt(data));
   }
 
   template<typename type>
   type& Math::hypo(type x, type y) {
     return std::hypot(x, y);
   }
+
+
+  
 }

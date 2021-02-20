@@ -21,14 +21,12 @@ namespace gaEngineSDK {
       }
     }
 
-    for (int32 i = 0; i < 3; ++i) {
-      for (int32 j = 0; j < 3; ++j) {
-        if (2 != i || 2 != j) {
-          m_mat2x2[i][j] = 0.0f;
-        }
-        m_mat3x3[i][j] = 0.0f;
-      }
-    }
+    m_mat2x2[0][0] = 0.0f; m_mat2x2[0][1] = 0.0f;
+    m_mat2x2[1][0] = 0.0f; m_mat2x2[1][1] = 0.0f;
+
+    m_mat3x3[0][0] = 0.0f; m_mat3x3[0][1] = 0.0f; m_mat3x3[0][2] = 0.0f;
+    m_mat3x3[1][0] = 0.0f; m_mat3x3[1][1] = 0.0f; m_mat3x3[1][2] = 0.0f;
+    m_mat3x3[2][0] = 0.0f; m_mat3x3[2][1] = 0.0f; m_mat3x3[2][2] = 0.0f;
   }
 
   Matrix::Matrix(const Matrix& matrix) {
@@ -42,16 +40,25 @@ namespace gaEngineSDK {
                  const Vector3& vecZ){
     m_columnSize = 3;
     m_rowSize = 3;
+
     m_mat3x3[0][0] = vecX.m_x; m_mat3x3[0][1] = vecX.m_y; m_mat3x3[0][2] = vecX.m_z;
     m_mat3x3[1][0] = vecY.m_x; m_mat3x3[1][1] = vecY.m_y; m_mat3x3[1][2] = vecY.m_z;
     m_mat3x3[2][0] = vecZ.m_x; m_mat3x3[2][1] = vecZ.m_y; m_mat3x3[2][2] = vecZ.m_z;
+
+    m_mat2x2[0][0] = 0.0f; m_mat2x2[0][1] = 0.0f;
+    m_mat2x2[1][0] = 0.0f; m_mat2x2[1][1] = 0.0f;
   }
 
   Matrix::Matrix(const Vector2& vecX, const Vector2& vecY){
     m_columnSize = 2;
     m_rowSize = 2;
+
     m_mat2x2[0][0] = vecX.m_x; m_mat2x2[0][1] = vecX.m_y;
     m_mat2x2[1][0] = vecY.m_x; m_mat2x2[1][1] = vecY.m_y;
+
+    m_mat3x3[0][0] = 0.0f; m_mat3x3[0][1] = 0.0f; m_mat3x3[0][2] = 0.0f;
+    m_mat3x3[1][0] = 0.0f; m_mat3x3[1][1] = 0.0f; m_mat3x3[1][2] = 0.0f;
+    m_mat3x3[2][0] = 0.0f; m_mat3x3[2][1] = 0.0f; m_mat3x3[2][2] = 0.0f;
   }
 
   /*************************************************************************/
@@ -60,7 +67,7 @@ namespace gaEngineSDK {
   */
   /*************************************************************************/
 
-  Matrix& Matrix::transpose() {
+  Matrix Matrix::transpose() {
     Matrix trans(m_columnSize, m_rowSize);
 
     for (int32 i = 0; i < m_columnSize; ++i) {
@@ -72,7 +79,7 @@ namespace gaEngineSDK {
     return trans;
   }
 
-  Matrix& Matrix::transpose3x3(){
+  Matrix Matrix::transpose3x3(){
     Matrix trans(3, 3);
 
     for (int32 i = 0; i < m_columnSize; ++i) {
@@ -84,7 +91,7 @@ namespace gaEngineSDK {
     return trans;
   }
 
-  Matrix& Matrix::transpose2x2(){
+  Matrix Matrix::transpose2x2(){
     Matrix trans(2, 2);
 
     for (int32 i = 0; i < m_columnSize; ++i) {

@@ -1,6 +1,10 @@
 #pragma once
 
-#include "gaPlatformTypes.h"
+#include "gaPrerequisitesUtilities.h"
+#include "gaMath.h"
+#include "gaVector3.h"
+
+class Vector3;
 
 namespace gaEngineSDK {
 
@@ -14,6 +18,11 @@ namespace gaEngineSDK {
               float y = 0.0f,
               float z = 0.0f,
               float w = 1.0f);
+
+      /**
+      * @brief Constructor where can be initialized with a vector 3.
+      */
+      Vector4(const Vector3 & vec3, float w = 1.0f);
     
       /**
       * @brief Constructor.
@@ -44,14 +53,6 @@ namespace gaEngineSDK {
       */
       float
       dotProduct(const Vector4& vector)const;
-    
-      /**
-      * @brief Calculate the cross product of two vectors.
-      * @param Another vector to calculate.
-      * @return The cross product.
-      */
-      Vector4
-      crossProduct(const Vector4& vector)const;
     
       /*************************************************************************/
       /**
@@ -179,68 +180,7 @@ namespace gaEngineSDK {
       */
       Vector4
       operator*(const Vector4& vector)const;
-    
-      /*************************************************************************/
-      /**
-      * Sets.
-      */
-      /*************************************************************************/
-    
-      /**
-      * @brief Method to save the member X.
-      */
-      void
-      setX(float x);
-    
-      /**
-      * @brief Member to save the member Y.
-      */
-      void
-      setY(float y);
-    
-      /**
-      * @brief Member to save the member Z.
-      */
-      void
-      setZ(float z);
-    
-      /**
-      * @brief Member to save the member Z.
-      */
-      void
-      setW(float w);
-    
-      /*************************************************************************/
-      /**
-      * Gets.
-      */
-      /*************************************************************************/
-    
-      /**
-      * @brief Method to obtain the member X.
-      */
-      float
-      getX();
-    
-      /**
-      * @brief Member to obtain the member Y.
-      */
-      float
-      getY();
-    
-      /**
-      * @brief Member to obtain the member Z.
-      */
-      float
-      getZ();
-    
-      /**
-      * @brief Member to obtain the member Z.
-      */
-      float
-      getW();
-    
-    private:
+
       float m_x;
       float m_y;
       float m_z;

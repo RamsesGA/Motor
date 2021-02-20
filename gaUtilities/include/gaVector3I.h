@@ -1,6 +1,7 @@
 #pragma once
 
-#include "gaPlatformTypes.h"
+#include "gaPrerequisitesUtilities.h"
+#include "gaMath.h"
 
 namespace gaEngineSDK {
 
@@ -179,55 +180,6 @@ namespace gaEngineSDK {
       Vector3I
       operator*(const Vector3I& vector)const;
     
-      /*************************************************************************/
-      /**
-      * Sets.
-      */
-      /*************************************************************************/
-    
-      /**
-      * @brief Method to save the member X.
-      */
-      void
-      setX(int32 x);
-    
-      /**
-      * @brief Member to save the member Y.
-      */
-      void
-      setY(int32 y);
-    
-      /**
-      * @brief Member to save the member Y.
-      */
-      void
-      setZ(int32 z);
-    
-      /*************************************************************************/
-      /**
-      * Gets.
-      */
-      /*************************************************************************/
-    
-      /**
-      * @brief Method to obtain the member X.
-      */
-      int32
-      getX();
-    
-      /**
-      * @brief Member to obtain the member Y.
-      */
-      int32
-      getY();
-    
-      /**
-      * @brief Member to obtain the member Z.
-      */
-      int32
-      getZ();
-    
-    private:
       /*************************************************************************/
       /**
       * Member.

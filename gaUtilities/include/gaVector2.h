@@ -1,6 +1,7 @@
 #pragma once
 
-#include "gaPlatformTypes.h"
+#include "gaPrerequisitesUtilities.h"
+#include "gaMath.h"
 
 namespace gaEngineSDK {
 

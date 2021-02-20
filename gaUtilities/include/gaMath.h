@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gaPlatformTypes.h"
+#include "gaPrerequisitesUtilities.h"
 
 namespace gaEngineSDK {
 
@@ -159,11 +159,16 @@ namespace gaEngineSDK {
       pow(type data, type exponent);
     
       /**
-      * @brief Returns the square root of x.
+      * @brief Returns the square root of x in floats.
       */
-      template<typename type>
-      type&
-      sqrt(type data);
+      static float 
+      sqrtf(float data);
+
+      /**
+      * @brief Returns the square root of x in integers.
+      */
+      static int32
+      sqrti(int32 data);
     
       /**
       * @brief Returns the natural logarithm of x.

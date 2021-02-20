@@ -1,3 +1,4 @@
+
 #include "gaMatrix4x4.h"
 
 namespace gaEngineSDK {
@@ -5,12 +6,24 @@ namespace gaEngineSDK {
   Matrix4x4::Matrix4x4(int32 columnSize, int32 rowSize) {
     m_columnSize = columnSize;
     m_rowSize = rowSize;
+
+    m_mat4x4[0][0] = 0.0f; m_mat4x4[0][1] = 0.0f;
+    m_mat4x4[1][0] = 0.0f; m_mat4x4[1][1] = 0.0f;
+    m_mat4x4[2][0] = 0.0f; m_mat4x4[2][1] = 0.0f;
+    m_mat4x4[3][0] = 0.0f; m_mat4x4[3][1] = 0.0f;
+
+    m_mat4x4[0][2] = 0.0f; m_mat4x4[0][3] = 0.0f;
+    m_mat4x4[1][2] = 0.0f; m_mat4x4[1][3] = 0.0f;
+    m_mat4x4[2][2] = 0.0f; m_mat4x4[2][3] = 0.0f;
+    m_mat4x4[3][2] = 0.0f; m_mat4x4[3][3] = 0.0f;
   }
 
   Matrix4x4::Matrix4x4(float x1, float y1, float z1, float w1,
                        float x2, float y2, float z2, float w2,
                        float x3, float y3, float z3, float w3,
                        float x4, float y4, float z4, float w4) {
+    m_columnSize = 4;
+    m_rowSize = 4;
     m_mat4x4[0][0] = x1; m_mat4x4[0][1] = y1;
     m_mat4x4[1][0] = x2; m_mat4x4[1][1] = y2;
     m_mat4x4[2][0] = x3; m_mat4x4[2][1] = y3;
@@ -37,6 +50,8 @@ namespace gaEngineSDK {
                        const Vector3& vecY,
                        const Vector3& vecZ,
                        const Vector3& vecW) {
+    m_columnSize = 4;
+    m_rowSize = 4;
     m_mat4x4[0][0] = vecX.m_x; m_mat4x4[0][1] = vecX.m_y;
     m_mat4x4[1][0] = vecY.m_x; m_mat4x4[1][1] = vecY.m_y;
     m_mat4x4[2][0] = vecZ.m_x; m_mat4x4[2][1] = vecZ.m_y;
@@ -48,7 +63,7 @@ namespace gaEngineSDK {
     m_mat4x4[3][2] = vecW.m_z; m_mat4x4[3][3] = 1.0f;
   }
 
-  Matrix4x4& gaEngineSDK::Matrix4x4::transpose() {
+  Matrix4x4 gaEngineSDK::Matrix4x4::transpose() {
     Matrix4x4 trans(4, 4);
 
     for (int32 i = 0; i < 4; ++i) {

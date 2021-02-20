@@ -1,7 +1,5 @@
 
-#include <cmath>
-
-#include <gaVector3I.h>
+#include "gaVector3I.h"
 
 namespace gaEngineSDK {
 
@@ -18,9 +16,9 @@ namespace gaEngineSDK {
   /*************************************************************************/
 
   int32 Vector3I::magnitude() {
-    return static_cast<int32>(std::sqrt((m_x * m_x) +
-      (m_y * m_y) +
-      (m_z * m_z)));
+    return Math::sqrti((m_x * m_x) +
+                       (m_y * m_y) +
+                       (m_z * m_z));
   }
 
   void Vector3I::normalize() {
@@ -158,46 +156,10 @@ namespace gaEngineSDK {
   }
 
   Vector3I Vector3I::operator*(const Vector3I& vector) const {
-    Vector3I vectorTemp;
+    Vector3I vectorTemp(0, 0, 0);
 
     return Vector3I(vectorTemp.m_x = m_x * vector.m_x,
       vectorTemp.m_y = m_y * vector.m_y,
       vectorTemp.m_z = m_z * vector.m_z);
-  }
-
-  /*************************************************************************/
-  /**
-  * Sets.
-  */
-  /*************************************************************************/
-
-  void Vector3I::setX(int32 x) {
-    m_x = x;
-  }
-
-  void Vector3I::setY(int32 y) {
-    m_y = y;
-  }
-
-  void Vector3I::setZ(int32 z) {
-    m_z = z;
-  }
-
-  /*************************************************************************/
-  /**
-  * Gets.
-  */
-  /*************************************************************************/
-
-  int32 Vector3I::getX() {
-    return m_x;
-  }
-
-  int32 Vector3I::getY() {
-    return m_y;
-  }
-
-  int32 Vector3I::getZ() {
-    return m_z;
   }
 }

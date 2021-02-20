@@ -1,8 +1,6 @@
 #pragma once
 
-#include <vector>
-
-#include "gaPlatformTypes.h"
+#include "gaPrerequisitesUtilities.h"
 #include "gaVector3.h"
 #include "gaVector2.h"
 
@@ -21,7 +19,7 @@ namespace gaEngineSDK{
       * @brief Take the column size, row size and generates automatically
       *        identity matrix
       */
-      Matrix(int32 columnSize = 3, int32 rowSize = 3);
+      Matrix(int32 columnSize, int32 rowSize);
   
       /**
       * @brief Copy the members of one class instance to another.
@@ -52,13 +50,13 @@ namespace gaEngineSDK{
       /**
       * @brief Let us convert our row in column and column in row.
       */
-      Matrix&
+      Matrix
       transpose();
 
-      Matrix&
+      Matrix
       transpose3x3();
 
-      Matrix&
+      Matrix
       transpose2x2();
   
       /*************************************************************************/
@@ -132,13 +130,14 @@ namespace gaEngineSDK{
       */
       int32
       getColumns() const;
+
+
+      float m_mat3x3[3][3];
+      float m_mat2x2[2][2];
+      std::vector<std::vector<float> > m_matrix;
   
     private:
       int32 m_rowSize;
       int32 m_columnSize;
-      float m_mat3x3[3][3];
-      float m_mat2x2[2][2];
-      std::vector<std::vector<float> > m_matrix;
-      
   };
 }

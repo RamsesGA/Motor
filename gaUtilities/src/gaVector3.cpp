@@ -1,7 +1,5 @@
 
-#include <cmath>
-
-#include <gaVector3.h>
+#include "gaVector3.h"
 
 namespace gaEngineSDK {
 
@@ -11,14 +9,32 @@ namespace gaEngineSDK {
     m_z = z;
   }
 
+  Vector3::Vector3(const Vector4 & vec4){
+    m_x = vec4.m_x;
+    m_y = vec4.m_y;
+    m_z = vec4.m_z;
+  }
+
+  /***********************************************************************/
+  /**
+  * Methods.
+  */
+  /***********************************************************************/
+
+  void Vector3::setNewValues(float x, float y, float z){
+    m_x = x;
+    m_y = y;
+    m_z = z;
+  }
+
   /*************************************************************************/
   /**
-  * Mathematical normal methods.
+  * Mathematical methods.
   */
   /*************************************************************************/
 
   float Vector3::magnitude() {
-    return (std::sqrtf((m_x * m_x) + (m_y * m_y) + (m_z * m_z)));
+    return Math::sqrtf((m_x * m_x) + (m_y * m_y) + (m_z * m_z));
   }
 
   void Vector3::normalize() {
@@ -156,10 +172,21 @@ namespace gaEngineSDK {
   }
 
   Vector3 Vector3::operator*(const Vector3& vector) const {
-    Vector3 vectorTemp;
+    Vector3 vectorTemp(0.0f, 0.0f, 0.0f);
 
     return Vector3(vectorTemp.m_x = m_x * vector.m_x,
-      vectorTemp.m_y = m_y * vector.m_y,
-      vectorTemp.m_z = m_z * vector.m_z);
+                   vectorTemp.m_y = m_y * vector.m_y,
+                   vectorTemp.m_z = m_z * vector.m_z);
   }
+
+  Vector3 Vector3::operator^(const Vector3& vector) const {
+    return Vector3(m_y * vector.m_z - m_z * vector.m_y,
+                   m_z * vector.m_x - m_x * vector.m_z,
+                   m_x * vector.m_y - m_y * vector.m_x);
+  }
+
+  float& Vector3::operator[](uint32 index){
+    return (&m_x)[index];
+  }
+
 }

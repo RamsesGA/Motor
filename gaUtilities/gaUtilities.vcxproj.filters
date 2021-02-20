@@ -90,5 +90,11 @@
     <ClInclude Include="include\gaMatrix4x4.h">
       <Filter>Archivos de origen\Math</Filter>
     </ClInclude>
+    <ClInclude Include="include\gaPrerequisitesUtilities.h">
+      <Filter>Archivos de origen</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaStdHeaders.h">
+      <Filter>Archivos de origen</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

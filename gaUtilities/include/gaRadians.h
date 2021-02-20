@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gaPlatformTypes.h"
+#include "gaPrerequisitesUtilities.h"
 
 namespace gaEngineSDK {
 
@@ -19,7 +19,6 @@ namespace gaEngineSDK {
       template<typename type>
       type&
       radiansToDegrees(type radian);
-    
     
     private:
       /*************************************************************************/

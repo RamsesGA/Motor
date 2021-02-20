@@ -1,5 +1,5 @@
 
-#include <gaDegrees.h>
+#include "gaDegrees.h"
 
 namespace gaEngineSDK {
 

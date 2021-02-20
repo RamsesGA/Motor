@@ -1,7 +1,5 @@
 
-#include <cmath>
-
-#include <gaVector2.h>
+#include "gaVector2.h"
 
 namespace gaEngineSDK {
 
@@ -17,7 +15,7 @@ namespace gaEngineSDK {
   /*************************************************************************/
 
   float Vector2::magnitude() {
-    return (std::sqrtf((m_x * m_x) + (m_y * m_y)));
+    return (Math::sqrtf((m_x * m_x) + (m_y * m_y)));
   }
 
   void Vector2::normalize() {
@@ -124,7 +122,7 @@ namespace gaEngineSDK {
   }
 
   Vector2 Vector2::operator*(const Vector2& vector) const {
-    Vector2 vectorTemp;
+    Vector2 vectorTemp(0.0f, 0.0f);
 
     return Vector2(vectorTemp.m_x = m_x * vector.m_x,
       vectorTemp.m_y = m_y * vector.m_y);
