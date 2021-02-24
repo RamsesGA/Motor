@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gaMath_unitTest.cpp" />
+    <ClCompile Include="src\gaMatrix_unitTest.cpp" />
     <ClCompile Include="src\gaVector_unitTest.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>

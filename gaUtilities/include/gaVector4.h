@@ -2,9 +2,9 @@
 
 #include "gaPrerequisitesUtilities.h"
 #include "gaMath.h"
-#include "gaVector3.h"
+//#include "gaVector3.h"
 
-class Vector3;
+//class Vector3;
 
 namespace gaEngineSDK {
 
@@ -22,7 +22,7 @@ namespace gaEngineSDK {
       /**
       * @brief Constructor where can be initialized with a vector 3.
       */
-      Vector4(const Vector3 & vec3, float w = 1.0f);
+      //Vector4(const Vector3 & vec3, float w = 1.0f);
     
       /**
       * @brief Constructor.

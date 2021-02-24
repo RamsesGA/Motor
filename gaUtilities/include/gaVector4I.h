@@ -52,12 +52,6 @@ namespace gaEngineSDK {
       magnitude();
     
       /**
-      * @brief Vector with length of 1 unit.
-      */
-      void
-      normalize();
-    
-      /**
       * @brief Operation between this vector with another.
       * @return Determine the angle between vectors.
       */

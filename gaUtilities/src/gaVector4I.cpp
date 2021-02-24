@@ -43,22 +43,6 @@ namespace gaEngineSDK {
                        (m_w * m_w));
   }
 
-  void Vector4I::normalize() {
-    int32 magn = magnitude();
-
-    if (magn > 0) {
-      int32 oneOverMag = 1 / magn;
-      m_x = m_x * oneOverMag;
-      m_y = m_y * oneOverMag;
-      m_z = m_z * oneOverMag;
-      m_w = m_w * oneOverMag;
-    }
-    m_x = 0;
-    m_y = 0;
-    m_z = 0;
-    m_w = 0;
-  }
-
   int32 Vector4I::dotProduct(const Vector4I& vector) const {
     return (m_x * vector.m_x) +
            (m_y * vector.m_y) +
