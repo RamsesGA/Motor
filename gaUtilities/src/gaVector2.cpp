@@ -15,7 +15,9 @@ namespace gaEngineSDK {
   /*************************************************************************/
 
   float Vector2::magnitude() {
-    return (Math::sqrtf((m_x * m_x) + (m_y * m_y)));
+    float temp = (m_x * m_x) + (m_y * m_y);
+    temp = Math::sqrtf(temp);
+    return (temp);
   }
 
   void Vector2::normalize() {
@@ -26,8 +28,10 @@ namespace gaEngineSDK {
       m_x = m_x * oneOverMag;
       m_y = m_y * oneOverMag;
     }
-    m_x = 0.0f;
-    m_y = 0.0f;
+    else {
+      m_x = 0.0f;
+      m_y = 0.0f;
+    }
   }
 
   float Vector2::dotProduct(const Vector2& vector) const {
@@ -125,6 +129,6 @@ namespace gaEngineSDK {
     Vector2 vectorTemp(0.0f, 0.0f);
 
     return Vector2(vectorTemp.m_x = m_x * vector.m_x,
-      vectorTemp.m_y = m_y * vector.m_y);
+                   vectorTemp.m_y = m_y * vector.m_y);
   }
 }

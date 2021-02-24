@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gaUtilities", "gaUtilities\gaUtilities.vcxproj", "{0E1FB950-EF3A-4F42-905F-3553040AD8B5}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gaUtility_UnitTest", "gaUtility_UnitTest\gaUtility_UnitTest.vcxproj", "{303540A2-B57C-4D03-8522-36E19CD06F02}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gaUtility_UnitTest", "gaUtility_UnitTest\gaUtility_UnitTest.vcxproj", "{BC89C3FC-7187-41CB-8601-C099F1E3BAD6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,22 +35,22 @@ Global
 		{0E1FB950-EF3A-4F42-905F-3553040AD8B5}.Release|x64.Build.0 = Release_DLL|x64
 		{0E1FB950-EF3A-4F42-905F-3553040AD8B5}.Release|x86.ActiveCfg = Release_DLL|Win32
 		{0E1FB950-EF3A-4F42-905F-3553040AD8B5}.Release|x86.Build.0 = Release_DLL|Win32
-		{303540A2-B57C-4D03-8522-36E19CD06F02}.Debug_DLL|x64.ActiveCfg = Debug|x64
-		{303540A2-B57C-4D03-8522-36E19CD06F02}.Debug_DLL|x64.Build.0 = Debug|x64
-		{303540A2-B57C-4D03-8522-36E19CD06F02}.Debug_DLL|x86.ActiveCfg = Debug|Win32
-		{303540A2-B57C-4D03-8522-36E19CD06F02}.Debug_DLL|x86.Build.0 = Debug|Win32
-		{303540A2-B57C-4D03-8522-36E19CD06F02}.Debug|x64.ActiveCfg = Debug|x64
-		{303540A2-B57C-4D03-8522-36E19CD06F02}.Debug|x64.Build.0 = Debug|x64
-		{303540A2-B57C-4D03-8522-36E19CD06F02}.Debug|x86.ActiveCfg = Debug|Win32
-		{303540A2-B57C-4D03-8522-36E19CD06F02}.Debug|x86.Build.0 = Debug|Win32
-		{303540A2-B57C-4D03-8522-36E19CD06F02}.Release_DLL|x64.ActiveCfg = Release|x64
-		{303540A2-B57C-4D03-8522-36E19CD06F02}.Release_DLL|x64.Build.0 = Release|x64
-		{303540A2-B57C-4D03-8522-36E19CD06F02}.Release_DLL|x86.ActiveCfg = Release|Win32
-		{303540A2-B57C-4D03-8522-36E19CD06F02}.Release_DLL|x86.Build.0 = Release|Win32
-		{303540A2-B57C-4D03-8522-36E19CD06F02}.Release|x64.ActiveCfg = Release|x64
-		{303540A2-B57C-4D03-8522-36E19CD06F02}.Release|x64.Build.0 = Release|x64
-		{303540A2-B57C-4D03-8522-36E19CD06F02}.Release|x86.ActiveCfg = Release|Win32
-		{303540A2-B57C-4D03-8522-36E19CD06F02}.Release|x86.Build.0 = Release|Win32
+		{BC89C3FC-7187-41CB-8601-C099F1E3BAD6}.Debug_DLL|x64.ActiveCfg = Debug|x64
+		{BC89C3FC-7187-41CB-8601-C099F1E3BAD6}.Debug_DLL|x64.Build.0 = Debug|x64
+		{BC89C3FC-7187-41CB-8601-C099F1E3BAD6}.Debug_DLL|x86.ActiveCfg = Debug|Win32
+		{BC89C3FC-7187-41CB-8601-C099F1E3BAD6}.Debug_DLL|x86.Build.0 = Debug|Win32
+		{BC89C3FC-7187-41CB-8601-C099F1E3BAD6}.Debug|x64.ActiveCfg = Debug|x64
+		{BC89C3FC-7187-41CB-8601-C099F1E3BAD6}.Debug|x64.Build.0 = Debug|x64
+		{BC89C3FC-7187-41CB-8601-C099F1E3BAD6}.Debug|x86.ActiveCfg = Debug|Win32
+		{BC89C3FC-7187-41CB-8601-C099F1E3BAD6}.Debug|x86.Build.0 = Debug|Win32
+		{BC89C3FC-7187-41CB-8601-C099F1E3BAD6}.Release_DLL|x64.ActiveCfg = Release|x64
+		{BC89C3FC-7187-41CB-8601-C099F1E3BAD6}.Release_DLL|x64.Build.0 = Release|x64
+		{BC89C3FC-7187-41CB-8601-C099F1E3BAD6}.Release_DLL|x86.ActiveCfg = Release|Win32
+		{BC89C3FC-7187-41CB-8601-C099F1E3BAD6}.Release_DLL|x86.Build.0 = Release|Win32
+		{BC89C3FC-7187-41CB-8601-C099F1E3BAD6}.Release|x64.ActiveCfg = Release|x64
+		{BC89C3FC-7187-41CB-8601-C099F1E3BAD6}.Release|x64.Build.0 = Release|x64
+		{BC89C3FC-7187-41CB-8601-C099F1E3BAD6}.Release|x86.ActiveCfg = Release|Win32
+		{BC89C3FC-7187-41CB-8601-C099F1E3BAD6}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

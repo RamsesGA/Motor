@@ -18,20 +18,6 @@ namespace gaEngineSDK {
     return Math::sqrti((m_x * m_x) + (m_y * m_y));
   }
 
-  void Vector2I::normalize() {
-    int32 magn = magnitude();
-
-    if (magn > 0) {
-      int32 oneOverMag = 1 / magn;
-
-      m_x = m_x * oneOverMag;
-      m_y = m_y * oneOverMag;
-    }
-
-    m_x = 0;
-    m_y = 0;
-  }
-
   int32 Vector2I::dotProduct(const Vector2I& vector) const {
     return (m_x * vector.m_x) + (m_y * vector.m_y);
   }
@@ -128,19 +114,5 @@ namespace gaEngineSDK {
 
     return Vector2I(vectorTemp.m_x = m_x * vector.m_x,
       vectorTemp.m_y = m_y * vector.m_y);
-  }
-
-  /*************************************************************************/
-  /**
-  * Gets.
-  */
-  /*************************************************************************/
-
-  int32 Vector2I::getX() {
-    return m_x;
-  }
-
-  int32 Vector2I::getY() {
-    return m_y;
   }
 }

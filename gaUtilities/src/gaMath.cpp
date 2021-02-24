@@ -1,7 +1,14 @@
-
 #include "gaMath.h"
 
 namespace gaEngineSDK {
+
+  /*************************************************************************/
+  /**
+  * Constants variables
+  */
+  /*************************************************************************/
+
+  const float Math::PI = 3.14159265f;
 
   /*************************************************************************/
   /**
@@ -9,33 +16,27 @@ namespace gaEngineSDK {
   */
   /*************************************************************************/
 
-  template<typename type>
-  inline type& Math::cos(type data) {
+  float Math::cos(float data){
     return std::cos(data);
   }
 
-  template<typename type>
-  inline type& Math::sin(type data) {
+  float Math::sin(float data) {
     return std::sin(data);
   }
 
-  template<typename type>
-  inline type& Math::tan(type data) {
+  float Math::tan(float data) {
     return std::tan(data);
   }
 
-  template<typename type>
-  inline type& Math::arcCos(type data) {
+  float Math::arcCos(float data) {
     return std::acos(data);
   }
 
-  template<typename type>
-  inline type& Math::arcSin(type data) {
+  float Math::arcSin(float data) {
     return std::asin(data);
   }
 
-  template<typename type>
-  inline type& Math::arcTan(type data) {
+  float Math::arcTan(float data) {
     return std::atan(data);
   }
 
@@ -45,33 +46,27 @@ namespace gaEngineSDK {
   */
   /*************************************************************************/
 
-  template<typename type>
-  inline type& Math::cosHB(type data) {
+  float Math::cosHB(float data) {
     return std::cosh(data);
   }
 
-  template<typename type>
-  inline type& Math::sinHB(type data) {
+  float Math::sinHB(float data) {
     return std::sinh(data);
   }
 
-  template<typename type>
-  inline type& Math::tanHB(type data) {
+  float Math::tanHB(float data) {
     return std::tanh(data);
   }
 
-  template<typename type>
-  inline type& Math::arcCosHB(type data) {
+  float Math::arcCosHB(float data) {
     return std::acosh(data);
   }
 
-  template<typename type>
-  inline type& Math::arcSinHB(type data) {
+  float Math::arcSinHB(float data) {
     return std::asinh(data);
   }
 
-  template<typename type>
-  inline type& Math::arcTanHB(type data) {
+  float Math::arcTanHB(float data) {
     return std::atanh(data);
   }
 
@@ -82,13 +77,11 @@ namespace gaEngineSDK {
   */
   /*************************************************************************/
 
-  template<typename type>
-  type& Math::exp(type data) {
+  float Math::exp(float data) {
     return std::exp(data);
   }
 
-  template<typename type>
-  type& Math::log(type data) {
+  float Math::log(float data) {
     return std::log(data);
   }
 
@@ -98,8 +91,7 @@ namespace gaEngineSDK {
   */
   /*************************************************************************/
 
-  template<typename type>
-  type& Math::pow(type data, type exponent) {
+  float Math::pow(float data, float exponent) {
     return std::pow(data, exponent);
   }
 
@@ -108,14 +100,11 @@ namespace gaEngineSDK {
   }
 
   int32 Math::sqrti(int32 data){
-    return static_cast<int32>(std::sqrt(data));
+    return static_cast<int32>(std::sqrt(data) + 0.5f);
   }
 
-  template<typename type>
-  type& Math::hypo(type x, type y) {
+  float Math::hypo(float x, float y) {
     return std::hypot(x, y);
   }
-
-
   
 }

@@ -2,9 +2,9 @@
 
 #include "gaPrerequisitesUtilities.h"
 #include "gaMath.h"
-#include "gaVector4.h"
+//#include "gaVector4.h"
 
-class Vector4;
+//class Vector4;
 
 namespace gaEngineSDK {
 
@@ -14,31 +14,19 @@ namespace gaEngineSDK {
       /**
       * @brief Constructor to start a vector with x and y.
       */
-      explicit Vector3(float x = 0.0f,
-                       float y = 0.0f,
-                       float z = 0.0f);
+      Vector3(float x = 0.0f,
+              float y = 0.0f,
+              float z = 0.0f);
     
       /**
       * @brief This constructor let us create a vector 3 with one vector 4
       */
-      Vector3(const Vector4 & vec4);
+      //Vector3(const Vector4 & vec4);
 
       /**
       * @brief Destroyer.
       */
       ~Vector3() = default;
-
-      /***********************************************************************/
-      /**
-      * Methods.
-      */
-      /***********************************************************************/
-
-      /**
-      * @brief Set new data in your vector.
-      */
-      void
-      setNewValues(float x, float y, float z);
     
       /*************************************************************************/
       /**

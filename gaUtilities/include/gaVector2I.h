@@ -31,12 +31,6 @@ namespace gaEngineSDK {
       magnitude();
     
       /**
-      * @brief Vector with length of 1 unit.
-      */
-      void
-      normalize();
-    
-      /**
       * @brief Operation between this vector with another.
       * @return Determine the angle between vectors.
       */
@@ -170,25 +164,6 @@ namespace gaEngineSDK {
       Vector2I
       operator*(const Vector2I& vector)const;
     
-      /*************************************************************************/
-      /**
-      * Gets.
-      */
-      /*************************************************************************/
-    
-      /**
-      * @brief Method to obtain the member X.
-      */
-      int32
-      getX();
-    
-      /**
-      * @brief Member to obtain the member Y.
-      */
-      int32
-      getY();
-    
-    private:
       /*************************************************************************/
       /**
       * Member.
