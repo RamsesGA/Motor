@@ -40,10 +40,18 @@ namespace gaEngineSDK {
                  const Vector3& vecZ){
     m_columnSize = 3;
     m_rowSize = 3;
+    m_matrix.resize(m_rowSize);
 
     m_mat3x3[0][0] = vecX.m_x; m_mat3x3[0][1] = vecX.m_y; m_mat3x3[0][2] = vecX.m_z;
     m_mat3x3[1][0] = vecY.m_x; m_mat3x3[1][1] = vecY.m_y; m_mat3x3[1][2] = vecY.m_z;
     m_mat3x3[2][0] = vecZ.m_x; m_mat3x3[2][1] = vecZ.m_y; m_mat3x3[2][2] = vecZ.m_z;
+
+    for (int32 i = 0; i < m_rowSize; ++i) {
+      m_matrix[i].resize(m_columnSize);
+      for (int32 j = 0; j < m_columnSize; ++j) {
+        m_matrix[i][j] = m_mat3x3[i][j];
+      }
+    }
 
     m_mat2x2[0][0] = 0.0f; m_mat2x2[0][1] = 0.0f;
     m_mat2x2[1][0] = 0.0f; m_mat2x2[1][1] = 0.0f;
@@ -52,9 +60,17 @@ namespace gaEngineSDK {
   Matrix::Matrix(const Vector2& vecX, const Vector2& vecY){
     m_columnSize = 2;
     m_rowSize = 2;
+    m_matrix.resize(m_rowSize);
 
     m_mat2x2[0][0] = vecX.m_x; m_mat2x2[0][1] = vecX.m_y;
     m_mat2x2[1][0] = vecY.m_x; m_mat2x2[1][1] = vecY.m_y;
+
+    for (int32 i = 0; i < m_rowSize; ++i) {
+      m_matrix[i].resize(m_columnSize);
+      for (int32 j = 0; j < m_columnSize; ++j) {
+        m_matrix[i][j] = m_mat2x2[i][j];
+      }
+    }
 
     m_mat3x3[0][0] = 0.0f; m_mat3x3[0][1] = 0.0f; m_mat3x3[0][2] = 0.0f;
     m_mat3x3[1][0] = 0.0f; m_mat3x3[1][1] = 0.0f; m_mat3x3[1][2] = 0.0f;
@@ -69,30 +85,6 @@ namespace gaEngineSDK {
 
   Matrix Matrix::transpose() {
     Matrix trans(m_columnSize, m_rowSize);
-
-    for (int32 i = 0; i < m_columnSize; ++i) {
-      for (int32 j = 0; j < m_rowSize; ++j) {
-        trans(i, j) = this->m_matrix[j][i];
-      }
-    }
-
-    return trans;
-  }
-
-  Matrix Matrix::transpose3x3(){
-    Matrix trans(3, 3);
-
-    for (int32 i = 0; i < m_columnSize; ++i) {
-      for (int32 j = 0; j < m_rowSize; ++j) {
-        trans(i, j) = this->m_matrix[j][i];
-      }
-    }
-
-    return trans;
-  }
-
-  Matrix Matrix::transpose2x2(){
-    Matrix trans(2, 2);
 
     for (int32 i = 0; i < m_columnSize; ++i) {
       for (int32 j = 0; j < m_rowSize; ++j) {
@@ -220,5 +212,9 @@ namespace gaEngineSDK {
 
   int32 Matrix::getColumns() const {
     return this->m_columnSize;
+  }
+
+  int32 Matrix::getSize() const {
+    return (m_columnSize * m_rowSize);
   }
 }

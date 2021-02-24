@@ -3,8 +3,11 @@
 
 namespace gaEngineSDK {
 
-  template<typename type>
-  inline type& Degrees::degreesToRadians(type radian) {
+  Degrees::Degrees(float degree){
+      m_degree = degree;
+  }
+  
+  float Degrees::degreesToRadians(float radian) {
     return (radian * (m_pi / 180));
   }
 }

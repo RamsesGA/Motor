@@ -4,6 +4,8 @@
 
 #include "gaPrerequisitesUtilities.h"
 #include "gaMath.h"
+#include "gaDegrees.h"
+#include "gaRadians.h"
 
 using namespace gaEngineSDK;
 
@@ -77,4 +79,14 @@ TEST(gaUtilities, Power_Functions) {
   EXPECT_FLOAT_EQ(Math::sqrti(100.0f), 10.0f);
 
   EXPECT_FLOAT_EQ(Math::hypo(1.0f, 5.0f), 5.0990195f);
+}
+
+TEST(gaUtilities, Degrees_Test) {
+  Degrees testDegree(150.50f);
+  EXPECT_FLOAT_EQ(testDegree.degreesToRadians(testDegree.m_degree), 2.6267205f);
+}
+
+TEST(gaUtilities, Radians_Test) {
+  Radians testRadians(150.50f);
+  EXPECT_FLOAT_EQ(testRadians.radiansToDegrees(testRadians.m_radian), 8623.0148f);
 }

@@ -52,12 +52,6 @@ namespace gaEngineSDK{
       */
       Matrix
       transpose();
-
-      Matrix
-      transpose3x3();
-
-      Matrix
-      transpose2x2();
   
       /*************************************************************************/
       /**
@@ -131,13 +125,18 @@ namespace gaEngineSDK{
       int32
       getColumns() const;
 
-
-      float m_mat3x3[3][3];
-      float m_mat2x2[2][2];
-      std::vector<std::vector<float> > m_matrix;
+      /**
+      * @brief Get the size of the matrix.
+      */
+      int32
+      getSize() const;
+      
   
     private:
       int32 m_rowSize;
       int32 m_columnSize;
+      float m_mat3x3[3][3];
+      float m_mat2x2[2][2];
+      std::vector<std::vector<float> > m_matrix;
   };
 }

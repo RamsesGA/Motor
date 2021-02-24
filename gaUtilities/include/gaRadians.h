@@ -12,13 +12,14 @@ namespace gaEngineSDK {
       * Constructor and Destructor
       */
       /*************************************************************************/
-      Radians() = default;
+      Radians(float radians);
     
       ~Radians() = default;
     
-      template<typename type>
-      type&
-      radiansToDegrees(type radian);
+      float
+      radiansToDegrees(float radian);
+
+      float m_radian;
     
     private:
       /*************************************************************************/

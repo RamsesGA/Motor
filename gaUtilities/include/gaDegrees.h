@@ -12,13 +12,14 @@ namespace gaEngineSDK {
       * Constructor and Destructor
       */
       /*************************************************************************/
-      Degrees() = default;
+      Degrees(float degree);
     
       ~Degrees() = default;
     
-      template<typename type>
-      type&
-      degreesToRadians(type degrees);
+      float
+      degreesToRadians(float degrees);
+
+      float m_degree;
     
     private:
       /*************************************************************************/

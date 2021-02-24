@@ -2,9 +2,11 @@
 #include "gaRadians.h"
 
 namespace gaEngineSDK {
+  Radians::Radians(float radians){
+    m_radian = radians;
+  }
 
-  template<typename type>
-  inline type& Radians::radiansToDegrees(type radian) {
+  float Radians::radiansToDegrees(float radian) {
     return (radian * (180 / m_pi));
   }
 }

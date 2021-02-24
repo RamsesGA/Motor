@@ -14,7 +14,7 @@ namespace gaEngineSDK {
       */
       /*************************************************************************/
     
-      Matrix4x4(int32 columnSize, int32 rowSize);
+      
 
       /**
       * @brief Define the value of the matrix in column major.
@@ -132,6 +132,9 @@ namespace gaEngineSDK {
       int32
       getColumns() const;
     
+    protected:
+      Matrix4x4(int32 columnSize, int32 rowSize);
+
     private:
       int32 m_rowSize;
       int32 m_columnSize;
