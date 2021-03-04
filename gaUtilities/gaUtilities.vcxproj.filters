@@ -11,11 +11,11 @@
     <Filter Include="Archivos de origen\Math">
       <UniqueIdentifier>{e5725446-f8be-436e-b77f-44f59e16af3c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Platforms">
+      <UniqueIdentifier>{d7666e05-c124-45b2-9f9a-a4e09ec1c3da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\deleteme.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="src\gaVector2I.cpp">
       <Filter>Archivos de origen\Math</Filter>
     </ClCompile>
@@ -49,14 +49,17 @@
     <ClCompile Include="src\gaMatrix4x4.cpp">
       <Filter>Archivos de origen\Math</Filter>
     </ClCompile>
+    <ClCompile Include="src\gaLinuxMath.cpp">
+      <Filter>Archivos de origen\Platforms</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaPlatformMath.cpp">
+      <Filter>Archivos de origen\Platforms</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaWindowsMath.cpp">
+      <Filter>Archivos de origen\Platforms</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\gaPlatformTypes.h">
-      <Filter>Archivos de origen</Filter>
-    </ClInclude>
-    <ClInclude Include="include\gaPlatformDefines.h">
-      <Filter>Archivos de origen</Filter>
-    </ClInclude>
     <ClInclude Include="include\gaVector2I.h">
       <Filter>Archivos de origen\Math</Filter>
     </ClInclude>
@@ -95,6 +98,21 @@
     </ClInclude>
     <ClInclude Include="include\gaStdHeaders.h">
       <Filter>Archivos de origen</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaLinuxMath.h">
+      <Filter>Archivos de origen\Platforms</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaPlatformDefines.h">
+      <Filter>Archivos de origen\Platforms</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaPlatformMath.h">
+      <Filter>Archivos de origen\Platforms</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaPlatformTypes.h">
+      <Filter>Archivos de origen\Platforms</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaWindowsMath.h">
+      <Filter>Archivos de origen\Platforms</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

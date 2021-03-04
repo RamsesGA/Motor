@@ -169,11 +169,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\deleteme.cpp" />
     <ClCompile Include="src\gaDegrees.cpp" />
+    <ClCompile Include="src\gaLinuxMath.cpp" />
     <ClCompile Include="src\gaMath.cpp" />
     <ClCompile Include="src\gaMatrix.cpp" />
     <ClCompile Include="src\gaMatrix4x4.cpp" />
+    <ClCompile Include="src\gaPlatformMath.cpp" />
     <ClCompile Include="src\gaRadians.cpp" />
     <ClCompile Include="src\gaVector2.cpp" />
     <ClCompile Include="src\gaVector2I.cpp" />
@@ -181,13 +182,16 @@
     <ClCompile Include="src\gaVector3I.cpp" />
     <ClCompile Include="src\gaVector4.cpp" />
     <ClCompile Include="src\gaVector4I.cpp" />
+    <ClCompile Include="src\gaWindowsMath.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gaDegrees.h" />
+    <ClInclude Include="include\gaLinuxMath.h" />
     <ClInclude Include="include\gaMath.h" />
     <ClInclude Include="include\gaMatrix.h" />
     <ClInclude Include="include\gaMatrix4x4.h" />
     <ClInclude Include="include\gaPlatformDefines.h" />
+    <ClInclude Include="include\gaPlatformMath.h" />
     <ClInclude Include="include\gaPlatformTypes.h" />
     <ClInclude Include="include\gaPrerequisitesUtilities.h" />
     <ClInclude Include="include\gaRadians.h" />
@@ -198,6 +202,7 @@
     <ClInclude Include="include\gaVector3I.h" />
     <ClInclude Include="include\gaVector4.h" />
     <ClInclude Include="include\gaVector4I.h" />
+    <ClInclude Include="include\gaWindowsMath.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
