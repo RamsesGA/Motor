@@ -7,7 +7,8 @@ namespace gaEngineSDK {
       m_degree = degree;
   }
   
-  float Degrees::degreesToRadians(float radian) {
+  float 
+  Degrees::degreesToRadians(float radian) {
     return (radian * (m_pi / 180));
   }
 }

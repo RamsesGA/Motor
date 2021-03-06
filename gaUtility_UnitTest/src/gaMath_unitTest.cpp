@@ -25,7 +25,7 @@ TEST(gaUtilities, Type_Size) {
   EXPECT_EQ(sizeof(double), 8);
   EXPECT_EQ(sizeof(unsigned char), 1U);
 
-  //EXPECT_FLOAT_EQ(Math::PI, 3.14159265f);
+  EXPECT_FLOAT_EQ(Math::PI, 3.14159265f);
 }
 
 TEST(gaUtilities, Trigonometric) {

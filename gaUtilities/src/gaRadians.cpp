@@ -6,7 +6,8 @@ namespace gaEngineSDK {
     m_radian = radians;
   }
 
-  float Radians::radiansToDegrees(float radian) {
+  float
+  Radians::radiansToDegrees(float radian) {
     return (radian * (180 / m_pi));
   }
 }

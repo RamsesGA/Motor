@@ -14,13 +14,15 @@ namespace gaEngineSDK {
   */
   /*************************************************************************/
 
-  float Vector2::magnitude() {
+  float
+  Vector2::magnitude() {
     float temp = (m_x * m_x) + (m_y * m_y);
     temp = Math::sqrtf(temp);
     return (temp);
   }
 
-  void Vector2::normalize() {
+  void 
+  Vector2::normalize() {
     float magn = magnitude();
 
     if (magn > 0.0f) {
@@ -34,7 +36,8 @@ namespace gaEngineSDK {
     }
   }
 
-  float Vector2::dotProduct(const Vector2& vector) const {
+  float 
+  Vector2::dotProduct(const Vector2& vector) const {
     return (m_x * vector.m_x) + (m_y * vector.m_y);
   }
 
@@ -44,88 +47,103 @@ namespace gaEngineSDK {
   */
   /*************************************************************************/
 
-  bool Vector2::operator<(const Vector2& vector) {
+  bool
+  Vector2::operator<(const Vector2& vector) {
     if (m_x < vector.m_x && m_y < vector.m_y) {
       return true;
     }
     return false;
   }
 
-  bool Vector2::operator<=(const Vector2& vector) {
+  bool 
+  Vector2::operator<=(const Vector2& vector) {
     if (m_x <= vector.m_x && m_y <= vector.m_y) {
       return true;
     }
     return false;
   }
 
-  bool Vector2::operator>(const Vector2& vector) {
+  bool
+  Vector2::operator>(const Vector2& vector) {
     if (m_x > vector.m_x && m_y > vector.m_y) {
       return true;
     }
     return false;
   }
 
-  bool Vector2::operator>=(const Vector2& vector) {
+  bool 
+  Vector2::operator>=(const Vector2& vector) {
     if (m_x >= vector.m_x && m_y >= vector.m_y) {
       return true;
     }
     return false;
   }
 
-  Vector2& Vector2::operator=(const Vector2& vector) {
+  Vector2& 
+  Vector2::operator=(const Vector2& vector) {
     m_x = vector.m_x;
     m_y = vector.m_y;
     return *this;
   }
 
-  bool Vector2::operator==(const Vector2& vector) {
+  bool 
+  Vector2::operator==(const Vector2& vector) {
     if (m_x == vector.m_x && m_y == vector.m_y) {
       return true;
     }
     return false;
   }
 
-  Vector2 Vector2::operator+(const Vector2& vector) const {
+  Vector2 
+  Vector2::operator+(const Vector2& vector) const {
     return Vector2(m_x + vector.m_x, m_y + vector.m_y);
   }
 
-  Vector2& Vector2::operator+=(const Vector2& vector) {
+  Vector2& 
+  Vector2::operator+=(const Vector2& vector) {
     m_x += vector.m_x;
     m_y += vector.m_y;
     return *this;
   }
 
-  Vector2 Vector2::operator-(const Vector2& vector) const {
+  Vector2 
+  Vector2::operator-(const Vector2& vector) const {
     return Vector2(m_x - vector.m_x, m_y - vector.m_y);
   }
 
-  Vector2& Vector2::operator-=(const Vector2& vector) {
+  Vector2& 
+  Vector2::operator-=(const Vector2& vector) {
     m_x -= vector.m_x;
     m_y -= vector.m_y;
     return *this;
   }
 
-  Vector2 Vector2::operator*(const float vector) const {
+  Vector2 
+  Vector2::operator*(const float vector) const {
     return Vector2(vector * m_x, vector * m_y);
   }
 
-  Vector2& Vector2::operator*=(const float vector) {
+  Vector2& 
+  Vector2::operator*=(const float vector) {
     m_x *= vector;
     m_y *= vector;
     return *this;
   }
 
-  Vector2 Vector2::operator/(const float vector) const {
+  Vector2
+  Vector2::operator/(const float vector) const {
     return Vector2(m_x / vector, m_y / vector);
   }
 
-  Vector2& Vector2::operator/=(const float vector) {
+  Vector2& 
+  Vector2::operator/=(const float vector) {
     m_x = m_x / vector;
     m_y = m_y / vector;
     return *this;
   }
 
-  Vector2 Vector2::operator*(const Vector2& vector) const {
+  Vector2
+  Vector2::operator*(const Vector2& vector) const {
     Vector2 vectorTemp(0.0f, 0.0f);
 
     return Vector2(vectorTemp.m_x = m_x * vector.m_x,

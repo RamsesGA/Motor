@@ -166,12 +166,12 @@ namespace gaEngineSDK {
       * Members
       */
       /***********************************************************************/
-    
+
       static const float PI;
-      /*static const float EULER_NUMBER = 2.718f;
-      static const float SMALL_NUMBER = 1.e-6f;
-      static const float KINDA_SMALL_NUMBER = 1.e-4f;
-      static const float BIG_NUMBER = 3.4e+38f;
-      static const float DELTA = 1.e-5f;*/
+      static const float EULER_NUMBER;
+      static const float SMALL_NUMBER;
+      static const float KINDA_SMALL_NUMBER;
+      static const float BIG_NUMBER;
+      static const float DELTA;
   };
 }

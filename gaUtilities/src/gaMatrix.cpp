@@ -83,7 +83,8 @@ namespace gaEngineSDK {
   */
   /*************************************************************************/
 
-  Matrix Matrix::transpose() {
+  Matrix 
+  Matrix::transpose() {
     Matrix trans(m_columnSize, m_rowSize);
 
     for (int32 i = 0; i < m_columnSize; ++i) {
@@ -101,7 +102,8 @@ namespace gaEngineSDK {
   */
   /*************************************************************************/
 
-  Matrix Matrix::operator+(Matrix& matrix)const {
+  Matrix 
+  Matrix::operator+(Matrix& matrix)const {
     Matrix add(m_columnSize, m_rowSize);
 
     for (int32 i = 0; i < m_rowSize; ++i) {
@@ -112,7 +114,8 @@ namespace gaEngineSDK {
     return add;
   }
 
-  Matrix Matrix::operator-(Matrix& matrix)const {
+  Matrix
+  Matrix::operator-(Matrix& matrix)const {
     Matrix subs(m_columnSize, m_rowSize);
 
     for (int32 i = 0; i < m_rowSize; ++i) {
@@ -124,7 +127,8 @@ namespace gaEngineSDK {
     return subs;
   }
 
-  Matrix Matrix::operator*(Matrix& matrix)const {
+  Matrix 
+  Matrix::operator*(Matrix& matrix)const {
     Matrix multip(m_rowSize, matrix.getColumns());
 
     if (m_columnSize != matrix.getRows()) {
@@ -148,7 +152,8 @@ namespace gaEngineSDK {
     return multip;
   }
 
-  Matrix Matrix::operator+(float data)const {
+  Matrix 
+  Matrix::operator+(float data)const {
     Matrix result(m_rowSize, m_columnSize);
 
     for (int32 i = 0; i < m_rowSize; ++i) {
@@ -160,7 +165,8 @@ namespace gaEngineSDK {
     return result;
   }
 
-  Matrix Matrix::operator-(float data)const {
+  Matrix 
+  Matrix::operator-(float data)const {
     Matrix result(m_rowSize, m_columnSize);
 
     for (int32 i = 0; i < m_rowSize; ++i) {
@@ -172,7 +178,8 @@ namespace gaEngineSDK {
     return result;
   }
 
-  Matrix Matrix::operator*(float data)const {
+  Matrix 
+  Matrix::operator*(float data)const {
     Matrix result(m_rowSize, m_columnSize);
 
     for (int32 i = 0; i < m_rowSize; ++i) {
@@ -184,7 +191,8 @@ namespace gaEngineSDK {
     return result;
   }
 
-  Matrix Matrix::operator/(float data)const {
+  Matrix 
+  Matrix::operator/(float data)const {
     Matrix result(m_rowSize, m_columnSize);
 
     for (int32 i = 0; i < m_rowSize; ++i) {
@@ -196,7 +204,8 @@ namespace gaEngineSDK {
     return result;
   }
 
-  float& Matrix::operator()(const int32& row, const int32& column) {
+  float&
+  Matrix::operator()(const int32& row, const int32& column) {
     return this->m_matrix[row][column];
   }
 
@@ -206,15 +215,18 @@ namespace gaEngineSDK {
   */
   /*************************************************************************/
 
-  int32 Matrix::getRows() const {
+  int32
+  Matrix::getRows() const {
     return this->m_rowSize;
   }
 
-  int32 Matrix::getColumns() const {
+  int32
+  Matrix::getColumns() const {
     return this->m_columnSize;
   }
 
-  int32 Matrix::getSize() const {
+  int32 
+  Matrix::getSize() const {
     return (m_columnSize * m_rowSize);
   }
 }

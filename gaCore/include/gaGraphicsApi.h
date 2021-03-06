@@ -174,7 +174,8 @@ namespace gaEngineSDK {
      * @param hWnd handle to a window.
      * @return true or false.
      */
-     virtual bool InitDevice(HWND hWnd) = 0;
+     virtual bool 
+     InitDevice(HWND hWnd) = 0;
   
      /**
      * @brief Function to send to draw the indices of a declared object.
@@ -182,41 +183,47 @@ namespace gaEngineSDK {
      *        startIndexLocation 
      *        baseVertexLocation 
      */
-     virtual void DrawIndex(unsigned int indexCount,
-                            unsigned int startIndexLocation,
-                            unsigned int baseVertexLocation) = 0;
+     virtual void 
+     DrawIndex(unsigned int indexCount,
+               unsigned int startIndexLocation,
+               unsigned int baseVertexLocation) = 0;
   
      /**
      * @brief Function to exchange buffers and update your information.
      * @param syncInterval 
      *        flags 
      */
-     virtual void SwapChainPresent(unsigned int syncInterval,
-                                   unsigned int flags) = 0;
+     virtual void 
+     SwapChainPresent(unsigned int syncInterval,
+                      unsigned int flags) = 0;
     
      /**
      * @brief Function to load textures in file.
      * @param srcFile
      * @return gaTextures.
      */
-     virtual gaTextures* LoadTextureFromFile(std::string srcFile) = 0;
+     virtual gaTextures* 
+     LoadTextureFromFile(std::string srcFile) = 0;
     
      /**
      * @brief Function to obtain the automatically generated back buffer.
      * @return gaTextures.
      */
-     virtual gaTextures* GetDefaultBackBuffer() = 0;
+     virtual gaTextures* 
+     GetDefaultBackBuffer() = 0;
     
      /**
      * @brief Function to obtain the automatically generated depth stencil.
      * @return gaTextures.
      */
-     virtual gaTextures* GetDefaultDepthStencil() = 0;
+     virtual gaTextures* 
+     GetDefaultDepthStencil() = 0;
     
      /**
      * @brief OGL function to separate a program.
      */
-     virtual void UnbindOGL() = 0;
+     virtual void 
+     UnbindOGL() = 0;
     
      /************************************************************************/
      /**
@@ -229,8 +236,9 @@ namespace gaEngineSDK {
      * @param srcData
      *        updateDataCB
      */
-     virtual void UpdateConstantBuffer(const void* srcData,
-                                       gaConstantBuffer& updateDataCB) = 0;
+     virtual void 
+     UpdateConstantBuffer(const void* srcData,
+                          gaConstantBuffer& updateDataCB) = 0;
     
      /************************************************************************/
      /**
@@ -246,14 +254,16 @@ namespace gaEngineSDK {
      *        b
      *        a
      */
-     virtual void ClearYourRenderTargetView(gaTextures* renderTarget,
-                                            float r, float g, float b, float a) = 0;
+     virtual void 
+     ClearYourRenderTargetView(gaTextures* renderTarget,
+                               float r, float g, float b, float a) = 0;
     
      /**
      * @brief Function to clean our depth stencil view.
      * @param depthStencil
      */
-     virtual void ClearYourDepthStencilView(gaTextures* depthStencil) = 0;
+     virtual void 
+     ClearYourDepthStencilView(gaTextures* depthStencil) = 0;
     
      /************************************************************************/
      /**
@@ -270,10 +280,11 @@ namespace gaEngineSDK {
      *        entryPointPS
      * @return gaShaders
      */
-     virtual gaShaders* CreateShadersProgram(const std::wstring& nameVS,
-                                             const std::string& entryPointVS, 
-                                             const std::wstring& namePS,
-                                             const std::string& entryPointPS) = 0;
+     virtual gaShaders* 
+     CreateShadersProgram(const std::wstring& nameVS,
+                          const std::string& entryPointVS, 
+                          const std::wstring& namePS,
+                          const std::string& entryPointPS) = 0;
     
      /**
      * @brief Function to generate the vertex buffer.
@@ -281,8 +292,9 @@ namespace gaEngineSDK {
      *        size
      * @return gaVertexBuffer
      */
-     virtual gaVertexBuffer* CreateVertexBuffer(const void* data,
-                                                const unsigned int size) = 0;
+     virtual gaVertexBuffer* 
+     CreateVertexBuffer(const void* data,
+                        const unsigned int size) = 0;
   
      /**
      * @brief Function to generate the index buffer.
@@ -290,15 +302,17 @@ namespace gaEngineSDK {
      *        size
      * @return gaIndexBuffer
      */
-     virtual gaIndexBuffer* CreateIndexBuffer(const void* data,
-                                              const unsigned int size) = 0;
+     virtual gaIndexBuffer*
+     CreateIndexBuffer(const void* data,
+                       const unsigned int size) = 0;
     
      /**
      * @brief Function to generate constant buffers.
      * @param bufferSize
      * @return gaConstantBuffer
      */
-     virtual gaConstantBuffer* CreateConstantBuffer(const unsigned int bufferSize) = 0;
+     virtual gaConstantBuffer* 
+     CreateConstantBuffer(const unsigned int bufferSize) = 0;
      
      /**
      * @brief Function to generate the following: 
@@ -312,24 +326,27 @@ namespace gaEngineSDK {
      *        fileName
      * @return gaTextures
      */
-     virtual gaTextures* CreateTexture(const unsigned int width,
-                                       const unsigned int height,
-                                       const unsigned int bindFlags,
-                                       TEXTURE_FORMAT textureFormat,
-                                       const std::string fileName) = 0;
+     virtual gaTextures* 
+     CreateTexture(const unsigned int width,
+                   const unsigned int height,
+                   const unsigned int bindFlags,
+                   TEXTURE_FORMAT textureFormat,
+                   const std::string fileName) = 0;
      
      /**
      * @brief Function to generate the sampler state.
      * @return gaSamplerState
      */
-     virtual gaSamplerState* CreateSamplerState() = 0;
+     virtual gaSamplerState* 
+     CreateSamplerState() = 0;
     
      /**
      * @brief Function to generate the input layout.
      * @param vertexShader
      * @return gaInputLayout
      */
-     virtual gaInputLayout* CreateInputLayout(gaShaders& vertexShader) = 0;
+     virtual gaInputLayout* 
+     CreateInputLayout(gaShaders& vertexShader) = 0;
     
      /************************************************************************/
      /**
@@ -341,25 +358,29 @@ namespace gaEngineSDK {
      * @brief Function to save the information of the pixel shader.
      * @param pixelShader
      */
-     virtual void SetPixelShader(gaShaders& pixelShader) = 0;
+     virtual void 
+     SetPixelShader(gaShaders& pixelShader) = 0;
     
      /**
      * @brief Function to save vertex shader information.
      * @param vertexShader
      */
-     virtual void SetVertexShader(gaShaders& vertexShader) = 0;
+     virtual void 
+     SetVertexShader(gaShaders& vertexShader) = 0;
     
      /**
      * @brief Function to save vertex buffer information.
      * @param vertexBuffer
      */
-     virtual void SetVertexBuffer(gaVertexBuffer& vertexBuffer) = 0;
+     virtual void 
+     SetVertexBuffer(gaVertexBuffer& vertexBuffer) = 0;
      
      /**
      * @brief Function to save the index buffer information.
      * @param indexBuffer
      */
-     virtual void SetIndexBuffer(gaIndexBuffer& indexBuffer) = 0;
+     virtual void 
+     SetIndexBuffer(gaIndexBuffer& indexBuffer) = 0;
      
      /**
      * @brief Function to save the information of the constant buffers.
@@ -368,10 +389,11 @@ namespace gaEngineSDK {
      *        startSlot
      *        numBuffers
      */
-     virtual void SetConstantBuffer(bool isVertex,
-                                    gaConstantBuffer& constantBuffer,
-                                    const unsigned int startSlot,
-                                    const unsigned int numBuffers) = 0;
+     virtual void 
+     SetConstantBuffer(bool isVertex,
+                       gaConstantBuffer& constantBuffer,
+                       const unsigned int startSlot,
+                       const unsigned int numBuffers) = 0;
      
      /**
      * @brief Function to save the information of the sampler state.
@@ -379,9 +401,10 @@ namespace gaEngineSDK {
      *        samplerState
      *        texture
      */
-     virtual void SetSamplerState(const unsigned int startSlot,
-                                  std::vector<gaSamplerState*>& samplerState,
-                                  gaTextures& texture) = 0;
+     virtual void 
+     SetSamplerState(const unsigned int startSlot,
+                     std::vector<gaSamplerState*>& samplerState,
+                     gaTextures& texture) = 0;
      
      /**
      * @brief Function to save the information of the shader resource view.
@@ -389,31 +412,35 @@ namespace gaEngineSDK {
      *        startSlot
      *        numViews
      */
-     virtual void SetShaderResourceView(gaTextures* shaderResourceView,
-                                        const unsigned int startSlot,
-                                        const unsigned int numViews) = 0;
+     virtual void 
+     SetShaderResourceView(gaTextures* shaderResourceView,
+                           const unsigned int startSlot,
+                           const unsigned int numViews) = 0;
      
      /**
      * @brief Function to save the information of the render target.
      * @param renderTarget
      *        depthStencil
      */
-     virtual void SetRenderTarget(gaTextures* renderTarget,
-                                  gaTextures* depthStencil) = 0;
+     virtual void 
+     SetRenderTarget(gaTextures* renderTarget,
+                     gaTextures* depthStencil) = 0;
     
      /**
      * @brief Function to save the depth stencil information.
      * @param depthStencil
      *        stencilRef
      */
-     virtual void SetDepthStencil(gaTextures& depthStencil,
-                                  const unsigned int stencilRef) = 0;
+     virtual void 
+     SetDepthStencil(gaTextures& depthStencil,
+                     const unsigned int stencilRef) = 0;
      
      /**
      * @brief Function to save the information of the input layout.
      * @param vertexLayout
      */
-     virtual void SetInputLayout(gaInputLayout& vertexLayout) = 0;
+     virtual void 
+     SetInputLayout(gaInputLayout& vertexLayout) = 0;
      
      /**
      * @brief Function to save the viewport information.
@@ -421,21 +448,24 @@ namespace gaEngineSDK {
      *        width
      *        heigth
      */
-     virtual void SetViewport(const unsigned int numViewports,
-                              const unsigned int width, 
-                              const unsigned int heigth) = 0;
+     virtual void 
+     SetViewport(const unsigned int numViewports,
+                 const unsigned int width, 
+                 const unsigned int heigth) = 0;
      
      /**
      * @brief Function to save the topology information.
      * @param topology
      */
-     virtual void SetPrimitiveTopology(const unsigned int topology) = 0;
+     virtual void 
+     SetPrimitiveTopology(const unsigned int topology) = 0;
      
      /**
      * @brief Function to call VSSetShader.
      * @param vertexShader
      */
-     virtual void SetYourVS(gaShaders& vertexShader) = 0;
+     virtual void 
+     SetYourVS(gaShaders& vertexShader) = 0;
      
      /**
      * @brief Function to call VSSetConstantBuffers.
@@ -443,15 +473,17 @@ namespace gaEngineSDK {
      *        startSlot
      *        numBuffers
      */
-     virtual void SetYourVSConstantBuffers(gaConstantBuffer* constantBuffer,
-                                           const unsigned int startSlot,
-                                           const unsigned int numBuffers) = 0;
+     virtual void 
+     SetYourVSConstantBuffers(gaConstantBuffer* constantBuffer,
+                              const unsigned int startSlot,
+                              const unsigned int numBuffers) = 0;
      
      /**
      * @brief Function to call PSSetShader.
      * @param pixelShader
      */
-     virtual void SetYourPS(gaShaders& pixelShader) = 0;
+     virtual void 
+     SetYourPS(gaShaders& pixelShader) = 0;
      
      /**
      * @brief Function to call PSSetConstantBuffers.
@@ -459,9 +491,10 @@ namespace gaEngineSDK {
      *        startSlot
      *        numBuffers
      */
-     virtual void SetYourPSConstantBuffers(gaConstantBuffer* constantBuffer,
-                                           const unsigned int startSlot,
-                                           const unsigned int numBuffers) = 0;
+     virtual void 
+     SetYourPSConstantBuffers(gaConstantBuffer* constantBuffer,
+                              const unsigned int startSlot,
+                              const unsigned int numBuffers) = 0;
      
      /**
      * @brief Function to call PSSetSamplers.
@@ -469,15 +502,17 @@ namespace gaEngineSDK {
      *        startSlot
      *        numSamplers
      */
-     virtual void SetYourPSSampler(gaSamplerState& sampler,
-                                   const unsigned int startSlot,
-                                   const unsigned int numSamplers) = 0;
+     virtual void 
+     SetYourPSSampler(gaSamplerState& sampler,
+                      const unsigned int startSlot,
+                      const unsigned int numSamplers) = 0;
      
      /**
      * @brief Function to call program and link for OGL.
      * @param shaders
      */
-     virtual void SetShaders(gaShaders& shaders) = 0;
+     virtual void 
+     SetShaders(gaShaders& shaders) = 0;
     
      protected:
       /***********************************************************************/

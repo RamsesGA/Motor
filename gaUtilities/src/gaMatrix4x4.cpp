@@ -75,7 +75,8 @@ namespace gaEngineSDK {
     return trans;
   }
 
-  float& Matrix4x4::operator()(const int32& row, const int32& column) {
+  float&
+  Matrix4x4::operator()(const int32& row, const int32& column) {
     return this->m_mat4x4[row][column];
   }
 
@@ -85,7 +86,8 @@ namespace gaEngineSDK {
   */
   /*************************************************************************/
 
-  Matrix4x4 Matrix4x4::operator+(Matrix4x4& matrix)const {
+  Matrix4x4 
+  Matrix4x4::operator+(Matrix4x4& matrix)const {
     Matrix4x4 add(m_columnSize, m_rowSize);
 
     for (int32 i = 0; i < m_rowSize; ++i) {
@@ -96,11 +98,13 @@ namespace gaEngineSDK {
     return add;
   }
 
-  void Matrix4x4::operator+=(Matrix4x4& matrix){
+  void 
+  Matrix4x4::operator+=(Matrix4x4& matrix){
     *this = *this + matrix;
   }
 
-  Matrix4x4 Matrix4x4::operator-(Matrix4x4& matrix)const {
+  Matrix4x4 
+  Matrix4x4::operator-(Matrix4x4& matrix)const {
     Matrix4x4 subs(m_columnSize, m_rowSize);
 
     for (int32 i = 0; i < m_rowSize; ++i) {
@@ -112,7 +116,8 @@ namespace gaEngineSDK {
     return subs;
   }
 
-  Matrix4x4 Matrix4x4::operator*(Matrix4x4& matrix)const {
+  Matrix4x4 
+  Matrix4x4::operator*(Matrix4x4& matrix)const {
     Matrix4x4 multip(m_rowSize, matrix.getColumns());
 
     if (m_columnSize != matrix.getRows()) {
@@ -136,7 +141,8 @@ namespace gaEngineSDK {
     return multip;
   }
 
-  Matrix4x4 Matrix4x4::operator+(float data)const {
+  Matrix4x4
+  Matrix4x4::operator+(float data)const {
     Matrix4x4 result(m_rowSize, m_columnSize);
 
     for (int32 i = 0; i < m_rowSize; ++i) {
@@ -148,7 +154,8 @@ namespace gaEngineSDK {
     return result;
   }
 
-  Matrix4x4 Matrix4x4::operator-(float data)const {
+  Matrix4x4 
+  Matrix4x4::operator-(float data)const {
     Matrix4x4 result(m_rowSize, m_columnSize);
 
     for (int32 i = 0; i < m_rowSize; ++i) {
@@ -160,7 +167,8 @@ namespace gaEngineSDK {
     return result;
   }
 
-  Matrix4x4 Matrix4x4::operator*(float data)const {
+  Matrix4x4 
+  Matrix4x4::operator*(float data)const {
     Matrix4x4 result(m_rowSize, m_columnSize);
 
     for (int32 i = 0; i < m_rowSize; ++i) {
@@ -172,11 +180,13 @@ namespace gaEngineSDK {
     return result;
   }
 
-  void Matrix4x4::operator*=(float data) {
+  void 
+  Matrix4x4::operator*=(float data) {
     *this = *this * data;
   }
 
-  Matrix4x4 Matrix4x4::operator/(float data)const {
+  Matrix4x4 
+  Matrix4x4::operator/(float data)const {
     Matrix4x4 result(m_rowSize, m_columnSize);
 
     for (int32 i = 0; i < m_rowSize; ++i) {
@@ -196,11 +206,13 @@ namespace gaEngineSDK {
   */
   /*************************************************************************/
 
-  int32 Matrix4x4::getRows() const {
+  int32
+  Matrix4x4::getRows() const {
     return this->m_rowSize;
   }
 
-  int32 Matrix4x4::getColumns() const {
+  int32
+  Matrix4x4::getColumns() const {
     return this->m_columnSize;
   }
 }
