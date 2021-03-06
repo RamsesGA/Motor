@@ -55,25 +55,9 @@ namespace gaEngineSDK {
     return false;
   }
 
-  bool 
-  Vector2::operator<=(const Vector2& vector) {
-    if (m_x <= vector.m_x && m_y <= vector.m_y) {
-      return true;
-    }
-    return false;
-  }
-
   bool
   Vector2::operator>(const Vector2& vector) {
     if (m_x > vector.m_x && m_y > vector.m_y) {
-      return true;
-    }
-    return false;
-  }
-
-  bool 
-  Vector2::operator>=(const Vector2& vector) {
-    if (m_x >= vector.m_x && m_y >= vector.m_y) {
       return true;
     }
     return false;
@@ -127,18 +111,6 @@ namespace gaEngineSDK {
   Vector2::operator*=(const float vector) {
     m_x *= vector;
     m_y *= vector;
-    return *this;
-  }
-
-  Vector2
-  Vector2::operator/(const float vector) const {
-    return Vector2(m_x / vector, m_y / vector);
-  }
-
-  Vector2& 
-  Vector2::operator/=(const float vector) {
-    m_x = m_x / vector;
-    m_y = m_y / vector;
     return *this;
   }
 

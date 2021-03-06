@@ -130,13 +130,12 @@ namespace gaEngineSDK{
       */
       int32
       getSize() const;
-      
   
     private:
       int32 m_rowSize;
       int32 m_columnSize;
       float m_mat3x3[3][3];
       float m_mat2x2[2][2];
-      std::vector<std::vector<float> > m_matrix;
+      std::vector<std::vector<float>> m_matrix;
   };
 }

@@ -40,9 +40,7 @@ TEST(gaUtilities, Vector2_Tests) {
   EXPECT_TRUE(testVec2  >  testVec);
 
   EXPECT_FALSE(testVec  >  testVec2);
-  EXPECT_FALSE(testVec  >= testVec2);
   EXPECT_FALSE(testVec2 <  testVec);
-  EXPECT_FALSE(testVec2 <= testVec);
 
   testVec = testVec2;
   EXPECT_TRUE(testVec == testVec2);
@@ -72,17 +70,9 @@ TEST(gaUtilities, Vector2_Tests) {
   EXPECT_FLOAT_EQ(testVec2.m_x, 1800.0f);
   EXPECT_FLOAT_EQ(testVec2.m_y, 1800.0f);
 
-  testVec = testVec / 300.0f;
-  EXPECT_FLOAT_EQ(testVec.m_x, 75.0f);
-  EXPECT_FLOAT_EQ(testVec.m_y, 75.0f);
-
-  testVec2 /= 15.0f;
-  EXPECT_FLOAT_EQ(testVec2.m_x, 120.0f);
-  EXPECT_FLOAT_EQ(testVec2.m_y, 120.0f);
-
   testVec2 = testVec * 2.0f;
-  EXPECT_FLOAT_EQ(testVec2.m_x, 150.0f);
-  EXPECT_FLOAT_EQ(testVec2.m_y, 150.0f);
+  EXPECT_FLOAT_EQ(testVec2.m_x, 45000.0f);
+  EXPECT_FLOAT_EQ(testVec2.m_y, 45000.0f);
 }
 
 TEST(gaUtilities, Vector2I_Tests) {
@@ -94,8 +84,6 @@ TEST(gaUtilities, Vector2I_Tests) {
   testVec.m_y = 15;
   EXPECT_EQ(testVec.m_x, 55);
   EXPECT_EQ(testVec.m_y, 15);
-  /***************************************************************************/
-  EXPECT_EQ(testVec.magnitude(), 57);
   /***************************************************************************/
   testVec.m_x = 50;
   testVec.m_y = 20;
@@ -109,9 +97,7 @@ TEST(gaUtilities, Vector2I_Tests) {
   EXPECT_TRUE(testVec2 > testVec);
   
   EXPECT_FALSE(testVec  >  testVec2);
-  EXPECT_FALSE(testVec  >= testVec2);
   EXPECT_FALSE(testVec2 <  testVec);
-  EXPECT_FALSE(testVec2 <= testVec);
   
   testVec = testVec2;
   EXPECT_TRUE(testVec  == testVec2);
@@ -141,17 +127,9 @@ TEST(gaUtilities, Vector2I_Tests) {
   EXPECT_EQ(testVec2.m_x, 1800);
   EXPECT_EQ(testVec2.m_y, 1800);
   
-  testVec = testVec / 300;
-  EXPECT_EQ(testVec.m_x, 75);
-  EXPECT_EQ(testVec.m_y, 75);
-  
-  testVec2 /= 15;
-  EXPECT_EQ(testVec2.m_x, 120);
-  EXPECT_EQ(testVec2.m_y, 120);
-  
   testVec2 = testVec * 2;
-  EXPECT_EQ(testVec2.m_x, 150);
-  EXPECT_EQ(testVec2.m_y, 150);
+  EXPECT_EQ(testVec2.m_x, 45000);
+  EXPECT_EQ(testVec2.m_y, 45000);
 }
 
 TEST(gaUtilities, Vector3_Tests) {
@@ -188,9 +166,7 @@ TEST(gaUtilities, Vector3_Tests) {
   EXPECT_TRUE(testVec2 > testVec);
 
   EXPECT_FALSE(testVec  >  testVec2);
-  EXPECT_FALSE(testVec  >= testVec2);
   EXPECT_FALSE(testVec2 <  testVec);
-  EXPECT_FALSE(testVec2 <= testVec);
 
   testVec = testVec2;
   EXPECT_TRUE(testVec  == testVec2);
@@ -226,20 +202,10 @@ TEST(gaUtilities, Vector3_Tests) {
   EXPECT_FLOAT_EQ(testVec2.m_y, 1800.0f);
   EXPECT_FLOAT_EQ(testVec2.m_z, 1800.0f);
 
-  testVec = testVec / 300.0f;
-  EXPECT_FLOAT_EQ(testVec.m_x, 75.0f);
-  EXPECT_FLOAT_EQ(testVec.m_y, 75.0f);
-  EXPECT_FLOAT_EQ(testVec.m_z, 75.0f);
-
-  testVec2 /= 15.0f;
-  EXPECT_FLOAT_EQ(testVec2.m_x, 120.0f);
-  EXPECT_FLOAT_EQ(testVec2.m_y, 120.0f);
-  EXPECT_FLOAT_EQ(testVec2.m_z, 120.0f);
-
   testVec2 = testVec * 2.0f;
-  EXPECT_FLOAT_EQ(testVec2.m_x, 150.0f);
-  EXPECT_FLOAT_EQ(testVec2.m_y, 150.0f);
-  EXPECT_FLOAT_EQ(testVec2.m_z, 150.0f);
+  EXPECT_FLOAT_EQ(testVec2.m_x, 45000.0f);
+  EXPECT_FLOAT_EQ(testVec2.m_y, 45000.0f);
+  EXPECT_FLOAT_EQ(testVec2.m_z, 45000.0f);
 }
 
 TEST(gaUtilities, Vector3I_Tests) {
@@ -255,8 +221,6 @@ TEST(gaUtilities, Vector3I_Tests) {
   EXPECT_EQ(testVec.m_y, 15);
   EXPECT_EQ(testVec.m_z, 20);
   /***************************************************************************/
-  EXPECT_EQ(testVec.magnitude(), 60);
-  /***************************************************************************/
   testVec.m_x = 50;
   testVec.m_y = 20;
   testVec.m_y = 50;
@@ -271,9 +235,7 @@ TEST(gaUtilities, Vector3I_Tests) {
   EXPECT_TRUE(testVec2 > testVec);
 
   EXPECT_FALSE(testVec  >  testVec2);
-  EXPECT_FALSE(testVec  >= testVec2);
   EXPECT_FALSE(testVec2 <  testVec);
-  EXPECT_FALSE(testVec2 <= testVec);
 
   testVec = testVec2;
   EXPECT_TRUE(testVec  == testVec2);
@@ -309,20 +271,10 @@ TEST(gaUtilities, Vector3I_Tests) {
   EXPECT_EQ(testVec2.m_y, 1800);
   EXPECT_EQ(testVec2.m_z, 1800);
 
-  testVec = testVec / 300;
-  EXPECT_EQ(testVec.m_x, 75);
-  EXPECT_EQ(testVec.m_y, 75);
-  EXPECT_EQ(testVec.m_z, 75);
-
-  testVec2 /= 15;
-  EXPECT_EQ(testVec2.m_x, 120);
-  EXPECT_EQ(testVec2.m_y, 120);
-  EXPECT_EQ(testVec2.m_z, 120);
-
   testVec2 = testVec * 2;
-  EXPECT_EQ(testVec2.m_x, 150);
-  EXPECT_EQ(testVec2.m_y, 150);
-  EXPECT_EQ(testVec2.m_z, 150);
+  EXPECT_EQ(testVec2.m_x, 45000);
+  EXPECT_EQ(testVec2.m_y, 45000);
+  EXPECT_EQ(testVec2.m_z, 45000);
 }
 
 TEST(gaUtilities, Vector4_Tests) {
@@ -365,9 +317,7 @@ TEST(gaUtilities, Vector4_Tests) {
   EXPECT_TRUE(testVec2 > testVec);
 
   EXPECT_FALSE(testVec > testVec2);
-  EXPECT_FALSE(testVec >= testVec2);
   EXPECT_FALSE(testVec2 < testVec);
-  EXPECT_FALSE(testVec2 <= testVec);
 
   testVec = testVec2;
   EXPECT_TRUE(testVec == testVec2);
@@ -409,23 +359,11 @@ TEST(gaUtilities, Vector4_Tests) {
   EXPECT_FLOAT_EQ(testVec2.m_z, 1800.0f);
   EXPECT_FLOAT_EQ(testVec2.m_w, 1800.0f);
 
-  testVec = testVec / 300.0f;
-  EXPECT_FLOAT_EQ(testVec.m_x, 75.0f);
-  EXPECT_FLOAT_EQ(testVec.m_y, 75.0f);
-  EXPECT_FLOAT_EQ(testVec.m_z, 75.0f);
-  EXPECT_FLOAT_EQ(testVec.m_w, 75.0f);
-
-  testVec2 /= 15.0f;
-  EXPECT_FLOAT_EQ(testVec2.m_x, 120.0f);
-  EXPECT_FLOAT_EQ(testVec2.m_y, 120.0f);
-  EXPECT_FLOAT_EQ(testVec2.m_z, 120.0f);
-  EXPECT_FLOAT_EQ(testVec2.m_w, 120.0f);
-
   testVec2 = testVec * 2.0f;
-  EXPECT_FLOAT_EQ(testVec2.m_x, 150.0f);
-  EXPECT_FLOAT_EQ(testVec2.m_y, 150.0f);
-  EXPECT_FLOAT_EQ(testVec2.m_z, 150.0f);
-  EXPECT_FLOAT_EQ(testVec2.m_w, 150.0f);
+  EXPECT_FLOAT_EQ(testVec2.m_x, 45000.0f);
+  EXPECT_FLOAT_EQ(testVec2.m_y, 45000.0f);
+  EXPECT_FLOAT_EQ(testVec2.m_z, 45000.0f);
+  EXPECT_FLOAT_EQ(testVec2.m_w, 45000.0f);
 }
 
 TEST(gaUtilities, Vector4I_Tests) {
@@ -444,8 +382,6 @@ TEST(gaUtilities, Vector4I_Tests) {
   EXPECT_EQ(testVec.m_z, 20);
   EXPECT_EQ(testVec.m_w, 150);
   /***************************************************************************/
-  EXPECT_EQ(testVec.magnitude(), 162);
-  /***************************************************************************/
   testVec.m_x = 50;
   testVec.m_y = 20;
   testVec.m_y = 50;
@@ -462,9 +398,7 @@ TEST(gaUtilities, Vector4I_Tests) {
   EXPECT_TRUE(testVec2 > testVec);
 
   EXPECT_FALSE(testVec  >  testVec2);
-  EXPECT_FALSE(testVec  >= testVec2);
   EXPECT_FALSE(testVec2 <  testVec);
-  EXPECT_FALSE(testVec2 <= testVec);
 
   testVec = testVec2;
   EXPECT_TRUE(testVec  == testVec2);
@@ -506,21 +440,9 @@ TEST(gaUtilities, Vector4I_Tests) {
   EXPECT_EQ(testVec2.m_z, 1800);
   EXPECT_EQ(testVec2.m_w, 1800);
 
-  testVec = testVec / 300;
-  EXPECT_EQ(testVec.m_x, 75);
-  EXPECT_EQ(testVec.m_y, 75);
-  EXPECT_EQ(testVec.m_z, 75);
-  EXPECT_EQ(testVec.m_w, 75);
-
-  testVec2 /= 15;
-  EXPECT_EQ(testVec2.m_x, 120);
-  EXPECT_EQ(testVec2.m_y, 120);
-  EXPECT_EQ(testVec2.m_z, 120);
-  EXPECT_EQ(testVec2.m_w, 120);
-
   testVec2 = testVec * 2;
-  EXPECT_EQ(testVec2.m_x, 150);
-  EXPECT_EQ(testVec2.m_y, 150);
-  EXPECT_EQ(testVec2.m_z, 150);
-  EXPECT_EQ(testVec2.m_w, 150);
+  EXPECT_EQ(testVec2.m_x, 45000);
+  EXPECT_EQ(testVec2.m_y, 45000);
+  EXPECT_EQ(testVec2.m_z, 45000);
+  EXPECT_EQ(testVec2.m_w, 45000);
 }

@@ -120,11 +120,6 @@ namespace gaEngineSDK {
     return std::sqrtf(data);
   }
 
-  int32 
-  PlatformMath::sqrti(int32 data) {
-    return static_cast<int32>(std::sqrt(data) + 0.5f);
-  }
-
   float
   PlatformMath::hypo(float x, float y) {
     return std::hypot(x, y);

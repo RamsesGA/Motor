@@ -75,34 +75,12 @@ namespace gaEngineSDK {
     return false;
   }
 
-  bool 
-  Vector4::operator<=(const Vector4& vector) {
-    if ((m_x <= vector.m_x) &&
-        (m_y <= vector.m_y) &&
-        (m_z <= vector.m_z) &&
-        (m_w <= vector.m_w)) {
-      return true;
-    }
-    return false;
-  }
-
   bool
   Vector4::operator>(const Vector4& vector) {
     if ((m_x > vector.m_x) &&
         (m_y > vector.m_y) &&
         (m_z > vector.m_z) &&
         (m_w > vector.m_w)) {
-      return true;
-    }
-    return false;
-  }
-
-  bool
-  Vector4::operator>=(const Vector4& vector) {
-    if ((m_x >= vector.m_x) &&
-        (m_y >= vector.m_y) &&
-        (m_z >= vector.m_z) &&
-        (m_w >= vector.m_w)) {
       return true;
     }
     return false;
@@ -176,23 +154,6 @@ namespace gaEngineSDK {
     m_y *= vector;
     m_z *= vector;
     m_w *= vector;
-    return *this;
-  }
-
-  Vector4 
-  Vector4::operator/(const float vector) const {
-    return Vector4(m_x / vector,
-                   m_y / vector,
-                   m_z / vector,
-                   m_w / vector);
-  }
-
-  Vector4& 
-  Vector4::operator/=(const float vector) {
-    m_x = m_x / vector;
-    m_y = m_y / vector;
-    m_z = m_z / vector;
-    m_w = m_w / vector;
     return *this;
   }
 

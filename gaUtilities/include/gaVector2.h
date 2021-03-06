@@ -58,29 +58,12 @@ namespace gaEngineSDK {
       operator <(const Vector2& vector);
     
       /**
-      * @brief Check if one vector is less than another or equal, based on X, Y.
-      * @param Another vector to compare.
-      * @return We return true if it is small or equal, otherwise it is false.
-      */
-      bool
-      operator <=(const Vector2& vector);
-    
-      /**
       * @brief Check if one vector is greater than another, based on X, Y.
       * @param Another vector to compare.
       * @return We return true if it is greater, otherwise it is false.
       */
       bool
       operator >(const Vector2& vector);
-    
-      /**
-      * @brief Check if one vector is greater than another
-               or equal, based on X, Y.
-      * @param Another vector to compare.
-      * @return We return true if it is greater or equal, otherwise it is false.
-      */
-      bool
-      operator >=(const Vector2& vector);
     
       /**
       * @brief We match the values of one vector in another.
@@ -145,22 +128,6 @@ namespace gaEngineSDK {
       */
       Vector2&
       operator *=(const float val);
-    
-      /**
-      * @brief We divide the value of a vector with an integer.
-      * @param An integer to divide.
-      * @return New value for the vector.
-      */
-      Vector2
-      operator /(const float val)const;
-    
-      /**
-      * @brief We divide the value of the current vector with an integer.
-      * @param An integer to divide.
-      * @return New value for the vector.
-      */
-      Vector2&
-      operator /=(const float val);
     
       /**
       * @brief We multiply the value of one vector with another.

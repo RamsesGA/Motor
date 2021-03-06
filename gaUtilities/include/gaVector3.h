@@ -2,9 +2,6 @@
 
 #include "gaPrerequisitesUtilities.h"
 #include "gaMath.h"
-//#include "gaVector4.h"
-
-//class Vector4;
 
 namespace gaEngineSDK {
 
@@ -17,11 +14,6 @@ namespace gaEngineSDK {
       Vector3(float x = 0.0f,
               float y = 0.0f,
               float z = 0.0f);
-    
-      /**
-      * @brief This constructor let us create a vector 3 with one vector 4
-      */
-      //Vector3(const Vector4 & vec4);
 
       /**
       * @brief Destroyer.
@@ -76,29 +68,12 @@ namespace gaEngineSDK {
       operator<(const Vector3& vector);
     
       /**
-      * @brief Check if one vector is less than another or equal, based on X, Y.
-      * @param Another vector to compare.
-      * @return We return true if it is small or equal, otherwise it is false.
-      */
-      bool
-      operator<=(const Vector3& vector);
-    
-      /**
       * @brief Check if one vector is greater than another, based on X, Y.
       * @param Another vector to compare.
       * @return We return true if it is greater, otherwise it is false.
       */
       bool
       operator>(const Vector3& vector);
-    
-      /**
-      * @brief Check if one vector is greater than another
-               or equal, based on X, Y.
-      * @param Another vector to compare.
-      * @return We return true if it is greater or equal, otherwise it is false.
-      */
-      bool
-      operator>=(const Vector3& vector);
     
       /**
       * @brief We match the values of one vector in another.
@@ -165,36 +140,12 @@ namespace gaEngineSDK {
       operator*=(const float val);
     
       /**
-      * @brief We divide the value of a vector with an integer.
-      * @param An integer to divide.
-      * @return New value for the vector.
-      */
-      Vector3
-      operator/(const float val)const;
-    
-      /**
-      * @brief We divide the value of the current vector with an integer.
-      * @param An integer to divide.
-      * @return New value for the vector.
-      */
-      Vector3&
-      operator/=(const float val);
-    
-      /**
       * @brief We multiply the value of one vector with another.
       * @param Another vector to multiply.
       * @return New value for the vector.
       */
       Vector3
       operator*(const Vector3& vector)const;
-
-      /**
-      * @brief Calculate the cross product with another vector.
-      * @param vector The vector to do the math.
-      * @return Cross product.
-      */
-      Vector3
-      operator^(const Vector3& vector) const;
 
       /**
       * @brief Obtain a specific component.

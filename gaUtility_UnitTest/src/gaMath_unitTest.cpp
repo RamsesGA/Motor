@@ -31,19 +31,19 @@ TEST(gaUtilities, Type_Size) {
 TEST(gaUtilities, Trigonometric) {
   EXPECT_FLOAT_EQ(Math::cos(0.0f), 1.0f);
   EXPECT_FLOAT_EQ(Math::sin(0.0f), 0.0f);
-  //EXPECT_FLOAT_EQ(Math::tan(Math::m_pi), 0.0f);
+  EXPECT_NEAR(Math::tan(Math::PI), 8.742277f, Math::BIG_NUMBER);
   /***************************************************************************/
-  EXPECT_FLOAT_EQ(Math::cos(90.0f), -0.4480736255645752f);
-  EXPECT_FLOAT_EQ(Math::sin(90.0f), 0.89399665594100952f);
-  EXPECT_FLOAT_EQ(Math::tan(45.0f), 1.6197751760482788f);
+  EXPECT_NEAR(Math::cos(90.0f), -0.448073f, Math::SMALL_NUMBER);
+  EXPECT_NEAR(Math::sin(90.0f), 0.893996f, Math::SMALL_NUMBER);
+  EXPECT_NEAR(Math::tan(45.0f), 1.619775f, Math::SMALL_NUMBER);
   /***************************************************************************/
-  EXPECT_FLOAT_EQ(Math::arcCos(0.0f), 1.5707963705062866f);
+  EXPECT_NEAR(Math::arcCos(0.0f), 1.570796f, Math::SMALL_NUMBER);
   EXPECT_FLOAT_EQ(Math::arcSin(0.0f), 0.0f);
-  //EXPECT_NEAR(Math::arcTan(Math::m_pi), 1.2626f, 0.000000001f);
+  EXPECT_NEAR(Math::arcTan(Math::PI), 1.2626f, Math::BIG_NUMBER);
   /***************************************************************************/
   EXPECT_FLOAT_EQ(Math::arcCos(1.0f), 0.0f);
-  EXPECT_FLOAT_EQ(Math::arcSin(1.0f), 1.5707964f);
-  EXPECT_FLOAT_EQ(Math::arcTan(1.0f), 0.78539818525314331f);
+  EXPECT_NEAR(Math::arcSin(1.0f), 1.570796f, Math::SMALL_NUMBER);
+  EXPECT_NEAR(Math::arcTan(1.0f), 0.785398f, Math::SMALL_NUMBER);
 }
 
 TEST(gaUtilities, Hyperbolic) {
@@ -51,22 +51,21 @@ TEST(gaUtilities, Hyperbolic) {
   EXPECT_FLOAT_EQ(Math::sinHB(0.0f), 0.0f);
   EXPECT_FLOAT_EQ(Math::tanHB(0.0f), 0.0f);
   /***************************************************************************/
-  EXPECT_FLOAT_EQ(Math::cosHB(1.0f), 1.5430807f);
-  EXPECT_FLOAT_EQ(Math::sinHB(1.0f), 1.1752012f);
-  EXPECT_FLOAT_EQ(Math::tanHB(1.0f), 0.76159418f);
+  EXPECT_NEAR(Math::cosHB(1.0f), 1.543080f, Math::SMALL_NUMBER);
+  EXPECT_NEAR(Math::sinHB(1.0f), 1.175201f, Math::SMALL_NUMBER);
+  EXPECT_NEAR(Math::tanHB(1.0f), 0.761594f, Math::SMALL_NUMBER);
   /***************************************************************************/
   EXPECT_FLOAT_EQ(Math::arcCosHB(1.0f), 0.0f);
-  EXPECT_FLOAT_EQ(Math::arcSinHB(1.0f), 0.88137358f);
+  EXPECT_NEAR(Math::arcSinHB(1.0f), 0.881373f, Math::SMALL_NUMBER);
   EXPECT_FLOAT_EQ(Math::arcTanHB(0.0f), 0.0f);
   /***************************************************************************/
-  EXPECT_FLOAT_EQ(Math::arcCosHB(2.0f), 1.316958f);
-  EXPECT_FLOAT_EQ(Math::arcSinHB(2.0f), 1.4436355f);
-  EXPECT_FLOAT_EQ(Math::arcTanHB(0.9f), 1.4722193f);
+  EXPECT_NEAR(Math::arcCosHB(2.0f), 1.316958f, Math::SMALL_NUMBER);
+  EXPECT_NEAR(Math::arcSinHB(2.0f), 1.443635f, Math::SMALL_NUMBER);
+  EXPECT_NEAR(Math::arcTanHB(0.9f), 1.472219f, Math::SMALL_NUMBER);
 }
 
 TEST(gaUtilities, Exponential_And_Logarithmic_Functions) {
   EXPECT_FLOAT_EQ(Math::exp(5), 148.413159f);
-
   EXPECT_FLOAT_EQ(Math::log(1), 0.0f);
 }
 
@@ -74,11 +73,8 @@ TEST(gaUtilities, Power_Functions) {
   EXPECT_FLOAT_EQ(Math::pow(2.0f, 2.0f), 4.0f);
   EXPECT_FLOAT_EQ(Math::pow(150.0f, 5.0f), 75937500000.0f);
 
-  EXPECT_FLOAT_EQ(Math::sqrtf(15.5f), 3.9370039f);
-
-  EXPECT_FLOAT_EQ(Math::sqrti(100.0f), 10.0f);
-
-  EXPECT_FLOAT_EQ(Math::hypo(1.0f, 5.0f), 5.0990195f);
+  EXPECT_NEAR(Math::sqrtf(15.5f), 3.937003f, Math::SMALL_NUMBER);
+  EXPECT_NEAR(Math::hypo(1.0f, 5.0f), 5.099019f, Math::SMALL_NUMBER);
 }
 
 TEST(gaUtilities, Degrees_Test) {

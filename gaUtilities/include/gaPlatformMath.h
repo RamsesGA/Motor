@@ -150,12 +150,6 @@ namespace gaEngineSDK {
       sqrtf(float data);
     
       /**
-      * @brief Returns the square root of x in integers.
-      */
-      static int32
-      sqrti(int32 data);
-    
-      /**
       * @brief Returns the natural logarithm of x.
       */
       static float

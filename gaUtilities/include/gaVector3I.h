@@ -20,17 +20,11 @@ namespace gaEngineSDK {
       */
       ~Vector3I() = default;
     
-      /*************************************************************************/
+      /***********************************************************************/
       /**
       * Mathematical normal methods.
       */
-      /*************************************************************************/
-    
-      /**
-      * @brief Represents the length of a vector.
-      */
-      int32
-      magnitude();
+      /***********************************************************************/
     
       /**
       * @brief Operation between this vector with another.
@@ -47,11 +41,11 @@ namespace gaEngineSDK {
       Vector3I
       crossProduct(const Vector3I& vector)const;
     
-      /*************************************************************************/
+      /***********************************************************************/
       /**
       * Operator overload.
       */
-      /*************************************************************************/
+      /***********************************************************************/
     
       /**
       * @brief Check if one vector is less than another, based on X, Y.
@@ -62,29 +56,12 @@ namespace gaEngineSDK {
       operator<(const Vector3I& vector);
     
       /**
-      * @brief Check if one vector is less than another or equal, based on X, Y.
-      * @param Another vector to compare.
-      * @return We return true if it is small or equal, otherwise it is false.
-      */
-      bool
-      operator<=(const Vector3I& vector);
-    
-      /**
       * @brief Check if one vector is greater than another, based on X, Y.
       * @param Another vector to compare.
       * @return We return true if it is greater, otherwise it is false.
       */
       bool
       operator>(const Vector3I& vector);
-    
-      /**
-      * @brief Check if one vector is greater than another
-               or equal, based on X, Y.
-      * @param Another vector to compare.
-      * @return We return true if it is greater or equal, otherwise it is false.
-      */
-      bool
-      operator>=(const Vector3I& vector);
     
       /**
       * @brief We match the values of one vector in another.
@@ -151,22 +128,6 @@ namespace gaEngineSDK {
       operator*=(const int32 val);
     
       /**
-      * @brief We divide the value of a vector with an integer.
-      * @param An integer to divide.
-      * @return New value for the vector.
-      */
-      Vector3I
-      operator/(const int32 val)const;
-    
-      /**
-      * @brief We divide the value of the current vector with an integer.
-      * @param An integer to divide.
-      * @return New value for the vector.
-      */
-      Vector3I&
-      operator/=(const int32 val);
-    
-      /**
       * @brief We multiply the value of one vector with another.
       * @param Another vector to multiply.
       * @return New value for the vector.
@@ -174,11 +135,11 @@ namespace gaEngineSDK {
       Vector3I
       operator*(const Vector3I& vector)const;
     
-      /*************************************************************************/
+      /***********************************************************************/
       /**
       * Member.
       */
-      /*************************************************************************/
+      /***********************************************************************/
       int32 m_x;
       int32 m_y;
       int32 m_z;

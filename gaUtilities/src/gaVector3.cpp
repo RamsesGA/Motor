@@ -9,17 +9,11 @@ namespace gaEngineSDK {
     m_z = z;
   }
 
-  /*Vector3::Vector3(const Vector4 & vec4){
-    m_x = vec4.m_x;
-    m_y = vec4.m_y;
-    m_z = vec4.m_z;
-  }*/
-
-  /*************************************************************************/
+  /***************************************************************************/
   /**
   * Mathematical methods.
   */
-  /*************************************************************************/
+  /***************************************************************************/
 
   float 
   Vector3::magnitude() {
@@ -55,11 +49,11 @@ namespace gaEngineSDK {
       m_x * vector.m_y - m_y * vector.m_x);
   }
 
-  /*************************************************************************/
+  /***************************************************************************/
   /**
   * Operator overload.
   */
-  /*************************************************************************/
+  /***************************************************************************/
 
   bool 
   Vector3::operator<(const Vector3& vector) {
@@ -72,30 +66,10 @@ namespace gaEngineSDK {
   }
 
   bool 
-  Vector3::operator<=(const Vector3& vector) {
-    if ((m_x <= vector.m_x) &&
-        (m_y <= vector.m_y) &&
-        (m_z <= vector.m_z)) {
-      return true;
-    }
-    return false;
-  }
-
-  bool 
   Vector3::operator>(const Vector3& vector) {
     if ((m_x > vector.m_x) &&
         (m_y > vector.m_y) &&
         (m_z > vector.m_z)) {
-      return true;
-    }
-    return false;
-  }
-
-  bool 
-  Vector3::operator>=(const Vector3& vector) {
-    if ((m_x >= vector.m_x) &&
-        (m_y >= vector.m_y) &&
-        (m_z >= vector.m_z)) {
       return true;
     }
     return false;
@@ -164,21 +138,6 @@ namespace gaEngineSDK {
     return *this;
   }
 
-  Vector3 
-  Vector3::operator/(const float vector) const {
-    return Vector3(m_x / vector,
-                   m_y / vector,
-                   m_z / vector);
-  }
-
-  Vector3& 
-  Vector3::operator/=(const float vector) {
-    m_x = m_x / vector;
-    m_y = m_y / vector;
-    m_z = m_z / vector;
-    return *this;
-  }
-
   Vector3
   Vector3::operator*(const Vector3& vector) const {
     Vector3 vectorTemp(0.0f, 0.0f, 0.0f);
@@ -188,16 +147,8 @@ namespace gaEngineSDK {
                    vectorTemp.m_z = m_z * vector.m_z);
   }
 
-  Vector3
-  Vector3::operator^(const Vector3& vector) const {
-    return Vector3(m_y * vector.m_z - m_z * vector.m_y,
-                   m_z * vector.m_x - m_x * vector.m_z,
-                   m_x * vector.m_y - m_y * vector.m_x);
-  }
-
   float& 
   Vector3::operator[](uint32 index){
     return (&m_x)[index];
   }
-
 }
