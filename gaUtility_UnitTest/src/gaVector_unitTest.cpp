@@ -2,13 +2,13 @@
 #define GTEST_USE_OWN_TR1_TUPLE 0
 #include <gtest/gtest.h>
 
-#include "gaPrerequisitesUtilities.h"
-#include "gaVector2.h"
-#include "gaVector2I.h"
-#include "gaVector3.h"
-#include "gaVector3I.h"
-#include "gaVector4.h"
-#include "gaVector4I.h"
+#include <gaPrerequisitesUtilities.h>
+#include <gaVector2.h>
+#include <gaVector2I.h>
+#include <gaVector3.h>
+#include <gaVector3I.h>
+#include <gaVector4.h>
+#include <gaVector4I.h>
 
 using namespace gaEngineSDK;
 
@@ -22,11 +22,11 @@ TEST(gaUtilities, Vector2_Tests) {
   EXPECT_FLOAT_EQ(testVec.m_x, 55.5f);
   EXPECT_FLOAT_EQ(testVec.m_y, 15.0f);
   /***************************************************************************/
-  EXPECT_FLOAT_EQ(testVec.magnitude(), 57.4913025f);
+  EXPECT_NEAR(testVec.magnitude(), 57.491302f, Math::SMALL_NUMBER);
   /***************************************************************************/
   testVec.normalize();
-  EXPECT_FLOAT_EQ(testVec.m_x, 0.965363443f);
-  EXPECT_FLOAT_EQ(testVec.m_y, 0.260909021f);
+  EXPECT_NEAR(testVec.m_x, 0.965363f, Math::SMALL_NUMBER);
+  EXPECT_NEAR(testVec.m_y, 0.260909f, Math::SMALL_NUMBER);
   /***************************************************************************/
   testVec.m_x = 50.0f;
   testVec.m_y = 20.0f;
@@ -145,12 +145,12 @@ TEST(gaUtilities, Vector3_Tests) {
   EXPECT_FLOAT_EQ(testVec.m_y, 20.0f);
   EXPECT_FLOAT_EQ(testVec.m_z, 40.0f);
   /***************************************************************************/
-  EXPECT_FLOAT_EQ(testVec.magnitude(), 109.544510f);
+  EXPECT_NEAR(testVec.magnitude(), 109.544510f, Math::SMALL_NUMBER);
   /***************************************************************************/
   testVec.normalize();
-  EXPECT_FLOAT_EQ(testVec.m_x, 0.912870944f);
-  EXPECT_FLOAT_EQ(testVec.m_y, 0.182574183f);
-  EXPECT_FLOAT_EQ(testVec.m_z, 0.365148365f);
+  EXPECT_NEAR(testVec.m_x, 0.912870f, Math::SMALL_NUMBER);
+  EXPECT_NEAR(testVec.m_y, 0.182574f, Math::SMALL_NUMBER);
+  EXPECT_NEAR(testVec.m_z, 0.365148f, Math::SMALL_NUMBER);
   /***************************************************************************/
   testVec.m_x = 50.0f;
   testVec.m_y = 20.0f;
@@ -293,19 +293,19 @@ TEST(gaUtilities, Vector4_Tests) {
   EXPECT_FLOAT_EQ(testVec.m_z, 40.0f);
   EXPECT_FLOAT_EQ(testVec.m_w, 80.0f);
   /***************************************************************************/
-  EXPECT_FLOAT_EQ(testVec.magnitude(), 135.64661f);
+  EXPECT_NEAR(testVec.magnitude(), 135.64661f, Math::SMALL_NUMBER);
   /***************************************************************************/
   testVec.normalize();
-  EXPECT_FLOAT_EQ(testVec.m_x, 0.73720974f);
-  EXPECT_FLOAT_EQ(testVec.m_y, 0.14744195f);
-  EXPECT_FLOAT_EQ(testVec.m_z, 0.29488391f);
-  EXPECT_FLOAT_EQ(testVec.m_w, 0.58976781f);
+  EXPECT_NEAR(testVec.m_x, 0.7372097f, Math::SMALL_NUMBER);
+  EXPECT_NEAR(testVec.m_y, 0.1474419f, Math::SMALL_NUMBER);
+  EXPECT_NEAR(testVec.m_z, 0.2948839f, Math::SMALL_NUMBER);
+  EXPECT_NEAR(testVec.m_w, 0.5897678f, Math::SMALL_NUMBER);
   /***************************************************************************/
   testVec.m_x = 50.0f;
   testVec.m_y = 20.0f;
   testVec.m_z = 40.0f;
   testVec.m_z = 140.0f;
-  EXPECT_FLOAT_EQ(testVec.dotProduct(testVec), 22500.348f);
+  EXPECT_NEAR(testVec.dotProduct(testVec), 22500.348f, Math::SMALL_NUMBER);
   /***************************************************************************/
   Vector4 testVec2(150.0f, 150.0f, 150.0f, 150.0f);
   EXPECT_FLOAT_EQ(testVec2.m_x, 150.0f);

@@ -58,6 +58,9 @@
     <ClCompile Include="src\gaWindowsMath.cpp">
       <Filter>Archivos de origen\Platforms</Filter>
     </ClCompile>
+    <ClCompile Include="src\gaQuaternions.cpp">
+      <Filter>Archivos de origen\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gaVector2I.h">
@@ -113,6 +116,9 @@
     </ClInclude>
     <ClInclude Include="include\gaWindowsMath.h">
       <Filter>Archivos de origen\Platforms</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaQuaternions.h">
+      <Filter>Archivos de origen\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

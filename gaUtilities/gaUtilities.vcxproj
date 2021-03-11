@@ -175,6 +175,7 @@
     <ClCompile Include="src\gaMatrix.cpp" />
     <ClCompile Include="src\gaMatrix4x4.cpp" />
     <ClCompile Include="src\gaPlatformMath.cpp" />
+    <ClCompile Include="src\gaQuaternions.cpp" />
     <ClCompile Include="src\gaRadians.cpp" />
     <ClCompile Include="src\gaVector2.cpp" />
     <ClCompile Include="src\gaVector2I.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="include\gaPlatformMath.h" />
     <ClInclude Include="include\gaPlatformTypes.h" />
     <ClInclude Include="include\gaPrerequisitesUtilities.h" />
+    <ClInclude Include="include\gaQuaternions.h" />
     <ClInclude Include="include\gaRadians.h" />
     <ClInclude Include="include\gaStdHeaders.h" />
     <ClInclude Include="include\gaVector2.h" />

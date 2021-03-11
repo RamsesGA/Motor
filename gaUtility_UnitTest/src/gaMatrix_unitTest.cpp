@@ -2,9 +2,9 @@
 #define GTEST_USE_OWN_TR1_TUPLE 0
 #include <gtest/gtest.h>
 
-#include "gaPrerequisitesUtilities.h"
-#include "gaMatrix.h"
-#include "gaMatrix4x4.h"
+#include <gaPrerequisitesUtilities.h>
+#include <gaMatrix.h>
+#include <gaMatrix4x4.h>
 
 using namespace gaEngineSDK;
 

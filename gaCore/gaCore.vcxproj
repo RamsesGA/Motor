@@ -161,9 +161,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="deleteme.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="include\gaConstantBuffer.h" />
     <ClInclude Include="include\gaGraphicsApi.h" />
     <ClInclude Include="include\gaIndexBuffer.h" />

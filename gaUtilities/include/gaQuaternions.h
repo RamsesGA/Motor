@@ -4,7 +4,7 @@
 
 namespace gaEngineSDK {
 
-  class GA_UTILITY_EXPORT Radians
+  class GA_UTILITY_EXPORT Quaternions
   {
     public:
       /*************************************************************************/
@@ -12,13 +12,8 @@ namespace gaEngineSDK {
       * Constructor and Destructor
       */
       /*************************************************************************/
-      Radians(float radians);
+      Quaternions();
     
-      ~Radians() = default;
-    
-      float
-      radiansToDegrees(float radian);
-
-      float m_radian;
+      ~Quaternions() = default;
   };
 }

@@ -1,5 +1,6 @@
 
 #include "gaRadians.h"
+#include "gaMath.h"
 
 namespace gaEngineSDK {
   Radians::Radians(float radians){
@@ -8,6 +9,6 @@ namespace gaEngineSDK {
 
   float
   Radians::radiansToDegrees(float radian) {
-    return (radian * (180 / m_pi));
+    return (radian * (180 / Math::PI));
   }
 }
