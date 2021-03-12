@@ -1,7 +1,7 @@
 #pragma once
 
 namespace gaEngineSDK {
-	class gaTextures
+	class Textures
 	{
 	  public:
 	  	/***********************************************************************/
@@ -9,7 +9,7 @@ namespace gaEngineSDK {
 	  	* Constructor and destructor.
 	  	*/
 	  	/***********************************************************************/
-			gaTextures() = default;
-	  	~gaTextures() = default;
+			Textures() = default;
+			virtual ~Textures() = default;
 	};
 }

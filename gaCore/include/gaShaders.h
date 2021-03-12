@@ -1,7 +1,7 @@
 #pragma once
 
 namespace gaEngineSDK {
-	class gaShaders
+	class Shaders
 	{
 	  public:
 			/***********************************************************************/
@@ -9,7 +9,7 @@ namespace gaEngineSDK {
 			* Constructor and destructor.
 			*/
 			/***********************************************************************/
-			gaShaders() = default;
-	  	~gaShaders() = default;
+			Shaders() = default;
+			virtual ~Shaders() = default;
 	};
 }

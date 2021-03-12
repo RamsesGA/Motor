@@ -1,7 +1,7 @@
 #pragma once
 
 namespace gaEngineSDK {
-	class gaVertexBuffer
+	class VertexBuffer
 	{
 	  public:
 			/***********************************************************************/
@@ -9,7 +9,7 @@ namespace gaEngineSDK {
 			* Constructor and destructor.
 			*/
 			/***********************************************************************/
-			gaVertexBuffer() = default;
-	  	~gaVertexBuffer() = default;
+			VertexBuffer() = default;
+			virtual ~VertexBuffer() = default;
 	};
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 namespace gaEngineSDK {
-	class gaSamplerState
+	class SamplerState
 	{
 	  public:
 			/***********************************************************************/
@@ -9,7 +9,7 @@ namespace gaEngineSDK {
 			* Constructor and destructor.
 			*/
 			/***********************************************************************/
-			gaSamplerState() = default;
-	  	~gaSamplerState() = default;
+			SamplerState() = default;
+			virtual ~SamplerState() = default;
 	};
 }

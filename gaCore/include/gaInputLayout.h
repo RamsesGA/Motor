@@ -1,7 +1,7 @@
 #pragma once
 
 namespace gaEngineSDK {
-	class gaInputLayout
+	class InputLayout
 	{
 	  public:
 			/***********************************************************************/
@@ -9,7 +9,7 @@ namespace gaEngineSDK {
 			* Constructor and destructor.
 			*/
 			/***********************************************************************/
-			gaInputLayout() = default;
-	  	~gaInputLayout() = default;
+			InputLayout() = default;
+			virtual ~InputLayout() = default;
 	};
 }

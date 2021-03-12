@@ -1,8 +1,10 @@
 #pragma once
 
 #include <windows.h>
-#include <string>
-#include <vector>
+#include <gaVector3.h>
+#include <gaVector2.h>
+
+#include <gaPrerequisitesUtilities.h>
 
 //#include "Structures.h"
 //#include "glm/glm.hpp"
@@ -139,19 +141,27 @@ namespace gaEngineSDK {
  PRIMITIVE_TOPOLOGY_TRIANGLELIST = 4,
  PRIMITIVE_TOPOLOGY_TRIANGLESTRIP = 5,
 };
+
+  struct Vertex {
+    Vector3 position;
+    Vector2 texCoords;
+    Vector3 normal;
+    Vector3 tangent;
+    Vector3 bitangent;
+  };
   
   /***************************************************************************/
   /**
   * Instances of the abstracted classes.
   */
   /***************************************************************************/
-  class gaConstantBuffer;
-  class gaTextures;
-  class gaSamplerState;
-  class gaInputLayout;
-  class gaShaders;
-  class gaVertexBuffer;
-  class gaIndexBuffer;
+  class ConstantBuffer;
+  class Textures;
+  class SamplerState;
+  class InputLayout;
+  class Shaders;
+  class VertexBuffer;
+  class IndexBuffer;
   
   /**
   * @brief Parent class where we can add 
@@ -160,375 +170,387 @@ namespace gaEngineSDK {
   class GraphicsApi 
   {
     public:
-     /************************************************************************/
-     /**
-     * Constructor and destructor.
-     */
-     /************************************************************************/
-     GraphicsApi() = default;
-     ~GraphicsApi() = default;
-    
-     /**
-     * @brief Function to initialize the device and generate 
-     *    the back buffer and depth stencil for DX by default
-     * @param hWnd handle to a window.
-     * @return true or false.
-     */
-     virtual bool 
-     InitDevice(HWND hWnd) = 0;
-  
-     /**
-     * @brief Function to send to draw the indices of a declared object.
-     * @param indexCount 
-     *        startIndexLocation 
-     *        baseVertexLocation 
-     */
-     virtual void 
-     DrawIndex(unsigned int indexCount,
-               unsigned int startIndexLocation,
-               unsigned int baseVertexLocation) = 0;
-  
-     /**
-     * @brief Function to exchange buffers and update your information.
-     * @param syncInterval 
-     *        flags 
-     */
-     virtual void 
-     SwapChainPresent(unsigned int syncInterval,
-                      unsigned int flags) = 0;
-    
-     /**
-     * @brief Function to load textures in file.
-     * @param srcFile
-     * @return gaTextures.
-     */
-     virtual gaTextures* 
-     LoadTextureFromFile(std::string srcFile) = 0;
-    
-     /**
-     * @brief Function to obtain the automatically generated back buffer.
-     * @return gaTextures.
-     */
-     virtual gaTextures* 
-     GetDefaultBackBuffer() = 0;
-    
-     /**
-     * @brief Function to obtain the automatically generated depth stencil.
-     * @return gaTextures.
-     */
-     virtual gaTextures* 
-     GetDefaultDepthStencil() = 0;
-    
-     /**
-     * @brief OGL function to separate a program.
-     */
-     virtual void 
-     UnbindOGL() = 0;
-    
-     /************************************************************************/
-     /**
-     * Updates methods.
-     */
-     /************************************************************************/
-  
-     /**
-     * @brief Function to update constant buffers.
-     * @param srcData
-     *        updateDataCB
-     */
-     virtual void 
-     UpdateConstantBuffer(const void* srcData,
-                          gaConstantBuffer& updateDataCB) = 0;
-    
-     /************************************************************************/
-     /**
-     * Clear methods.
-     */
-     /************************************************************************/
-  
-     /**
-     * @brief Function to clean our render target view.
-     * @param renderTarget
-     *        r
-     *        g
-     *        b
-     *        a
-     */
-     virtual void 
-     ClearYourRenderTargetView(gaTextures* renderTarget,
-                               float r, float g, float b, float a) = 0;
-    
-     /**
-     * @brief Function to clean our depth stencil view.
-     * @param depthStencil
-     */
-     virtual void 
-     ClearYourDepthStencilView(gaTextures* depthStencil) = 0;
-    
-     /************************************************************************/
-     /**
-     * Create methods.
-     */
-     /************************************************************************/
-     
-     /**
-     * @brief Function to generate the vertex shader and vertex resource.
-     *         Function to generate the pixel shader or fragment shader.
-     * @param nameVS
-     *        entryPointVS
-     *        namePS
-     *        entryPointPS
-     * @return gaShaders
-     */
-     virtual gaShaders* 
-     CreateShadersProgram(const std::wstring& nameVS,
-                          const std::string& entryPointVS, 
-                          const std::wstring& namePS,
-                          const std::string& entryPointPS) = 0;
-    
-     /**
-     * @brief Function to generate the vertex buffer.
-     * @param data
-     *        size
-     * @return gaVertexBuffer
-     */
-     virtual gaVertexBuffer* 
-     CreateVertexBuffer(const void* data,
-                        const unsigned int size) = 0;
-  
-     /**
-     * @brief Function to generate the index buffer.
-     * @param data
-     *        size
-     * @return gaIndexBuffer
-     */
-     virtual gaIndexBuffer*
-     CreateIndexBuffer(const void* data,
-                       const unsigned int size) = 0;
-    
-     /**
-     * @brief Function to generate constant buffers.
-     * @param bufferSize
-     * @return gaConstantBuffer
-     */
-     virtual gaConstantBuffer* 
-     CreateConstantBuffer(const unsigned int bufferSize) = 0;
-     
-     /**
-     * @brief Function to generate the following: 
-     *        ° ShaderResourceView 
-     *        ° DepthStencilView 
-     *        ° RenderTargetView.
-     * @param width
-     *        height
-     *        bindFlags
-     *        textureFormat
-     *        fileName
-     * @return gaTextures
-     */
-     virtual gaTextures* 
-     CreateTexture(const unsigned int width,
-                   const unsigned int height,
-                   const unsigned int bindFlags,
-                   TEXTURE_FORMAT textureFormat,
-                   const std::string fileName) = 0;
-     
-     /**
-     * @brief Function to generate the sampler state.
-     * @return gaSamplerState
-     */
-     virtual gaSamplerState* 
-     CreateSamplerState() = 0;
-    
-     /**
-     * @brief Function to generate the input layout.
-     * @param vertexShader
-     * @return gaInputLayout
-     */
-     virtual gaInputLayout* 
-     CreateInputLayout(gaShaders& vertexShader) = 0;
-    
-     /************************************************************************/
-     /**
-     * Set methods.
-     */
-     /************************************************************************/
-  
-     /**
-     * @brief Function to save the information of the pixel shader.
-     * @param pixelShader
-     */
-     virtual void 
-     SetPixelShader(gaShaders& pixelShader) = 0;
-    
-     /**
-     * @brief Function to save vertex shader information.
-     * @param vertexShader
-     */
-     virtual void 
-     SetVertexShader(gaShaders& vertexShader) = 0;
-    
-     /**
-     * @brief Function to save vertex buffer information.
-     * @param vertexBuffer
-     */
-     virtual void 
-     SetVertexBuffer(gaVertexBuffer& vertexBuffer) = 0;
-     
-     /**
-     * @brief Function to save the index buffer information.
-     * @param indexBuffer
-     */
-     virtual void 
-     SetIndexBuffer(gaIndexBuffer& indexBuffer) = 0;
-     
-     /**
-     * @brief Function to save the information of the constant buffers.
-     * @param isVertex
-     *        constantBuffer
-     *        startSlot
-     *        numBuffers
-     */
-     virtual void 
-     SetConstantBuffer(bool isVertex,
-                       gaConstantBuffer& constantBuffer,
-                       const unsigned int startSlot,
-                       const unsigned int numBuffers) = 0;
-     
-     /**
-     * @brief Function to save the information of the sampler state.
-     * @param startSlot
-     *        samplerState
-     *        texture
-     */
-     virtual void 
-     SetSamplerState(const unsigned int startSlot,
-                     std::vector<gaSamplerState*>& samplerState,
-                     gaTextures& texture) = 0;
-     
-     /**
-     * @brief Function to save the information of the shader resource view.
-     * @param shaderResourceView
-     *        startSlot
-     *        numViews
-     */
-     virtual void 
-     SetShaderResourceView(gaTextures* shaderResourceView,
-                           const unsigned int startSlot,
-                           const unsigned int numViews) = 0;
-     
-     /**
-     * @brief Function to save the information of the render target.
-     * @param renderTarget
-     *        depthStencil
-     */
-     virtual void 
-     SetRenderTarget(gaTextures* renderTarget,
-                     gaTextures* depthStencil) = 0;
-    
-     /**
-     * @brief Function to save the depth stencil information.
-     * @param depthStencil
-     *        stencilRef
-     */
-     virtual void 
-     SetDepthStencil(gaTextures& depthStencil,
-                     const unsigned int stencilRef) = 0;
-     
-     /**
-     * @brief Function to save the information of the input layout.
-     * @param vertexLayout
-     */
-     virtual void 
-     SetInputLayout(gaInputLayout& vertexLayout) = 0;
-     
-     /**
-     * @brief Function to save the viewport information.
-     * @param numViewports
-     *        width
-     *        heigth
-     */
-     virtual void 
-     SetViewport(const unsigned int numViewports,
-                 const unsigned int width, 
-                 const unsigned int heigth) = 0;
-     
-     /**
-     * @brief Function to save the topology information.
-     * @param topology
-     */
-     virtual void 
-     SetPrimitiveTopology(const unsigned int topology) = 0;
-     
-     /**
-     * @brief Function to call VSSetShader.
-     * @param vertexShader
-     */
-     virtual void 
-     SetYourVS(gaShaders& vertexShader) = 0;
-     
-     /**
-     * @brief Function to call VSSetConstantBuffers.
-     * @param constantBuffer
-     *        startSlot
-     *        numBuffers
-     */
-     virtual void 
-     SetYourVSConstantBuffers(gaConstantBuffer* constantBuffer,
-                              const unsigned int startSlot,
-                              const unsigned int numBuffers) = 0;
-     
-     /**
-     * @brief Function to call PSSetShader.
-     * @param pixelShader
-     */
-     virtual void 
-     SetYourPS(gaShaders& pixelShader) = 0;
-     
-     /**
-     * @brief Function to call PSSetConstantBuffers.
-     * @param constantBuffer
-     *        startSlot
-     *        numBuffers
-     */
-     virtual void 
-     SetYourPSConstantBuffers(gaConstantBuffer* constantBuffer,
-                              const unsigned int startSlot,
-                              const unsigned int numBuffers) = 0;
-     
-     /**
-     * @brief Function to call PSSetSamplers.
-     * @param sampler
-     *        startSlot
-     *        numSamplers
-     */
-     virtual void 
-     SetYourPSSampler(gaSamplerState& sampler,
-                      const unsigned int startSlot,
-                      const unsigned int numSamplers) = 0;
-     
-     /**
-     * @brief Function to call program and link for OGL.
-     * @param shaders
-     */
-     virtual void 
-     SetShaders(gaShaders& shaders) = 0;
-    
+      /***********************************************************************/
+      /**
+      * Constructor and destructor.
+      */
+      /***********************************************************************/
+      GraphicsApi() = default;
+      virtual ~GraphicsApi() = default;
+      
+      /***********************************************************************/
+      /**
+      * Methods.
+      */
+      /***********************************************************************/
+      
+      /**
+      * @brief Function to initialize the device and generate 
+      *    the back buffer and depth stencil for DX by default
+      * @param hWnd handle to a window.
+      * @return true or false.
+      */
+      virtual bool 
+      initDevice(HWND hWnd) = 0;
+      
+      /**
+      * @brief Function to send to draw the indices of a declared object.
+      * @param indexCount 
+      *        startIndexLocation 
+      *        baseVertexLocation 
+      */
+      virtual void 
+      drawIndex(uint32 indexCount,
+                uint32 startIndexLocation,
+                uint32 baseVertexLocation) = 0;
+      
+      /**
+      * @brief Function to exchange buffers and update your information.
+      * @param syncInterval 
+      *        flags 
+      */
+      virtual void 
+      swapChainPresent(uint32 syncInterval,
+                       uint32 flags) = 0;
+      
+      /**
+      * @brief Function to load textures in file.
+      * @param srcFile
+      * @return Textures.
+      */
+      virtual Textures* 
+      loadTextureFromFile(std::string srcFile) = 0;
+      
+      /**
+      * @brief OGL function to separate a program.
+      */
+      virtual void 
+      unbindOGL() = 0;
+      
+      /***********************************************************************/
+      /**
+      * Updates methods.
+      */
+      /***********************************************************************/
+      
+      /**
+      * @brief Function to update constant buffers.
+      * @param srcData
+      *        updateDataCB
+      */
+      virtual void 
+      updateConstantBuffer(const void* srcData,
+                           ConstantBuffer& updateDataCB) = 0;
+      
+      /***********************************************************************/
+      /**
+      * Clear methods.
+      */
+      /***********************************************************************/
+      
+      /**
+      * @brief Function to clean our render target view.
+      * @param renderTarget
+      *        r
+      *        g
+      *        b
+      *        a
+      */
+      virtual void 
+      clearYourRenderTargetView(Textures* renderTarget,
+                                float r, float g, float b, float a) = 0;
+      
+      /**
+      * @brief Function to clean our depth stencil view.
+      * @param depthStencil
+      */
+      virtual void 
+      clearYourDepthStencilView(Textures* depthStencil) = 0;
+      
+      /***********************************************************************/
+      /**
+      * Create methods.
+      */
+      /***********************************************************************/
+      
+      /**
+      * @brief Function to generate the vertex shader and vertex resource.
+      *         Function to generate the pixel shader or fragment shader.
+      * @param nameVS
+      *        entryPointVS
+      *        namePS
+      *        entryPointPS
+      * @return Shaders
+      */
+      virtual Shaders* 
+      createShadersProgram(const std::wstring& nameVS,
+                           const std::string& entryPointVS, 
+                           const std::wstring& namePS,
+                           const std::string& entryPointPS) = 0;
+      
+      /**
+      * @brief Function to generate the vertex buffer.
+      * @param data
+      *        size
+      * @return gaVertexBuffer
+      */
+      virtual VertexBuffer* 
+      createVertexBuffer(const void* data,
+                         const uint32 size) = 0;
+      
+      /**
+      * @brief Function to generate the index buffer.
+      * @param data
+      *        size
+      * @return gaIndexBuffer
+      */
+      virtual IndexBuffer*
+      createIndexBuffer(const void* data,
+                        const uint32 size) = 0;
+      
+      /**
+      * @brief Function to generate constant buffers.
+      * @param bufferSize
+      * @return ConstantBuffer
+      */
+      virtual ConstantBuffer* 
+      createConstantBuffer(const uint32 bufferSize) = 0;
+      
+      /**
+      * @brief Function to generate the following: 
+      *        ° ShaderResourceView 
+      *        ° DepthStencilView 
+      *        ° RenderTargetView.
+      * @param width
+      *        height
+      *        bindFlags
+      *        textureFormat
+      *        fileName
+      * @return Textures
+      */
+      virtual Textures* 
+      createTexture(const uint32 width,
+                    const uint32 height,
+                    const uint32 bindFlags,
+                    TEXTURE_FORMAT textureFormat,
+                    const std::string fileName) = 0;
+      
+      /**
+      * @brief Function to generate the sampler state.
+      * @return SamplerState
+      */
+      virtual SamplerState* 
+      createSamplerState() = 0;
+      
+      /**
+      * @brief Function to generate the input layout.
+      * @param vertexShader
+      * @return InputLayout
+      */
+      virtual InputLayout* 
+      createInputLayout(Shaders& vertexShader) = 0;
+      
+      /***********************************************************************/
+      /**
+      * Set methods.
+      */
+      /***********************************************************************/
+      
+      /**
+      * @brief Function to save the information of the pixel shader.
+      * @param pixelShader
+      */
+      virtual void 
+      setPixelShader(Shaders& pixelShader) = 0;
+      
+      /**
+      * @brief Function to save vertex shader information.
+      * @param vertexShader
+      */
+      virtual void 
+      setVertexShader(Shaders& vertexShader) = 0;
+      
+      /**
+      * @brief Function to save vertex buffer information.
+      * @param vertexBuffer
+      */
+      virtual void 
+      setVertexBuffer(VertexBuffer& vertexBuffer) = 0;
+      
+      /**
+      * @brief Function to save the index buffer information.
+      * @param indexBuffer
+      */
+      virtual void 
+      setIndexBuffer(IndexBuffer& indexBuffer) = 0;
+      
+      /**
+      * @brief Function to save the information of the constant buffers.
+      * @param isVertex
+      *        constantBuffer
+      *        startSlot
+      *        numBuffers
+      */
+      virtual void 
+      setConstantBuffer(bool isVertex,
+                        ConstantBuffer& constantBuffer,
+                        const uint32 startSlot,
+                        const uint32 numBuffers) = 0;
+      
+      /**
+      * @brief Function to save the information of the sampler state.
+      * @param startSlot
+      *        samplerState
+      *        texture
+      */
+      virtual void 
+      setSamplerState(const uint32 startSlot,
+                      std::vector<SamplerState*>& samplerState,
+                      Textures& texture) = 0;
+      
+      /**
+      * @brief Function to save the information of the shader resource view.
+      * @param shaderResourceView
+      *        startSlot
+      *        numViews
+      */
+      virtual void 
+      setShaderResourceView(Textures* shaderResourceView,
+                            const uint32 startSlot,
+                            const uint32 numViews) = 0;
+      
+      /**
+      * @brief Function to save the information of the render target.
+      * @param renderTarget
+      *        depthStencil
+      */
+      virtual void 
+      setRenderTarget(Textures* renderTarget,
+                      Textures* depthStencil) = 0;
+      
+      /**
+      * @brief Function to save the depth stencil information.
+      * @param depthStencil
+      *        stencilRef
+      */
+      virtual void 
+      setDepthStencil(Textures& depthStencil,
+                      const uint32 stencilRef) = 0;
+      
+      /**
+      * @brief Function to save the information of the input layout.
+      * @param vertexLayout
+      */
+      virtual void 
+      setInputLayout(InputLayout& vertexLayout) = 0;
+      
+      /**
+      * @brief Function to save the viewport information.
+      * @param numViewports
+      *        width
+      *        heigth
+      */
+      virtual void 
+      setViewport(const uint32 numViewports,
+                  const uint32 width, 
+                  const uint32 heigth) = 0;
+      
+      /**
+      * @brief Function to save the topology information.
+      * @param topology
+      */
+      virtual void 
+      setPrimitiveTopology(const uint32 topology) = 0;
+      
+      /**
+      * @brief Function to call VSSetShader.
+      * @param vertexShader
+      */
+      virtual void 
+      setYourVS(Shaders& vertexShader) = 0;
+      
+      /**
+      * @brief Function to call VSSetConstantBuffers.
+      * @param constantBuffer
+      *        startSlot
+      *        numBuffers
+      */
+      virtual void 
+      setYourVSConstantBuffers(ConstantBuffer* constantBuffer,
+                               const uint32 startSlot,
+                               const uint32 numBuffers) = 0;
+      
+      /**
+      * @brief Function to call PSSetShader.
+      * @param pixelShader
+      */
+      virtual void 
+      setYourPS(Shaders& pixelShader) = 0;
+      
+      /**
+      * @brief Function to call PSSetConstantBuffers.
+      * @param constantBuffer
+      *        startSlot
+      *        numBuffers
+      */
+      virtual void 
+      setYourPSConstantBuffers(ConstantBuffer* constantBuffer,
+                               const uint32 startSlot,
+                               const uint32 numBuffers) = 0;
+      
+      /**
+      * @brief Function to call PSSetSamplers.
+      * @param sampler
+      *        startSlot
+      *        numSamplers
+      */
+      virtual void 
+      setYourPSSampler(SamplerState& sampler,
+                       const uint32 startSlot,
+                       const uint32 numSamplers) = 0;
+      
+      /**
+      * @brief Function to call program and link for OGL.
+      * @param shaders
+      */
+      virtual void 
+      setShaders(Shaders& shaders) = 0;
+      
+      /***********************************************************************/
+      /**
+      * Gets.
+      */
+      /***********************************************************************/
+      
+      /**
+      * @brief Function to obtain the automatically generated back buffer.
+      * @return Textures.
+      */
+      virtual Textures*
+      getDefaultBackBuffer() = 0;
+      
+      /**
+      * @brief Function to obtain the automatically generated depth stencil.
+      * @return Textures.
+      */
+      virtual Textures*
+      getDefaultDepthStencil() = 0;
+
      protected:
-      /***********************************************************************/
-      /**
-      * Members.
-      */
-      /***********************************************************************/
-    
-      /**
-      * @brief Member to save screen width.
-      */
-      unsigned int m_width;
-    
-      /**
-      * @brief Member to save the screen height.
-      */
-      unsigned int m_height;
+       /**********************************************************************/
+       /**
+       * Members.
+       */
+       /**********************************************************************/
+       
+       /**
+       * @brief Member to save screen width.
+       */
+       uint32 m_width;
+       
+       /**
+       * @brief Member to save the screen height.
+       */
+       uint32 m_height;
   };
 }

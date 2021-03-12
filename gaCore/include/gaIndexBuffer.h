@@ -1,7 +1,7 @@
 #pragma once
 
 namespace gaEngineSDK {
-	class gaIndexBuffer
+	class IndexBuffer
 	{
 	  public:
 			/***********************************************************************/
@@ -9,7 +9,7 @@ namespace gaEngineSDK {
 			* Constructor and destructor.
 			*/
 			/***********************************************************************/
-			gaIndexBuffer() = default;
-	  	~gaIndexBuffer() = default;
+			IndexBuffer() = default;
+			virtual ~IndexBuffer() = default;
 	};
 }
