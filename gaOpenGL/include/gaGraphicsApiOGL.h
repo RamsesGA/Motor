@@ -1,8 +1,8 @@
 #pragma once
+#define STB_IMAGE_IMPLEMENTATION
 
-#include <d3d11.h>
-#include <d3dcompiler.h>
-#include <d3d11shader.h>
+#include <Glad/glad.h>
+#include <Glm/glm.hpp>
 
 #include <gaGraphicsApi.h>
 #include <gaConstantBuffer.h>
@@ -15,7 +15,7 @@
 
 namespace gaEngineSDK {
   
-  class GraphicsApiDX final : public GraphicsApi
+  class GraphicsApiOGL final : public GraphicsApi
   {
     public:
       /***********************************************************************/
@@ -24,9 +24,9 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
 
-      GraphicsApiDX() = default;
+      GraphicsApiOGL() = default;
 
-      ~GraphicsApiDX();
+      ~GraphicsApiOGL();
 
       /***********************************************************************/
       /**
@@ -214,33 +214,19 @@ namespace gaEngineSDK {
       HWND m_hWnd;
 
       /// <summary>
-      /// Miembro representa 
-      /// un adaptador virtual
+      /// 
       /// </summary>
-      ID3D11Device* m_pd3dDevice;
+      HDC m_HandleToDC;
 
       /// <summary>
-      /// Miembro para implementar una o más 
-      /// superficies para almacenar datos renderizados
+      /// 
       /// </summary>
-      IDXGISwapChain* m_pSwapChain;
+      HGLRC m_renderingContext;
 
       /// <summary>
-      /// Miembro para representar un contexto de 
-      /// dispositivo que genera comandos de renderizado
+      /// Miembro para almacenar
+      /// la topología y que la api lo conozca
       /// </summary>
-      ID3D11DeviceContext* m_pImmediateContext;
-
-      /// <summary>
-      /// Miembro para almacenar y acceder a un recurso de 
-      /// textura durante la prueba de plantilla en profundidad
-      /// </summary>
-      Textures* m_pDepthStencil;
-
-      /// <summary>
-      /// Miembro para almacenar la textura por default al crear
-      /// el device
-      /// </summary>
-      Textures* m_pBackBuffer;
+      uint32 m_topology;
   };
 }

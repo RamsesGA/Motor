@@ -97,8 +97,8 @@ namespace gaEngineSDK {
   
   GraphicsApiDX::~GraphicsApiDX() {
   
-    ///Liberar mis miembros del API
-    /// (SON LOS QUE TENGO DOMINIO PROPIO)
+    //Liberar mis miembros del API
+    // (SON LOS QUE TENGO DOMINIO PROPIO)
     delete m_pd3dDevice;
   
     delete m_pSwapChain;
@@ -186,7 +186,7 @@ namespace gaEngineSDK {
     hr = m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
       (LPVOID*)&backBuffer->m_pTexture);
     
-    ///Checamos que todo salga bien, si no mandamos un error
+    //Checamos que todo salga bien, si no mandamos un error
     if (FAILED(hr)) {
       delete backBuffer;
       return false;
@@ -220,7 +220,7 @@ namespace gaEngineSDK {
     textureDesc.CPUAccessFlags = 0;
     textureDesc.MiscFlags = 0;
     
-    ///Creamos la textura
+    //Creamos la textura
     hr = m_pd3dDevice->CreateTexture2D(&textureDesc,
       nullptr, &depthStencil->m_pTexture);
     
@@ -240,7 +240,7 @@ namespace gaEngineSDK {
       &depthStencilDesc,
       &depthStencil->m_pDepthStencilView);
     
-    ///Checamos que todo salga bien, si no mandamos un error
+    //Checamos que todo salga bien, si no mandamos un error
     if (FAILED(hr)) {
       delete backBuffer;
       delete depthStencil;
@@ -257,17 +257,17 @@ namespace gaEngineSDK {
   }
   
   void 
-  GraphicsApiDX::drawIndex(uint32 indexCountDX,
-                           uint32 startIndexLocationDX,
-                           uint32 baseVertexLocationDX) {
-    m_pImmediateContext->DrawIndexed(indexCountDX, startIndexLocationDX,
-                                     baseVertexLocationDX);
+  GraphicsApiDX::drawIndex(uint32 indexCount,
+                           uint32 startIndexLocation,
+                           uint32 baseVertexLocation) {
+    m_pImmediateContext->DrawIndexed(indexCount, startIndexLocation,
+                                     baseVertexLocation);
   }
   
   void 
-  GraphicsApiDX::swapChainPresent(uint32 syncIntervalDX,
-                                  uint32 flagsDX) {
-    m_pSwapChain->Present(syncIntervalDX, flagsDX);
+  GraphicsApiDX::swapChainPresent(uint32 syncInterval,
+                                  uint32 flags) {
+    m_pSwapChain->Present(syncInterval, flags);
   }
   
   Textures* 
@@ -307,7 +307,7 @@ namespace gaEngineSDK {
     //else if (4 == components) {
     //  desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
     //}
-    ////Texture data
+    ///Texture data
     //D3D11_SUBRESOURCE_DATA initData;
     //ZeroMemory(&initData, sizeof(initData));
     //initData.pSysMem = data;
@@ -319,7 +319,7 @@ namespace gaEngineSDK {
     //  stbi_image_free(data);
     //  return nullptr;
     //}
-    ////Shader resource data
+    ///Shader resource data
     //D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc;
     //ZeroMemory(&viewDesc, sizeof(viewDesc));
     //viewDesc.Format = desc.Format;
@@ -372,10 +372,10 @@ namespace gaEngineSDK {
   }
   
   void 
-  GraphicsApiDX::clearYourDepthStencilView(Textures* depthStencilDX) {
-    auto* depthStencil = reinterpret_cast<TexturesDX*>(depthStencilDX);
+  GraphicsApiDX::clearYourDepthStencilView(Textures* depthStencil) {
+    auto* depthSten = reinterpret_cast<TexturesDX*>(depthStencil);
   
-    m_pImmediateContext->ClearDepthStencilView(depthStencil->m_pDepthStencilView,
+    m_pImmediateContext->ClearDepthStencilView(depthSten->m_pDepthStencilView,
                                                D3D11_CLEAR_DEPTH, 1.0f, 0);
   }
   
@@ -390,8 +390,8 @@ namespace gaEngineSDK {
                                       const std::string& entryPointVS, 
                                       const std::wstring& namePS,
                                       const std::string& entryPointPS) {
-    ///Generamos una variable auto
-    ///para adaptar el tipo de dato que ocupamos
+    //Generamos una variable auto
+    //para adaptar el tipo de dato que ocupamos
     auto* shaders = new ShadersDX();
   
     if (!(AnalyzeVertexShaderDX(nameVS))) {
@@ -403,50 +403,50 @@ namespace gaEngineSDK {
       return nullptr;
     }
   
-    ///Asignamos datos a las variables
+    //Asignamos datos a las variables
     shaders->m_pPSBlob = NULL;
     HRESULT hr = S_OK;
   
-    ///Compilamos el shader recibido
+    //Compilamos el shader recibido
     hr = CompileShaderFromFile(namePS, entryPointPS.c_str(), "ps_4_0", &shaders->m_pPSBlob);
   
-    ///Checamos que todo salga bien, si no mandamos un error
+    //Checamos que todo salga bien, si no mandamos un error
     if (FAILED(hr)) {
       delete shaders;
       return nullptr;
     }
   
-    ///Creamos el pixel shader con la función de DX
+    //Creamos el pixel shader con la función de DX
     hr = m_pd3dDevice->CreatePixelShader(shaders->m_pPSBlob->GetBufferPointer(),
                                          shaders->m_pPSBlob->GetBufferSize(),
                                          nullptr, &shaders->m_pPixelShader);
     shaders->m_pPSBlob->Release();
   
-    ///Finalmente regresamos el dato en caso
-    ///de no obtener un error
+    //Finalmente regresamos el dato en caso
+    //de no obtener un error
     if (FAILED(hr)) {
       delete shaders;
       return nullptr;
     }
   
-    ///Asignamos datos a las variables
+    //Asignamos datos a las variables
     shaders->m_pVSBlob = NULL;
   
-    ///Compilamos el shader recibido
+    //Compilamos el shader recibido
     hr = CompileShaderFromFile(nameVS, entryPointVS.c_str(), "vs_4_0", &shaders->m_pVSBlob);
   
-    ///Checamos que todo salga bien, si no mandamos un error
+    //Checamos que todo salga bien, si no mandamos un error
     if (FAILED(hr)) {
       delete shaders;
       return nullptr;
     }
   
-    ///Creamos el vertex shader con la función de DX
+    //Creamos el vertex shader con la función de DX
     hr = m_pd3dDevice->CreateVertexShader(shaders->m_pVSBlob->GetBufferPointer(),
                                           shaders->m_pVSBlob->GetBufferSize(),
                                           nullptr, &shaders->m_pVertexShader);
-    ///Finalmente regresamos el dato en caso
-    ///de no obtener un error
+    //Finalmente regresamos el dato en caso
+    //de no obtener un error
     if (FAILED(hr)) {
       shaders->m_pVSBlob->Release();
       delete shaders;
@@ -459,27 +459,27 @@ namespace gaEngineSDK {
   VertexBuffer* 
   GraphicsApiDX::createVertexBuffer(const void* data,
                                     const uint32 size) {
-    ///Generamos una variable auto
-    ///para adaptar el tipo de dato que ocupamos
+    //Generamos una variable auto
+    //para adaptar el tipo de dato que ocupamos
     auto* VB = new VertexBufferDX();
   
-    ///Asignamos datos a la variable
+    //Asignamos datos a la variable
     HRESULT hr = S_OK;
   
     if (0 != size) {
-      ///Rellenamos el descriptor de buffer
+      //Rellenamos el descriptor de buffer
       CD3D11_BUFFER_DESC bd(size, D3D11_BIND_VERTEX_BUFFER);
   
       if (nullptr != data) {
-        ///Generamos una variable descriptor
+        //Generamos una variable descriptor
         D3D11_SUBRESOURCE_DATA InitData;
-        ///Limpiamos la memoria y dejamos
-        ///definido todo en 0
+        //Limpiamos la memoria y dejamos
+        //definido todo en 0
         ZeroMemory(&InitData, sizeof(InitData));
-        ///Asignamos datos a las variables
+        //Asignamos datos a las variables
         InitData.pSysMem = data;
   
-        ///Creamos el buffer
+        //Creamos el buffer
         hr = m_pd3dDevice->CreateBuffer(&bd, &InitData,
           &VB->m_pVertexBuffer);
   
@@ -509,15 +509,15 @@ namespace gaEngineSDK {
   IndexBuffer* 
   GraphicsApiDX::createIndexBuffer(const void* data,
                                    const uint32 size) {
-    ///Generamos una variable auto
-    ///para adaptar el tipo de dato que ocupamos
+    //Generamos una variable auto
+    //para adaptar el tipo de dato que ocupamos
     auto* IB = new IndexBufferDX();
   
-    ///Asignamos datos a la variable
+    //Asignamos datos a la variable
     HRESULT hr = S_OK;
   
     if (0 != size) {
-      ///Rellenamos el descriptor de buffer
+      //Rellenamos el descriptor de buffer
       D3D11_BUFFER_DESC bd;
       ZeroMemory(&bd, sizeof(bd));
       bd.Usage = D3D11_USAGE_DEFAULT;
@@ -527,17 +527,17 @@ namespace gaEngineSDK {
       bd.MiscFlags = 0;
   
       if (nullptr != data) {
-        ///Generamos una variable descriptor
+        //Generamos una variable descriptor
         D3D11_SUBRESOURCE_DATA InitData;
-        ///Limpiamos la memoria y dejamos
-        ///definido todo en 0
+        //Limpiamos la memoria y dejamos
+        //definido todo en 0
         ZeroMemory(&InitData, sizeof(InitData));
-        ///Asignamos datos a las variables
+        //Asignamos datos a las variables
         InitData.pSysMem = data;
         InitData.SysMemPitch = 0;
         InitData.SysMemSlicePitch = 0;
   
-        ///Creamos el buffer
+        //Creamos el buffer
         hr = m_pd3dDevice->CreateBuffer(&bd, &InitData,
                                         &IB->m_pIndexBuffer);
         if (FAILED(hr)) {
@@ -563,22 +563,22 @@ namespace gaEngineSDK {
   
   ConstantBuffer* 
   GraphicsApiDX::createConstantBuffer(const uint32 bufferSize) {
-    ///Generamos una variable auto
-    ///para adaptar el tipo de dato que ocupamos
+    //Generamos una variable auto
+    //para adaptar el tipo de dato que ocupamos
     auto* constantBuffer = new ConstantBufferDX();
   
-    ///Asignamos datos a la variable
+    //Asignamos datos a la variable
     HRESULT hr = S_OK;
   
-    ///Rellenamos el descriptor de buffer
+    //Rellenamos el descriptor de buffer
     CD3D11_BUFFER_DESC bd(bufferSize, D3D11_BIND_CONSTANT_BUFFER);
   
-    ///Creamos el buffer
+    //Creamos el buffer
     hr = m_pd3dDevice->CreateBuffer(&bd, nullptr,
                                     &constantBuffer->m_pConstantBuffer);
   
-    ///Finalmente regresamos el dato en caso
-    ///de no obtener un error
+    //Finalmente regresamos el dato en caso
+    //de no obtener un error
     if (FAILED(hr)) {
       delete constantBuffer;
       return nullptr;
@@ -591,16 +591,16 @@ namespace gaEngineSDK {
   GraphicsApiDX::createTexture(const uint32 width,
                                const uint32 height,
                                const uint32 bindFlags,
-                               TEXTURE_FORMAT textureFormat,
+                               TEXTURE_FORMAT::E textureFormat,
                                const std::string fileName) {
-    ///Asignamos datos a la variable
+    //Asignamos datos a la variable
     HRESULT hr = S_OK;
   
-    ///Generamos una variable auto
-    ///para adaptar el tipo de dato que ocupamos
+    //Generamos una variable auto
+    //para adaptar el tipo de dato que ocupamos
     auto* texture = new TexturesDX();
   
-    ///Rellenamos el descriptor
+    //Rellenamos el descriptor
     D3D11_TEXTURE2D_DESC textureDesc;
     ZeroMemory(&textureDesc, sizeof(textureDesc));
     textureDesc.Width = width;
@@ -615,7 +615,7 @@ namespace gaEngineSDK {
     textureDesc.CPUAccessFlags = 0;
     textureDesc.MiscFlags = 0;
   
-    ///Creamos la textura
+    //Creamos la textura
     hr = m_pd3dDevice->CreateTexture2D(&textureDesc, nullptr, &texture->m_pTexture);
   
     if (FAILED(hr)) {
@@ -623,7 +623,7 @@ namespace gaEngineSDK {
       return nullptr;
     }
   
-    ///RenderTargetView
+    //RenderTargetView
     if (bindFlags & D3D11_BIND_RENDER_TARGET) {
       hr = m_pd3dDevice->CreateRenderTargetView(texture->m_pTexture,
         nullptr,
@@ -637,7 +637,7 @@ namespace gaEngineSDK {
       return texture;
     }
   
-    ///DepthStencilView
+    //DepthStencilView
     if (bindFlags & D3D11_BIND_DEPTH_STENCIL) {
       D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilDesc;
       ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
@@ -648,7 +648,7 @@ namespace gaEngineSDK {
       hr = m_pd3dDevice->CreateDepthStencilView(texture->m_pTexture,
                                                 &depthStencilDesc,
                                                 &texture->m_pDepthStencilView);
-      ///Checamos que todo salga bien, si no mandamos un error
+      //Checamos que todo salga bien, si no mandamos un error
       if (FAILED(hr)) {
         delete texture;
         return nullptr;
@@ -657,7 +657,7 @@ namespace gaEngineSDK {
       return texture;
     }
   
-    ///ShaderResourceView
+    //ShaderResourceView
     if (bindFlags & D3D11_BIND_SHADER_RESOURCE) {
       CD3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc(D3D11_SRV_DIMENSION_TEXTURE2D);
   
@@ -665,7 +665,7 @@ namespace gaEngineSDK {
         &shaderResourceViewDesc,
         &texture->m_pShaderResourceView);
   
-      ///Checamos que todo salga bien, si no mandamos un error
+      //Checamos que todo salga bien, si no mandamos un error
       if (FAILED(hr)) {
   
         delete texture;
@@ -678,14 +678,14 @@ namespace gaEngineSDK {
   
   SamplerState* 
   GraphicsApiDX::createSamplerState() {
-    ///Generamos una variable auto
-    ///para adaptar el tipo de dato que ocupamos
+    //Generamos una variable auto
+    //para adaptar el tipo de dato que ocupamos
     auto* samplerState = new SamplerStateDX();
   
-    ///Asignamos datos a la variable
+    //Asignamos datos a la variable
     HRESULT hr = S_OK;
   
-    ///Definimos el sampler state
+    //Definimos el sampler state
     D3D11_SAMPLER_DESC sampDesc;
     ZeroMemory(&sampDesc, sizeof(sampDesc));
     sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -698,8 +698,8 @@ namespace gaEngineSDK {
   
     hr = m_pd3dDevice->CreateSamplerState(&sampDesc,
                                           &samplerState->m_pSamplerState);
-    ///Finalmente regresamos el dato en caso
-    ///de no obtener un error
+    //Finalmente regresamos el dato en caso
+    //de no obtener un error
     if (FAILED(hr)) {
       delete samplerState;
       return nullptr;
@@ -709,18 +709,18 @@ namespace gaEngineSDK {
   }
   
   InputLayout* 
-  GraphicsApiDX::createInputLayout(Shaders& vertexShaderDX) {
-    ///Asignamos datos a la variable
+  GraphicsApiDX::createInputLayout(Shaders& vertexShader) {
+    //Asignamos datos a la variable
     HRESULT hr = S_OK;
   
     auto* inputLayout = new InputLayoutDX();
-    auto& vertexShader = reinterpret_cast<ShadersDX&>(vertexShaderDX);
+    auto& vShader = reinterpret_cast<ShadersDX&>(vertexShader);
   
-    ///Generamos la información del shader
+    //Generamos la información del shader
     ID3D11ShaderReflection* pVertexShaderReflection = nullptr;
   
-    if (FAILED(D3DReflect(vertexShader.m_pVSBlob->GetBufferPointer(),
-                          vertexShader.m_pVSBlob->GetBufferSize(),
+    if (FAILED(D3DReflect(vShader.m_pVSBlob->GetBufferPointer(),
+                          vShader.m_pVSBlob->GetBufferSize(),
                           IID_ID3D11ShaderReflection,
                           (void**)&pVertexShaderReflection))) {
       delete inputLayout;
@@ -729,15 +729,15 @@ namespace gaEngineSDK {
       return nullptr;
     }
   
-    ///Generamos una descriptor del shader
+    //Generamos una descriptor del shader
     D3D11_SHADER_DESC shaderDesc;
   
-    ///Obtenemos la información de nuestro
-    ///descriptor del shader
+    //Obtenemos la información de nuestro
+    //descriptor del shader
     pVertexShaderReflection->GetDesc(&shaderDesc);
   
-    ///Leer la descripción del input layout de 
-    /// la información del sombreador
+    //Leer la descripción del input layout de 
+    // la información del sombreador
     uint32 byteOffset = 0;
     Vector<D3D11_INPUT_ELEMENT_DESC> inputLayoutDesc;
   
@@ -745,12 +745,12 @@ namespace gaEngineSDK {
       D3D11_SIGNATURE_PARAMETER_DESC paramDesc;
       pVertexShaderReflection->GetInputParameterDesc(i, &paramDesc);
   
-      ///Creamos y guardamos la información
-      ///para input element
+      //Creamos y guardamos la información
+      //para input element
       D3D11_INPUT_ELEMENT_DESC elementDesc;
   
-      ///Rellenamos 6 datos de 7 el formato es
-      ///lo que sigue
+      //Rellenamos 6 datos de 7 el formato es
+      //lo que sigue
       elementDesc.SemanticName = paramDesc.SemanticName;
       elementDesc.SemanticIndex = paramDesc.SemanticIndex;
       elementDesc.InputSlot = 0;
@@ -758,10 +758,10 @@ namespace gaEngineSDK {
       elementDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
       elementDesc.InstanceDataStepRate = 0;
   
-      ///Determinamos el formato DXGI
-      /// DXGI_FORMAT_R32_UINT
-      /// DXGI_FORMAT_R32_SINT
-      /// DXGI_FORMAT_R32_FLOAT
+      //Determinamos el formato DXGI
+      // DXGI_FORMAT_R32_UINT
+      // DXGI_FORMAT_R32_SINT
+      // DXGI_FORMAT_R32_FLOAT
       if (paramDesc.Mask == 1) {
   
         if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) {
@@ -778,9 +778,9 @@ namespace gaEngineSDK {
         }
         byteOffset += 4;
       }
-      /// DXGI_FORMAT_R32G32_UINT
-      /// DXGI_FORMAT_R32G32_SINT
-      /// DXGI_FORMAT_R32G32_FLOAT
+      // DXGI_FORMAT_R32G32_UINT
+      // DXGI_FORMAT_R32G32_SINT
+      // DXGI_FORMAT_R32G32_FLOAT
       else if (paramDesc.Mask <= 3) {
   
         if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) {
@@ -797,9 +797,9 @@ namespace gaEngineSDK {
         }
         byteOffset += 8;
       }
-      /// DXGI_FORMAT_R32G32B32_UINT
-      /// DXGI_FORMAT_R32G32B32_SINT
-      /// DXGI_FORMAT_R32G32B32_FLOAT
+      // DXGI_FORMAT_R32G32B32_UINT
+      // DXGI_FORMAT_R32G32B32_SINT
+      // DXGI_FORMAT_R32G32B32_FLOAT
       else if (paramDesc.Mask <= 7) {
   
         if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) {
@@ -816,9 +816,9 @@ namespace gaEngineSDK {
         }
         byteOffset += 12;
       }
-      /// DXGI_FORMAT_R32G32B32A32_UINT
-      /// DXGI_FORMAT_R32G32B32A32_SINT
-      /// DXGI_FORMAT_R32G32B32A32_FLOAT
+      // DXGI_FORMAT_R32G32B32A32_UINT
+      // DXGI_FORMAT_R32G32B32A32_SINT
+      // DXGI_FORMAT_R32G32B32A32_FLOAT
       else if (paramDesc.Mask <= 15) {
   
         if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) {
@@ -836,30 +836,30 @@ namespace gaEngineSDK {
         byteOffset += 16;
       }
   
-      ///Guardamos el element desc
+      //Guardamos el element desc
       inputLayoutDesc.push_back(elementDesc);
     }
   
-    ///Creamos el input layout
+    //Creamos el input layout
     hr = m_pd3dDevice->CreateInputLayout(&inputLayoutDesc[0],
                                          inputLayoutDesc.size(), 
-                                         vertexShader.m_pVSBlob->GetBufferPointer(),
-                                         vertexShader.m_pVSBlob->GetBufferSize(), 
+                                         vShader.m_pVSBlob->GetBufferPointer(),
+                                         vShader.m_pVSBlob->GetBufferSize(), 
                                          &inputLayout->m_pVertexLayout);
-    ///Liberamos el puntero blob
-    vertexShader.m_pVSBlob->Release();
+    //Liberamos el puntero blob
+    vShader.m_pVSBlob->Release();
   
-    ///Liberación de memoria de reflexión de shader de asignación
+    //Liberación de memoria de reflexión de shader de asignación
     pVertexShaderReflection->Release();
   
-    ///Checamos que todo salga bien, si no mandamos un error
+    //Checamos que todo salga bien, si no mandamos un error
     if (FAILED(hr)) {
       delete inputLayout;
       delete pVertexShaderReflection;
       return nullptr;
     }
   
-    ///Registro de longitud de bytes
+    //Registro de longitud de bytes
     inputLayout->m_inputLayoutByteLength = &byteOffset;
   
     return inputLayout;
@@ -872,41 +872,41 @@ namespace gaEngineSDK {
   /***************************************************************************/
   
   void 
-  GraphicsApiDX::setPixelShader(Shaders& pixelShaderDX) {
-    ///Generamos una variable auto
-    ///para adaptar el tipo de dato que ocupamos
-    ///Y hacemos un casteo reinterprete para convertir el puntero
-    auto& pixelShader = reinterpret_cast<ShadersDX&> (pixelShaderDX);
+  GraphicsApiDX::setPixelShader(Shaders& pixelShader) {
+    //Generamos una variable auto
+    //para adaptar el tipo de dato que ocupamos
+    //Y hacemos un casteo reinterprete para convertir el puntero
+    auto& pShader = reinterpret_cast<ShadersDX&> (pixelShader);
   
-    m_pImmediateContext->PSSetShader(pixelShader.m_pPixelShader, NULL, 0);
+    m_pImmediateContext->PSSetShader(pShader.m_pPixelShader, NULL, 0);
   }
   
   void 
-  GraphicsApiDX::setVertexShader(Shaders& vertexShaderDX) {
-    auto& vertexShader = reinterpret_cast<ShadersDX&>(vertexShaderDX);
+  GraphicsApiDX::setVertexShader(Shaders& vertexShader) {
+    auto& vShader = reinterpret_cast<ShadersDX&>(vertexShader);
   
-    m_pImmediateContext->VSSetShader(vertexShader.m_pVertexShader, NULL, 0);
+    m_pImmediateContext->VSSetShader(vShader.m_pVertexShader, NULL, 0);
   }
   
   void 
-  GraphicsApiDX::setVertexBuffer(VertexBuffer& vertexBufferDX) {
-    auto& vertexBuffer = reinterpret_cast<VertexBufferDX&>(vertexBufferDX);
+  GraphicsApiDX::setVertexBuffer(VertexBuffer& vertexBuffer) {
+    auto& vBuffer = reinterpret_cast<VertexBufferDX&>(vertexBuffer);
   
     UINT stride = sizeof(Vertex);
     UINT offset = 0;
   
     m_pImmediateContext->IASetVertexBuffers(0,
                                             1,
-                                            &vertexBuffer.m_pVertexBuffer,
+                                            &vBuffer.m_pVertexBuffer,
                                             &stride,
                                             &offset);
   }
   
   void 
-  GraphicsApiDX::setIndexBuffer(IndexBuffer& indexBufferDX) {
-    auto& indexBuffer = reinterpret_cast<IndexBufferDX&>(indexBufferDX);
+  GraphicsApiDX::setIndexBuffer(IndexBuffer& indexBuffer) {
+    auto& iBuffer = reinterpret_cast<IndexBufferDX&>(indexBuffer);
   
-    m_pImmediateContext->IASetIndexBuffer(indexBuffer.m_pIndexBuffer,
+    m_pImmediateContext->IASetIndexBuffer(iBuffer.m_pIndexBuffer,
                                           DXGI_FORMAT_R32_UINT,
                                           0);
   }
@@ -929,124 +929,123 @@ namespace gaEngineSDK {
   }
   
   void 
-  GraphicsApiDX::setSamplerState(const uint32 startSlotDX,
-                                 Vector<SamplerState*>& samplerStateDX,
+  GraphicsApiDX::setSamplerState(const uint32 startSlot,
+                                 Vector<SamplerState*>& samplerState,
                                  Textures& texture) {
   
-    for (uint32 i = 0; i < samplerStateDX.size(); i++) {
-      auto* samplerState = reinterpret_cast<SamplerStateDX*>(samplerStateDX[i]);
+    for (uint32 i = 0; i < samplerState.size(); i++) {
+      auto* sState = reinterpret_cast<SamplerStateDX*>(samplerState[i]);
   
-      m_pImmediateContext->PSSetSamplers(startSlotDX,
-                                         samplerStateDX.size(),
-                                         &samplerState->m_pSamplerState);
+      m_pImmediateContext->PSSetSamplers(startSlot,
+                                         samplerState.size(),
+                                         &sState->m_pSamplerState);
     }
   }
   
   void
-  GraphicsApiDX::setShaderResourceView(Textures* shaderResourceViewDX,
-                                       const uint32 startSlotDX,
-                                       const uint32 numViewsDX) {
-    auto* shaderResource = reinterpret_cast<TexturesDX*>(shaderResourceViewDX);
+  GraphicsApiDX::setShaderResourceView(Textures* shaderResourceView,
+                                       const uint32 startSlot,
+                                       const uint32 numViews) {
+    auto* shaderResource = reinterpret_cast<TexturesDX*>(shaderResourceView);
   
-    m_pImmediateContext->PSSetShaderResources(startSlotDX, numViewsDX,
+    m_pImmediateContext->PSSetShaderResources(startSlot, numViews,
                                               &shaderResource->m_pShaderResourceView);
   }
   
   void
-  GraphicsApiDX::setRenderTarget(Textures* renderTargetDX,
-                                 Textures* depthStencilDX) {
-    auto* depthStencil = reinterpret_cast<TexturesDX*>(depthStencilDX);
-    auto* renderTarget = reinterpret_cast<TexturesDX*>(renderTargetDX);
+  GraphicsApiDX::setRenderTarget(Textures* renderTarget,
+                                 Textures* depthStencil) {
+    auto* dStencil = reinterpret_cast<TexturesDX*>(depthStencil);
+    auto* rTarget = reinterpret_cast<TexturesDX*>(renderTarget);
   
-    m_pImmediateContext->OMSetRenderTargets(1, &renderTarget->m_pRenderTargetView,
-                                            depthStencil->m_pDepthStencilView);
+    m_pImmediateContext->OMSetRenderTargets(1, &rTarget->m_pRenderTargetView,
+                                            dStencil->m_pDepthStencilView);
   }
   
   void 
-  GraphicsApiDX::setDepthStencil(Textures& depthStencilDX,
-                                 const uint32 stencilRefDX) {
-    auto& depthStencil = reinterpret_cast<TexturesDX&>(depthStencilDX);
+  GraphicsApiDX::setDepthStencil(Textures& depthStencil,
+                                 const uint32 stencilRef) {
+    auto& dStencil = reinterpret_cast<TexturesDX&>(depthStencil);
   
-    m_pImmediateContext->OMSetDepthStencilState(depthStencil.m_pDepthStencilState,
-                                                stencilRefDX);
+    m_pImmediateContext->OMSetDepthStencilState(dStencil.m_pDepthStencilState,
+                                                stencilRef);
   }
   
   void 
-  GraphicsApiDX::setInputLayout(InputLayout& vertexLayoutDX) {
-    auto& inputLayout = reinterpret_cast<InputLayoutDX&>(vertexLayoutDX);
+  GraphicsApiDX::setInputLayout(InputLayout& vertexLayout) {
+    auto& inputLayout = reinterpret_cast<InputLayoutDX&>(vertexLayout);
   
     m_pImmediateContext->IASetInputLayout(inputLayout.m_pVertexLayout);
   }
   
   void 
-  GraphicsApiDX::setViewport(const uint32 numViewportsDX,
-                             const uint32 widthDX, 
-                             const uint32 heigthDX) {
+  GraphicsApiDX::setViewport(const uint32 numViewports,
+                             const uint32 width, 
+                             const uint32 heigth) {
     D3D11_VIEWPORT vp;
-    vp.Width = (FLOAT)widthDX;
-    vp.Height = (FLOAT)heigthDX;
+    vp.Width = (FLOAT)width;
+    vp.Height = (FLOAT)heigth;
     vp.MinDepth = 0.0f;
     vp.MaxDepth = 1.0f;
     vp.TopLeftX = 0;
     vp.TopLeftY = 0;
   
-    m_pImmediateContext->RSSetViewports(numViewportsDX, &vp);
+    m_pImmediateContext->RSSetViewports(numViewports, &vp);
   }
   
   void 
-  GraphicsApiDX::setPrimitiveTopology(const uint32 topologyDX) {
-    m_pImmediateContext->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)topologyDX);
+  GraphicsApiDX::setPrimitiveTopology(const uint32 topology) {
+    m_pImmediateContext->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)topology);
   }
   
   void 
-  GraphicsApiDX::setYourVS(Shaders& vertexShaderDX) {
-    auto& vertexShader = reinterpret_cast<ShadersDX&>(vertexShaderDX);
+  GraphicsApiDX::setYourVS(Shaders& vertexShader) {
+    auto& vShader = reinterpret_cast<ShadersDX&>(vertexShader);
   
-    m_pImmediateContext->VSSetShader(vertexShader.m_pVertexShader,
+    m_pImmediateContext->VSSetShader(vShader.m_pVertexShader,
                                      nullptr, 0);
   }
   
   void
-  GraphicsApiDX::setYourVSConstantBuffers(ConstantBuffer* constantBufferDX,
-                                          const uint32 startSlotDX,
-                                          const uint32 numBuffersDX) {
-    auto* constantBuffer = reinterpret_cast<ConstantBufferDX*>(constantBufferDX);
+  GraphicsApiDX::setYourVSConstantBuffers(ConstantBuffer* constantBuffer,
+                                          const uint32 startSlot,
+                                          const uint32 numBuffers) {
+    auto* cBuffer = reinterpret_cast<ConstantBufferDX*>(constantBuffer);
   
-    m_pImmediateContext->VSSetConstantBuffers(startSlotDX, numBuffersDX,
-                                              &constantBuffer->m_pConstantBuffer);
+    m_pImmediateContext->VSSetConstantBuffers(startSlot, numBuffers,
+                                              &cBuffer->m_pConstantBuffer);
   }
   
   void 
-  GraphicsApiDX::setYourPS(Shaders& pixelShaderDX) {
-    auto& pixelShader = reinterpret_cast<ShadersDX&>(pixelShaderDX);
+  GraphicsApiDX::setYourPS(Shaders& pixelShader) {
+    auto& pShader = reinterpret_cast<ShadersDX&>(pixelShader);
   
-    m_pImmediateContext->PSSetShader(pixelShader.m_pPixelShader,
+    m_pImmediateContext->PSSetShader(pShader.m_pPixelShader,
                                      nullptr, 0);
   }
   
   void 
-  GraphicsApiDX::setYourPSConstantBuffers(ConstantBuffer* constantBufferDX,
-                                          const uint32 startSlotDX,
-                                          const uint32 numBuffersDX) {
-    auto* constantBuffer = reinterpret_cast<ConstantBufferDX*>(constantBufferDX);
+  GraphicsApiDX::setYourPSConstantBuffers(ConstantBuffer* constantBuffer,
+                                          const uint32 startSlot,
+                                          const uint32 numBuffers) {
+    auto* cBuffer = reinterpret_cast<ConstantBufferDX*>(constantBuffer);
   
-    m_pImmediateContext->PSSetConstantBuffers(startSlotDX, numBuffersDX,
-                                              &constantBuffer->m_pConstantBuffer);
+    m_pImmediateContext->PSSetConstantBuffers(startSlot, numBuffers,
+                                              &cBuffer->m_pConstantBuffer);
   }
   
   void
-  GraphicsApiDX::setYourPSSampler(SamplerState& samplerDX,
-                                  const uint32 startSlotDX,
-                                  const uint32 numSamplersDX) {
-    auto& sampler = reinterpret_cast<SamplerStateDX&>(samplerDX);
+  GraphicsApiDX::setYourPSSampler(SamplerState& sampler,
+                                  const uint32 startSlot,
+                                  const uint32 numSamplers) {
+    auto& SMP = reinterpret_cast<SamplerStateDX&>(sampler);
   
-    m_pImmediateContext->PSSetSamplers(startSlotDX, numSamplersDX,
-                                       &sampler.m_pSamplerState);
+    m_pImmediateContext->PSSetSamplers(startSlot, numSamplers,
+                                       &SMP.m_pSamplerState);
   }
   
   void
   GraphicsApiDX::setShaders(Shaders& shaders) {
-  
     auto& shader = reinterpret_cast<ShadersDX&>(shaders);
   
     m_pImmediateContext->VSSetShader(shader.m_pVertexShader,
