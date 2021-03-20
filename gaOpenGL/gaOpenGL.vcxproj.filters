@@ -41,5 +41,8 @@
     <ClCompile Include="src\gaGraphicsApiOGL.cpp">
       <Filter>Archivos de origen\GraphicApi</Filter>
     </ClCompile>
+    <ClCompile Include="src\glad.c">
+      <Filter>Archivos de origen\GraphicApi</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

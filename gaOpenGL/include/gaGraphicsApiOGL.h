@@ -2,7 +2,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 
 #include <Glad/glad.h>
-#include <Glm/glm.hpp>
 
 #include <gaGraphicsApi.h>
 #include <gaConstantBuffer.h>
@@ -11,7 +10,7 @@
 #include <gaVertexBuffer.h>
 #include <gaIndexBuffer.h>
 
-#include <gaPrerequisitesUtilities.h>
+#include "gaPrerequisitesCore.h"
 
 namespace gaEngineSDK {
   

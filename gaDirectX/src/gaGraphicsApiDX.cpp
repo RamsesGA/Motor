@@ -8,9 +8,6 @@
 #include "gaIndexBufferDX.h"
 //#include <stb_image.h>
 
-#include <iostream>
-#include <vector>
-
 namespace gaEngineSDK {
   HRESULT 
   CompileShaderFromFile(const std::wstring& szFileName, 
@@ -50,11 +47,11 @@ namespace gaEngineSDK {
   }
   
   bool 
-  AnalyzeVertexShaderDX(const std::wstring& _nameVS) {
+  AnalyzeVertexShaderDX(const std::wstring& nameVS) {
     std::string bufferAnalyze;
   
-    for (uint32 i = 0; i < _nameVS.size(); i++) {
-      bufferAnalyze += _nameVS[i];
+    for (uint32 i = 0; i < nameVS.size(); i++) {
+      bufferAnalyze += nameVS[i];
   
       if (('_' == bufferAnalyze[i]) &&
           ("DX_" != bufferAnalyze)) {
@@ -70,11 +67,11 @@ namespace gaEngineSDK {
   }
   
   bool 
-  AnalyzePixelShaderDX(const std::wstring& _namePS) {
+  AnalyzePixelShaderDX(const std::wstring& namePS) {
     std::string bufferAnalyze;
   
-    for (uint32 i = 0; i < _namePS.size(); i++) {
-      bufferAnalyze += _namePS[i];
+    for (uint32 i = 0; i < namePS.size(); i++) {
+      bufferAnalyze += namePS[i];
   
       if (('_' == bufferAnalyze[i]) &&
           ("DX_" != bufferAnalyze)) {
@@ -164,8 +161,7 @@ namespace gaEngineSDK {
     sd.SampleDesc.Quality = 0;
     sd.Windowed = TRUE;
     
-    for (UINT driverTypeIndex = 0; driverTypeIndex < driverTypes.size(); driverTypeIndex++) {
-
+    for (uint32 driverTypeIndex = 0; driverTypeIndex < driverTypes.size(); driverTypeIndex++) {
       hr = D3D11CreateDeviceAndSwapChain(nullptr, driverTypes[driverTypeIndex],
                                          nullptr, createDeviceFlags,
                                          featureLevels.data(), featureLevels.size(),
@@ -184,7 +180,7 @@ namespace gaEngineSDK {
     auto* backBuffer = new TexturesDX();
     
     hr = m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
-      (LPVOID*)&backBuffer->m_pTexture);
+                                 (LPVOID*)&backBuffer->m_pTexture);
     
     //Checamos que todo salga bien, si no mandamos un error
     if (FAILED(hr)) {
@@ -193,8 +189,8 @@ namespace gaEngineSDK {
     }
     
     hr = m_pd3dDevice->CreateRenderTargetView(backBuffer->m_pTexture,
-      nullptr,
-      &backBuffer->m_pRenderTargetView);
+                                              nullptr,
+                                              &backBuffer->m_pRenderTargetView);
     
     if (FAILED(hr)) {
       delete backBuffer;
@@ -222,7 +218,7 @@ namespace gaEngineSDK {
     
     //Creamos la textura
     hr = m_pd3dDevice->CreateTexture2D(&textureDesc,
-      nullptr, &depthStencil->m_pTexture);
+                                       nullptr, &depthStencil->m_pTexture);
     
     if (FAILED(hr)) {
       delete backBuffer;
@@ -237,8 +233,8 @@ namespace gaEngineSDK {
     depthStencilDesc.Texture2D.MipSlice = 0;
     
     hr = m_pd3dDevice->CreateDepthStencilView(depthStencil->m_pTexture,
-      &depthStencilDesc,
-      &depthStencil->m_pDepthStencilView);
+                                              &depthStencilDesc,
+                                              &depthStencil->m_pDepthStencilView);
     
     //Checamos que todo salga bien, si no mandamos un error
     if (FAILED(hr)) {
@@ -248,9 +244,8 @@ namespace gaEngineSDK {
     }
     
     m_pImmediateContext->OMSetRenderTargets(1,
-      &backBuffer->m_pRenderTargetView,
-      depthStencil->m_pDepthStencilView);
-    
+                                            &backBuffer->m_pRenderTargetView,
+                                            depthStencil->m_pDepthStencilView);
     m_pDepthStencil = depthStencil;
     
     return true;
@@ -481,7 +476,7 @@ namespace gaEngineSDK {
   
         //Creamos el buffer
         hr = m_pd3dDevice->CreateBuffer(&bd, &InitData,
-          &VB->m_pVertexBuffer);
+                                        &VB->m_pVertexBuffer);
   
         if (FAILED(hr)) {
           delete VB;
@@ -626,9 +621,8 @@ namespace gaEngineSDK {
     //RenderTargetView
     if (bindFlags & D3D11_BIND_RENDER_TARGET) {
       hr = m_pd3dDevice->CreateRenderTargetView(texture->m_pTexture,
-        nullptr,
-        &texture->m_pRenderTargetView);
-  
+                                                nullptr,
+                                                &texture->m_pRenderTargetView);
       if (FAILED(hr)) {
         delete texture;
         return nullptr;
@@ -662,12 +656,10 @@ namespace gaEngineSDK {
       CD3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc(D3D11_SRV_DIMENSION_TEXTURE2D);
   
       hr = m_pd3dDevice->CreateShaderResourceView(texture->m_pTexture,
-        &shaderResourceViewDesc,
-        &texture->m_pShaderResourceView);
-  
+                                                  &shaderResourceViewDesc,
+                                                  &texture->m_pShaderResourceView);
       //Checamos que todo salga bien, si no mandamos un error
       if (FAILED(hr)) {
-  
         delete texture;
         return nullptr;
       }
@@ -892,8 +884,8 @@ namespace gaEngineSDK {
   GraphicsApiDX::setVertexBuffer(VertexBuffer& vertexBuffer) {
     auto& vBuffer = reinterpret_cast<VertexBufferDX&>(vertexBuffer);
   
-    UINT stride = sizeof(Vertex);
-    UINT offset = 0;
+    uint32 stride = sizeof(Vertex);
+    uint32 offset = 0;
   
     m_pImmediateContext->IASetVertexBuffers(0,
                                             1,
@@ -983,8 +975,8 @@ namespace gaEngineSDK {
                              const uint32 width, 
                              const uint32 heigth) {
     D3D11_VIEWPORT vp;
-    vp.Width = (FLOAT)width;
-    vp.Height = (FLOAT)heigth;
+    vp.Width = (float)width;
+    vp.Height = (float)heigth;
     vp.MinDepth = 0.0f;
     vp.MaxDepth = 1.0f;
     vp.TopLeftX = 0;

@@ -11,7 +11,7 @@
 #include <gaVertexBuffer.h>
 #include <gaIndexBuffer.h>
 
-#include <gaPrerequisitesUtilities.h>
+#include "gaPrerequisitesCore.h"
 
 namespace gaEngineSDK {
   

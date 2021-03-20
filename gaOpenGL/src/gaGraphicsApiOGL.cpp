@@ -8,9 +8,6 @@
 #include "gaIndexBufferOGL.h"
 //#include <stb_image.h>
 
-#include <iostream>
-#include <vector>
-
 namespace gaEngineSDK {
 
   std::string 
@@ -39,7 +36,7 @@ namespace gaEngineSDK {
   AnalyzeVertexShaderOGL(const std::wstring& _nameVS) {
     std::string bufferAnalyze;
 
-    for (unsigned int i = 0; i < _nameVS.size(); i++) {
+    for (uint32 i = 0; i < _nameVS.size(); i++) {
 
       bufferAnalyze += _nameVS[i];
 
@@ -60,7 +57,7 @@ namespace gaEngineSDK {
   AnalyzePixelShaderOGL(const std::wstring& _namePS) {
     std::string bufferAnalyze;
 
-    for (unsigned int i = 0; i < _namePS.size(); i++) {
+    for (uint32 i = 0; i < _namePS.size(); i++) {
 
       bufferAnalyze += _namePS[i];
 
@@ -121,7 +118,7 @@ namespace gaEngineSDK {
 
     m_HandleToDC = GetDC(hWnd);
 
-    int pixelFormat = ChoosePixelFormat(m_HandleToDC, &pfd);
+    int32 pixelFormat = ChoosePixelFormat(m_HandleToDC, &pfd);
 
     SetPixelFormat(m_HandleToDC, pixelFormat, &pfd);
 
@@ -146,7 +143,7 @@ namespace gaEngineSDK {
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       exit(1);
@@ -162,7 +159,7 @@ namespace gaEngineSDK {
     glDrawElements(m_topology, indexCount,
                    GL_UNSIGNED_INT, 0);
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       exit(1);
@@ -181,9 +178,9 @@ namespace gaEngineSDK {
     auto* texture = new TexturesOGL();
 
     return texture;
-    //int width;
-    //int height;
-    //int components;
+    //int32 width;
+    //int32 height;
+    //int32 components;
     //unsigned char* data = stbi_load(srcFile.c_str(),
     //                                &width, &height, &components, 0);
     //if (!data) {
@@ -246,7 +243,7 @@ namespace gaEngineSDK {
     glBufferSubData(GL_UNIFORM_BUFFER, 0, UBO.m_bufferSize, srcData);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       exit(1);
@@ -266,7 +263,7 @@ namespace gaEngineSDK {
 
     glClear(GL_COLOR_BUFFER_BIT);
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       exit(1);
@@ -277,7 +274,7 @@ namespace gaEngineSDK {
   GraphicsApiOGL::clearYourDepthStencilView(Textures* depthStencil) {
     glClear(GL_DEPTH_BUFFER_BIT);
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       exit(1);
@@ -310,26 +307,26 @@ namespace gaEngineSDK {
     auto* shaders = new ShadersOGL();
 
     // Create an empty vertex shader handle
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    uint32 vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
     // Send the vertex shader source code to GL
     // Note that std::string's .c_str is NULL character terminated.
-    const GLchar* source = (const GLchar*)VS_ShaderSrc.c_str();
+    const char* source = (const char*)VS_ShaderSrc.c_str();
     glShaderSource(vertexShader, 1, &source, nullptr);
 
     // Compile the vertex shader
     glCompileShader(vertexShader);
 
-    GLint isCompiled = 0;
+    int32 isCompiled = 0;
 
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &isCompiled);
 
     if (isCompiled == GL_FALSE) {
-      GLint maxLength = 0;
+      int32 maxLength = 0;
       glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &maxLength);
 
       // The maxLength includes the NULL character
-      std::vector<GLchar> infoLog(maxLength);
+      Vector<char> infoLog(maxLength);
       glGetShaderInfoLog(vertexShader, maxLength, &maxLength, &infoLog[0]);
 
       // We don't need the shader anymore.
@@ -342,11 +339,11 @@ namespace gaEngineSDK {
     shaders->m_vertexShader = vertexShader;
 
     // Create an empty fragment shader handle
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    uint32 fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
     // Send the fragment shader source code to GL
     // Note that std::string's .c_str is NULL character terminated.
-    source = (const GLchar*)PS_ShaderSrc.c_str();
+    source = (const char*)PS_ShaderSrc.c_str();
     glShaderSource(fragmentShader, 1, &source, nullptr);
 
     // Compile the fragment shader
@@ -355,11 +352,11 @@ namespace gaEngineSDK {
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &isCompiled);
 
     if (isCompiled == GL_FALSE) {
-      GLint maxLength = 0;
+      int32 maxLength = 0;
       glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &maxLength);
 
       // The maxLength includes the NULL character
-      std::vector<GLchar> infoLog(maxLength);
+      Vector<char> infoLog(maxLength);
       glGetShaderInfoLog(fragmentShader, maxLength, &maxLength, &infoLog[0]);
 
       // We don't need the shader anymore.
@@ -385,15 +382,15 @@ namespace gaEngineSDK {
     glLinkProgram(shaders->m_rendererID);
 
     // Note the different functions here: glGetProgram* instead of glGetShader*.
-    GLint isLinked = 0;
-    glGetProgramiv(shaders->m_rendererID, GL_LINK_STATUS, (int*)&isLinked);
+    int32 isLinked = 0;
+    glGetProgramiv(shaders->m_rendererID, GL_LINK_STATUS, (int32*)&isLinked);
 
     if (isLinked == GL_FALSE) {
-      GLint maxLength = 0;
+      int32 maxLength = 0;
       glGetProgramiv(shaders->m_rendererID, GL_INFO_LOG_LENGTH, &maxLength);
 
       // The maxLength includes the NULL character
-      std::vector<GLchar> infoLog(maxLength);
+      Vector<char> infoLog(maxLength);
       glGetProgramInfoLog(shaders->m_rendererID, maxLength, &maxLength, &infoLog[0]);
 
       // We don't need the program anymore.
@@ -436,7 +433,7 @@ namespace gaEngineSDK {
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       delete VBO;
@@ -465,7 +462,7 @@ namespace gaEngineSDK {
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       delete EBO;
@@ -487,7 +484,7 @@ namespace gaEngineSDK {
 
     UBO->m_bufferSize = bufferSize;
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       delete UBO;
@@ -505,7 +502,7 @@ namespace gaEngineSDK {
                                const std::string fileName) {
     auto* tex = new TexturesOGL();
 
-    unsigned int texture;
+    uint32 texture;
 
     glGenTextures(1, &texture);
 
@@ -521,7 +518,7 @@ namespace gaEngineSDK {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     // load and generate the texture
-    //int width, height, nrChannels;
+    //int32 width, height, nrChannels;
 
     //unsigned char* data = stbi_load(_fileName.c_str(), &width, &height, &nrChannels, 4);
 
@@ -537,7 +534,7 @@ namespace gaEngineSDK {
 
     //stbi_image_free(data);
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       delete tex;
@@ -557,7 +554,7 @@ namespace gaEngineSDK {
     glSamplerParameteri(samplerState->m_samplerState, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glSamplerParameteri(samplerState->m_samplerState, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       delete samplerState;
@@ -579,28 +576,28 @@ namespace gaEngineSDK {
     glBindVertexArray(inputLayout->m_inputLayout);
 
     bool firstOffSet = true;
-    unsigned int offSet = 0;
-    unsigned int sizeComponent = 0;
-    int total = -1;
+    uint32 offSet = 0;
+    uint32 sizeComponent = 0;
+    int32 total = -1;
 
     glGetProgramiv(shader.m_rendererID, GL_ACTIVE_ATTRIBUTES, &total);
 
-    for (unsigned int i = 0; i < total; i++) {
+    for (uint32 i = 0; i < total; i++) {
       char name[100];
       memset(name, ' ', 100);
 
-      int num = -1;
-      int name_len = -1;
+      int32 num = -1;
+      int32 name_len = -1;
 
       GLenum type = GL_ZERO;
 
-      glGetActiveAttrib(shader.m_rendererID, GLuint(i),
+      glGetActiveAttrib(shader.m_rendererID, uint32(i),
                         sizeof(name) - 1, &name_len, &num,
                         &type, name);
 
       name[name_len] = 0;
 
-      GLuint location = glGetAttribLocation(shader.m_rendererID, name);
+      uint32 location = glGetAttribLocation(shader.m_rendererID, name);
 
       ///Switch para obtener el tamaño del componente
       /// y asignar su offset correspondiente
@@ -630,7 +627,7 @@ namespace gaEngineSDK {
 
       glVertexAttribFormat(location, sizeComponent, GL_FLOAT, false, offSet);
 
-      GLuint detectError = glGetError();
+      uint32 detectError = glGetError();
 
       if (detectError != 0) {
         delete inputLayout;
@@ -641,7 +638,7 @@ namespace gaEngineSDK {
       glEnableVertexAttribArray(location);
     }
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       delete inputLayout;
@@ -663,7 +660,7 @@ namespace gaEngineSDK {
 
     glUseProgram(shader.m_rendererID);
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       exit(1);
@@ -676,7 +673,7 @@ namespace gaEngineSDK {
 
     glUseProgram(shader.m_rendererID);
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       exit(1);
@@ -689,7 +686,7 @@ namespace gaEngineSDK {
 
     glBindVertexBuffer(0, vertex.m_vertexBufferObject, 0, sizeof(Vertex));
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       exit(1);
@@ -702,7 +699,7 @@ namespace gaEngineSDK {
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index.m_indexBufferObject);
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       exit(1);
@@ -718,7 +715,7 @@ namespace gaEngineSDK {
 
     glBindBuffer(GL_UNIFORM_BUFFER, cBuffer.m_uniformBufferObject);
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       exit(1);
@@ -734,7 +731,7 @@ namespace gaEngineSDK {
 
     glBindSampler(tex.m_texture, sampler.m_samplerState);
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       exit(1);
@@ -751,7 +748,7 @@ namespace gaEngineSDK {
 
     glBindTexture(GL_TEXTURE_2D, resourceView->m_texture);
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       delete resourceView;
@@ -771,7 +768,7 @@ namespace gaEngineSDK {
                                 GL_RENDERBUFFER, 
                                 dStencil->m_renderBufferObject);
 
-      GLuint detectError = glGetError();
+      uint32 detectError = glGetError();
 
       if (detectError != 0) {
         exit(1);
@@ -791,7 +788,7 @@ namespace gaEngineSDK {
 
     glBindVertexArray(inputLayout.m_inputLayout);
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       exit(1);
@@ -804,7 +801,7 @@ namespace gaEngineSDK {
                              const uint32 heigth) {
     glViewport(0, 0, width, heigth);
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       exit(1);
@@ -835,7 +832,7 @@ namespace gaEngineSDK {
         break;
     }
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       exit(1);
@@ -854,7 +851,7 @@ namespace gaEngineSDK {
     glBindBufferBase(GL_UNIFORM_BUFFER, startSlot, 
                      cBuffer->m_uniformBufferObject);
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       delete cBuffer;
@@ -874,7 +871,7 @@ namespace gaEngineSDK {
     glBindBufferBase(GL_UNIFORM_BUFFER, startSlot,
                      cBuffer->m_uniformBufferObject);
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       delete cBuffer;
@@ -893,7 +890,7 @@ namespace gaEngineSDK {
 
     glUseProgram(shader.m_rendererID);
 
-    GLuint detectError = glGetError();
+    uint32 detectError = glGetError();
 
     if (detectError != 0) {
       exit(1);

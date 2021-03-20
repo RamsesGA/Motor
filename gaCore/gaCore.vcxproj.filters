@@ -7,6 +7,9 @@
     <Filter Include="Archivos de origen\GraphicApi">
       <UniqueIdentifier>{973d1330-d3b1-48b1-aeb4-0c09dba6acda}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Window">
+      <UniqueIdentifier>{7e6d3ae8-bcfc-4676-acee-a075eccabb73}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gaConstantBuffer.h">
@@ -33,10 +36,17 @@
     <ClInclude Include="include\gaVertexBuffer.h">
       <Filter>Archivos de origen\GraphicApi</Filter>
     </ClInclude>
+    <ClInclude Include="include\gaPrerequisitesCore.h" />
+    <ClInclude Include="include\gaBaseApp.h">
+      <Filter>Archivos de origen\Window</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
       <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaBaseApp.cpp">
+      <Filter>Archivos de origen\Window</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

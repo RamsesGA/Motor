@@ -5,12 +5,19 @@
 * Type objects
 */
 /*****************************************************************************/
-#include <cassert>
-#include <cstring>
+#include <ctime>
 #include <cmath>
 #include <cstdio>
-#include <ctime>
+#include <cassert>
+#include <cstdlib>
+#include <cstring>
+#include <cstdarg>
 
+/*****************************************************************************/
+/**
+* Memory
+*/
+/*****************************************************************************/
 #include <memory>
 
 /*****************************************************************************/
@@ -18,80 +25,39 @@
 * Containers
 */
 /*****************************************************************************/
-
-#include <vector>
-#include <stack>
 #include <map>
-#include <string>
 #include <set>
 #include <list>
-#include <forward_list>
+#include <stack>
 #include <deque>
 #include <queue>
-#include <bitset>
 #include <array>
+#include <vector>
+#include <string>
+#include <bitset>
+#include <forward_list>
 
 /*****************************************************************************/
 /**
-* reading documents and writing documents
+* Reading documents and writing documents
 */
 /*****************************************************************************/
-
+#include <iomanip>
 #include <fstream>
-#include <iostream>
 #include <sstream>
+#include <iostream>
+
+/*****************************************************************************/
+/**
+* Algorithms and functions
+*/
+/*****************************************************************************/
+#include <limits>
+#include <iterator>
+#include <algorithm>
+#include <functional>
 
 namespace gaEngineSDK {
-
-  /**
-  * @brief
-  */
-  template<typename T, typename A = std::allocator<T>>
-  using Vector = std::vector<T, A>;
-
-  /**
-  * @brief
-  */
-  template<typename T, typename A = std::allocator<T>>
-  using Stack = std::stack<T, std::deque<T, A>>;
-
-  /**
-  * @brief
-  */
-  template<typename K, 
-           typename V, 
-           typename P = std::less<K>,
-           typename A = std::allocator<std::pair<const K, V>>>
-  using Map = std::map<K, V, P, A>;
-
-
-  /**
-  * @brief basic_string<char, char_traits<char>, allocator<char>>;
-  */
-  /*template<typename C = char, 
-           typename CT = std::char_traits<C>, 
-           typename A = std::allocator<C>>
-  using String = std::string<C, CT, A>;*/
-
-  /**
-  * @brief
-  */
-  template<typename T, 
-           typename P = std::less<T>, 
-           typename A = std::allocator<T>>
-  using Set = std::set<T, P, A>;
-
-  /**
-  * @brief
-  */
-  template<typename T, typename A = std::allocator<T>>
-  using List = std::list<T, A>;
-
-  /**
-  * @brief
-  */
-  template<typename T, typename A = std::allocator<T>>
-  using ForwardList = std::forward_list<T, A>;
 
   /**
   * @brief
@@ -103,5 +69,54 @@ namespace gaEngineSDK {
   * @brief
   */
   template<typename T, typename A = std::allocator<T>>
+  using ForwardList = std::forward_list<T, A>;
+
+  /**
+  * @brief
+  */
+  template<typename T, typename A = std::allocator<T>>
+  using List = std::list<T, A>;
+
+  /**
+  * @brief
+  */
+  template<typename K,
+           typename V,
+           typename P = std::less<K>,
+           typename A = std::allocator<std::pair<const K, V>>>
+    using Map = std::map<K, V, P, A>;
+
+  /**
+  * @brief
+  */
+  template<typename T, typename A = std::allocator<T>>
   using Queue = std::queue<T, std::deque<T, A>>;
+
+  /**
+  * @brief
+  */
+  template<typename T,
+           typename P = std::less<T>,
+           typename A = std::allocator<T>>
+    using Set = std::set<T, P, A>;
+
+  /**
+  * @brief
+  */
+  template<typename T, typename A = std::allocator<T>>
+  using Stack = std::stack<T, std::deque<T, A>>;
+
+  /**
+  * @brief
+  */
+  template<typename T, typename A = std::allocator<T>>
+  using Vector = std::vector<T, A>;
+
+  /**
+  * @brief basic_string<char, char_traits<char>, allocator<char>>;
+  */
+  /*template<typename C = char, 
+           typename CT = std::char_traits<C>, 
+           typename A = std::allocator<C>>
+  using String = std::string<C, CT, A>;*/
 }

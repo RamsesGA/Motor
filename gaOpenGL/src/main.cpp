@@ -1,7 +1,7 @@
-//#include "gaGraphicsApiDX.h"
-//
-//namespace gaEngineSDK {
-//  extern "C" _declspec(dllexport) GraphicsApi * createGraphicsApiDX() {
-//    return new GraphicsApiDX();
-//  }
-//}
+#include "gaGraphicsApiOGL.h"
+
+namespace gaEngineSDK {
+  extern "C" _declspec(dllexport) GraphicsApi * createGraphicsApiOGL() {
+    return new GraphicsApiOGL();
+  }
+}
