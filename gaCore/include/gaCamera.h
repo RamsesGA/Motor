@@ -1,20 +1,23 @@
 #pragma once
-
+#include <d3d11.h>
+#include <gaVector2.h>
 #include <gaVector3.h>
+#include <gaMatrix4x4.h>
+
 #include "gaPrerequisitesCore.h"
 
 namespace gaEngineSDK {
 
   struct CameraDescriptor {
-    float width;
-    float height;
-    float near;
-    float far;
-    float foV;
+    float camWidth;
+    float camHeight;
+    float camNear;
+    float camFar;
+    float camFoV;
 
-    Vector3 eye;
-    Vector3 lookAt;
-    Vector3 up;
+    Vector3 camEye;
+    Vector3 camLookAt;
+    Vector3 camUp;
   };
 
   class Camera
@@ -22,7 +25,7 @@ namespace gaEngineSDK {
     public:
       /***********************************************************************/
       /**
-      * Construcotr and destructor
+      * Constructor and destructor
       */
       /***********************************************************************/
       Camera() = default;
@@ -109,73 +112,18 @@ namespace gaEngineSDK {
       /***********************************************************************/
 
       /**
-      * @brief Function to save WIDTH value.
+      * @brief Function to save the X, Y value of our mouse.
       * @param .
       */
-      void 
-      setWidht(float width);
-
-      /// <summary>
-      /// 
-      /// </summary>
-      
-      /**
-      * @brief Function to save the HEIGHT value.
-      * @param .
-      */
-      void 
-      setHeight(float height);
-
-      /// <summary>
-      /// Función para guardar el valor NEAR
-      /// </summary>
-      void 
-      setNear(float near);
-
-      /// <summary>
-      /// Función para guardar el valor FAR
-      /// </summary>
-      void 
-      setFar(float far);
-
-      /// <summary>
-      /// Función para guardar el valor 
-      /// Field Of View
-      /// </summary>
-      void 
-      setFoV(float foV);
-
-      /// <summary>
-      /// Función para guardar el valor EYE
-      /// </summary>
-      void
-      setEye(glm::vec3 vec3);
-
-      /// <summary>
-      /// Función para guardar el valor LOOK AT
-      /// </summary>
-      void 
-      setLookAt(glm::vec3 vec3);
-
-      /// <summary>
-      /// Función para guardar el valor UP
-      /// </summary>
-      void 
-      setUp(glm::vec3 vec3);
-
-      /// <summary>
-      /// Función para guardar el valor X, Y
-      /// de nuestro mouse
-      /// </summary>
       void 
       setOriginalMousePos(float x, float y);
 
-      /// <summary>
-      /// Función para guardar el valor bool
-      /// sobre un click o no
-      /// </summary>
+      /**
+      * @brief Function to save the bool value on a click or not.
+      * @param .
+      */
       void 
-      setClickPressed(bool bool);
+      setClickPressed(bool isClicked);
 
       /***********************************************************************/
       /**
@@ -183,21 +131,115 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
 
-      /// <summary>
-      /// Función para obtener la matríz de vista
-      /// </summary>
-      glm::mat4x4 GetView();
-      /// <summary>
-      /// Función para obtener la matríz de proyección
-      /// </summary>
-      glm::mat4x4 GetProjection();
-      /// <summary>
-      /// Función para obtener la posición original del mouse
-      /// </summary>
-      glm::vec2 GetOriginalMousePos();
-      /// <summary>
-      /// Función para obtener el booleano de detección de un click
-      /// </summary>
-      bool GetClickPressed();
+      /**
+      * @brief Function to get the view matrix.
+      */
+      Matrix4x4 
+      getView();
+      
+      /**
+      * @brief Function to obtain the projection matrix.
+      */
+      Matrix4x4 
+      getProjection();
+      
+      /**
+      * @brief Function to get the original position of the mouse.
+      */
+      Vector2 
+      getOriginalMousePos();
+     
+      /**
+      * @brief Function to obtain the boolean of detection of a click.
+      */
+      bool 
+      getClickPressed();
+
+    private:
+      /***********************************************************************/
+      /**
+      * Members
+      */
+      /***********************************************************************/
+
+      /**
+      * @brief Member to detect and notify if user clicked.
+      */
+      bool m_clickPressed = false;
+
+      /**
+      * @brief Member to detect if it is OGL or DX.
+      */
+      bool m_isOGL;
+
+      /**
+      * @brief Member to save angle.
+      */
+      float m_angule;
+
+      /**
+      * @brief Member to define a maximum angle that the user can rotate.
+      */
+      float m_maxAngule = 2160.0f;
+     
+      /**
+      * @brief Member to save original mouse position.
+      */
+      Vector2 m_originalMousePos;
+
+      /**
+      * @brief Member to save the vectors above.
+      */
+      Vector3 m_up;
+
+      /**
+      * @brief Member to save the front vectors.
+      */
+      Vector3 m_front;
+
+      /**
+      * @brief Member to save vectors.
+      */
+      Vector3 m_locketFront;
+
+      /**
+      * @brief Member to save vectors in motion X Y.
+      */
+      Vector3 m_onlyXnY;
+
+      /**
+      * @brief Member to save the X Y vectors and lock the camera.
+      */
+      Vector3 m_locketonlyXnY;
+
+      /**
+      * @brief Member to save the vectors of the right position.
+      */
+      Vector3 m_right;
+
+      /**
+      * @brief Member to store a projection matrix.
+      */
+      Matrix4x4 m_projection;
+
+      /**
+      * @brief Member to store a position matrix.
+      */
+      Matrix4x4 m_position;
+
+      /**
+      * @brief Member to store an axis matrix.
+      */
+      Matrix4x4 m_axis;
+      
+      /**
+      * @brief Member to store a view array.
+      */
+      Matrix4x4 m_view;
+
+      /**
+      * @brief Member to connect to the structure and define its values.
+      */
+      CameraDescriptor m_cameraDesc;
   };
 }

@@ -96,9 +96,6 @@
     <ClInclude Include="include\gaMatrix4x4.h">
       <Filter>Archivos de origen\Math</Filter>
     </ClInclude>
-    <ClInclude Include="include\gaPrerequisitesUtilities.h">
-      <Filter>Archivos de origen</Filter>
-    </ClInclude>
     <ClInclude Include="include\gaStdHeaders.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
@@ -119,6 +116,9 @@
     </ClInclude>
     <ClInclude Include="include\gaQuaternions.h">
       <Filter>Archivos de origen\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaPrerequisitesUtilities.h">
+      <Filter>Archivos de origen\Prerequisites</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
