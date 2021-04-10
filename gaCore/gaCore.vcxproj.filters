@@ -46,9 +46,6 @@
     <ClInclude Include="include\gaBaseApp.h">
       <Filter>Archivos de origen\Window</Filter>
     </ClInclude>
-    <ClInclude Include="include\gaWindowBase.h">
-      <Filter>Archivos de origen\Window</Filter>
-    </ClInclude>
     <ClInclude Include="include\gaCamera.h">
       <Filter>Archivos de origen\Camara</Filter>
     </ClInclude>
@@ -61,12 +58,6 @@
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="src\gaBaseApp.cpp">
-      <Filter>Archivos de origen\Window</Filter>
-    </ClCompile>
-    <ClCompile Include="src\gaWindowBase.cpp">
-      <Filter>Archivos de origen\Window</Filter>
-    </ClCompile>
-    <ClCompile Include="src\gaMainWindow.cpp">
       <Filter>Archivos de origen\Window</Filter>
     </ClCompile>
     <ClCompile Include="src\gaCamera.cpp">
