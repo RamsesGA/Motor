@@ -474,4 +474,33 @@ TEST(gaUtilities, Matrix_4x4_Tests) {
       accountant++;
     }
   }
+
+  //New 09/04/21
+
+  Vector3 right;
+
+  /*
+  right.x = 1
+  right.y = 2
+  right.z = 3
+  */
+  right = testMat4.matrixData3(0);
+  EXPECT_FLOAT_EQ(right.m_x, 1.0f);
+  EXPECT_FLOAT_EQ(right.m_y, 2.0f);
+  EXPECT_FLOAT_EQ(right.m_z, 3.0f);
+
+  right = testMat4.matrixData3(1);
+  EXPECT_FLOAT_EQ(right.m_x, 5.0f);
+  EXPECT_FLOAT_EQ(right.m_y, 6.0f);
+  EXPECT_FLOAT_EQ(right.m_z, 7.0f);
+
+  right = testMat4.matrixData3(2);
+  EXPECT_FLOAT_EQ(right.m_x, 9.0f);
+  EXPECT_FLOAT_EQ(right.m_y, 10.0f);
+  EXPECT_FLOAT_EQ(right.m_z, 11.0f);
+
+  Matrix4x4 b;
+  EXPECT_FLOAT_EQ(b.matrixData3(0).m_x, 0.0f);
+  EXPECT_FLOAT_EQ(b.matrixData3(1).m_y, 0.0f);
+  EXPECT_FLOAT_EQ(b.matrixData3(2).m_z, 0.0f);
 }

@@ -1,11 +1,32 @@
-
 #include "gaMatrix4x4.h"
+#include "gaPlatformMath.h"
 
 namespace gaEngineSDK {
+
+  /*************************************************************************/
+  /**
+  * Constructor and Destructor
+  */
+  /*************************************************************************/
 
   Matrix4x4::Matrix4x4(int32 columnSize, int32 rowSize) {
     m_columnSize = columnSize;
     m_rowSize = rowSize;
+
+    m_mat4x4[0][0] = 0.0f; m_mat4x4[0][1] = 0.0f;
+    m_mat4x4[1][0] = 0.0f; m_mat4x4[1][1] = 0.0f;
+    m_mat4x4[2][0] = 0.0f; m_mat4x4[2][1] = 0.0f;
+    m_mat4x4[3][0] = 0.0f; m_mat4x4[3][1] = 0.0f;
+
+    m_mat4x4[0][2] = 0.0f; m_mat4x4[0][3] = 0.0f;
+    m_mat4x4[1][2] = 0.0f; m_mat4x4[1][3] = 0.0f;
+    m_mat4x4[2][2] = 0.0f; m_mat4x4[2][3] = 0.0f;
+    m_mat4x4[3][2] = 0.0f; m_mat4x4[3][3] = 0.0f;
+  }
+
+  Matrix4x4::Matrix4x4() {
+    m_columnSize = 4;
+    m_rowSize = 4;
 
     m_mat4x4[0][0] = 0.0f; m_mat4x4[0][1] = 0.0f;
     m_mat4x4[1][0] = 0.0f; m_mat4x4[1][1] = 0.0f;
@@ -63,7 +84,14 @@ namespace gaEngineSDK {
     m_mat4x4[3][2] = vecW.m_z; m_mat4x4[3][3] = 1.0f;
   }
 
-  Matrix4x4 gaEngineSDK::Matrix4x4::transpose() {
+  /*************************************************************************/
+  /**
+  * Normal methods.
+  */
+  /*************************************************************************/
+
+  Matrix4x4 
+  Matrix4x4::transpose() {
     Matrix4x4 trans(4, 4);
 
     for (int32 i = 0; i < 4; ++i) {
@@ -75,9 +103,37 @@ namespace gaEngineSDK {
     return trans;
   }
 
-  float&
-  Matrix4x4::operator()(const int32& row, const int32& column) {
-    return this->m_mat4x4[row][column];
+  Matrix4x4 
+  Matrix4x4::perspectiveFovLH(float FOV, float width,
+                              float height, float near,
+                              float far) {
+    float rad = FOV;
+    float h = Math::cos(float(0.5) * rad) / Math::sin(float(0.5) * rad);
+    auto w = h * height / width;
+
+    Matrix4x4 result(w,   0,   0,                                0,
+                     0,   h,   0,                                0,
+                     0,   0,   (far + near) / (far - near),      1,
+                     0,   0,   -(2 * far * near) / (far - near), 0);
+    return result;
+  }
+
+  Vector3 
+  Matrix4x4::matrixData3(uint32 index) {
+    m_matrixData.resize(3);
+    m_matrixData.at(0).m_x = m_mat4x4[0][0];
+    m_matrixData.at(0).m_y = m_mat4x4[1][0];
+    m_matrixData.at(0).m_z = m_mat4x4[2][0];
+                           
+    m_matrixData.at(1).m_x = m_mat4x4[0][1];
+    m_matrixData.at(1).m_y = m_mat4x4[1][1];
+    m_matrixData.at(1).m_z = m_mat4x4[2][1];
+                           
+    m_matrixData.at(2).m_x = m_mat4x4[0][2];
+    m_matrixData.at(2).m_y = m_mat4x4[1][2];
+    m_matrixData.at(2).m_z = m_mat4x4[2][2];
+
+    return m_matrixData.at(index);
   }
 
   /*************************************************************************/
@@ -85,6 +141,11 @@ namespace gaEngineSDK {
   * Operators overloads.
   */
   /*************************************************************************/
+
+  float&
+  Matrix4x4::operator()(const int32& row, const int32& column) {
+    return this->m_mat4x4[row][column];
+  }
 
   Matrix4x4 
   Matrix4x4::operator+(Matrix4x4& matrix)const {

@@ -8,18 +8,20 @@
 
 namespace gaEngineSDK {
 
-  struct CameraDescriptor {
-    float camWidth;
-    float camHeight;
-    float camNear;
-    float camFar;
-    float camFoV;
+  namespace CameraDescriptor {
+    struct E {
+      float camWidth;
+      float camHeight;
+      float camNear;
+      float camFar;
+      float camFoV;
 
-    Vector3 camEye;
-    Vector3 camLookAt;
-    Vector3 camUp;
-  };
-
+      Vector3 camEye;
+      Vector3 camLookAt;
+      Vector3 camUp;
+    };
+  }
+  
   class Camera
   {
     public:
@@ -37,7 +39,7 @@ namespace gaEngineSDK {
       * @param .
       */
       void 
-      init(CameraDescriptor cameraDesc,
+      init(CameraDescriptor::E cameraDesc,
            bool isOGL);
       
       /**
@@ -240,6 +242,6 @@ namespace gaEngineSDK {
       /**
       * @brief Member to connect to the structure and define its values.
       */
-      CameraDescriptor m_cameraDesc;
+      CameraDescriptor::E m_cameraDesc;
   };
 }

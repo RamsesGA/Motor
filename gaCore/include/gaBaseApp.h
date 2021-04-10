@@ -1,18 +1,17 @@
 #pragma once
 
-#include <gaVector2I.h>
 #include <SFML/Window.hpp>
+#include <gaVector2I.h>
 
 #include "gaPrerequisitesCore.h"
 
-using sf::Event;
 using sf::Window;
 using sf::VideoMode;
 using sf::WindowHandle;
 
 namespace gaEngineSDK {
 
-  class BaseApp
+  class GA_CORE_EXPORT BaseApp
   {
     public:
       BaseApp() = default;
@@ -24,31 +23,44 @@ namespace gaEngineSDK {
       run();
 
     protected:
-      virtual void
-      init();
+      void
+      createWindow(int32 sizeX, int32 sizeY, String windowTitle);
 
       virtual void
-      update(float deltaTime);
+      init(){};
 
       virtual void
-      render();
+      onInit() {};
 
       virtual void
-      create();
+      update(float deltaTime) {};
 
       virtual void
-      createWindow();
+      onUpdate(float deltaTime) {};
 
       virtual void
-      resize(int32 width, int32 height);
+      render() {};
 
       virtual void
-      destroySystem();
+      onRender() {};
 
-      Vector2I m_windowPosition;
+      virtual void
+      create() {};
+
+      virtual void
+      onCreate() {};
+
+      virtual void
+      resize(int32 width, int32 height) {};
+
+      virtual void
+      destroySystem() {};
+
       Vector2I m_windowSize;
 
-      std::string m_windoTitle;
+      std::string m_windowTitle;
+
+      Vector2I m_windowPosition;
 
       Window m_sfmlWindow;
   };

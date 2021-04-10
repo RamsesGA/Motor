@@ -2,6 +2,7 @@
 
 #include "gaPrerequisitesUtilities.h"
 #include "gaVector3.h"
+#include "gaVector4.h"
 
 namespace gaEngineSDK {
 
@@ -14,6 +15,8 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
       
+      Matrix4x4();
+
       /**
       * @brief Define the value of the matrix in column major.
       */
@@ -49,8 +52,19 @@ namespace gaEngineSDK {
       Matrix4x4
       transpose();
       
-      Matrix4x4&
-      perspectiveFovLH();
+      Matrix4x4
+      perspectiveFovLH(float FOV,
+                       float width,
+                       float height,
+                       float near,
+                       float far);
+
+      /**
+      * @brief Obtain a vector with the values of the matrix.
+      * @return One vector with XYZ values.
+      */
+      Vector3
+      matrixData3(uint32 index);
       
       /***********************************************************************/
       /**
@@ -137,5 +151,6 @@ namespace gaEngineSDK {
       int32 m_rowSize;
       int32 m_columnSize;
       float m_mat4x4[4][4];
+      Vector<Vector3> m_matrixData;
   };
 }

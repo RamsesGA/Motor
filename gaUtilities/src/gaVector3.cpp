@@ -45,8 +45,8 @@ namespace gaEngineSDK {
   Vector3 
   Vector3::crossProduct(const Vector3& vector) const {
     return Vector3(m_y * vector.m_z - m_z * vector.m_y,
-      m_z * vector.m_x - m_x * vector.m_z,
-      m_x * vector.m_y - m_y * vector.m_x);
+                   m_z * vector.m_x - m_x * vector.m_z,
+                   m_x * vector.m_y - m_y * vector.m_x);
   }
 
   /***************************************************************************/

@@ -10,6 +10,12 @@
     <Filter Include="Archivos de origen\Window">
       <UniqueIdentifier>{7e6d3ae8-bcfc-4676-acee-a075eccabb73}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Camara">
+      <UniqueIdentifier>{6875d821-3a32-4a6b-83f6-ec801ffe7368}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Models">
+      <UniqueIdentifier>{bc3eb5b7-539c-4996-b48c-bd712aad007f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gaConstantBuffer.h">
@@ -44,10 +50,10 @@
       <Filter>Archivos de origen\Window</Filter>
     </ClInclude>
     <ClInclude Include="include\gaCamera.h">
-      <Filter>Archivos de origen</Filter>
+      <Filter>Archivos de origen\Camara</Filter>
     </ClInclude>
     <ClInclude Include="include\gaModels.h">
-      <Filter>Archivos de origen</Filter>
+      <Filter>Archivos de origen\Models</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -64,10 +70,10 @@
       <Filter>Archivos de origen\Window</Filter>
     </ClCompile>
     <ClCompile Include="src\gaCamera.cpp">
-      <Filter>Archivos de origen</Filter>
+      <Filter>Archivos de origen\Camara</Filter>
     </ClCompile>
     <ClCompile Include="src\gaModels.cpp">
-      <Filter>Archivos de origen</Filter>
+      <Filter>Archivos de origen\Models</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

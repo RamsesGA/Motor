@@ -115,8 +115,5 @@ namespace gaEngineSDK {
   /**
   * @brief basic_string<char, char_traits<char>, allocator<char>>;
   */
-  /*template<typename C = char, 
-           typename CT = std::char_traits<C>, 
-           typename A = std::allocator<C>>
-  using String = std::string<C, CT, A>;*/
+  using String = std::string;
 }

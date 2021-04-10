@@ -99,13 +99,14 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>./include/;$(SolutionDir)gaCore/include;$(DEVLIBS)/OpenGL/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./include/;$(SolutionDir)gaCore/include;$(DEVLIBS)/OpenGL/include;$(SolutionDir)gaUtilities/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib/$(PlatformTarget)/;$(DEVLIBS)/OpenGL/lib/$(PlatformTarget)/</AdditionalLibraryDirectories>
-      <AdditionalDependencies>gaCore_d.lib;%(AdditionalDependencies);opengl32.lib;glfw3.lib</AdditionalDependencies>
+      <AdditionalDependencies>gaCore_d.lib;gaUtilities_d.lib;%(AdditionalDependencies);opengl32.lib;glfw3.lib</AdditionalDependencies>
+      <ImportLibrary>$(SolutionDir)/lib/$(PlatformTarget)/$(TargetName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -117,7 +118,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>./include/;$(SolutionDir)gaCore/include;$(DEVLIBS)/OpenGL/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./include/;$(SolutionDir)gaCore/include;$(DEVLIBS)/OpenGL/include;$(SolutionDir)gaUtilities/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -126,6 +127,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib/$(PlatformTarget)/;$(DEVLIBS)/OpenGL/lib/$(PlatformTarget)/</AdditionalLibraryDirectories>
       <AdditionalDependencies>gaCore.lib;%(AdditionalDependencies);opengl32.lib;glfw3.lib</AdditionalDependencies>
+      <ImportLibrary>$(SolutionDir)/lib/$(PlatformTarget)/$(TargetName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -135,13 +137,14 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>./include/;$(SolutionDir)gaCore/include;$(DEVLIBS)/OpenGL/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./include/;$(SolutionDir)gaCore/include;$(DEVLIBS)/OpenGL/include;$(SolutionDir)gaUtilities/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib/$(PlatformTarget)/;$(DEVLIBS)/OpenGL/lib/$(PlatformTarget)/</AdditionalLibraryDirectories>
-      <AdditionalDependencies>gaCore_d.lib;%(AdditionalDependencies);opengl32.lib;glfw3.lib</AdditionalDependencies>
+      <AdditionalDependencies>gaCore_d.lib;gaUtilities_d.lib;%(AdditionalDependencies);opengl32.lib;glfw3.lib</AdditionalDependencies>
+      <ImportLibrary>$(SolutionDir)/lib/$(PlatformTarget)/$(TargetName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -153,7 +156,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>./include/;$(SolutionDir)gaCore/include;$(DEVLIBS)/OpenGL/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./include/;$(SolutionDir)gaCore/include;$(DEVLIBS)/OpenGL/include;$(SolutionDir)gaUtilities/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -162,6 +165,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib/$(PlatformTarget)/;$(DEVLIBS)/OpenGL/lib/$(PlatformTarget)/</AdditionalLibraryDirectories>
       <AdditionalDependencies>gaCore.lib;%(AdditionalDependencies);opengl32.lib;glfw3.lib</AdditionalDependencies>
+      <ImportLibrary>$(SolutionDir)/lib/$(PlatformTarget)/$(TargetName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

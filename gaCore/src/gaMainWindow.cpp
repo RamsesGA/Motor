@@ -41,8 +41,8 @@ namespace gaEngineSDK {
   * Camera
   */
   /***************************************************************************/
-  Matrix4x4 g_world;
-  Camera g_mainCamera;
+  //Matrix4x4 g_world;
+  //Camera g_mainCamera;
   
   /***************************************************************************/
   /**
@@ -112,12 +112,12 @@ namespace gaEngineSDK {
         // WM_KEYDOWN: A window receives keyboard 
         // input in the form of keystroke messages and character messages.
       case WM_KEYDOWN: {
-        g_mainCamera.inputDetection(wParam);
+        //g_mainCamera.inputDetection(wParam);
       
-        ConstantBuffer1 cb;
+        /*ConstantBuffer1 cb;
         cb.mView = g_mainCamera.getView();
       
-        g_pGraphicApi->updateConstantBuffer(&cb, *g_pConstantBuffer1);
+        g_pGraphicApi->updateConstantBuffer(&cb, *g_pConstantBuffer1);*/
         break;
       }
       
@@ -126,30 +126,30 @@ namespace gaEngineSDK {
       case WM_LBUTTONDOWN: {
         GetCursorPos(&Temp);
 
-        g_mainCamera.setOriginalMousePos(Temp.x, Temp.y);
-        g_mainCamera.setClickPressed(true);
+        //g_mainCamera.setOriginalMousePos(Temp.x, Temp.y);
+        //g_mainCamera.setClickPressed(true);
         break;
       }
       
       case WM_MOUSEMOVE: {
-        if (g_mainCamera.getClickPressed()) {
+        //if (g_mainCamera.getClickPressed()) {
       
-          g_mainCamera.setOriginalMousePos(g_mainCamera.getOriginalMousePos().x, 
-                                           g_mainCamera.getOriginalMousePos().y);
+          //g_mainCamera.setOriginalMousePos(g_mainCamera.getOriginalMousePos().x, 
+          //                                 g_mainCamera.getOriginalMousePos().y);
       
-          g_mainCamera.mouseRotation();
+          //g_mainCamera.mouseRotation();
       
-          ConstantBuffer1 cb;
+          /*ConstantBuffer1 cb;
           cb.mView = g_mainCamera.getView();
-          g_pGraphicApi->updateConstantBuffer(&cb, *g_pConstantBuffer1);
-        }
+          g_pGraphicApi->updateConstantBuffer(&cb, *g_pConstantBuffer1);*/
+        //}
         break;
       }
       
       // WM_LBUTTONUP: Posted when the user releases 
       // the left mouse button while the cursor is in the client area of a window.
       case WM_LBUTTONUP:
-        g_mainCamera.setClickPressed(false);
+        //g_mainCamera.setClickPressed(false);
         break;
       
       default:
@@ -211,20 +211,20 @@ namespace gaEngineSDK {
   * @brief Function to initialize the main values of the camera.
   */
   void InitCamera(bool _isOGL = false) {
-    //Inicializamos la matriz de identidad
-    g_world = glm::mat4(1.0f);
+    ////Inicializamos la matriz de identidad
+    //g_world = glm::mat4(1.0f);
   
-    CameraDescriptor mainCamera;
-    mainCamera.camLookAt = Vector3(0.0f, 1.0f, 0.0f);
-    mainCamera.camEye = Vector3(0.0f, 3.0f, -6.0f);
-    mainCamera.camUp = Vector3(0.0f, 1.0f, 0.0f);
-    mainCamera.camFar = 1000.0f;
-    mainCamera.camNear = 0.01f;
-    mainCamera.camFoV = 0.78539816339f;
-    mainCamera.camHeight = g_height;
-    mainCamera.camWidth = g_width;
+    //CameraDescriptor mainCamera;
+    //mainCamera.camLookAt = Vector3(0.0f, 1.0f, 0.0f);
+    //mainCamera.camEye = Vector3(0.0f, 3.0f, -6.0f);
+    //mainCamera.camUp = Vector3(0.0f, 1.0f, 0.0f);
+    //mainCamera.camFar = 1000.0f;
+    //mainCamera.camNear = 0.01f;
+    //mainCamera.camFoV = 0.78539816339f;
+    //mainCamera.camHeight = g_height;
+    //mainCamera.camWidth = g_width;
   
-    g_mainCamera.init(mainCamera, _isOGL);
+    //g_mainCamera.init(mainCamera, _isOGL);
   }
   
   /**
@@ -232,7 +232,7 @@ namespace gaEngineSDK {
   */
   void Update() {
   
-    ConstantBuffer1 meshData;
+    /*ConstantBuffer1 meshData;
   
     meshData.mProjection = g_mainCamera.getProjection();
     meshData.mView = g_mainCamera.getView();
@@ -244,7 +244,7 @@ namespace gaEngineSDK {
     cb.mWorld = g_world;
     cb.vMeshColor = g_vMeshColor;
   
-    g_pGraphicApi->updateConstantBuffer(&cb, *g_pConstantBuffer2);
+    g_pGraphicApi->updateConstantBuffer(&cb, *g_pConstantBuffer2);*/
   }
   
   /**
@@ -275,14 +275,14 @@ namespace gaEngineSDK {
     //Guardamos el index buffer
     g_pGraphicApi->setIndexBuffer(*g_pIndexBuffer);
     //Guardamos la topología
-    g_pGraphicApi->setPrimitiveTopology(PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    //g_pGraphicApi->setPrimitiveTopology(PRIMITIVE_TOPOLOGY_TRIANGLELIST);
   
     g_pGraphicApi->setShaders(*g_pBothShaders);
     g_pGraphicApi->setYourVSConstantBuffers(g_pConstantBuffer1, 0, 1);
     g_pGraphicApi->setYourVSConstantBuffers(g_pConstantBuffer2, 1, 1);
     g_pGraphicApi->setYourPSConstantBuffers(g_pConstantBuffer2, 1, 1);
   
-    g_model->draw(g_pGraphicApi);
+    //g_model->draw(g_pGraphicApi);
   
     //
     // Present our back buffer to our front buffer
@@ -334,19 +334,19 @@ namespace gaEngineSDK {
       exit(1);
     }
   
-    //Creamos el vertex buffer
-    g_pVertexBuffer = g_pGraphicApi->createVertexBuffer(nullptr, sizeof(Matrices));
-    if (nullptr == g_pVertexBuffer) {
+    ////Creamos el vertex buffer
+    //g_pVertexBuffer = g_pGraphicApi->createVertexBuffer(nullptr, sizeof(Matrices));
+    //if (nullptr == g_pVertexBuffer) {
   
-      exit(1);
-    }
+    //  exit(1);
+    //}
   
-    //Creamos el index buffer
-    g_pIndexBuffer = g_pGraphicApi->createIndexBuffer(nullptr, sizeof(ViewCB));
-    if (nullptr == g_pIndexBuffer) {
+    ////Creamos el index buffer
+    //g_pIndexBuffer = g_pGraphicApi->createIndexBuffer(nullptr, sizeof(ViewCB));
+    //if (nullptr == g_pIndexBuffer) {
   
-      exit(1);
-    }
+    //  exit(1);
+    //}
   
     //Creamos los constant buffers para el shader
     g_pConstantBuffer1 = g_pGraphicApi->createConstantBuffer(sizeof(ConstantBuffer1));
@@ -365,7 +365,7 @@ namespace gaEngineSDK {
     //g_model->Init("Models/POD/OBJ/POD.obj", g_pGraphicApi);
     //g_model->Init("Models/ugandan/FBX/Knuckles.fbx", g_pGraphicApi);
     //g_model->Init("Models/sonic/FBX/sonic.fbx", g_pGraphicApi);
-    g_model->init("Models/Nier2b/OBJ/Nier2b.obj", g_pGraphicApi);
+    //g_model->init("Models/Nier2b/OBJ/Nier2b.obj", g_pGraphicApi);
   }
   
   // <summary>
