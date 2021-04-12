@@ -243,4 +243,10 @@ namespace gaEngineSDK {
       /// </summary>
       Textures* m_pBackBuffer;
   };
+
+  extern "C" GA_CORE_EXPORT GraphicsApi *
+  createGraphicApi() {
+    GraphicsApiDX* pGraphicsApiDX = new GraphicsApiDX();
+    return pGraphicsApiDX;
+  }
 }

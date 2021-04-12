@@ -54,9 +54,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="src\gaBaseApp.cpp">
       <Filter>Archivos de origen\Window</Filter>
     </ClCompile>

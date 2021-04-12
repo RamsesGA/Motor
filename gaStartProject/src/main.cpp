@@ -1,12 +1,12 @@
-#include <gaBaseApp.h>
+#include <gaApp.h>
 
 using namespace gaEngineSDK;
 
 int
 main() {
-  BaseApp baseApp;
+  App app;
 
-  baseApp.run();
+  app.run("GA Window");
 
   return 0;
 }

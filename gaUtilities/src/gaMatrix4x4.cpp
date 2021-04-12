@@ -122,15 +122,15 @@ namespace gaEngineSDK {
   Matrix4x4::matrixData3(uint32 index) {
     m_matrixData.resize(3);
     m_matrixData.at(0).m_x = m_mat4x4[0][0];
-    m_matrixData.at(0).m_y = m_mat4x4[1][0];
-    m_matrixData.at(0).m_z = m_mat4x4[2][0];
+    m_matrixData.at(0).m_y = m_mat4x4[0][1];
+    m_matrixData.at(0).m_z = m_mat4x4[0][2];
                            
-    m_matrixData.at(1).m_x = m_mat4x4[0][1];
+    m_matrixData.at(1).m_x = m_mat4x4[1][0];
     m_matrixData.at(1).m_y = m_mat4x4[1][1];
-    m_matrixData.at(1).m_z = m_mat4x4[2][1];
+    m_matrixData.at(1).m_z = m_mat4x4[1][2];
                            
-    m_matrixData.at(2).m_x = m_mat4x4[0][2];
-    m_matrixData.at(2).m_y = m_mat4x4[1][2];
+    m_matrixData.at(2).m_x = m_mat4x4[2][0];
+    m_matrixData.at(2).m_y = m_mat4x4[2][1];
     m_matrixData.at(2).m_z = m_mat4x4[2][2];
 
     return m_matrixData.at(index);

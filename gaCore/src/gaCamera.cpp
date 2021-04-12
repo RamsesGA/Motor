@@ -237,7 +237,8 @@ namespace gaEngineSDK {
       createView();
     }
 
-    if (secondPos.m_y < m_originalMousePos.m_y && m_angule < m_maxAngule) {
+    if ((secondPos.m_y < m_originalMousePos.m_y) && 
+        (m_angule < m_maxAngule)) {
       m_angule += speedAngule;
 
       if (m_angule > m_maxAngule) {
@@ -247,14 +248,15 @@ namespace gaEngineSDK {
         Pitch =
         {
           1,	0,									0,										0,
-          0,	cosf(speedAngule * 3.141516 / 180),	-sinf(speedAngule * 3.141516 / 180),	0,
-          0,	sinf(speedAngule * 3.141516 / 180),	cosf(speedAngule * 3.141516 / 180),		0,
+          0,	cosf(speedAngule * Math::PI / 180),	-sinf(speedAngule * Math::PI / 180),	0,
+          0,	sinf(speedAngule * Math::PI / 180),	cosf(speedAngule * Math::PI / 180),		0,
           0,	0,									0,										1
         };
       }
     }
 
-    if (secondPos.m_y > m_originalMousePos.m_y && m_angule > -m_maxAngule) {
+    if ((secondPos.m_y > m_originalMousePos.m_y) && 
+        (m_angule > -m_maxAngule)) {
       m_angule -= speedAngule;
 
       if (m_angule < -m_maxAngule) {
@@ -264,8 +266,8 @@ namespace gaEngineSDK {
         Pitch =
         {
           1,	0,										0,										0,
-          0,	cosf(-speedAngule * 3.141516 / 180),	-sinf(-speedAngule * 3.141516 / 180),	0,
-          0,	sinf(-speedAngule * 3.141516 / 180),	cosf(-speedAngule * 3.141516 / 180),	0,
+          0,	cosf(-speedAngule * Math::PI / 180),	-sinf(-speedAngule * Math::PI / 180),	0,
+          0,	sinf(-speedAngule * Math::PI / 180),	cosf(-speedAngule * Math::PI / 180),	0,
           0,	0,										0,										1
         };
       }
@@ -334,7 +336,6 @@ namespace gaEngineSDK {
   		-m_cameraDesc.s_eye.m_x, -m_cameraDesc.s_eye.m_y, -m_cameraDesc.s_eye.m_z, 1
   	};*/
   
-  	//m_view = m_axis * m_position;
     m_position = m_position * m_axis;
   	m_view = m_position;
   }

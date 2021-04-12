@@ -9,7 +9,7 @@
 namespace gaEngineSDK {
 
   namespace CameraDescriptor {
-    struct E {
+    struct GA_CORE_EXPORT E {
       float camWidth;
       float camHeight;
       float camNear;
@@ -22,7 +22,7 @@ namespace gaEngineSDK {
     };
   }
   
-  class Camera
+  class GA_CORE_EXPORT Camera
   {
     public:
       /***********************************************************************/
@@ -177,7 +177,7 @@ namespace gaEngineSDK {
       /**
       * @brief Member to save angle.
       */
-      float m_angule;
+      float m_angule = 0.0f;
 
       /**
       * @brief Member to define a maximum angle that the user can rotate.
