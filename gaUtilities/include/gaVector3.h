@@ -18,6 +18,7 @@ namespace gaEngineSDK {
       /**
       * @brief Destroyer.
       */
+      virtual
       ~Vector3() = default;
     
       /*************************************************************************/

@@ -91,8 +91,6 @@ class App : public BaseApp
     Camera m_mainCamera;
     Model* m_model = nullptr;
 
-    GraphicsApi* m_pGraphicApi;
-
     Textures* m_pRenderTargetView = nullptr;
     Textures* m_pDepthStencil = nullptr;
 

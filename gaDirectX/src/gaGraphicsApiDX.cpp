@@ -54,11 +54,11 @@ namespace gaEngineSDK {
       bufferAnalyze += nameVS[i];
   
       if (('_' == bufferAnalyze[i]) &&
-          ("DX_" != bufferAnalyze)) {
+          ("data/shaders/DX_" != bufferAnalyze)) {
         return false;
       }
       else if (('_' == bufferAnalyze[i]) &&
-               ("DX_" == bufferAnalyze)) {
+               ("data/shaders/DX_" == bufferAnalyze)) {
         return true;
       }
     }
@@ -74,11 +74,11 @@ namespace gaEngineSDK {
       bufferAnalyze += namePS[i];
   
       if (('_' == bufferAnalyze[i]) &&
-          ("DX_" != bufferAnalyze)) {
+          ("data/shaders/DX_" != bufferAnalyze)) {
         return false;
       }
       else if (('_' == bufferAnalyze[i]) &&
-               ("DX_" == bufferAnalyze)) {
+               ("data/shaders/DX_" == bufferAnalyze)) {
         return true;
       }
     }

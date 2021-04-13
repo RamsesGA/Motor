@@ -27,6 +27,7 @@ namespace gaEngineSDK {
       /**
       * @brief Constructor.
       */
+      virtual
       ~Vector4() = default;
     
       /*************************************************************************/

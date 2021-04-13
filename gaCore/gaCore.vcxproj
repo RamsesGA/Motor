@@ -185,6 +185,7 @@
   <ItemGroup>
     <ClCompile Include="src\gaBaseApp.cpp" />
     <ClCompile Include="src\gaCamera.cpp" />
+    <ClCompile Include="src\gaGraphicsApi.cpp" />
     <ClCompile Include="src\gaModels.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

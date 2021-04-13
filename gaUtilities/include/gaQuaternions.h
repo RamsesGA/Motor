@@ -14,6 +14,7 @@ namespace gaEngineSDK {
       /*************************************************************************/
       Quaternions();
     
+      virtual
       ~Quaternions() = default;
   };
 }

@@ -4,8 +4,9 @@
 #include <gaVector3.h>
 #include <gaVector2.h>
 #include <gaTextures.h>
+#include <gaModule.h>
 
-#include <gaPrerequisitesUtilities.h>
+#include "gaPrerequisitesCore.h"
 
 //#include "Structures.h"
 
@@ -53,7 +54,7 @@ namespace gaEngineSDK {
   * @brief Parent class where we can add 
   *        new functions to generalize a graphical api.
   */
-  class GraphicsApi 
+  class GA_CORE_EXPORT GraphicsApi : public Module<GraphicsApi>
   {
     public:
       /***********************************************************************/
@@ -70,6 +71,11 @@ namespace gaEngineSDK {
       * Methods.
       */
       /***********************************************************************/
+
+      void
+      setObject(GraphicsApi* api) {
+        GraphicsApi::_instance() = api;
+      }
       
       /**
       * @brief Function to initialize the device and generate 
@@ -78,7 +84,7 @@ namespace gaEngineSDK {
       * @return true or false.
       */
       virtual bool 
-      initDevice(HWND hWnd) = 0;
+      initDevice(HWND hWnd) { return false; };
       
       /**
       * @brief Function to send to draw the indices of a declared object.
@@ -89,7 +95,7 @@ namespace gaEngineSDK {
       virtual void 
       drawIndex(uint32 indexCount,
                 uint32 startIndexLocation,
-                uint32 baseVertexLocation) = 0;
+                uint32 baseVertexLocation) { };
       
       /**
       * @brief Function to exchange buffers and update your information.
@@ -98,7 +104,7 @@ namespace gaEngineSDK {
       */
       virtual void 
       swapChainPresent(uint32 syncInterval,
-                       uint32 flags) = 0;
+                       uint32 flags) { };
       
       /**
       * @brief Function to load textures in file.
@@ -106,13 +112,13 @@ namespace gaEngineSDK {
       * @return Textures.
       */
       virtual Textures* 
-      loadTextureFromFile(std::string srcFile) = 0;
+      loadTextureFromFile(std::string srcFile) { return nullptr; };
       
       /**
       * @brief OGL function to separate a program.
       */
       virtual void 
-      unbindOGL() = 0;
+      unbindOGL() { };
       
       /***********************************************************************/
       /**
@@ -127,7 +133,7 @@ namespace gaEngineSDK {
       */
       virtual void 
       updateConstantBuffer(const void* srcData,
-                           ConstantBuffer& updateDataCB) = 0;
+                           ConstantBuffer& updateDataCB) { };
       
       /***********************************************************************/
       /**
@@ -145,14 +151,14 @@ namespace gaEngineSDK {
       */
       virtual void 
       clearYourRenderTargetView(Textures* renderTarget,
-                                float r, float g, float b, float a) = 0;
+                                float r, float g, float b, float a) { };
       
       /**
       * @brief Function to clean our depth stencil view.
       * @param depthStencil
       */
       virtual void 
-      clearYourDepthStencilView(Textures* depthStencil) = 0;
+      clearYourDepthStencilView(Textures* depthStencil) { };
       
       /***********************************************************************/
       /**
@@ -173,7 +179,7 @@ namespace gaEngineSDK {
       createShadersProgram(const std::wstring& nameVS,
                            const std::string& entryPointVS, 
                            const std::wstring& namePS,
-                           const std::string& entryPointPS) = 0;
+                           const std::string& entryPointPS) { return nullptr; };
       
       /**
       * @brief Function to generate the vertex buffer.
@@ -183,7 +189,7 @@ namespace gaEngineSDK {
       */
       virtual VertexBuffer* 
       createVertexBuffer(const void* data,
-                         const uint32 size) = 0;
+                         const uint32 size) { return nullptr; };
       
       /**
       * @brief Function to generate the index buffer.
@@ -193,7 +199,7 @@ namespace gaEngineSDK {
       */
       virtual IndexBuffer*
       createIndexBuffer(const void* data,
-                        const uint32 size) = 0;
+                        const uint32 size) { return nullptr; };
       
       /**
       * @brief Function to generate constant buffers.
@@ -201,7 +207,7 @@ namespace gaEngineSDK {
       * @return ConstantBuffer
       */
       virtual ConstantBuffer* 
-      createConstantBuffer(const uint32 bufferSize) = 0;
+      createConstantBuffer(const uint32 bufferSize) { return nullptr; };
       
       /**
       * @brief Function to generate the following: 
@@ -220,14 +226,14 @@ namespace gaEngineSDK {
                     const uint32 height,
                     const uint32 bindFlags,
                     TEXTURE_FORMAT::E textureFormat,
-                    const std::string fileName) = 0;
+                    const std::string fileName) { return nullptr; };
       
       /**
       * @brief Function to generate the sampler state.
       * @return SamplerState
       */
       virtual SamplerState* 
-      createSamplerState() = 0;
+      createSamplerState() { return nullptr; };
       
       /**
       * @brief Function to generate the input layout.
@@ -235,7 +241,7 @@ namespace gaEngineSDK {
       * @return InputLayout
       */
       virtual InputLayout* 
-      createInputLayout(Shaders& vertexShader) = 0;
+      createInputLayout(Shaders& vertexShader) { return nullptr; };
       
       /***********************************************************************/
       /**
@@ -248,28 +254,28 @@ namespace gaEngineSDK {
       * @param pixelShader
       */
       virtual void 
-      setPixelShader(Shaders& pixelShader) = 0;
+      setPixelShader(Shaders& pixelShader) { };
       
       /**
       * @brief Function to save vertex shader information.
       * @param vertexShader
       */
       virtual void 
-      setVertexShader(Shaders& vertexShader) = 0;
+      setVertexShader(Shaders& vertexShader) { };
       
       /**
       * @brief Function to save vertex buffer information.
       * @param vertexBuffer
       */
       virtual void 
-      setVertexBuffer(VertexBuffer& vertexBuffer) = 0;
+      setVertexBuffer(VertexBuffer& vertexBuffer) { };
       
       /**
       * @brief Function to save the index buffer information.
       * @param indexBuffer
       */
       virtual void 
-      setIndexBuffer(IndexBuffer& indexBuffer) = 0;
+      setIndexBuffer(IndexBuffer& indexBuffer) { };
       
       /**
       * @brief Function to save the information of the constant buffers.
@@ -282,7 +288,7 @@ namespace gaEngineSDK {
       setConstantBuffer(bool isVertex,
                         ConstantBuffer& constantBuffer,
                         const uint32 startSlot,
-                        const uint32 numBuffers) = 0;
+                        const uint32 numBuffers) { };
       
       /**
       * @brief Function to save the information of the sampler state.
@@ -293,7 +299,7 @@ namespace gaEngineSDK {
       virtual void 
       setSamplerState(const uint32 startSlot,
                       std::vector<SamplerState*>& samplerState,
-                      Textures& texture) = 0;
+                      Textures& texture) { };
       
       /**
       * @brief Function to save the information of the shader resource view.
@@ -304,7 +310,7 @@ namespace gaEngineSDK {
       virtual void 
       setShaderResourceView(Textures* shaderResourceView,
                             const uint32 startSlot,
-                            const uint32 numViews) = 0;
+                            const uint32 numViews) { };
       
       /**
       * @brief Function to save the information of the render target.
@@ -313,7 +319,7 @@ namespace gaEngineSDK {
       */
       virtual void 
       setRenderTarget(Textures* renderTarget,
-                      Textures* depthStencil) = 0;
+                      Textures* depthStencil) { };
       
       /**
       * @brief Function to save the depth stencil information.
@@ -322,14 +328,14 @@ namespace gaEngineSDK {
       */
       virtual void 
       setDepthStencil(Textures& depthStencil,
-                      const uint32 stencilRef) = 0;
+                      const uint32 stencilRef) { };
       
       /**
       * @brief Function to save the information of the input layout.
       * @param vertexLayout
       */
       virtual void 
-      setInputLayout(InputLayout& vertexLayout) = 0;
+      setInputLayout(InputLayout& vertexLayout) { };
       
       /**
       * @brief Function to save the viewport information.
@@ -340,21 +346,21 @@ namespace gaEngineSDK {
       virtual void 
       setViewport(const uint32 numViewports,
                   const uint32 width, 
-                  const uint32 heigth) = 0;
+                  const uint32 heigth) { };
       
       /**
       * @brief Function to save the topology information.
       * @param topology
       */
       virtual void 
-      setPrimitiveTopology(const uint32 topology) = 0;
+      setPrimitiveTopology(const uint32 topology) { };
       
       /**
       * @brief Function to call VSSetShader.
       * @param vertexShader
       */
       virtual void 
-      setYourVS(Shaders& vertexShader) = 0;
+      setYourVS(Shaders& vertexShader) { };
       
       /**
       * @brief Function to call VSSetConstantBuffers.
@@ -365,14 +371,14 @@ namespace gaEngineSDK {
       virtual void 
       setYourVSConstantBuffers(ConstantBuffer* constantBuffer,
                                const uint32 startSlot,
-                               const uint32 numBuffers) = 0;
+                               const uint32 numBuffers) { };
       
       /**
       * @brief Function to call PSSetShader.
       * @param pixelShader
       */
       virtual void 
-      setYourPS(Shaders& pixelShader) = 0;
+      setYourPS(Shaders& pixelShader) { };
       
       /**
       * @brief Function to call PSSetConstantBuffers.
@@ -383,7 +389,7 @@ namespace gaEngineSDK {
       virtual void 
       setYourPSConstantBuffers(ConstantBuffer* constantBuffer,
                                const uint32 startSlot,
-                               const uint32 numBuffers) = 0;
+                               const uint32 numBuffers) { };
       
       /**
       * @brief Function to call PSSetSamplers.
@@ -394,14 +400,14 @@ namespace gaEngineSDK {
       virtual void 
       setYourPSSampler(SamplerState& sampler,
                        const uint32 startSlot,
-                       const uint32 numSamplers) = 0;
+                       const uint32 numSamplers) { };
       
       /**
       * @brief Function to call program and link for OGL.
       * @param shaders
       */
       virtual void 
-      setShaders(Shaders& shaders) = 0;
+      setShaders(Shaders& shaders) { };
       
       /***********************************************************************/
       /**
@@ -414,14 +420,14 @@ namespace gaEngineSDK {
       * @return Textures.
       */
       virtual Textures*
-      getDefaultBackBuffer() = 0;
+      getDefaultBackBuffer() { return nullptr; };
       
       /**
       * @brief Function to obtain the automatically generated depth stencil.
       * @return Textures.
       */
       virtual Textures*
-      getDefaultDepthStencil() = 0;
+      getDefaultDepthStencil() { return nullptr; };
 
      protected:
        /**********************************************************************/
@@ -440,4 +446,15 @@ namespace gaEngineSDK {
        */
        uint32 m_height;
   };
+
+  /***************************************************************************/
+  /**
+  * Export.
+  */
+  /***************************************************************************/
+  //TODO
+  using funcGraphicsApiProto = GraphicsApi * (*)();
+
+  GA_CORE_EXPORT GraphicsApi&
+  g_graphicApi();
 }

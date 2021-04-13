@@ -191,6 +191,7 @@
     <ClInclude Include="include\gaMath.h" />
     <ClInclude Include="include\gaMatrix.h" />
     <ClInclude Include="include\gaMatrix4x4.h" />
+    <ClInclude Include="include\gaModule.h" />
     <ClInclude Include="include\gaPlatformDefines.h" />
     <ClInclude Include="include\gaPlatformMath.h" />
     <ClInclude Include="include\gaPlatformTypes.h" />

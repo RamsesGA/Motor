@@ -14,6 +14,7 @@ namespace gaEngineSDK {
       /*************************************************************************/
       Degrees(float degree);
     
+      virtual
       ~Degrees() = default;
     
       float

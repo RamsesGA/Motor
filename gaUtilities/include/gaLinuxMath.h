@@ -8,7 +8,10 @@ namespace gaEngineSDK {
 
     public:
       LinuxMath() = default;
+
+      virtual
       ~LinuxMath() = default;
+
     protected:
     
     private:

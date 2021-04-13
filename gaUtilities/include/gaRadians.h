@@ -14,6 +14,7 @@ namespace gaEngineSDK {
       /*************************************************************************/
       Radians(float radians);
     
+      virtual
       ~Radians() = default;
     
       float

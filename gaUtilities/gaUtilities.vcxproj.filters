@@ -120,5 +120,8 @@
     <ClInclude Include="include\gaPrerequisitesUtilities.h">
       <Filter>Archivos de origen\Prerequisites</Filter>
     </ClInclude>
+    <ClInclude Include="include\gaModule.h">
+      <Filter>Archivos de origen</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

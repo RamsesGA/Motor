@@ -38,6 +38,7 @@ namespace gaEngineSDK {
                 const Vector3& vecZ,
                 const Vector3& vecW);
       
+      virtual
       ~Matrix4x4() = default;
       
       /***********************************************************************/
@@ -144,13 +145,7 @@ namespace gaEngineSDK {
       int32
       getColumns() const;
 
-    protected:
-      Matrix4x4(int32 columnSize, int32 rowSize);
-
     private:
-      int32 m_rowSize;
-      int32 m_columnSize;
       float m_mat4x4[4][4];
-      Vector<Vector3> m_matrixData;
   };
 }

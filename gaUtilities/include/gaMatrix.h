@@ -39,6 +39,7 @@ namespace gaEngineSDK{
       Matrix(const Vector2& vecX,
              const Vector2& vecY);
   
+      virtual
       ~Matrix() = default;
   
       /*************************************************************************/
