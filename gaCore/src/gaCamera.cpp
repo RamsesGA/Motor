@@ -35,15 +35,17 @@ namespace gaEngineSDK {
   }
   
   void
-  Camera::inputDetection(WPARAM param) {
-	  if ((VK_UP == param)  || (param == VK_DOWN)) {
+  Camera::inputDetection(sf::Event param) {
+	  if ((sf::Keyboard::Up == param.key.code)  || 
+        (sf::Keyboard::Down == param.key.code)) {
 	  	pitchX(param);
 	  }
-	  if ((VK_RIGHT == param) || (VK_LEFT == param)) {
+	  if ((sf::Keyboard::Right == param.key.code) ||
+        (sf::Keyboard::Left == param.key.code)) {
 	  	rollZ(param);
 	  }
-	  if (('m_z' == param) || ('Z' == param) || 
-			  ('c' == param )|| ('C' == param)) {
+	  if ((sf::Keyboard::Z == param.key.code)||
+			  (sf::Keyboard::C == param.key.code)) {
 	  	yawY(param);
 	  }
 	  else {
@@ -52,12 +54,12 @@ namespace gaEngineSDK {
   }
   
   void
-  Camera::pitchX(WPARAM param) {
+  Camera::pitchX(sf::Event param) {
     Matrix4x4 rotation;
 
     float speedrot = 0.10f;
 
-    if (VK_UP == param) {
+    if (sf::Keyboard::Up == param.key.code) {
       rotation =
       {
         1,	0,				0,					0,
@@ -66,7 +68,7 @@ namespace gaEngineSDK {
         0,	0,				0,					1
       };
     }
-    else if (VK_DOWN == param) {
+    else if (sf::Keyboard::Down == param.key.code) {
       rotation =
       {
         1,	0,					0,					0,
@@ -82,12 +84,12 @@ namespace gaEngineSDK {
   }
   
   void 
-  Camera::rollZ(WPARAM param) {
+  Camera::rollZ(sf::Event param) {
     Matrix4x4 rotation;
 
     float speedrot = 0.10f;
 
-    if (VK_RIGHT == param) {
+    if (sf::Keyboard::Right == param.key.code) {
       rotation =
       {
         cosf(speedrot),	-sinf(speedrot),	0,	0,
@@ -96,7 +98,7 @@ namespace gaEngineSDK {
         0,				0,					0,	1
       };
     }
-    else if (VK_LEFT == param) {
+    else if (sf::Keyboard::Left == param.key.code) {
       rotation =
       {
         cosf(-speedrot),	-sinf(-speedrot),		0,		0,
@@ -112,13 +114,12 @@ namespace gaEngineSDK {
   }
   
   void 
-  Camera::yawY(WPARAM param) {
+  Camera::yawY(sf::Event param) {
     Matrix4x4 rotation;
 
     float speedrot = 0.10f;
 
-    if ('m_z' == param ||
-        'Z' == param) {
+    if (sf::Keyboard::Z == param.key.code) {
       rotation =
       {
         cosf(speedrot),		0,	sinf(speedrot),	0,
@@ -127,8 +128,7 @@ namespace gaEngineSDK {
         0,					0,	0,				1
       };
     }
-    else if ('c' == param ||
-             'C' == param) {
+    else if (sf::Keyboard::C == param.key.code) {
       rotation =
       {
         cosf(-speedrot),		0,	sinf(-speedrot),	0,
@@ -144,29 +144,23 @@ namespace gaEngineSDK {
   }
   
   void 
-  Camera::move(WPARAM param) {
-  	if (param == 'w' ||
-  		  'W' == param) {
+  Camera::move(sf::Event param) {
+  	if (sf::Keyboard::W == param.key.code) {
   		m_cameraDesc.camEye += m_front;
   	}
-  	else if (param == 's' ||
-  		       'S' == param) {
+  	else if (sf::Keyboard::S == param.key.code) {
   		m_cameraDesc.camEye -= m_front;
   	}
-  	else if (param == 'a' ||
-  		       'A' == param) {
+  	else if (sf::Keyboard::A == param.key.code) {
   		m_cameraDesc.camEye -= m_right;
   	}
-  	else if (param == 'd' ||
-  		       'D' == param) {
+  	else if (sf::Keyboard::D == param.key.code) {
   		m_cameraDesc.camEye += m_right;
   	}
-  	else if (param == 'q' ||
-  		       'Q' == param) {
+  	else if (sf::Keyboard::Q == param.key.code) {
   		m_cameraDesc.camEye += m_up;
   	}
-  	else if (param == 'e' ||
-  		       'E' == param) {
+  	else if (sf::Keyboard::E == param.key.code) {
   		m_cameraDesc.camEye -= m_up;
   	}
   

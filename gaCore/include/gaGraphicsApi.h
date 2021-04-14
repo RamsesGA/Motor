@@ -7,8 +7,7 @@
 #include <gaModule.h>
 
 #include "gaPrerequisitesCore.h"
-
-//#include "Structures.h"
+#include "gaStructures.h"
 
 namespace gaEngineSDK {
 
@@ -24,18 +23,6 @@ namespace gaEngineSDK {
       kTriangleStrip = 5,
     };
   }
-
-  /**
-  * @brief 
-  */
-  struct Vertex 
-  {
-    Vector3 position;
-    Vector2 texCoords;
-    Vector3 normal;
-    Vector3 tangent;
-    Vector3 bitangent;
-  };
   
   /***************************************************************************/
   /**
@@ -452,7 +439,7 @@ namespace gaEngineSDK {
   * Export.
   */
   /***************************************************************************/
-  //TODO
+  
   using funcGraphicsApiProto = GraphicsApi * (*)();
 
   GA_CORE_EXPORT GraphicsApi&

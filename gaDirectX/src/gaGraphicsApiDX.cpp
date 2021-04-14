@@ -884,7 +884,7 @@ namespace gaEngineSDK {
   GraphicsApiDX::setVertexBuffer(VertexBuffer& vertexBuffer) {
     auto& vBuffer = reinterpret_cast<VertexBufferDX&>(vertexBuffer);
   
-    uint32 stride = sizeof(Vertex);
+    uint32 stride = sizeof(Vertex::E);
     uint32 offset = 0;
   
     m_pImmediateContext->IASetVertexBuffers(0,

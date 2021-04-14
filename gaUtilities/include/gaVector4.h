@@ -20,14 +20,8 @@ namespace gaEngineSDK {
               float w = 1.0f);
 
       /**
-      * @brief Constructor where can be initialized with a vector 3.
-      */
-      //Vector4(const Vector3 & vec3, float w = 1.0f);
-    
-      /**
       * @brief Constructor.
       */
-      virtual
       ~Vector4() = default;
     
       /*************************************************************************/
@@ -67,7 +61,7 @@ namespace gaEngineSDK {
       * @return We return true if it is small, otherwise it is false.
       */
       bool
-      operator<(const Vector4& vector);
+      operator<(const Vector4& vector)const;
     
       /**
       * @brief Check if one vector is greater than another, based on X, Y.
@@ -75,7 +69,7 @@ namespace gaEngineSDK {
       * @return We return true if it is greater, otherwise it is false.
       */
       bool
-      operator>(const Vector4& vector);
+      operator>(const Vector4& vector)const;
     
       /**
       * @brief We match the values of one vector in another.
@@ -91,7 +85,7 @@ namespace gaEngineSDK {
       * @return True if the vectors are equal, otherwise false.
       */
       bool
-      operator==(const Vector4& vector);
+      operator==(const Vector4& vector)const;
     
       /**
       * @brief We add the value of a saved vector and yours.
@@ -149,9 +143,14 @@ namespace gaEngineSDK {
       Vector4
       operator*(const Vector4& vector)const;
 
-      float m_x;
-      float m_y;
-      float m_z;
-      float m_w;
+      union {
+        struct {
+          float m_x;
+          float m_y;
+          float m_z;
+          float m_w;
+        };
+      };
+
   };
 }

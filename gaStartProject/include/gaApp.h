@@ -1,46 +1,19 @@
 #pragma once
 
-#include <gaBaseApp.h>
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+#include <assimp/cimport.h>
+
 #include <gaCamera.h>
 #include <gaModels.h>
+#include <gaBaseApp.h>
 #include <gaVector4.h>
 #include <gaMatrix4x4.h>
+#include <gaStructures.h>
 #include <gaGraphicsApi.h>
 
 using namespace gaEngineSDK;
-
-/***************************************************************************/
-/**
-* Structs
-*/
-/***************************************************************************/
-namespace ConstantBuffer1 {
-  struct E {
-    Matrix4x4 mView;
-    Matrix4x4 mProjection;
-  };
-}
-
-namespace ConstantBuffer2 {
-  struct E {
-    Matrix4x4 mWorld;
-    Vector4 vMeshColor;
-  };
-}
-
-namespace Matrices {
-  struct E {
-    Matrix4x4 World;
-    Matrix4x4 Projection;
-    Vector4   Color;
-  };
-}
-
-namespace ViewCB {
-  struct E {
-    Matrix4x4 View;
-  };
-}
 
 class App : public BaseApp
 {
@@ -75,6 +48,18 @@ class App : public BaseApp
 
     void
     onDestroySystem()override;
+
+    void
+    onKeyboardDown(sf::Event param)override;
+
+    void
+    onLeftMouseBtnDown()override;
+
+    void
+    onLeftMouseBtnUp()override;
+
+    void
+    onMouseMove()override;
 
   public:
     /*************************************************************************/

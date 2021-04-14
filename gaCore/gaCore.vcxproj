@@ -175,10 +175,12 @@
     <ClInclude Include="include\gaGraphicsApi.h" />
     <ClInclude Include="include\gaIndexBuffer.h" />
     <ClInclude Include="include\gaInputLayout.h" />
+    <ClInclude Include="include\gaMesh.h" />
     <ClInclude Include="include\gaModels.h" />
     <ClInclude Include="include\gaPrerequisitesCore.h" />
     <ClInclude Include="include\gaSamplerState.h" />
     <ClInclude Include="include\gaShaders.h" />
+    <ClInclude Include="include\gaStructures.h" />
     <ClInclude Include="include\gaTextures.h" />
     <ClInclude Include="include\gaVertexBuffer.h" />
   </ItemGroup>
@@ -186,6 +188,7 @@
     <ClCompile Include="src\gaBaseApp.cpp" />
     <ClCompile Include="src\gaCamera.cpp" />
     <ClCompile Include="src\gaGraphicsApi.cpp" />
+    <ClCompile Include="src\gaMesh.cpp" />
     <ClCompile Include="src\gaModels.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -52,6 +52,12 @@
     <ClInclude Include="include\gaModels.h">
       <Filter>Archivos de origen\Models</Filter>
     </ClInclude>
+    <ClInclude Include="include\gaMesh.h">
+      <Filter>Archivos de origen\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaStructures.h">
+      <Filter>Archivos de origen\Models</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gaBaseApp.cpp">
@@ -65,6 +71,9 @@
     </ClCompile>
     <ClCompile Include="src\gaGraphicsApi.cpp">
       <Filter>Archivos de origen\GraphicApi</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaMesh.cpp">
+      <Filter>Archivos de origen\Models</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

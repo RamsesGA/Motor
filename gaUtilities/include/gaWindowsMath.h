@@ -9,7 +9,6 @@ namespace gaEngineSDK {
     public:
       WindowsMath() = default;
 
-      virtual
       ~WindowsMath() = default;
     protected:
     

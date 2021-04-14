@@ -85,8 +85,9 @@ App::onRender() {
   //
   // Clear the back buffer
   //
-  g_graphicApi().clearYourRenderTargetView(m_pRenderTargetView,
-    0.0f, 156.0f, 140.0f, 1.6f);
+  g_graphicApi().clearYourRenderTargetView(m_pRenderTargetView, 87.0f/255.0f, 
+                                           35.0f/255.0f, 100.0f/255.0f, 255.0f);
+
   //
   // Clear the depth buffer to 1.0 (max depth)
   //
@@ -99,21 +100,20 @@ App::onRender() {
   //Guardamos el index buffer
   g_graphicApi().setIndexBuffer(*m_pIndexBuffer);
   //Guardamos la topología
-  //g_graphicApi().setPrimitiveTopology(PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+  g_graphicApi().setPrimitiveTopology(PRIMITIVE_TOPOLOGY::E::kTriangleList);
 
   g_graphicApi().setShaders(*m_pBothShaders);
   g_graphicApi().setYourVSConstantBuffers(m_pConstantBuffer1, 0, 1);
   g_graphicApi().setYourVSConstantBuffers(m_pConstantBuffer2, 1, 1);
   g_graphicApi().setYourPSConstantBuffers(m_pConstantBuffer2, 1, 1);
 
-  //m_model->draw(g_graphicApi);
+  m_model->draw(&g_graphicApi());
 
   //
   // Present our back buffer to our front buffer
   //
   g_graphicApi().swapChainPresent(0, 0);
 }
-
 
 void 
 App::onCreate() {
@@ -172,10 +172,10 @@ App::onCreate() {
   }
 
   m_model = new Model();
-  //g_model->Init("Models/POD/OBJ/POD.obj", g_graphicApi);
-  //g_model->Init("Models/ugandan/FBX/Knuckles.fbx", g_graphicApi);
-  //g_model->Init("Models/sonic/FBX/sonic.fbx", g_graphicApi);
-  //g_model->init("Models/Nier2b/OBJ/Nier2b.obj", g_graphicApi);
+  m_model->init("data/models/POD/OBJ/POD.obj", &g_graphicApi());
+  //m_model->init("data/models/sonic/FBX/sonic.fbx", &g_graphicApi());
+  //m_model->init("data/models/Nier2b/OBJ/Nier2b.obj", &g_graphicApi());
+  //m_model->init("data/models/ugandan/FBX/Knuckles.fbx", &g_graphicApi());
 }
 
 void
@@ -189,4 +189,41 @@ App::onDestroySystem() {
   delete m_pIndexBuffer;
   delete m_pConstantBuffer1;
   delete m_pConstantBuffer2;
+}
+
+void 
+App::onKeyboardDown(sf::Event param) {
+  m_mainCamera.inputDetection(param);
+
+  ConstantBuffer1::E cb;
+  cb.mView = m_mainCamera.getView();
+
+  g_graphicApi().updateConstantBuffer(&cb, *m_pConstantBuffer1);
+}
+
+void 
+App::onLeftMouseBtnDown() {
+  sf::Vector2i position = sf::Mouse::getPosition();
+
+  m_mainCamera.setOriginalMousePos(position.x, position.y);
+  m_mainCamera.setClickPressed(true);
+}
+
+void 
+App::onLeftMouseBtnUp() {
+  m_mainCamera.setClickPressed(false);
+}
+
+void 
+App::onMouseMove() {
+  if (m_mainCamera.getClickPressed()) {
+    m_mainCamera.setOriginalMousePos(m_mainCamera.getOriginalMousePos().m_x, 
+                                     m_mainCamera.getOriginalMousePos().m_y);
+    m_mainCamera.mouseRotation();
+
+    ConstantBuffer1::E cb;
+    cb.mView = m_mainCamera.getView();
+
+    g_graphicApi().updateConstantBuffer(&cb, *m_pConstantBuffer1);
+  }
 }

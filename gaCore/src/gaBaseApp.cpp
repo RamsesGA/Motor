@@ -18,6 +18,35 @@ namespace gaEngineSDK {
     float trueDeltaTime = 0.0f;
     
     while (m_sfmlWindow.isOpen()) {
+      sf::Event event;
+
+      while (m_sfmlWindow.pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
+          m_sfmlWindow.close();
+          break;
+        }
+
+        if (event.type == sf::Event::KeyPressed) {
+          keyboardDown(event);
+        }
+
+        if (event.type == sf::Event::MouseButtonPressed) {
+          if (sf::Mouse::Left == event.key.code) {
+            leftMouseBtnDown();
+          }
+
+          if (event.type == sf::Event::MouseButtonReleased) {
+            if (sf::Mouse::Left == event.key.code) {
+              leftMouseBtnUp();
+            }
+          }
+        }
+
+        if (event.type == sf::Event::MouseMoved) {
+          mouseMove();
+        }
+      }
+
       trueDeltaTime = deltaTime.getElapsedTime().asSeconds();
     
       deltaTime.restart();
@@ -68,4 +97,24 @@ namespace gaEngineSDK {
 
   void 
   BaseApp::resize(int32 width, int32 height) { }
+
+  void 
+  BaseApp::keyboardDown(sf::Event param) {
+    onKeyboardDown(param);
+  }
+
+  void 
+  BaseApp::leftMouseBtnDown() {
+    onLeftMouseBtnDown();
+  }
+
+  void 
+  BaseApp::leftMouseBtnUp() {
+    onLeftMouseBtnUp();
+  }
+
+  void 
+  BaseApp::mouseMove() {
+    onMouseMove();
+  }
 }

@@ -56,6 +56,18 @@ namespace gaEngineSDK {
       void
       resize(int32 width, int32 height);
 
+      void
+      keyboardDown(sf::Event param);
+
+      void
+      leftMouseBtnDown();
+
+      void
+      leftMouseBtnUp();
+
+      void
+      mouseMove();
+
       /***********************************************************************/
       /*
       * On Methods (virtual).
@@ -79,6 +91,18 @@ namespace gaEngineSDK {
 
       virtual void
       onDestroySystem() {};
+
+      virtual void
+      onKeyboardDown(sf::Event param) {};
+
+      virtual void
+      onLeftMouseBtnDown() {};
+
+      virtual void
+      onLeftMouseBtnUp() {};
+
+      virtual void
+      onMouseMove() {};
 
     protected:
       /***********************************************************************/

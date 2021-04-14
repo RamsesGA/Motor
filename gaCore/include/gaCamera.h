@@ -3,6 +3,7 @@
 #include <gaVector2.h>
 #include <gaVector3.h>
 #include <gaMatrix4x4.h>
+#include <SFML/Window/Event.hpp>
 
 #include "gaPrerequisitesCore.h"
 
@@ -32,7 +33,7 @@ namespace gaEngineSDK {
       /***********************************************************************/
       Camera() = default;
 
-      virtual ~Camera() = default;
+      ~Camera() = default;
 
       /**
       * @brief Function to initialize class members.
@@ -53,35 +54,35 @@ namespace gaEngineSDK {
       * @param .
       */
       void 
-      inputDetection(WPARAM param);
+      inputDetection(sf::Event param);
 
       /**
       * @brief Function to be able to apply a PITCH rotation.
       * @param .
       */
       void 
-      pitchX(WPARAM param);
+      pitchX(sf::Event param);
 
       /**
       * @brief Function to be able to apply a ROLL rotation.
       * @param .
       */
       void 
-      rollZ(WPARAM param);
+      rollZ(sf::Event param);
       
       /**
       * @brief Function to be able to apply a YAW rotation.
       * @param .
       */
       void 
-      yawY(WPARAM param);
+      yawY(sf::Event param);
 
       /**
       * @brief Function to be able to apply a movement to the camera.
       * @param .
       */
       void 
-      move(WPARAM param);
+      move(sf::Event param);
       
       /**
       * @brief Function to be able to apply a rotation of the view.
