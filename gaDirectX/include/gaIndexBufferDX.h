@@ -14,7 +14,7 @@ namespace gaEngineSDK {
 			/***********************************************************************/
 			IndexBufferDX() = default;
 
-			virtual ~IndexBufferDX() = default;
+			~IndexBufferDX() = default;
 
 	  protected:
 			/**

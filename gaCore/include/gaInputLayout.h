@@ -10,6 +10,8 @@ namespace gaEngineSDK {
 			*/
 			/***********************************************************************/
 			InputLayout() = default;
-			virtual ~InputLayout() = default;
+
+			virtual 
+			~InputLayout() = default;
 	};
 }

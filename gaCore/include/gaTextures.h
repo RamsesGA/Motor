@@ -130,6 +130,8 @@ namespace gaEngineSDK {
 	  	*/
 	  	/***********************************************************************/
 			Textures() = default;
-			virtual ~Textures() = default;
+
+			virtual 
+      ~Textures() = default;
 	};
 }

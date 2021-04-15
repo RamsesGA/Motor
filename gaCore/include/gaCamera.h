@@ -37,7 +37,7 @@ namespace gaEngineSDK {
 
       /**
       * @brief Function to initialize class members.
-      * @param .
+      * @param Variable to obtain the information of the camera description.
       */
       void 
       init(CameraDescriptor::E cameraDesc,
@@ -51,35 +51,35 @@ namespace gaEngineSDK {
 
       /**
       * @brief Function to detect an input.
-      * @param .
+      * @param SFML event for input detection.
       */
       void 
       inputDetection(sf::Event param);
 
       /**
       * @brief Function to be able to apply a PITCH rotation.
-      * @param .
+      * @param SFML event for input detection.
       */
       void 
       pitchX(sf::Event param);
 
       /**
       * @brief Function to be able to apply a ROLL rotation.
-      * @param .
+      * @param SFML event for input detection.
       */
       void 
       rollZ(sf::Event param);
       
       /**
       * @brief Function to be able to apply a YAW rotation.
-      * @param .
+      * @param SFML event for input detection.
       */
       void 
       yawY(sf::Event param);
 
       /**
       * @brief Function to be able to apply a movement to the camera.
-      * @param .
+      * @param SFML event for input detection.
       */
       void 
       move(sf::Event param);
@@ -116,14 +116,13 @@ namespace gaEngineSDK {
 
       /**
       * @brief Function to save the X, Y value of our mouse.
-      * @param .
       */
       void 
       setOriginalMousePos(float x, float y);
 
       /**
       * @brief Function to save the bool value on a click or not.
-      * @param .
+      * @param Bool to know if you are pressing or not on the screen.
       */
       void 
       setClickPressed(bool isClicked);

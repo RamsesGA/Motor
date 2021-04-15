@@ -4,14 +4,16 @@
 #include "gaPlatformMath.h"
 
 namespace gaEngineSDK {
-  class GA_UTILITY_EXPORT WindowsMath : public PlatformMath {
-
+  class GA_UTILITY_EXPORT WindowsMath : public PlatformMath 
+  {
     public:
+      /***********************************************************************/
+      /*
+      * Constructor and destructor.
+      */
+      /***********************************************************************/
       WindowsMath() = default;
 
       ~WindowsMath() = default;
-    protected:
-    
-    private:
   };
 }

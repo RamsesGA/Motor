@@ -14,6 +14,11 @@
 #include "gaPrerequisitesCore.h"
 
 namespace gaEngineSDK {
+
+  /*
+  * @brief This class is a child of the Graphic Api parent class, 
+  *        all comments on members or methods are found in their respective .h.
+  */
   
   class GraphicsApiDX final : public GraphicsApi
   {
@@ -35,7 +40,7 @@ namespace gaEngineSDK {
       /***********************************************************************/
 
       bool 
-      initDevice(HWND hWnd)override;
+      initDevice(sf::WindowHandle hWnd)override;
 
       void 
       drawIndex(uint32 indexCount,
@@ -47,7 +52,7 @@ namespace gaEngineSDK {
       		             uint32 flags)override;
 
       Textures* 
-      loadTextureFromFile(std::string srcFile)override;
+      loadTextureFromFile(String srcFile)override;
 
       void 
       unbindOGL()override;
@@ -82,10 +87,10 @@ namespace gaEngineSDK {
       /***********************************************************************/
 
       Shaders* 
-      createShadersProgram(const std::wstring& nameVS,
-      		                 const std::string& entryPointVS, 
-      	                   const std::wstring& namePS,
-      		                 const std::string& entryPointPS)override;
+      createShadersProgram(const WString& nameVS,
+      		                 const String& entryPointVS, 
+      	                   const WString& namePS,
+      		                 const String& entryPointPS)override;
 
       VertexBuffer* 
       createVertexBuffer(const void* data,
@@ -103,7 +108,7 @@ namespace gaEngineSDK {
                     const uint32 height,
                     const uint32 bindFlags,
                     TEXTURE_FORMAT::E textureFormat,
-                    const std::string fileName)override;
+                    const String fileName)override;
 
       SamplerState* 
       createSamplerState()override;
@@ -207,42 +212,42 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
 
-      /// <summary>
-      /// Miembro con la información
-      /// de la ventana traida del usuario
-      /// </summary>
-      HWND m_hWnd;
-
-      /// <summary>
-      /// Miembro representa 
-      /// un adaptador virtual
-      /// </summary>
+      /*
+      * @brief Member with window information brought from user.
+      */
+      sf::WindowHandle m_hWnd;
+      
+      /*
+      * @brief Member represents a virtual adapter.
+      */
       ID3D11Device* m_pd3dDevice;
 
-      /// <summary>
-      /// Miembro para implementar una o más 
-      /// superficies para almacenar datos renderizados
-      /// </summary>
+      /*
+      * @brief Member to implement one or more surfaces to store rendered data.
+      */
       IDXGISwapChain* m_pSwapChain;
 
-      /// <summary>
-      /// Miembro para representar un contexto de 
-      /// dispositivo que genera comandos de renderizado
-      /// </summary>
+      /*
+      * @brief Member to represent a device context that generates render commands.
+      */
       ID3D11DeviceContext* m_pImmediateContext;
 
-      /// <summary>
-      /// Miembro para almacenar y acceder a un recurso de 
-      /// textura durante la prueba de plantilla en profundidad
-      /// </summary>
+      /*
+      * @brief Member to store and access a texture resource during in-depth template testing.
+      */
       Textures* m_pDepthStencil;
 
-      /// <summary>
-      /// Miembro para almacenar la textura por default al crear
-      /// el device
-      /// </summary>
+      /*
+      * @brief Member to store the default texture when creating the device.
+      */
       Textures* m_pBackBuffer;
   };
+
+  /***************************************************************************/
+  /**
+  * Export.
+  */
+  /***************************************************************************/
 
   extern "C" GA_CORE_EXPORT GraphicsApi *
   createGraphicApi() {

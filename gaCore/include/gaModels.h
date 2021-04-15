@@ -33,42 +33,49 @@ namespace gaEngineSDK {
 
       /*
       * @brief Function to initialize class members and start with assimp.
-      * @param 
+      * @param Variable string with the address of the file.
+      * @param Variable with API information.
       */
       void 
       init(String const& path, GraphicsApi* pGraphicApi);
 
       /*
       * @brief Function to draw based on mmeshes.
-      * @param 
+      * @param Variable with API information.
       */
       void 
       draw(GraphicsApi* pGraphicApi);
 
       /*
       * @brief Function to process node information.
-      * @param
+      * @param Assimp variable with node information
+      * @param Assimp variable with scene information.
+      * @param Variable with API information.
       */
       void 
       processNode(aiNode* pNode, const aiScene* pScene, GraphicsApi* pGraphicApi);
 
       /*
       * @brief Function to process the information of the meshes.
-      * @param
+      * @param Assimp variable with the mesh information.
+      * @param Assimp variable with scene information.
+      * @param Variable with API information.
       */
       Mesh* 
       processMesh(aiMesh* pMesh, const aiScene* pScene, GraphicsApi* pGraphicApi);
 
       /*
       * @brief Function for loading the model texture.
-      * @param
+      * @param Assimp variable for the material.
+      * @param Assimp variable for the texture type.
+      * @param Variable with API information.
       */
       Vector<Texture::E>
       loadMaterialTextures(aiMaterial* pMat, aiTextureType type, GraphicsApi* pGraphicApi);
 
       /*
       * @brief Function to get the direction of the texture.
-      * @param
+      * @param String with the file name.
       */
       String 
       getTexturePath(String file);

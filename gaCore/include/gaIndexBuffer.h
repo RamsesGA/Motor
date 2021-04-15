@@ -10,6 +10,8 @@ namespace gaEngineSDK {
 			*/
 			/***********************************************************************/
 			IndexBuffer() = default;
-			virtual ~IndexBuffer() = default;
+
+			virtual 
+			~IndexBuffer() = default;
 	};
 }

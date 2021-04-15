@@ -14,7 +14,7 @@ namespace gaEngineSDK {
 			/***********************************************************************/
 			SamplerStateDX() = default;
 
-			virtual ~SamplerStateDX() = default;
+			~SamplerStateDX() = default;
 
 		protected:
 		  /**

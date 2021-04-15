@@ -15,6 +15,12 @@
 
 using namespace gaEngineSDK;
 
+/*
+* @brief This class is a child of 
+*        the parent class called Base App, 
+*        all the comments regarding the functions 
+*        and other members are in its .h.
+*/
 class App : public BaseApp
 {
   public:
@@ -31,6 +37,7 @@ class App : public BaseApp
     * Inheritance.
     */
     /*************************************************************************/
+
     int32
     onInit()override;
 
@@ -68,25 +75,56 @@ class App : public BaseApp
     */
     /*************************************************************************/
 
+    /*
+    * @brief Material color.
+    */
     Vector4 m_vMeshColor = (0.7f, 0.7f, 0.7f, 1.0f);
 
-
+    /*
+    * @brief 4x4 matrix of the world.
+    */
     Matrix4x4 m_world;
 
+    /*
+    * @brief Variable with camera information.
+    */
     Camera m_mainCamera;
+
+    /*
+    * @brief Variable with the information of the loaded model.
+    */
     Model* m_model = nullptr;
 
+    /*
+    * @brief Variables with the information of the 
+    *        render target and depth stencil, both of the texture class.
+    */
     Textures* m_pRenderTargetView = nullptr;
     Textures* m_pDepthStencil = nullptr;
 
+    /*
+    * @brief Variable that stores the vertex layout data.
+    */
     InputLayout* m_pVertexLayout = nullptr;
 
+    /*
+    * @brief Variable that saves the data of the shaders to be read.
+    */
     Shaders* m_pBothShaders = nullptr;
 
+    /*
+    * @brief Variable that stores the vertex buffer data.
+    */
     VertexBuffer* m_pVertexBuffer = nullptr;
 
+    /*
+    * @brief Variable that stores the index buffer data.
+    */
     IndexBuffer* m_pIndexBuffer = nullptr;
 
+    /*
+    * @brief Variable that stores the CB data.
+    */
     ConstantBuffer* m_pConstantBuffer1 = nullptr;
     ConstantBuffer* m_pConstantBuffer2 = nullptr;
 };

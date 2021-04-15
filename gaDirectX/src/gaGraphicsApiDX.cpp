@@ -10,9 +10,9 @@
 
 namespace gaEngineSDK {
   HRESULT 
-  CompileShaderFromFile(const std::wstring& szFileName, 
-                        const std::string& szEntryPoint,
-                        const std::string& szShaderModel, 
+  CompileShaderFromFile(const WString& szFileName, 
+                        const String& szEntryPoint,
+                        const String& szShaderModel, 
                         ID3DBlob** ppBlobOut) {
     HRESULT hr = S_OK;
 
@@ -47,8 +47,8 @@ namespace gaEngineSDK {
   }
   
   bool 
-  AnalyzeVertexShaderDX(const std::wstring& nameVS) {
-    std::string bufferAnalyze;
+  AnalyzeVertexShaderDX(const WString& nameVS) {
+    String bufferAnalyze;
   
     for (uint32 i = 0; i < nameVS.size(); i++) {
       bufferAnalyze += nameVS[i];
@@ -67,8 +67,8 @@ namespace gaEngineSDK {
   }
   
   bool 
-  AnalyzePixelShaderDX(const std::wstring& namePS) {
-    std::string bufferAnalyze;
+  AnalyzePixelShaderDX(const WString& namePS) {
+    String bufferAnalyze;
   
     for (uint32 i = 0; i < namePS.size(); i++) {
       bufferAnalyze += namePS[i];
@@ -115,7 +115,7 @@ namespace gaEngineSDK {
   /***************************************************************************/
   
   bool 
-  GraphicsApiDX::initDevice(HWND hWnd) {
+  GraphicsApiDX::initDevice(sf::WindowHandle hWnd) {
 
     HRESULT hr = S_OK;
     
@@ -266,7 +266,7 @@ namespace gaEngineSDK {
   }
   
   Textures* 
-  GraphicsApiDX::loadTextureFromFile(std::string srcFile) {
+  GraphicsApiDX::loadTextureFromFile(String srcFile) {
   
     auto* texture = new TexturesDX();
     return texture;
@@ -381,10 +381,10 @@ namespace gaEngineSDK {
   /***************************************************************************/
   
   Shaders* 
-  GraphicsApiDX::createShadersProgram(const std::wstring& nameVS,
-                                      const std::string& entryPointVS, 
-                                      const std::wstring& namePS,
-                                      const std::string& entryPointPS) {
+  GraphicsApiDX::createShadersProgram(const WString& nameVS,
+                                      const String& entryPointVS, 
+                                      const WString& namePS,
+                                      const String& entryPointPS) {
     //Generamos una variable auto
     //para adaptar el tipo de dato que ocupamos
     auto* shaders = new ShadersDX();
@@ -587,7 +587,7 @@ namespace gaEngineSDK {
                                const uint32 height,
                                const uint32 bindFlags,
                                TEXTURE_FORMAT::E textureFormat,
-                               const std::string fileName) {
+                               const String fileName) {
     //Asignamos datos a la variable
     HRESULT hr = S_OK;
   

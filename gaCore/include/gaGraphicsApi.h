@@ -5,6 +5,7 @@
 #include <gaVector2.h>
 #include <gaTextures.h>
 #include <gaModule.h>
+#include <SFML/Window.hpp>
 
 #include "gaPrerequisitesCore.h"
 #include "gaStructures.h"
@@ -51,7 +52,8 @@ namespace gaEngineSDK {
       /***********************************************************************/
       GraphicsApi() = default;
 
-      virtual ~GraphicsApi() = default;
+      virtual 
+      ~GraphicsApi() = default;
       
       /***********************************************************************/
       /**
@@ -71,13 +73,10 @@ namespace gaEngineSDK {
       * @return true or false.
       */
       virtual bool 
-      initDevice(HWND hWnd) { return false; };
+      initDevice(sf::WindowHandle hWnd) { return false; };
       
       /**
       * @brief Function to send to draw the indices of a declared object.
-      * @param indexCount 
-      *        startIndexLocation 
-      *        baseVertexLocation 
       */
       virtual void 
       drawIndex(uint32 indexCount,
@@ -86,8 +85,9 @@ namespace gaEngineSDK {
       
       /**
       * @brief Function to exchange buffers and update your information.
-      * @param syncInterval 
-      *        flags 
+      * @param An integer that specifies how to synchronize presentation 
+      *        of a frame with the vertical blank.
+      * @param An integer value that contains swap-chain presentation options.
       */
       virtual void 
       swapChainPresent(uint32 syncInterval,
@@ -95,11 +95,11 @@ namespace gaEngineSDK {
       
       /**
       * @brief Function to load textures in file.
-      * @param srcFile
+      * @param String with the address of the file.
       * @return Textures.
       */
       virtual Textures* 
-      loadTextureFromFile(std::string srcFile) { return nullptr; };
+      loadTextureFromFile(String srcFile) { return nullptr; };
       
       /**
       * @brief OGL function to separate a program.
@@ -115,8 +115,9 @@ namespace gaEngineSDK {
       
       /**
       * @brief Function to update constant buffers.
-      * @param srcData
-      *        updateDataCB
+      * @param The distance (in bytes) from the 
+      *        beginning of one line of a texture to the next line.
+      * @param Constant buffers contain shader constant data.
       */
       virtual void 
       updateConstantBuffer(const void* srcData,
@@ -130,11 +131,6 @@ namespace gaEngineSDK {
       
       /**
       * @brief Function to clean our render target view.
-      * @param renderTarget
-      *        r
-      *        g
-      *        b
-      *        a
       */
       virtual void 
       clearYourRenderTargetView(Textures* renderTarget,
@@ -142,7 +138,6 @@ namespace gaEngineSDK {
       
       /**
       * @brief Function to clean our depth stencil view.
-      * @param depthStencil
       */
       virtual void 
       clearYourDepthStencilView(Textures* depthStencil) { };
@@ -163,10 +158,10 @@ namespace gaEngineSDK {
       * @return Shaders
       */
       virtual Shaders* 
-      createShadersProgram(const std::wstring& nameVS,
-                           const std::string& entryPointVS, 
-                           const std::wstring& namePS,
-                           const std::string& entryPointPS) { return nullptr; };
+      createShadersProgram(const WString& nameVS,
+                           const String& entryPointVS, 
+                           const WString& namePS,
+                           const String& entryPointPS) { return nullptr; };
       
       /**
       * @brief Function to generate the vertex buffer.
@@ -213,7 +208,7 @@ namespace gaEngineSDK {
                     const uint32 height,
                     const uint32 bindFlags,
                     TEXTURE_FORMAT::E textureFormat,
-                    const std::string fileName) { return nullptr; };
+                    const String fileName) { return nullptr; };
       
       /**
       * @brief Function to generate the sampler state.
@@ -285,7 +280,7 @@ namespace gaEngineSDK {
       */
       virtual void 
       setSamplerState(const uint32 startSlot,
-                      std::vector<SamplerState*>& samplerState,
+                      Vector<SamplerState*>& samplerState,
                       Textures& texture) { };
       
       /**

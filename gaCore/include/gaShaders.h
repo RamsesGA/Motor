@@ -10,6 +10,8 @@ namespace gaEngineSDK {
 			*/
 			/***********************************************************************/
 			Shaders() = default;
-			virtual ~Shaders() = default;
+
+			virtual 
+			~Shaders() = default;
 	};
 }

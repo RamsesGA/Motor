@@ -4,8 +4,12 @@
 
 int32
 App::onInit() {
-  HINSTANCE hInstance = LoadLibraryExA("gaDirectX_d.dll", nullptr,
+  //HINSTANCE hInstance = LoadLibraryExA("gaDirectX_d.dll", nullptr,
+  //                                     LOAD_WITH_ALTERED_SEARCH_PATH);
+
+  HINSTANCE hInstance = LoadLibraryExA("gaOpenGL_d.dll", nullptr,
                                        LOAD_WITH_ALTERED_SEARCH_PATH);
+
   //In case of error
   if (!(hInstance)) {
     return -1;

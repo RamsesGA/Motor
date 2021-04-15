@@ -14,7 +14,7 @@ namespace gaEngineSDK {
 			/***********************************************************************/
 			ShadersDX() = default;
 
-			virtual ~ShadersDX() = default;
+			~ShadersDX() = default;
 
 	  protected:
 			/**

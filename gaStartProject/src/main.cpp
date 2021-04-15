@@ -2,7 +2,7 @@
 
 using namespace gaEngineSDK;
 
-int
+int32
 main() {
   App app;
 

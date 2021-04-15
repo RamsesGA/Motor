@@ -19,11 +19,11 @@ namespace gaEngineSDK {
 			/**
 			* @brief Member to save the index.
 			*/
-			unsigned int m_indexBufferObject;
+			uint32 m_indexBufferObject;
 			/**
 			* @brief Member to store size.
 			*/
-			unsigned int m_indexBufferSize;
+			uint32 m_indexBufferSize;
 
 			friend class GraphicsApiOGL;
 	};

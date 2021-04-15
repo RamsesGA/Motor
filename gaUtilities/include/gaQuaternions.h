@@ -7,12 +7,12 @@ namespace gaEngineSDK {
   class GA_UTILITY_EXPORT Quaternions
   {
     public:
-      /*************************************************************************/
+      /***********************************************************************/
       /**
-      * Constructor and Destructor
+      * Constructor and Destructor.
       */
-      /*************************************************************************/
-      Quaternions();
+      /***********************************************************************/
+      Quaternions() = default;
     
       ~Quaternions() = default;
   };

@@ -24,12 +24,12 @@ namespace gaEngineSDK {
 			/**
 			* @brief Member to save position information
 			*/
-			unsigned int m_vertexShader;
+			uint32 m_vertexShader;
 			
 			/**
 			* @brief Member to save position information.
 			*/
-			unsigned int m_fragmentShader;
+			uint32 m_fragmentShader;
 
 			friend class GraphicsApiOGL;
 	};

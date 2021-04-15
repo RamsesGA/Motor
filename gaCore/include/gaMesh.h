@@ -31,7 +31,7 @@ namespace gaEngineSDK {
       
       /*
       * @brief Function to initialize class members.
-      * @param
+      * @param Variable with API information.
       */
       void 
       init(Vector<Vertex::E>* pVertices, Vector<uint32>* pIndices,
@@ -39,14 +39,14 @@ namespace gaEngineSDK {
 
       /*
       * @brief Function to save information for m_vertexBuffer and m_indexBuffer.
-      * @param
+      * @param Variable with API information.
       */
       void 
       setUpMesh(GraphicsApi* pGraphicApi);
       
       /*
       * @brief Function to save vertices and indices and finally draw.
-      * @param
+      * @param Variable with API information.
       */
       void 
       draw(GraphicsApi* pGraphicApi, Vector <SamplerState*> pSamplerState);

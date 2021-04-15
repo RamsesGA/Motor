@@ -10,6 +10,8 @@ namespace gaEngineSDK {
 	    */
 	    /***********************************************************************/
 			ConstantBuffer() = default;
-			virtual ~ConstantBuffer() = default;
+
+			virtual 
+			~ConstantBuffer() = default;
 	};
 }

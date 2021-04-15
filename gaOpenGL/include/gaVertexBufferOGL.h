@@ -20,12 +20,12 @@ namespace gaEngineSDK {
 			/**
 			* @brief Member to save position information.
 			*/
-			unsigned int m_vertexBufferObject;
+			uint32 m_vertexBufferObject;
 
 			/**
 			* @brief Member for size.
 			*/
-			unsigned int m_vertexBufferSize;
+			uint32 m_vertexBufferSize;
 
 			friend class GraphicsApiOGL;
 	};

@@ -9,6 +9,12 @@ namespace gaEngineSDK {
   class GA_UTILITY_EXPORT Vector4I
   {
     public:
+      /***********************************************************************/
+      /*
+      * Constructor and destructor.
+      */
+      /***********************************************************************/
+
       /**
       * @brief Constructor with default definition.
       */
@@ -147,9 +153,14 @@ namespace gaEngineSDK {
       * Members.
       */
       /***********************************************************************/
-      int32 m_x;
-      int32 m_y;
-      int32 m_z;
-      int32 m_w;
+
+      union {
+        struct {
+          int32 m_x;
+          int32 m_y;
+          int32 m_z;
+          int32 m_w;
+        };
+      };
   };
 }

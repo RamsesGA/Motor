@@ -14,7 +14,7 @@ namespace gaEngineSDK {
 	  	/***********************************************************************/
 			TexturesDX() = default;
 
-			virtual ~TexturesDX() = default;
+			~TexturesDX() = default;
 
 	  protected:
 			/**

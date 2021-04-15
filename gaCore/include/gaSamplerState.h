@@ -10,6 +10,8 @@ namespace gaEngineSDK {
 			*/
 			/***********************************************************************/
 			SamplerState() = default;
-			virtual ~SamplerState() = default;
+
+			virtual 
+			~SamplerState() = default;
 	};
 }

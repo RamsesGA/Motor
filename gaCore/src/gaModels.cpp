@@ -35,7 +35,7 @@ namespace gaEngineSDK {
 
   void 
   Model::draw(GraphicsApi* pGraphicApi) {
-    for (unsigned int i = 0; i < m_pMeshes.size(); i++) {
+    for (uint32 i = 0; i < m_pMeshes.size(); i++) {
       m_pMeshes[i]->draw(pGraphicApi, m_pSampler);
     }
   }
@@ -43,14 +43,14 @@ namespace gaEngineSDK {
   void
   Model::processNode(aiNode* pNode, const aiScene* pScene, GraphicsApi* pGraphicApi) {
     //Process each _mesh located at the current pNode
-    for (unsigned int i = 0; i < pNode->mNumMeshes; i++) {
+    for (uint32 i = 0; i < pNode->mNumMeshes; i++) {
       //The pNode object only contains indices to index the actual objects in the pScene.
       //The pScene contains all the data, pNode is just to keep stuff organized.
       aiMesh* _mesh = pScene->mMeshes[pNode->mMeshes[i]];
       m_pMeshes.push_back(processMesh(_mesh, pScene, pGraphicApi));
     }
 
-    for (unsigned int i = 0; i < pNode->mNumChildren; i++) {
+    for (uint32 i = 0; i < pNode->mNumChildren; i++) {
       processNode(pNode->mChildren[i], pScene, pGraphicApi);
     }
   }
@@ -59,11 +59,11 @@ namespace gaEngineSDK {
   Model::processMesh(aiMesh* pMesh, const aiScene* pScene, GraphicsApi* pGraphicApi) {
     //Data to fill
     Vector<Vertex::E>* vertices = new Vector<Vertex::E>();
-    Vector<unsigned int>* indices = new Vector<uint32>();
+    Vector<uint32>* indices = new Vector<uint32>();
     Vector<Texture::E> textures;
 
     //Walk through each of the _mesh's vertices.
-    for (unsigned int i = 0; i < pMesh->mNumVertices; i++) {
+    for (uint32 i = 0; i < pMesh->mNumVertices; i++) {
       Vertex::E structVertex;
 
       //Positions
@@ -100,11 +100,11 @@ namespace gaEngineSDK {
     }
 
     //Go through each of the _mesh's faces and retrieve the corresponding indices.
-    for (unsigned int i = 0; i < pMesh->mNumFaces; i++) {
+    for (uint32 i = 0; i < pMesh->mNumFaces; i++) {
       aiFace face = pMesh->mFaces[i];
 
       //retrieve all indices of the face and store them in the indices vector
-      for (unsigned int j = 0; j < face.mNumIndices; j++) {
+      for (uint32 j = 0; j < face.mNumIndices; j++) {
         indices->push_back(face.mIndices[j]);
       }
     }
@@ -127,7 +127,7 @@ namespace gaEngineSDK {
   Model::loadMaterialTextures(aiMaterial* pMat, aiTextureType type, GraphicsApi* pGraphicApi) {
     Vector<Texture::E> textures;
 
-    for (unsigned int i = 0; i < pMat->GetTextureCount(type); i++) {
+    for (uint32 i = 0; i < pMat->GetTextureCount(type); i++) {
       aiString aistr;
 
       pMat->GetTexture(type, i, &aistr);

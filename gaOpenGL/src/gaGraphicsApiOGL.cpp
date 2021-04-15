@@ -10,42 +10,42 @@
 
 namespace gaEngineSDK {
 
-  std::string 
-  ReadShaderOGL(const std::wstring& _nameVS) {
-    std::ifstream shaderFile;
+  String
+  ReadShaderOGL(const WString& _nameVS) {
+    IfStream shaderFile;
 
-    shaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    shaderFile.exceptions(IfStream::failbit | IfStream::badbit);
 
     try {
       shaderFile.open(_nameVS);
 
-      std::stringstream shaderStream;
+      StrStream shaderStream;
       shaderStream << shaderFile.rdbuf();
 
       shaderFile.close();
 
       return shaderStream.str();
     }
-    catch (std::ifstream::failure e) {
+    catch (IfStream::failure e) {
       std::cout << "ERROR, no se pudo leer el shader\n";
       return "";
     }
   }
 
   bool 
-  AnalyzeVertexShaderOGL(const std::wstring& _nameVS) {
-    std::string bufferAnalyze;
+  AnalyzeVertexShaderOGL(const WString& _nameVS) {
+    String bufferAnalyze;
 
     for (uint32 i = 0; i < _nameVS.size(); i++) {
 
       bufferAnalyze += _nameVS[i];
 
       if (('_' == bufferAnalyze[i]) &&
-          ("OGL_" != bufferAnalyze)) {
+          ("data/shaders/OGL_" != bufferAnalyze)) {
         return false;
       }
       else if (('_' == bufferAnalyze[i]) &&
-               ("OGL_" == bufferAnalyze)) {
+               ("data/shaders/OGL_" == bufferAnalyze)) {
         return true;
       }
     }
@@ -54,19 +54,19 @@ namespace gaEngineSDK {
   }
 
   bool 
-  AnalyzePixelShaderOGL(const std::wstring& _namePS) {
-    std::string bufferAnalyze;
+  AnalyzePixelShaderOGL(const WString& _namePS) {
+    String bufferAnalyze;
 
     for (uint32 i = 0; i < _namePS.size(); i++) {
 
       bufferAnalyze += _namePS[i];
 
       if (('_' == bufferAnalyze[i]) &&
-          ("OGL_" != bufferAnalyze)) {
+          ("data/shaders/OGL_" != bufferAnalyze)) {
         return false;
       }
       else if (('_' == bufferAnalyze[i]) &&
-               ("OGL_" == bufferAnalyze)) {
+               ("data/shaders/OGL_" == bufferAnalyze)) {
         return true;
       }
     }
@@ -93,7 +93,7 @@ namespace gaEngineSDK {
   /***************************************************************************/
   
   bool 
-  GraphicsApiOGL::initDevice(HWND hWnd) {
+  GraphicsApiOGL::initDevice(sf::WindowHandle hWnd) {
 
     PIXELFORMATDESCRIPTOR pfd = {
       sizeof(PIXELFORMATDESCRIPTOR),
@@ -173,7 +173,7 @@ namespace gaEngineSDK {
   }
   
   Textures* 
-  GraphicsApiOGL::loadTextureFromFile(std::string srcFile) {
+  GraphicsApiOGL::loadTextureFromFile(String srcFile) {
 
     auto* texture = new TexturesOGL();
 
@@ -258,7 +258,7 @@ namespace gaEngineSDK {
   
   void 
   GraphicsApiOGL::clearYourRenderTargetView(Textures* renderTarget,
-                                           float r, float g, float b, float a) {
+                                            float r, float g, float b, float a) {
     glClearColor(r, g, b, a);
 
     glClear(GL_COLOR_BUFFER_BIT);
@@ -288,10 +288,10 @@ namespace gaEngineSDK {
   /***************************************************************************/
   
   Shaders* 
-  GraphicsApiOGL::createShadersProgram(const std::wstring& nameVS,
-                                      const std::string& entryPointVS, 
-                                      const std::wstring& namePS,
-                                      const std::string& entryPointPS) {
+  GraphicsApiOGL::createShadersProgram(const WString& nameVS,
+                                      const String& entryPointVS, 
+                                      const WString& namePS,
+                                      const String& entryPointPS) {
     if (!(AnalyzeVertexShaderOGL(nameVS))) {
       return nullptr;
     }
@@ -299,8 +299,8 @@ namespace gaEngineSDK {
       return nullptr;
     }
 
-    std::string VS_ShaderSrc = ReadShaderOGL(nameVS);
-    std::string PS_ShaderSrc = ReadShaderOGL(namePS);
+    String VS_ShaderSrc = ReadShaderOGL(nameVS);
+    String PS_ShaderSrc = ReadShaderOGL(namePS);
 
     //Generamos el tipo de dato para ir guardando
     //los datos necesarios y entregarlo al usuario
@@ -310,7 +310,7 @@ namespace gaEngineSDK {
     uint32 vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
     // Send the vertex shader source code to GL
-    // Note that std::string's .c_str is NULL character terminated.
+    // Note that String's .c_str is NULL character terminated.
     const char* source = (const char*)VS_ShaderSrc.c_str();
     glShaderSource(vertexShader, 1, &source, nullptr);
 
@@ -342,7 +342,7 @@ namespace gaEngineSDK {
     uint32 fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
     // Send the fragment shader source code to GL
-    // Note that std::string's .c_str is NULL character terminated.
+    // Note that String's .c_str is NULL character terminated.
     source = (const char*)PS_ShaderSrc.c_str();
     glShaderSource(fragmentShader, 1, &source, nullptr);
 
@@ -414,7 +414,7 @@ namespace gaEngineSDK {
   
   VertexBuffer* 
   GraphicsApiOGL::createVertexBuffer(const void* data,
-                                    const uint32 size) {
+                                     const uint32 size) {
     auto* VBO = new VertexBufferOGL();
 
     ///Guardamos el tamaño del buffer
@@ -445,7 +445,7 @@ namespace gaEngineSDK {
   
   IndexBuffer* 
   GraphicsApiOGL::createIndexBuffer(const void* data,
-                                   const uint32 size) {
+                                    const uint32 size) {
     auto* EBO = new IndexBufferOGL();
 
     EBO->m_indexBufferSize = size;
@@ -496,10 +496,10 @@ namespace gaEngineSDK {
   
   Textures* 
   GraphicsApiOGL::createTexture(const uint32 width,
-                               const uint32 height,
-                               const uint32 bindFlags,
-                               TEXTURE_FORMAT::E textureFormat,
-                               const std::string fileName) {
+                                const uint32 height,
+                                const uint32 bindFlags,
+                                TEXTURE_FORMAT::E textureFormat,
+                                const String fileName) {
     auto* tex = new TexturesOGL();
 
     uint32 texture;
@@ -684,7 +684,7 @@ namespace gaEngineSDK {
   GraphicsApiOGL::setVertexBuffer(VertexBuffer& vertexBuffer) {
     auto& vertex = reinterpret_cast<VertexBufferOGL&>(vertexBuffer);
 
-    glBindVertexBuffer(0, vertex.m_vertexBufferObject, 0, sizeof(Vertex));
+    glBindVertexBuffer(0, vertex.m_vertexBufferObject, 0, sizeof(Vertex::E));
 
     uint32 detectError = glGetError();
 
@@ -708,9 +708,9 @@ namespace gaEngineSDK {
   
   void 
   GraphicsApiOGL::setConstantBuffer(bool isVertex,
-                                   ConstantBuffer& constantBuffer,
-                                   const uint32 startSlot,
-                                   const uint32 numBuffers) {
+                                    ConstantBuffer& constantBuffer,
+                                    const uint32 startSlot,
+                                    const uint32 numBuffers) {
     auto& cBuffer = reinterpret_cast<ConstantBufferOGL&>(constantBuffer);
 
     glBindBuffer(GL_UNIFORM_BUFFER, cBuffer.m_uniformBufferObject);
@@ -724,8 +724,8 @@ namespace gaEngineSDK {
   
   void 
   GraphicsApiOGL::setSamplerState(const uint32 startSlot,
-                                 Vector<SamplerState*>& samplerState,
-                                 Textures& texture) {
+                                  Vector<SamplerState*>& samplerState,
+                                  Textures& texture) {
     auto& sampler = reinterpret_cast<SamplerStateOGL&>(samplerState);
     auto& tex = reinterpret_cast<TexturesOGL&>(texture);
 
@@ -740,8 +740,8 @@ namespace gaEngineSDK {
   
   void
   GraphicsApiOGL::setShaderResourceView(Textures* shaderResourceView,
-                                       const uint32 startSlot,
-                                       const uint32 numViews) {
+                                        const uint32 startSlot,
+                                        const uint32 numViews) {
     auto* resourceView = reinterpret_cast<TexturesOGL*>(shaderResourceView);
 
     glActiveTexture(GL_TEXTURE0 + startSlot);
@@ -758,7 +758,7 @@ namespace gaEngineSDK {
   
   void
   GraphicsApiOGL::setRenderTarget(Textures* renderTarget,
-                                 Textures* depthStencil) {
+                                  Textures* depthStencil) {
     if (nullptr != renderTarget) {
       auto* rTarget = reinterpret_cast<TexturesOGL*>(renderTarget);
       auto* dStencil = reinterpret_cast<TexturesOGL*>(depthStencil);
@@ -780,7 +780,7 @@ namespace gaEngineSDK {
   
   void 
   GraphicsApiOGL::setDepthStencil(Textures& depthStencil,
-                                 const uint32 stencilRef) {}
+                                  const uint32 stencilRef) {}
   
   void 
   GraphicsApiOGL::setInputLayout(InputLayout& vertexLayout) {
@@ -797,8 +797,8 @@ namespace gaEngineSDK {
   
   void 
   GraphicsApiOGL::setViewport(const uint32 numViewports,
-                             const uint32 width, 
-                             const uint32 heigth) {
+                              const uint32 width, 
+                              const uint32 heigth) {
     glViewport(0, 0, width, heigth);
 
     uint32 detectError = glGetError();
@@ -844,8 +844,8 @@ namespace gaEngineSDK {
   
   void
   GraphicsApiOGL::setYourVSConstantBuffers(ConstantBuffer* constantBuffer,
-                                          const uint32 startSlot,
-                                          const uint32 numBuffers) {
+                                           const uint32 startSlot,
+                                           const uint32 numBuffers) {
     auto* cBuffer = reinterpret_cast<ConstantBufferOGL*>(constantBuffer);
 
     glBindBufferBase(GL_UNIFORM_BUFFER, startSlot, 
@@ -864,8 +864,8 @@ namespace gaEngineSDK {
   
   void 
   GraphicsApiOGL::setYourPSConstantBuffers(ConstantBuffer* constantBuffer,
-                                          const uint32 startSlot,
-                                          const uint32 numBuffers) {
+                                           const uint32 startSlot,
+                                           const uint32 numBuffers) {
     auto* cBuffer = reinterpret_cast<ConstantBufferOGL*>(constantBuffer);
 
     glBindBufferBase(GL_UNIFORM_BUFFER, startSlot,
@@ -881,8 +881,8 @@ namespace gaEngineSDK {
   
   void
   GraphicsApiOGL::setYourPSSampler(SamplerState& sampler,
-                                  const uint32 startSlot,
-                                  const uint32 numSamplers) {}
+                                   const uint32 startSlot,
+                                   const uint32 numSamplers) {}
   
   void
   GraphicsApiOGL::setShaders(Shaders& shaders) {

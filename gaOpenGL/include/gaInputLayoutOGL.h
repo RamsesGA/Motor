@@ -19,7 +19,7 @@ namespace gaEngineSDK {
 			/**
 			* @brief In OGL it is known as vertex array object.
 			*/
-			unsigned int m_inputLayout;
+			uint32 m_inputLayout;
 
 			friend class GraphicsApiOGL;
 	};

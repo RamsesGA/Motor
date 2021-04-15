@@ -4,15 +4,17 @@
 #include "gaPlatformMath.h"
 
 namespace gaEngineSDK {
-  class GA_UTILITY_EXPORT LinuxMath : public PlatformMath {
-
+  class GA_UTILITY_EXPORT LinuxMath : public PlatformMath 
+  {
     public:
+      /***********************************************************************/
+      /*
+      * Constructor and destructor.
+      */
+      /***********************************************************************/
+
       LinuxMath() = default;
 
       ~LinuxMath() = default;
-
-    protected:
-    
-    private:
   };
 }

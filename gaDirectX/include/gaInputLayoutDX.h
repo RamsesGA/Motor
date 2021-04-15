@@ -14,13 +14,13 @@ namespace gaEngineSDK {
 			/***********************************************************************/
 			InputLayoutDX() = default;
 
-			virtual ~InputLayoutDX() = default;
+			~InputLayoutDX() = default;
 
 	  protected:
 			/**
 			* @brief DX member to save byte off set.
 			*/
-			unsigned int* m_inputLayoutByteLength;
+			uint32* m_inputLayoutByteLength;
 
 			/**
 			* @brief DX member to save the vertex layout.

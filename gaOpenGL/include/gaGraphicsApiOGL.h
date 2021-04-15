@@ -14,6 +14,11 @@
 
 namespace gaEngineSDK {
   
+  /*
+  * @brief This class is a child of the Graphic Api parent class,
+  *        all comments on members or methods are found in their respective .h.
+  */
+
   class GraphicsApiOGL final : public GraphicsApi
   {
     public:
@@ -34,7 +39,7 @@ namespace gaEngineSDK {
       /***********************************************************************/
 
       bool 
-      initDevice(HWND hWnd)override;
+      initDevice(sf::WindowHandle hWnd)override;
 
       void 
       drawIndex(uint32 indexCount,
@@ -46,7 +51,7 @@ namespace gaEngineSDK {
       		             uint32 flags)override;
 
       Textures* 
-      loadTextureFromFile(std::string srcFile)override;
+      loadTextureFromFile(String srcFile)override;
 
       void 
       unbindOGL()override;
@@ -81,10 +86,10 @@ namespace gaEngineSDK {
       /***********************************************************************/
 
       Shaders* 
-      createShadersProgram(const std::wstring& nameVS,
-      		                 const std::string& entryPointVS, 
-      	                   const std::wstring& namePS,
-      		                 const std::string& entryPointPS)override;
+      createShadersProgram(const WString& nameVS,
+      		                 const String& entryPointVS, 
+      	                   const WString& namePS,
+      		                 const String& entryPointPS)override;
 
       VertexBuffer* 
       createVertexBuffer(const void* data,
@@ -102,7 +107,7 @@ namespace gaEngineSDK {
                     const uint32 height,
                     const uint32 bindFlags,
                     TEXTURE_FORMAT::E textureFormat,
-                    const std::string fileName)override;
+                    const String fileName)override;
 
       SamplerState* 
       createSamplerState()override;
@@ -206,26 +211,36 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
 
-      /// <summary>
-      /// Miembro con la información
-      /// de la ventana traida del usuario
-      /// </summary>
-      HWND m_hWnd;
+      /*
+      * @brief Member with window information brought from user.
+      */
+      sf::WindowHandle m_hWnd;
 
-      /// <summary>
-      /// 
-      /// </summary>
+      /*
+      * @brief .
+      */
       HDC m_HandleToDC;
 
-      /// <summary>
-      /// 
-      /// </summary>
+      /*
+      * @brief .
+      */
       HGLRC m_renderingContext;
 
-      /// <summary>
-      /// Miembro para almacenar
-      /// la topología y que la api lo conozca
-      /// </summary>
+      /*
+      * @brief Member to store the topology and let the api know about it.
+      */
       uint32 m_topology;
   };
+
+  /***************************************************************************/
+  /**
+  * Export.
+  */
+  /***************************************************************************/
+
+  extern "C" GA_CORE_EXPORT GraphicsApi *
+  createGraphicApi() {
+    GraphicsApiOGL* pGraphicsApiGL = new GraphicsApiOGL();
+    return pGraphicsApiGL;
+  }
 }

@@ -116,4 +116,14 @@ namespace gaEngineSDK {
   * @brief basic_string<char, char_traits<char>, allocator<char>>;
   */
   using String = std::string;
+
+  using WString = std::wstring;
+
+  using IfStream = std::ifstream;
+
+  using FStream = std::fstream;
+
+  using OfStream = std::ofstream;
+
+  using StrStream = std::stringstream;
 }

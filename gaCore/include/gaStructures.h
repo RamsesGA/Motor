@@ -12,6 +12,8 @@ using namespace gaEngineSDK;
 /***************************************************************************/
 /**
 * Structs
+* 
+* @brief The creation of structs necessary for the API is done.
 */
 /***************************************************************************/
 namespace ConstantBuffer1 {

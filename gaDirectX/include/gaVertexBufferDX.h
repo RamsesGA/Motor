@@ -13,7 +13,7 @@ namespace gaEngineSDK {
 			/***********************************************************************/
 			VertexBufferDX() = default;
 
-			virtual ~VertexBufferDX() = default;
+			~VertexBufferDX() = default;
 
 	  protected:
 			

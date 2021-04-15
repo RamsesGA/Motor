@@ -10,6 +10,8 @@ namespace gaEngineSDK {
 			*/
 			/***********************************************************************/
 			VertexBuffer() = default;
-			virtual ~VertexBuffer() = default;
+
+			virtual 
+		  ~VertexBuffer() = default;
 	};
 }

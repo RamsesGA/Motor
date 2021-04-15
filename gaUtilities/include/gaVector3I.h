@@ -8,6 +8,12 @@ namespace gaEngineSDK {
   class GA_UTILITY_EXPORT Vector3I
   {
     public:
+      /***********************************************************************/
+      /*
+      * Constructor and destructor.
+      */
+      /***********************************************************************/
+
       /**
       * @brief Constructor to start a vector with x and y.
       */
@@ -15,9 +21,6 @@ namespace gaEngineSDK {
                int32 y = 0,
                int32 z = 0);
     
-      /**
-      * @brief Destroyer.
-      */
       ~Vector3I() = default;
     
       /***********************************************************************/
@@ -137,11 +140,16 @@ namespace gaEngineSDK {
     
       /***********************************************************************/
       /**
-      * Member.
+      * Members.
       */
       /***********************************************************************/
-      int32 m_x;
-      int32 m_y;
-      int32 m_z;
+
+      union {
+        struct {
+          int32 m_x;
+          int32 m_y;
+          int32 m_z;
+        };
+      };
   };
 }

@@ -19,7 +19,7 @@ namespace gaEngineSDK {
 			/**
 			* @brief Member to save position information.
 			*/
-			unsigned int m_texture;
+			uint32 m_texture;
 			
 			/**
 			* @brief Member to save position information.
@@ -29,12 +29,12 @@ namespace gaEngineSDK {
 			/**
 			* @brief It can be the render target view of DX.
 			*/
-			unsigned int m_framebuffer;
+			uint32 m_framebuffer;
 			
 			/**
 			* @brief It can be the depth Stencil.
 			*/
-			unsigned int m_renderBufferObject;
+			uint32 m_renderBufferObject;
 
 			friend class GraphicsApiOGL;
 	};
