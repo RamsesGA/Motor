@@ -32,7 +32,7 @@ namespace gaEngineSDK {
       /***********************************************************************/
 
       int32
-      run(String windowTitle, int32 sizeX = 1024, int32 sizeY = 768);
+      run(String windowTitle, int32 sizeX = 1440, int32 sizeY = 900);
 
     protected:
       void

@@ -92,19 +92,19 @@ namespace gaEngineSDK {
     if (sf::Keyboard::Right == param.key.code) {
       rotation =
       {
-        cosf(speedrot),	-sinf(speedrot),	0,	0,
-        sinf(speedrot),	cosf(speedrot),		0,	0,
-        0,				0,					1,	0,
-        0,				0,					0,	1
+        cosf(speedrot),	-sinf(speedrot), 0,	0,
+        sinf(speedrot),	cosf(speedrot),	 0,	0,
+        0,				      0,					     1,	0,
+        0,				      0,					     0,	1
       };
     }
     else if (sf::Keyboard::Left == param.key.code) {
       rotation =
       {
-        cosf(-speedrot),	-sinf(-speedrot),		0,		0,
-        sinf(-speedrot),	cosf(-speedrot),		0,		0,
-        0,				0,							1,		0,
-        0,				0,							0,		1
+        cosf(-speedrot),	-sinf(-speedrot),	0, 0,
+        sinf(-speedrot),	cosf(-speedrot),	0, 0,
+        0,				        0,							  1, 0,
+        0,				        0,							  0, 1
       };
     }
 
@@ -122,19 +122,19 @@ namespace gaEngineSDK {
     if (sf::Keyboard::Z == param.key.code) {
       rotation =
       {
-        cosf(speedrot),		0,	sinf(speedrot),	0,
-        0,					1,	0,				0,
-        -sinf(speedrot),	0,	cosf(speedrot),	0,
-        0,					0,	0,				1
+        cosf(speedrot),  0,	sinf(speedrot),	0,
+        0,					     1,	0,				      0,
+        -sinf(speedrot), 0,	cosf(speedrot),	0,
+        0,					     0,	0,				      1
       };
     }
     else if (sf::Keyboard::C == param.key.code) {
       rotation =
       {
-        cosf(-speedrot),		0,	sinf(-speedrot),	0,
-        0,						1,	0,					0,
-        -sinf(-speedrot),		0,	cosf(-speedrot),	0,
-        0,						0,	0,					1
+        cosf(-speedrot),  0,	sinf(-speedrot), 0,
+        0,						    1,	0,					     0,
+        -sinf(-speedrot), 0,	cosf(-speedrot), 0,
+        0,						    0,	0,					     1
       };
     }
 
@@ -347,8 +347,8 @@ namespace gaEngineSDK {
   /// S E T´s
   /// 
   
-  void Camera::setOriginalMousePos(float _x, float _y) {
-  	m_originalMousePos = { _x, _y };
+  void Camera::setOriginalMousePos(float x, float y) {
+  	m_originalMousePos = { x, y };
   }
   
   void Camera::setClickPressed(bool _bool) {

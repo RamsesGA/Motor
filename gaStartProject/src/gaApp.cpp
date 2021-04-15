@@ -64,8 +64,7 @@ App::onUpdate(float deltaTime) {
   meshData.mProjection = m_mainCamera.getProjection();
   meshData.mView = m_mainCamera.getView();
 
-  g_graphicApi().updateConstantBuffer
-  (&meshData, *m_pConstantBuffer1);
+  g_graphicApi().updateConstantBuffer(&meshData, *m_pConstantBuffer1);
 
   ConstantBuffer2::E cb;
   cb.mWorld = m_world;
@@ -172,9 +171,9 @@ App::onCreate() {
   }
 
   m_model = new Model();
-  m_model->init("data/models/POD/OBJ/POD.obj", &g_graphicApi());
+  //m_model->init("data/models/POD/OBJ/POD.obj", &g_graphicApi());
   //m_model->init("data/models/sonic/FBX/sonic.fbx", &g_graphicApi());
-  //m_model->init("data/models/Nier2b/OBJ/Nier2b.obj", &g_graphicApi());
+  m_model->init("data/models/Nier2b/OBJ/Nier2b.obj", &g_graphicApi());
   //m_model->init("data/models/ugandan/FBX/Knuckles.fbx", &g_graphicApi());
 }
 

@@ -34,11 +34,11 @@ namespace gaEngineSDK {
           if (sf::Mouse::Left == event.key.code) {
             leftMouseBtnDown();
           }
+        }
 
-          if (event.type == sf::Event::MouseButtonReleased) {
-            if (sf::Mouse::Left == event.key.code) {
-              leftMouseBtnUp();
-            }
+        if (event.type == sf::Event::MouseButtonReleased) {
+          if (sf::Mouse::Left == event.key.code) {
+            leftMouseBtnUp();
           }
         }
 
@@ -54,7 +54,6 @@ namespace gaEngineSDK {
       update(trueDeltaTime);
       render();
     }
-    
     destroySystem();
     
     return 0;
