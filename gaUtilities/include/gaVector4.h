@@ -152,13 +152,9 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
 
-      union {
-        struct {
-          float m_x;
-          float m_y;
-          float m_z;
-          float m_w;
-        };
-      };
+      float m_x = 0.0f;
+      float m_y = 0.0f;
+      float m_z = 0.0f;
+      float m_w = 0.0f;
   };
 }

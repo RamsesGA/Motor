@@ -95,7 +95,7 @@ namespace gaEngineSDK {
   }
 
   void 
-  BaseApp::resize(int32 width, int32 height) { }
+  BaseApp::resize(int32 , int32 ) { }
 
   void 
   BaseApp::keyboardDown(sf::Event param) {

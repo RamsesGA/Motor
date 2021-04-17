@@ -11,15 +11,15 @@ namespace gaEngineSDK {
 
   namespace CameraDescriptor {
     struct GA_CORE_EXPORT E {
-      float camWidth;
-      float camHeight;
-      float camNear;
-      float camFar;
-      float camFoV;
+      uint32 camWidth = 0;
+      uint32 camHeight = 0;
+      float camNear = 0.0f;
+      float camFar = 0.0f;
+      float camFoV = 0.0f;
 
-      Vector3 camEye;
-      Vector3 camLookAt;
-      Vector3 camUp;
+      Vector3 camEye = { 0.0f, 0.0f, 0.0f };
+      Vector3 camLookAt = { 0.0f, 0.0f, 0.0f };
+      Vector3 camUp = { 0.0f, 0.0f, 0.0f };
     };
   }
   
@@ -172,7 +172,7 @@ namespace gaEngineSDK {
       /**
       * @brief Member to detect if it is OGL or DX.
       */
-      bool m_isOGL;
+      bool m_isOGL = false;
 
       /**
       * @brief Member to save angle.

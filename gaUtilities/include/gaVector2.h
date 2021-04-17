@@ -18,7 +18,7 @@ namespace gaEngineSDK {
       * @brief Constructor to start a vector with x and y.
       */
       Vector2(float x = 0.0f, float y = 0.0f);
-    
+
       ~Vector2() = default;
     
       /***********************************************************************/
@@ -146,11 +146,7 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
 
-      union {
-        struct {
-          float m_x;
-          float m_y;
-        };
-      };
+      float m_x = 0.0f;
+      float m_y = 0.0f;
   };
 }

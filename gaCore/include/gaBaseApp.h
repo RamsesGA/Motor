@@ -121,17 +121,17 @@ namespace gaEngineSDK {
 
       /*
       * @brief Initialize the camera and all its default values.
-      * @param Bool to indicate if you are using OGL (this will be removed).
+      * @param isOGL, Bool to indicate if you are using OGL (this will be removed).
       */
       virtual void
-      onInitCamera(bool isOGL = false) {};
+      onInitCamera(bool  = false) {};
 
       /*
       * @brief Update the constant buffer of the api.
-      * @param float for delta time.
+      * @param deltaTime, float for delta time.
       */
       virtual void
-      onUpdate(float deltaTime) {};
+      onUpdate(float ) {};
 
       /*
       * @brief Save new data, update other and clean old data.
@@ -154,10 +154,10 @@ namespace gaEngineSDK {
 
       /*
       * @brief Detect keyboard input.
-      * @param SFML event to know the input pressed.
+      * @param param, SFML event to know the input pressed.
       */
       virtual void
-      onKeyboardDown(sf::Event param) {};
+      onKeyboardDown(sf::Event ) {};
 
       /*
       * @brief Indicates if the left mouse button is pressed.
@@ -187,8 +187,8 @@ namespace gaEngineSDK {
       /*
       * @param Members with screen size.
       */
-      uint32 m_width;
-      uint32 m_height;
+      uint32 m_width = 0;
+      uint32 m_height = 0;
 
       /*
       * @param Members with window size and position.
