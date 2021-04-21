@@ -99,13 +99,13 @@
       <PreprocessorDefinitions>GA_CORE_EXPORTS;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>./include/;$(SolutionDir)gaUtilities/include;$(DEVLIBS)/SFML/include;$(DEVLIBS)/Assimp/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./include/;$(SolutionDir)gaUtilities/include;$(DEVLIBS)/SFML/include;$(DEVLIBS)/Assimp/include;./include/Externals/</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib/$(PlatformTarget)/;$(DEVLIBS)/SFML/lib/$(PlatformTarget)/;$(DEVLIBS)/Assimp/lib/$(PlatformTarget)/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>gaUtilities_d.lib;sfml-window-d.lib;sfml-system-d.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>gaUtilities_d.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;sfml-network-d.lib;assimp-vc142-mtd.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)/lib/$(PlatformTarget)/$(TargetName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -118,7 +118,7 @@
       <PreprocessorDefinitions>GA_UTILITY_EXPORTS;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>./include/;$(SolutionDir)gaUtilities/include;$(DEVLIBS)/SFML/include;$(DEVLIBS)/Assimp/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./include/;$(SolutionDir)gaUtilities/include;$(DEVLIBS)/SFML/include;$(DEVLIBS)/Assimp/include;./include/Externals/</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,13 +137,13 @@
       <PreprocessorDefinitions>GA_CORE_EXPORTS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>./include/;$(SolutionDir)gaUtilities/include;$(DEVLIBS)/SFML/include;$(DEVLIBS)/Assimp/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./include/;$(SolutionDir)gaUtilities/include;$(DEVLIBS)/SFML/include;$(DEVLIBS)/Assimp/include;./include/Externals/</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib/$(PlatformTarget)/;$(DEVLIBS)/SFML/lib/$(PlatformTarget)/;$(DEVLIBS)/Assimp/lib/$(PlatformTarget)/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>gaUtilities_d.lib;sfml-window-d.lib;sfml-system-d.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>gaUtilities_d.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;sfml-network-d.lib;assimp-vc142-mtd.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)/lib/$(PlatformTarget)/$(TargetName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -156,7 +156,7 @@
       <PreprocessorDefinitions>GA_UTILITY_EXPORTS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>./include/;$(SolutionDir)gaUtilities/include;$(DEVLIBS)/SFML/include;$(DEVLIBS)/Assimp/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./include/;$(SolutionDir)gaUtilities/include;$(DEVLIBS)/SFML/include;$(DEVLIBS)/Assimp/include;./include/Externals/</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

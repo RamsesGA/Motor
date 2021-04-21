@@ -214,8 +214,8 @@ namespace gaEngineSDK {
     POINT Temp;
     GetCursorPos(&Temp);
 
-    firstPos.m_x = Temp.x;
-    secondPos.m_y = Temp.y;
+    firstPos.m_x = (float)Temp.x;
+    secondPos.m_y = (float)Temp.y;
 
     if (firstPos.m_x < m_originalMousePos.m_x) {
       m_cameraDesc.camLookAt -= m_right * speedRot;
@@ -268,7 +268,7 @@ namespace gaEngineSDK {
 
     }
 
-    SetCursorPos(m_originalMousePos.m_x, m_originalMousePos.m_y);
+    SetCursorPos((int32)m_originalMousePos.m_x, (int32)m_originalMousePos.m_y);
     m_view = m_view * Yaw;
 
     updateViewMatrix();
@@ -337,8 +337,8 @@ namespace gaEngineSDK {
   void
   Camera::createProjectionMatrix() {
   	m_projection = m_projection.perspectiveFovLH(m_cameraDesc.camFoV, 
-                                                 m_cameraDesc.camWidth,
-                                                 m_cameraDesc.camHeight, 
+                                                 (float)m_cameraDesc.camWidth,
+                                                 (float)m_cameraDesc.camHeight, 
                                                  m_cameraDesc.camNear, 
                                                  m_cameraDesc.camFar);
   }

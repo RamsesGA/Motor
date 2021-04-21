@@ -16,7 +16,7 @@ namespace gaEngineSDK {
     
     sf::Clock deltaTime;
     float trueDeltaTime = 0.0f;
-    
+
     while (m_sfmlWindow.isOpen()) {
       sf::Event event;
 
@@ -72,6 +72,12 @@ namespace gaEngineSDK {
   void 
   BaseApp::init() {
     onInit();
+
+    //sf::RenderWindow* window;
+
+    //window;
+
+    //ImGui::SFML::Init(&m_sfmlWindow, window);
   }
 
   void 

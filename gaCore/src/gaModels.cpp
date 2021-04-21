@@ -20,7 +20,7 @@ namespace gaEngineSDK {
 
     //Check for errors
     if (!pScene || pScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !pScene->mRootNode) {
-      return;
+      throw new std::exception("Error, al leer el path del modelo");
     }
 
     //Retrieve the directory path of the _file
@@ -35,6 +35,10 @@ namespace gaEngineSDK {
 
   void 
   Model::draw(GraphicsApi* pGraphicApi) {
+    if (nullptr == pGraphicApi) {
+      throw new std::exception("Error, parametro nulo en Draw del modelo");
+    }
+
     for (uint32 i = 0; i < m_pMeshes.size(); i++) {
       m_pMeshes[i]->draw(pGraphicApi, m_pSampler);
     }

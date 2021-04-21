@@ -1,3 +1,5 @@
+#include <exception>
+
 #include "gaGraphicsApiOGL.h"
 #include "gaConstantBufferOGL.h"
 #include "gaTexturesOGL.h"
@@ -237,6 +239,10 @@ namespace gaEngineSDK {
   void 
   GraphicsApiOGL::updateConstantBuffer(const void* srcData,
                                       ConstantBuffer& updateDataCB) {
+    if (nullptr == &updateDataCB) {
+      throw new std::exception("Error, parametro de ConstanBuffer nulo OGL");
+    }
+
     auto& UBO = reinterpret_cast<ConstantBufferOGL&>(updateDataCB);
 
     glBindBuffer(GL_UNIFORM_BUFFER, UBO.m_uniformBufferObject);
@@ -246,7 +252,7 @@ namespace gaEngineSDK {
     uint32 detectError = glGetError();
 
     if (detectError != 0) {
-      exit(1);
+      throw new std::exception("Error, al actualizar el Constant Buffer OGL");
     }
   }
   
@@ -259,26 +265,22 @@ namespace gaEngineSDK {
   void 
   GraphicsApiOGL::clearYourRenderTargetView(Textures* renderTarget,
                                             float r, float g, float b, float a) {
+    //if (nullptr == renderTarget) {
+    //  throw new std::exception("Error, parametro nulo en Clear Render Target View OGL");
+    //}
+
     glClearColor(r, g, b, a);
 
     glClear(GL_COLOR_BUFFER_BIT);
-
-    uint32 detectError = glGetError();
-
-    if (detectError != 0) {
-      exit(1);
-    }
   }
   
   void 
   GraphicsApiOGL::clearYourDepthStencilView(Textures* depthStencil) {
+    //if (nullptr == depthStencil) {
+    //  throw new std::exception("Error, parametro nulo en Clear Depth Stencil View OGL");
+    //}
+
     glClear(GL_DEPTH_BUFFER_BIT);
-
-    uint32 detectError = glGetError();
-
-    if (detectError != 0) {
-      exit(1);
-    }
   }
   
   /***************************************************************************/
@@ -293,10 +295,10 @@ namespace gaEngineSDK {
                                       const WString& namePS,
                                       const String& entryPointPS) {
     if (!(AnalyzeVertexShaderOGL(nameVS))) {
-      return nullptr;
+      throw new std::exception("Error, no se encontro vertex shader OGL");
     }
     if (!(AnalyzePixelShaderOGL(namePS))) {
-      return nullptr;
+      throw new std::exception("Error, no se encontro pixel shader OGL");
     }
 
     String VS_ShaderSrc = ReadShaderOGL(nameVS);
@@ -333,7 +335,7 @@ namespace gaEngineSDK {
       glDeleteShader(vertexShader);
       delete shaders;
 
-      return nullptr;
+      throw new std::exception("Error, isCompiled es falso OGL");
     }
 
     shaders->m_vertexShader = vertexShader;
@@ -366,7 +368,7 @@ namespace gaEngineSDK {
       glDeleteShader(vertexShader);
       delete shaders;
 
-      return nullptr;
+      throw new std::exception("Error, isCompiled es falso OGL");
     }
 
     // Vertex and fragment shaders are successfully compiled.
@@ -400,7 +402,7 @@ namespace gaEngineSDK {
       glDeleteShader(fragmentShader);
       delete shaders;
 
-      return nullptr;
+      throw new std::exception("Error, isLinked es falso OGL");
     }
 
     shaders->m_fragmentShader = fragmentShader;
@@ -437,7 +439,7 @@ namespace gaEngineSDK {
 
     if (detectError != 0) {
       delete VBO;
-      exit(1);
+      throw new std::exception("Error, al crear el vertex buffer OGL");
     }
 
     return VBO;
@@ -466,7 +468,7 @@ namespace gaEngineSDK {
 
     if (detectError != 0) {
       delete EBO;
-      exit(1);
+      throw new std::exception("Error, al crear el index buffer OGL");
     }
 
     return EBO;
@@ -488,7 +490,7 @@ namespace gaEngineSDK {
 
     if (detectError != 0) {
       delete UBO;
-      exit(1);
+      throw new std::exception("Error, al crear el constant buffer OGL");
     }
 
     return UBO;
@@ -569,6 +571,10 @@ namespace gaEngineSDK {
     auto* inputLayout = new InputLayoutOGL();
     auto& shader = reinterpret_cast<ShadersOGL&>(vertexShader);
 
+    if (nullptr == &shader) {
+      throw new std::exception("Error, shader nulo OGL");
+    }
+
     ///Creamos el vertex array
     glGenVertexArrays(1, &inputLayout->m_inputLayout);
 
@@ -631,7 +637,7 @@ namespace gaEngineSDK {
 
       if (detectError != 0) {
         delete inputLayout;
-        exit(1);
+        throw new std::exception("Error, al crear el input layout OGL");
       }
 
       glVertexAttribBinding(location, 0);
@@ -642,7 +648,7 @@ namespace gaEngineSDK {
 
     if (detectError != 0) {
       delete inputLayout;
-      exit(1);
+      throw new std::exception("Error, al crear el input layout OGL");
     }
 
     return inputLayout;
@@ -682,28 +688,24 @@ namespace gaEngineSDK {
   
   void 
   GraphicsApiOGL::setVertexBuffer(VertexBuffer& vertexBuffer) {
+    if (nullptr == &vertexBuffer) {
+      throw new std::exception("Error, parametro nulo en set Vertex Buffer OGL");
+    }
+
     auto& vertex = reinterpret_cast<VertexBufferOGL&>(vertexBuffer);
 
     glBindVertexBuffer(0, vertex.m_vertexBufferObject, 0, sizeof(Vertex::E));
-
-    uint32 detectError = glGetError();
-
-    if (detectError != 0) {
-      exit(1);
-    }
   }
   
   void 
   GraphicsApiOGL::setIndexBuffer(IndexBuffer& indexBuffer) {
+    if (nullptr == &indexBuffer) {
+      throw new std::exception("Error, parametro nulo en set Index Buffer OGL");
+    }
+
     auto& index = reinterpret_cast<IndexBufferOGL&>(indexBuffer);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index.m_indexBufferObject);
-
-    uint32 detectError = glGetError();
-
-    if (detectError != 0) {
-      exit(1);
-    }
   }
   
   void 
@@ -771,7 +773,7 @@ namespace gaEngineSDK {
       uint32 detectError = glGetError();
 
       if (detectError != 0) {
-        exit(1);
+        throw new std::exception("Error, al guardar el Render Target OGL");
       }
     }
 
@@ -784,15 +786,13 @@ namespace gaEngineSDK {
   
   void 
   GraphicsApiOGL::setInputLayout(InputLayout& vertexLayout) {
+    if (nullptr == &vertexLayout) {
+      throw new std::exception("Error, parametro nulo en set Input Layout OGL");
+    }
+
     auto& inputLayout = reinterpret_cast<InputLayoutOGL&>(vertexLayout);
 
     glBindVertexArray(inputLayout.m_inputLayout);
-
-    uint32 detectError = glGetError();
-
-    if (detectError != 0) {
-      exit(1);
-    }
   }
   
   void 
@@ -800,12 +800,6 @@ namespace gaEngineSDK {
                               const uint32 width, 
                               const uint32 heigth) {
     glViewport(0, 0, width, heigth);
-
-    uint32 detectError = glGetError();
-
-    if (detectError != 0) {
-      exit(1);
-    }
   }
   
   void 
@@ -846,17 +840,13 @@ namespace gaEngineSDK {
   GraphicsApiOGL::setYourVSConstantBuffers(ConstantBuffer* constantBuffer,
                                            const uint32 startSlot,
                                            const uint32 numBuffers) {
+    if (nullptr == constantBuffer) {
+      throw new std::exception("Error, parametro nulo en set Your Const Buff OGL");
+    }
+
     auto* cBuffer = reinterpret_cast<ConstantBufferOGL*>(constantBuffer);
 
-    glBindBufferBase(GL_UNIFORM_BUFFER, startSlot, 
-                     cBuffer->m_uniformBufferObject);
-
-    uint32 detectError = glGetError();
-
-    if (detectError != 0) {
-      delete cBuffer;
-      exit(1);
-    }
+    glBindBufferBase(GL_UNIFORM_BUFFER, startSlot, cBuffer->m_uniformBufferObject);
   }
   
   void 
@@ -866,17 +856,14 @@ namespace gaEngineSDK {
   GraphicsApiOGL::setYourPSConstantBuffers(ConstantBuffer* constantBuffer,
                                            const uint32 startSlot,
                                            const uint32 numBuffers) {
+    if (nullptr == constantBuffer) {
+      throw new std::exception("Error, parametro nulo en set Your Pixel Shader Const Buff OGL");
+    }
+
     auto* cBuffer = reinterpret_cast<ConstantBufferOGL*>(constantBuffer);
 
     glBindBufferBase(GL_UNIFORM_BUFFER, startSlot,
                      cBuffer->m_uniformBufferObject);
-
-    uint32 detectError = glGetError();
-
-    if (detectError != 0) {
-      delete cBuffer;
-      exit(1);
-    }
   }
   
   void
@@ -886,15 +873,13 @@ namespace gaEngineSDK {
   
   void
   GraphicsApiOGL::setShaders(Shaders& shaders) {
+    if (nullptr == &shaders) {
+      throw new std::exception("Error, parametro nulo en set Shaders OGL");
+    }
+
     auto& shader = reinterpret_cast<ShadersOGL&>(shaders);
 
     glUseProgram(shader.m_rendererID);
-
-    uint32 detectError = glGetError();
-
-    if (detectError != 0) {
-      exit(1);
-    }
   }
 
   /***************************************************************************/

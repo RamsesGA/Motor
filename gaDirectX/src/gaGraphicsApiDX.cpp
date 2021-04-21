@@ -1,3 +1,5 @@
+#include <exception>
+
 #include "gaGraphicsApiDX.h"
 #include "gaConstantBufferDX.h"
 #include "gaTexturesDX.h"
@@ -96,11 +98,11 @@ namespace gaEngineSDK {
   
     //Liberar mis miembros del API
     // (SON LOS QUE TENGO DOMINIO PROPIO)
-    delete m_pd3dDevice;
+    //delete m_pd3dDevice;
   
-    delete m_pSwapChain;
+    //delete m_pSwapChain;
   
-    delete m_pImmediateContext;
+    //delete m_pImmediateContext;
   
     delete m_pDepthStencil;
   
@@ -164,7 +166,7 @@ namespace gaEngineSDK {
     for (uint32 driverTypeIndex = 0; driverTypeIndex < driverTypes.size(); driverTypeIndex++) {
       hr = D3D11CreateDeviceAndSwapChain(nullptr, driverTypes[driverTypeIndex],
                                          nullptr, createDeviceFlags,
-                                         featureLevels.data(), featureLevels.size(),
+                                         featureLevels.data(), (uint32)featureLevels.size(),
                                          D3D11_SDK_VERSION, &sd,
                                          &m_pSwapChain, &m_pd3dDevice,
                                          &featureLevel, &m_pImmediateContext);
@@ -342,6 +344,10 @@ namespace gaEngineSDK {
   void 
   GraphicsApiDX::updateConstantBuffer(const void* srcData,
                                       ConstantBuffer& updateDataCB) {
+    if (nullptr == &updateDataCB) {
+      throw new std::exception("Error, parametro nulo de Constant Buffer DX");
+    }
+
     auto& constantBuffer = reinterpret_cast<ConstantBufferDX&>(updateDataCB);
   
     m_pImmediateContext->UpdateSubresource(constantBuffer.m_pConstantBuffer, 0,
@@ -358,6 +364,10 @@ namespace gaEngineSDK {
   void 
   GraphicsApiDX::clearYourRenderTargetView(Textures* renderTarget,
                                            float r, float g, float b, float a) {
+    if (nullptr == renderTarget) {
+      throw new std::exception("Error, parametro nulo en Clear Render Target View DX");
+    }
+
     float ClearColor[4] = { r, g, b, a };
   
     auto* renderTGT = reinterpret_cast<TexturesDX*>(renderTarget);
@@ -368,6 +378,10 @@ namespace gaEngineSDK {
   
   void 
   GraphicsApiDX::clearYourDepthStencilView(Textures* depthStencil) {
+    if (nullptr == depthStencil) {
+      throw new std::exception("Error, parametro nulo en Clear Depth Stencil View DX");
+    }
+
     auto* depthSten = reinterpret_cast<TexturesDX*>(depthStencil);
   
     m_pImmediateContext->ClearDepthStencilView(depthSten->m_pDepthStencilView,
@@ -391,11 +405,11 @@ namespace gaEngineSDK {
   
     if (!(AnalyzeVertexShaderDX(nameVS))) {
       delete shaders;
-      return nullptr;
+      throw new std::exception("Error, no se encontro el archivo vertex shader DX");
     }
     if (!(AnalyzePixelShaderDX(namePS))) {
       delete shaders;
-      return nullptr;
+      throw new std::exception("Error, no se encontro el archivo pixel shader DX");
     }
   
     //Asignamos datos a las variables
@@ -408,7 +422,7 @@ namespace gaEngineSDK {
     //Checamos que todo salga bien, si no mandamos un error
     if (FAILED(hr)) {
       delete shaders;
-      return nullptr;
+      throw new std::exception("Error, no se compilo el shader DX");
     }
   
     //Creamos el pixel shader con la función de DX
@@ -421,7 +435,7 @@ namespace gaEngineSDK {
     //de no obtener un error
     if (FAILED(hr)) {
       delete shaders;
-      return nullptr;
+      throw new std::exception("Error, no se creo el pixel shader DX");
     }
   
     //Asignamos datos a las variables
@@ -433,7 +447,7 @@ namespace gaEngineSDK {
     //Checamos que todo salga bien, si no mandamos un error
     if (FAILED(hr)) {
       delete shaders;
-      return nullptr;
+      throw new std::exception("Error, no se compilo el shader DX");
     }
   
     //Creamos el vertex shader con la función de DX
@@ -445,7 +459,7 @@ namespace gaEngineSDK {
     if (FAILED(hr)) {
       shaders->m_pVSBlob->Release();
       delete shaders;
-      return nullptr;
+      throw new std::exception("Error, no se creo el vertex shader DX");
     }
   
     return shaders;
@@ -480,7 +494,7 @@ namespace gaEngineSDK {
   
         if (FAILED(hr)) {
           delete VB;
-          return nullptr;
+          throw new std::exception("Error, al crear el vertex buffer DX");
         }
   
         return VB;
@@ -490,7 +504,7 @@ namespace gaEngineSDK {
   
         if (FAILED(hr)) {
           delete VB;
-          return nullptr;
+          throw new std::exception("Error, al crear el vertex buffer DX");
         }
   
         return VB;
@@ -498,7 +512,7 @@ namespace gaEngineSDK {
     }
   
     delete VB;
-    return nullptr;
+    throw new std::exception("Error, al crear el vertex buffer DX");
   }
   
   IndexBuffer* 
@@ -537,7 +551,7 @@ namespace gaEngineSDK {
                                         &IB->m_pIndexBuffer);
         if (FAILED(hr)) {
           delete IB;
-          return nullptr;
+          throw new std::exception("Error, al crear el index buffer DX");
         }
         return IB;
       }
@@ -546,14 +560,14 @@ namespace gaEngineSDK {
   
         if (FAILED(hr)) {
           delete IB;
-          return nullptr;
+          throw new std::exception("Error, al crear el index buffer DX");
         }
         return IB;
       }
     }
   
     delete IB;
-    return nullptr;
+    throw new std::exception("Error, al crear el index buffer DX");
   }
   
   ConstantBuffer* 
@@ -576,7 +590,7 @@ namespace gaEngineSDK {
     //de no obtener un error
     if (FAILED(hr)) {
       delete constantBuffer;
-      return nullptr;
+      throw new std::exception("Error, al crear el constant buffer DX");
     }
   
     return constantBuffer;
@@ -666,6 +680,8 @@ namespace gaEngineSDK {
   
       return texture;
     }
+
+    return texture;
   }
   
   SamplerState* 
@@ -710,15 +726,17 @@ namespace gaEngineSDK {
   
     //Generamos la información del shader
     ID3D11ShaderReflection* pVertexShaderReflection = nullptr;
-  
+
+    if (nullptr == &vShader) {
+      throw new std::exception("Error, vShader nulo DX");
+    }
     if (FAILED(D3DReflect(vShader.m_pVSBlob->GetBufferPointer(),
                           vShader.m_pVSBlob->GetBufferSize(),
                           IID_ID3D11ShaderReflection,
                           (void**)&pVertexShaderReflection))) {
       delete inputLayout;
       pVertexShaderReflection->Release();
-      delete pVertexShaderReflection;
-      return nullptr;
+      throw new std::exception("Error, fallo en D3DReflect DX");
     }
   
     //Generamos una descriptor del shader
@@ -755,7 +773,6 @@ namespace gaEngineSDK {
       // DXGI_FORMAT_R32_SINT
       // DXGI_FORMAT_R32_FLOAT
       if (paramDesc.Mask == 1) {
-  
         if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) {
   
           elementDesc.Format = DXGI_FORMAT_R32_UINT;
@@ -774,7 +791,6 @@ namespace gaEngineSDK {
       // DXGI_FORMAT_R32G32_SINT
       // DXGI_FORMAT_R32G32_FLOAT
       else if (paramDesc.Mask <= 3) {
-  
         if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) {
   
           elementDesc.Format = DXGI_FORMAT_R32G32_UINT;
@@ -793,7 +809,6 @@ namespace gaEngineSDK {
       // DXGI_FORMAT_R32G32B32_SINT
       // DXGI_FORMAT_R32G32B32_FLOAT
       else if (paramDesc.Mask <= 7) {
-  
         if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) {
   
           elementDesc.Format = DXGI_FORMAT_R32G32B32_UINT;
@@ -812,7 +827,6 @@ namespace gaEngineSDK {
       // DXGI_FORMAT_R32G32B32A32_SINT
       // DXGI_FORMAT_R32G32B32A32_FLOAT
       else if (paramDesc.Mask <= 15) {
-  
         if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) {
   
           elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
@@ -834,7 +848,7 @@ namespace gaEngineSDK {
   
     //Creamos el input layout
     hr = m_pd3dDevice->CreateInputLayout(&inputLayoutDesc[0],
-                                         inputLayoutDesc.size(), 
+                                         (uint32)inputLayoutDesc.size(), 
                                          vShader.m_pVSBlob->GetBufferPointer(),
                                          vShader.m_pVSBlob->GetBufferSize(), 
                                          &inputLayout->m_pVertexLayout);
@@ -847,8 +861,7 @@ namespace gaEngineSDK {
     //Checamos que todo salga bien, si no mandamos un error
     if (FAILED(hr)) {
       delete inputLayout;
-      delete pVertexShaderReflection;
-      return nullptr;
+      throw new std::exception("Error, al crear el input layout DX");
     }
   
     //Registro de longitud de bytes
@@ -882,25 +895,27 @@ namespace gaEngineSDK {
   
   void 
   GraphicsApiDX::setVertexBuffer(VertexBuffer& vertexBuffer) {
+    if (nullptr == &vertexBuffer) {
+      throw new std::exception("Error, parametro nulo en set Vertex Buffer DX");
+    }
+
     auto& vBuffer = reinterpret_cast<VertexBufferDX&>(vertexBuffer);
   
     uint32 stride = sizeof(Vertex::E);
     uint32 offset = 0;
   
-    m_pImmediateContext->IASetVertexBuffers(0,
-                                            1,
-                                            &vBuffer.m_pVertexBuffer,
-                                            &stride,
-                                            &offset);
+    m_pImmediateContext->IASetVertexBuffers(0, 1, &vBuffer.m_pVertexBuffer, &stride, &offset);
   }
   
   void 
   GraphicsApiDX::setIndexBuffer(IndexBuffer& indexBuffer) {
+    if (nullptr == &indexBuffer) {
+      throw new std::exception("Error, parametro nulo en set Index Buffer DX");
+    }
+
     auto& iBuffer = reinterpret_cast<IndexBufferDX&>(indexBuffer);
   
-    m_pImmediateContext->IASetIndexBuffer(iBuffer.m_pIndexBuffer,
-                                          DXGI_FORMAT_R32_UINT,
-                                          0);
+    m_pImmediateContext->IASetIndexBuffer(iBuffer.m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
   }
   
   void 
@@ -923,13 +938,13 @@ namespace gaEngineSDK {
   void 
   GraphicsApiDX::setSamplerState(const uint32 startSlot,
                                  Vector<SamplerState*>& samplerState,
-                                 Textures& texture) {
+                                 Textures& ) {
   
     for (uint32 i = 0; i < samplerState.size(); i++) {
       auto* sState = reinterpret_cast<SamplerStateDX*>(samplerState[i]);
   
       m_pImmediateContext->PSSetSamplers(startSlot,
-                                         samplerState.size(),
+                                         (uint32)samplerState.size(),
                                          &sState->m_pSamplerState);
     }
   }
@@ -947,6 +962,11 @@ namespace gaEngineSDK {
   void
   GraphicsApiDX::setRenderTarget(Textures* renderTarget,
                                  Textures* depthStencil) {
+    if ((nullptr == &renderTarget) || 
+        (nullptr == &depthStencil)) {
+      throw new std::exception("Error, parametro nulo del SetRenderTarget DX");
+    }
+
     auto* dStencil = reinterpret_cast<TexturesDX*>(depthStencil);
     auto* rTarget = reinterpret_cast<TexturesDX*>(renderTarget);
   
@@ -965,6 +985,10 @@ namespace gaEngineSDK {
   
   void 
   GraphicsApiDX::setInputLayout(InputLayout& vertexLayout) {
+    if (nullptr == &vertexLayout) {
+      throw new std::exception("Error, parametro nulo en set Input Layout DX");
+    }
+
     auto& inputLayout = reinterpret_cast<InputLayoutDX&>(vertexLayout);
   
     m_pImmediateContext->IASetInputLayout(inputLayout.m_pVertexLayout);
@@ -1002,6 +1026,10 @@ namespace gaEngineSDK {
   GraphicsApiDX::setYourVSConstantBuffers(ConstantBuffer* constantBuffer,
                                           const uint32 startSlot,
                                           const uint32 numBuffers) {
+    if (nullptr == constantBuffer) {
+      throw new std::exception("Error, parametro nulo en set Your Const Buff DX");
+    }
+
     auto* cBuffer = reinterpret_cast<ConstantBufferDX*>(constantBuffer);
   
     m_pImmediateContext->VSSetConstantBuffers(startSlot, numBuffers,
@@ -1020,6 +1048,10 @@ namespace gaEngineSDK {
   GraphicsApiDX::setYourPSConstantBuffers(ConstantBuffer* constantBuffer,
                                           const uint32 startSlot,
                                           const uint32 numBuffers) {
+    if (nullptr == constantBuffer) {
+      throw new std::exception("Error, parametro nulo en set Your Pixel Shader Const Buff DX");
+    }
+
     auto* cBuffer = reinterpret_cast<ConstantBufferDX*>(constantBuffer);
   
     m_pImmediateContext->PSSetConstantBuffers(startSlot, numBuffers,
@@ -1038,13 +1070,15 @@ namespace gaEngineSDK {
   
   void
   GraphicsApiDX::setShaders(Shaders& shaders) {
+    if (nullptr == &shaders) {
+      throw new std::exception("Error, parametro nulo en set Shaders DX");
+    }
+
     auto& shader = reinterpret_cast<ShadersDX&>(shaders);
   
-    m_pImmediateContext->VSSetShader(shader.m_pVertexShader,
-                                     0, 0);
+    m_pImmediateContext->VSSetShader(shader.m_pVertexShader, 0, 0);
 
-    m_pImmediateContext->PSSetShader(shader.m_pPixelShader,
-                                     0, 0);
+    m_pImmediateContext->PSSetShader(shader.m_pPixelShader, 0, 0);
   }
 
   /***************************************************************************/

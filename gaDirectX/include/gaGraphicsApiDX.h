@@ -220,27 +220,27 @@ namespace gaEngineSDK {
       /*
       * @brief Member represents a virtual adapter.
       */
-      ID3D11Device* m_pd3dDevice;
+      ID3D11Device* m_pd3dDevice = nullptr;
 
       /*
       * @brief Member to implement one or more surfaces to store rendered data.
       */
-      IDXGISwapChain* m_pSwapChain;
+      IDXGISwapChain* m_pSwapChain = nullptr;
 
       /*
       * @brief Member to represent a device context that generates render commands.
       */
-      ID3D11DeviceContext* m_pImmediateContext;
+      ID3D11DeviceContext* m_pImmediateContext = nullptr;
 
       /*
       * @brief Member to store and access a texture resource during in-depth template testing.
       */
-      Textures* m_pDepthStencil;
+      Textures* m_pDepthStencil = nullptr;
 
       /*
       * @brief Member to store the default texture when creating the device.
       */
-      Textures* m_pBackBuffer;
+      Textures* m_pBackBuffer = nullptr;
   };
 
   /***************************************************************************/
