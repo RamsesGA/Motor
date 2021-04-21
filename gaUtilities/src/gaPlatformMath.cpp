@@ -14,6 +14,7 @@ namespace gaEngineSDK {
   const float PlatformMath::KINDA_SMALL_NUMBER = 1.e-4f;
   const float PlatformMath::BIG_NUMBER = 3.4e+38f;
   const float PlatformMath::DELTA = 1.e-5f;
+  const float PlatformMath::FOV = 0.78539816339f;
 
   /*************************************************************************/
   /**

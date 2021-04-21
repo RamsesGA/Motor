@@ -5,6 +5,9 @@
 #define D3D11
 //#define OGL
 
+void
+EXPECT_CAM(CameraDescriptor::E mainCamera);
+
 int32
 AppTest::onInit() {
 #ifdef D3D11
@@ -55,13 +58,15 @@ AppTest::onInitCamera(bool isOGL) {
 
   CameraDescriptor::E mainCamera;
   mainCamera.camLookAt = Vector3(0.0f, 1.0f, 0.0f);
-  mainCamera.camEye = Vector3(0.0f, 3.0f, -6.0f);
+  mainCamera.camEye = Vector3(0.0f, 0.0f, -12.0f);
   mainCamera.camUp = Vector3(0.0f, 1.0f, 0.0f);
-  mainCamera.camFar = 1000.0f;
+  mainCamera.camFar = 3000.0f;
   mainCamera.camNear = 0.01f;
-  mainCamera.camFoV = 0.78539816339f;
+  mainCamera.camFoV = Math::FOV;
   mainCamera.camHeight = m_height;
   mainCamera.camWidth = m_width;
+
+  EXPECT_CAM(mainCamera);
 
   m_mainCamera.init(mainCamera, isOGL);
 
@@ -86,6 +91,7 @@ AppTest::onUpdate(float ) {
   }
   catch (exception* e) {
     std::cout << "- - > " << e->what() << '\n';
+    exit(1);
   }
 }
 
@@ -128,6 +134,7 @@ AppTest::onRender() {
   }
   catch (exception* e) {
     std::cout << "- - > " << e->what() << '\n';
+    exit(1);
   }
   
   // Present our back buffer to our front buffer
@@ -150,6 +157,7 @@ AppTest::onCreate() {
   m_pDepthStencil = g_graphicApi().getDefaultDepthStencil();
 
   try {
+
 #ifdef D3D11
     //Creamos el vertex shader y pixel shader.
     m_pBothShaders = g_graphicApi().createShadersProgram(L"data/shaders/DX_CubeShader.fx", 
@@ -164,6 +172,7 @@ AppTest::onCreate() {
                                                          "main");
     onInitCamera(true);
 #endif
+
     //Creamos el input layout 
     m_pVertexLayout = g_graphicApi().createInputLayout(*m_pBothShaders);
 
@@ -179,15 +188,16 @@ AppTest::onCreate() {
   }
   catch (exception* e) {
     std::cout << "- - > " << e->what() << '\n';
+    exit(1);
   }
 
   try {
     m_model = new Model();
 
-    //m_model->init("data/models/POD/OBJ/POD.obj", &g_graphicApi());
-    //m_model->init("data/models/sonic/FBX/sonic.fbx", &g_graphicApi());
-    m_model->init("data/models/Nier2b/OBJ/Nier2b.obj", &g_graphicApi());
-    //m_model->init("data/models/ugandan/FBX/Knuckles.fbx", &g_graphicApi());
+    //m_model->init("data/models/2B/2B.obj", &g_graphicApi());
+    m_model->init("data/models/pod/POD.obj", &g_graphicApi());
+    //m_model->init("data/models/spartan/Spartan.fbx", &g_graphicApi());
+    //m_model->init("data/models/ugandan/Knuckles.fbx", &g_graphicApi());
   }
   catch (exception* e) {
     std::cout << "- - > " << e->what() << '\n';
@@ -242,4 +252,31 @@ AppTest::onMouseMove() {
 
     g_graphicApi().updateConstantBuffer(&cb, *m_pConstantBuffer1);
   }
+}
+
+/*****************************************************************************/
+/* 
+* EXPECT FUNCTIONS
+*/
+/*****************************************************************************/
+
+void
+EXPECT_CAM(CameraDescriptor::E mainCamera) {
+  EXPECT_FLOAT_EQ(mainCamera.camLookAt.m_x, 0.0f);
+  EXPECT_FLOAT_EQ(mainCamera.camLookAt.m_y, 1.0f);
+  EXPECT_FLOAT_EQ(mainCamera.camLookAt.m_z, 0.0f);
+
+  EXPECT_FLOAT_EQ(mainCamera.camEye.m_x, 0.0f);
+  EXPECT_FLOAT_EQ(mainCamera.camEye.m_y, 0.0f);
+  EXPECT_FLOAT_EQ(mainCamera.camEye.m_z, -12.0f);
+
+  EXPECT_FLOAT_EQ(mainCamera.camUp.m_x, 0.0f);
+  EXPECT_FLOAT_EQ(mainCamera.camUp.m_y, 1.0f);
+  EXPECT_FLOAT_EQ(mainCamera.camUp.m_z, 0.0f);
+
+  EXPECT_FLOAT_EQ(mainCamera.camFar, 3000.0f);
+
+  EXPECT_FLOAT_EQ(mainCamera.camNear, 0.01f);
+
+  EXPECT_FLOAT_EQ(mainCamera.camFoV, 0.78539816339f);
 }

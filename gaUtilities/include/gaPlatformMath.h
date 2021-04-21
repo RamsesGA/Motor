@@ -167,5 +167,6 @@ namespace gaEngineSDK {
       static const float KINDA_SMALL_NUMBER;
       static const float BIG_NUMBER;
       static const float DELTA;
+      static const float FOV;
   };
 }
