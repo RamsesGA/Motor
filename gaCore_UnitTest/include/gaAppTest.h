@@ -46,7 +46,7 @@ class AppTest : public BaseApp
     onInitCamera(bool isOGL = false);
 
     void
-   onUpdate(float deltaTime)override;
+    onUpdate(float deltaTime)override;
 
     void
     onRender()override;
@@ -128,4 +128,9 @@ class AppTest : public BaseApp
     */
     ConstantBuffer* m_pConstantBuffer1 = nullptr;
     ConstantBuffer* m_pConstantBuffer2 = nullptr;
+
+    /*
+    * @brief Variable with the sampler state.
+    */
+
 };

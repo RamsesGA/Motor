@@ -8,7 +8,7 @@
 #include "gaShadersDX.h"
 #include "gaVertexBufferDX.h"
 #include "gaIndexBufferDX.h"
-//#include <stb_image.h>
+#include "stb_image.h"
 
 namespace gaEngineSDK {
   HRESULT 
@@ -270,67 +270,73 @@ namespace gaEngineSDK {
   Textures* 
   GraphicsApiDX::loadTextureFromFile(String srcFile) {
   
-    auto* texture = new TexturesDX();
-    return texture;
-    //int width;
-    //int height;
-    //int components;
-    //unsigned char* data = stbi_load(srcFile.c_str(),
-    //                                &width, &height, &components, 0);
-    //if (!data) {
-    //  return nullptr;
-    //}
     //auto* texture = new TexturesDX();
-    //D3D11_TEXTURE2D_DESC desc;
-    //ZeroMemory(&desc, sizeof(desc));
-    //desc.Width = width;
-    //desc.Height = height;
-    //desc.MipLevels = 1;
-    //desc.ArraySize = 1;
-    //desc.SampleDesc.Count = 1;
-    //desc.SampleDesc.Quality = 0;
-    //desc.Usage = D3D11_USAGE_DEFAULT;
-    //desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-    //desc.MiscFlags = 0;
-    //if (1 == components) {
-    //  desc.Format = DXGI_FORMAT_R16_FLOAT;
-    //}
-    //else if (2 == components) {
-    //  desc.Format = DXGI_FORMAT_R16G16_FLOAT;
-    //}
-    //else if (3 == components) {
-    //  desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
-    //}
-    //else if (4 == components) {
-    //  desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
-    //}
-    ///Texture data
-    //D3D11_SUBRESOURCE_DATA initData;
-    //ZeroMemory(&initData, sizeof(initData));
-    //initData.pSysMem = data;
-    //initData.SysMemPitch = 1;
-    //if (FAILED(m_pd3dDevice->CreateTexture2D(&desc,
-    //  &initData,
-    //  &texture->m_pTexture))) {
-    //  delete texture;
-    //  stbi_image_free(data);
-    //  return nullptr;
-    //}
-    ///Shader resource data
-    //D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc;
-    //ZeroMemory(&viewDesc, sizeof(viewDesc));
-    //viewDesc.Format = desc.Format;
-    //viewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-    //viewDesc.Texture2D.MostDetailedMip = 0;
-    //viewDesc.Texture2D.MipLevels = 1;
-    //if (FAILED(m_pd3dDevice->CreateShaderResourceView(texture->m_pTexture,
-    //  &viewDesc,
-    //  &texture->m_pShaderResourceView))) {
-    //  delete texture;
-    //  stbi_image_free(data);
-    //  return nullptr;
-    //}
     //return texture;
+
+    int32 width;
+    int32 height;
+    int32 components;
+
+    unsigned char* data = stbi_load(srcFile.c_str(),
+                                    &width, &height, &components, 0);
+    if (!data) {
+      return nullptr;
+    }
+
+    auto* texture = new TexturesDX();
+    D3D11_TEXTURE2D_DESC desc;
+    ZeroMemory(&desc, sizeof(desc));
+    desc.Width = width;
+    desc.Height = height;
+    desc.MipLevels = 1;
+    desc.ArraySize = 1;
+    desc.SampleDesc.Count = 1;
+    desc.SampleDesc.Quality = 0;
+    desc.Usage = D3D11_USAGE_DEFAULT;
+    desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+    desc.MiscFlags = 0;
+
+    if (1 == components) {
+      desc.Format = DXGI_FORMAT_R16_FLOAT;
+    }
+    else if (2 == components) {
+      desc.Format = DXGI_FORMAT_R16G16_FLOAT;
+    }
+    else if (3 == components) {
+      desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
+    }
+    else if (4 == components) {
+      desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
+    }
+
+    //Texture data
+    D3D11_SUBRESOURCE_DATA initData;
+    ZeroMemory(&initData, sizeof(initData));
+    initData.pSysMem = data;
+    initData.SysMemPitch = 1;
+
+    if (FAILED(m_pd3dDevice->CreateTexture2D(&desc, &initData, &texture->m_pTexture))) {
+      delete texture;
+      stbi_image_free(data);
+      return nullptr;
+    }
+
+    //Shader resource data
+    D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc;
+    ZeroMemory(&viewDesc, sizeof(viewDesc));
+    viewDesc.Format = desc.Format;
+    viewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+    viewDesc.Texture2D.MostDetailedMip = 0;
+    viewDesc.Texture2D.MipLevels = 1;
+
+    if (FAILED(m_pd3dDevice->CreateShaderResourceView(texture->m_pTexture, &viewDesc, 
+                                                      &texture->m_pShaderResourceView))) {
+      delete texture;
+      stbi_image_free(data);
+      return nullptr;
+    }
+
+    return texture;
   }
   
   void GraphicsApiDX::unbindOGL() {}

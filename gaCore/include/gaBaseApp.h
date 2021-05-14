@@ -39,7 +39,6 @@ namespace gaEngineSDK {
       run(String windowTitle, int32 sizeX = 1440, int32 sizeY = 900);
 
     protected:
-
       /*
       * @param Create the information for the window.
       */
@@ -47,64 +46,10 @@ namespace gaEngineSDK {
       createWindow(String windowTitle);
 
       /*
-      * @param Command to call the onInit function.
-      */
-      void
-      init();
-
-      /*
-      * @param Command to call the onUpdate function.
-      */
-      void
-      update(float deltaTime);
-
-      /*
-      * @param Command to call the onRender function.
-      */
-      void
-      render();
-
-      /*
-      * @param Command to call the onCreate function.
-      */
-      void
-      create();
-
-      /*
-      * @param Command to call the onDestroySystem function.
-      */
-      void
-      destroySystem();
-
-      /*
       * @param Command to call the onResize function.
       */
       void
       resize(int32 width, int32 height);
-
-      /*
-      * @param Command to call the onKeyboardDown function.
-      */
-      void
-      keyboardDown(sf::Event param);
-
-      /*
-      * @param Command to call the onLeftMouseBtnDown function.
-      */
-      void
-      leftMouseBtnDown();
-
-      /*
-      * @param Command to call the onLeftMouseBtnUp function.
-      */
-      void
-      leftMouseBtnUp();
-
-      /*
-      * @param Command to call the onMouseMove function.
-      */
-      void
-      mouseMove();
 
       /***********************************************************************/
       /*

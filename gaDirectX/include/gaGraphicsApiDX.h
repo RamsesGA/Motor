@@ -1,5 +1,7 @@
 #pragma once
 
+#define STB_IMAGE_IMPLEMENTATION
+
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <d3d11shader.h>

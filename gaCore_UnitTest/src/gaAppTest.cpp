@@ -25,8 +25,8 @@ AppTest::onInit() {
 
   using fnProt = GraphicsApi * (*)();
 
-  fnProt graphicsApiFunc = reinterpret_cast<fnProt>
-    (GetProcAddress(hInstance, "createGraphicApi"));
+  fnProt graphicsApiFunc = reinterpret_cast<fnProt>(GetProcAddress
+                                                   (hInstance, "createGraphicApi"));
 
   //In case of error
   if (!(graphicsApiFunc)) {
@@ -185,6 +185,9 @@ AppTest::onCreate() {
     //Creamos los constant buffers para el shader
     m_pConstantBuffer1 = g_graphicApi().createConstantBuffer(sizeof(ConstantBuffer1::E));
     m_pConstantBuffer2 = g_graphicApi().createConstantBuffer(sizeof(ConstantBuffer2::E));
+
+    //Creamos el sampler state
+
   }
   catch (exception* e) {
     std::cout << "- - > " << e->what() << '\n';

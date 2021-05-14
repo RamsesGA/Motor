@@ -10,9 +10,9 @@ namespace gaEngineSDK {
 
     createWindow(windowTitle);
     
-    init();
+    onInit();
 
-    create();
+    onCreate();
     
     sf::Clock deltaTime;
     float trueDeltaTime = 0.0f;
@@ -27,23 +27,23 @@ namespace gaEngineSDK {
         }
 
         if (event.type == sf::Event::KeyPressed) {
-          keyboardDown(event);
+          onKeyboardDown(event);
         }
 
         if (event.type == sf::Event::MouseButtonPressed) {
           if (sf::Mouse::Left == event.key.code) {
-            leftMouseBtnDown();
+            onLeftMouseBtnDown();
           }
         }
 
         if (event.type == sf::Event::MouseButtonReleased) {
           if (sf::Mouse::Left == event.key.code) {
-            leftMouseBtnUp();
+            onLeftMouseBtnUp();
           }
         }
 
         if (event.type == sf::Event::MouseMoved) {
-          mouseMove();
+          onMouseMove();
         }
       }
 
@@ -51,10 +51,11 @@ namespace gaEngineSDK {
     
       deltaTime.restart();
     
-      update(trueDeltaTime);
-      render();
+      onUpdate(trueDeltaTime);
+      onRender();
     }
-    destroySystem();
+
+    onDestroySystem();
     
     return 0;
   }
@@ -70,56 +71,5 @@ namespace gaEngineSDK {
   }
 
   void 
-  BaseApp::init() {
-    onInit();
-
-    //sf::RenderWindow* window;
-
-    //window;
-
-    //ImGui::SFML::Init(&m_sfmlWindow, window);
-  }
-
-  void 
-  BaseApp::update(float deltaTime) {
-    onUpdate(deltaTime);
-  }
-
-  void 
-  BaseApp::render() {
-    onRender();
-  }
-
-  void
-  BaseApp::create() {
-    onCreate();
-  }
-
-  void
-  BaseApp::destroySystem() {
-    onDestroySystem();
-  }
-
-  void 
   BaseApp::resize(int32 , int32 ) { }
-
-  void 
-  BaseApp::keyboardDown(sf::Event param) {
-    onKeyboardDown(param);
-  }
-
-  void 
-  BaseApp::leftMouseBtnDown() {
-    onLeftMouseBtnDown();
-  }
-
-  void 
-  BaseApp::leftMouseBtnUp() {
-    onLeftMouseBtnUp();
-  }
-
-  void 
-  BaseApp::mouseMove() {
-    onMouseMove();
-  }
 }

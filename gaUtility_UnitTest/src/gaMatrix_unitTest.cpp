@@ -480,12 +480,12 @@ TEST(gaUtilities, Matrix_4x4_Tests) {
   Vector3 right;
 
   /*
-   *   0     1       2      3
-   0- 1.0f, 5.0f,  9.0f,  13.0f,
-   1- 2.0f, 6.0f,  10.0f, 14.0f,
-   2- 3.0f, 7.0f,  11.0f, 15.0f,
-   3- 4.0f, 8.0f,  12.0f, 16.0f
-   */
+  *   0     1       2      3
+  0- 1.0f, 5.0f,  9.0f,  13.0f,
+  1- 2.0f, 6.0f,  10.0f, 14.0f,
+  2- 3.0f, 7.0f,  11.0f, 15.0f,
+  3- 4.0f, 8.0f,  12.0f, 16.0f
+  */
   right = testMat4.matrixData3(0);
   EXPECT_FLOAT_EQ(right.m_x, 1.0f);
   EXPECT_FLOAT_EQ(right.m_y, 5.0f);

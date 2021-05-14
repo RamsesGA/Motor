@@ -84,7 +84,7 @@ namespace gaEngineSDK {
            typename V,
            typename P = std::less<K>,
            typename A = std::allocator<std::pair<const K, V>>>
-    using Map = std::map<K, V, P, A>;
+  using Map = std::map<K, V, P, A>;
 
   /**
   * @brief
@@ -98,7 +98,7 @@ namespace gaEngineSDK {
   template<typename T,
            typename P = std::less<T>,
            typename A = std::allocator<T>>
-    using Set = std::set<T, P, A>;
+  using Set = std::set<T, P, A>;
 
   /**
   * @brief
@@ -113,17 +113,38 @@ namespace gaEngineSDK {
   using Vector = std::vector<T, A>;
 
   /**
-  * @brief basic_string<char, char_traits<char>, allocator<char>>;
+  * @brief
+  */
+  template<typename T, typename D = std::default_delete<T>>
+  using SPtr = std::unique_ptr<T, D>;
+  
+  /**
+  * @brief 
   */
   using String = std::string;
 
+  /**
+  * @brief
+  */
   using WString = std::wstring;
 
+  /**
+  * @brief
+  */
   using IfStream = std::ifstream;
 
+  /**
+  * @brief
+  */
   using FStream = std::fstream;
 
+  /**
+  * @brief
+  */
   using OfStream = std::ofstream;
 
+  /**
+  * @brief
+  */
   using StrStream = std::stringstream;
 }

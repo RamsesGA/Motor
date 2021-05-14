@@ -16,6 +16,12 @@
     <Filter Include="Archivos de origen\Models">
       <UniqueIdentifier>{bc3eb5b7-539c-4996-b48c-bd712aad007f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\SceneGraph">
+      <UniqueIdentifier>{bf415c7d-1ffc-43d0-acbb-6621eb306de8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\GameObject">
+      <UniqueIdentifier>{5bc608e3-4838-4c74-8416-3ebf351a3aab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gaConstantBuffer.h">
@@ -58,6 +64,15 @@
     <ClInclude Include="include\gaStructures.h">
       <Filter>Archivos de origen\Models</Filter>
     </ClInclude>
+    <ClInclude Include="include\stb_image.h">
+      <Filter>Archivos de origen\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaSceneGraph.h">
+      <Filter>Archivos de origen\SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaGameObject.h">
+      <Filter>Archivos de origen\GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gaBaseApp.cpp">
@@ -74,6 +89,9 @@
     </ClCompile>
     <ClCompile Include="src\gaMesh.cpp">
       <Filter>Archivos de origen\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaSceneGraph.cpp">
+      <Filter>Archivos de origen\SceneGraph</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
