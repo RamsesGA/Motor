@@ -5,7 +5,7 @@ namespace gaEngineSDK
   void 
   SceneGraph::onInit() {
     GameObject* root = new GameObject();
-
+    root->setLayer();
   }
 
   void 
@@ -18,6 +18,8 @@ namespace gaEngineSDK
 
   SPtr<GameObject> 
   SceneGraph::createNewGameObj() {
-    return SPtr<GameObject>();
+    GameObject* gameObj = new GameObject();
+    gameObj->setLayer();
+    return nullptr;
   }
 }

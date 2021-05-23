@@ -113,6 +113,109 @@ namespace gaEngineSDK {
     return matrixData.at(index);
   }
 
+  void 
+  Matrix4x4::RotationX(float speedRotation) {
+    m_mat4x4[0][0] = 1.0f;
+    m_mat4x4[1][0] = 0.0f;
+    m_mat4x4[2][0] = 0.0f;
+    m_mat4x4[3][0] = 0.0f;
+
+    m_mat4x4[0][1] = 0.0f;
+    m_mat4x4[1][1] = cosf(speedRotation);
+    m_mat4x4[2][1] = sinf(speedRotation);
+    m_mat4x4[3][1] = 0.0f;
+
+    m_mat4x4[0][2] = 0.0f;
+    m_mat4x4[1][2] = -sinf(speedRotation);
+    m_mat4x4[2][2] = cosf(speedRotation);
+    m_mat4x4[3][2] = 0.0f;
+
+    m_mat4x4[0][3] = 0.0f;
+    m_mat4x4[1][3] = 0.0f;
+    m_mat4x4[2][3] = 0.0f;
+    m_mat4x4[3][3] = 1.0f;
+  }
+
+  void
+  Matrix4x4::RotationY(float speedRotation) {
+    m_mat4x4[0][0] = cosf(speedRotation);
+    m_mat4x4[1][0] = 0.0f;
+    m_mat4x4[2][0] = -sinf(speedRotation);
+    m_mat4x4[3][0] = 0.0f;
+
+    m_mat4x4[0][1] = 0.0f;
+    m_mat4x4[1][1] = 1.0f;
+    m_mat4x4[2][1] = 0.0f;
+    m_mat4x4[3][1] = 0.0f;
+
+    m_mat4x4[0][2] = sinf(speedRotation);
+    m_mat4x4[1][2] = 0.0f;
+    m_mat4x4[2][2] = cosf(speedRotation);
+    m_mat4x4[3][2] = 0.0f;
+
+    m_mat4x4[0][3] = 0.0f;
+    m_mat4x4[1][3] = 0.0f;
+    m_mat4x4[2][3] = 0.0f;
+    m_mat4x4[3][3] = 1.0f;
+  }
+
+  void
+  Matrix4x4::RotationZ(float speedRotation) {
+    m_mat4x4[0][0] = cosf(speedRotation);
+    m_mat4x4[1][0] = sinf(speedRotation);
+    m_mat4x4[2][0] = 0.0f;
+    m_mat4x4[3][0] = 0.0f;
+
+    m_mat4x4[0][1] = -sinf(speedRotation);
+    m_mat4x4[1][1] = cosf(speedRotation);
+    m_mat4x4[2][1] = 0.0f;
+    m_mat4x4[3][1] = 0.0f;
+
+    m_mat4x4[0][2] = 0.0f; m_mat4x4[0][3] = 0.0f;
+    m_mat4x4[1][2] = 0.0f; m_mat4x4[1][3] = 0.0f;
+    m_mat4x4[2][2] = 1.0f; m_mat4x4[2][3] = 0.0f;
+    m_mat4x4[3][2] = 0.0f; m_mat4x4[3][3] = 1.0f;
+  }
+
+  void
+  Matrix4x4::calculateAxis(Vector3 right, Vector3 up, Vector3 front) {
+    m_mat4x4[0][0] = right.m_x; m_mat4x4[0][1] = right.m_y;
+    m_mat4x4[1][0] = up.m_x;    m_mat4x4[1][1] = up.m_y;
+    m_mat4x4[2][0] = front.m_x; m_mat4x4[2][1] = front.m_y;
+    m_mat4x4[3][0] = 0.0f;      m_mat4x4[3][1] = 0.0f;
+
+    m_mat4x4[0][2] = right.m_z; m_mat4x4[0][3] = 0.0f;
+    m_mat4x4[1][2] = up.m_z;    m_mat4x4[1][3] = 0.0f;
+    m_mat4x4[2][2] = front.m_z; m_mat4x4[2][3] = 0.0f;
+    m_mat4x4[3][2] = 0.0f;      m_mat4x4[3][3] = 1.0f;
+  }
+
+  void
+  Matrix4x4::calculatePosition(Vector3 eye) {
+    m_mat4x4[0][0] = 1.0f; m_mat4x4[0][1] = 0.0f;
+    m_mat4x4[1][0] = 0.0f; m_mat4x4[1][1] = 1.0f;
+    m_mat4x4[2][0] = 0.0f; m_mat4x4[2][1] = 0.0f;
+    m_mat4x4[3][0] = 0.0f; m_mat4x4[3][1] = 0.0f;
+
+    m_mat4x4[0][2] = 0.0f; m_mat4x4[0][3] = -eye.m_x;
+    m_mat4x4[1][2] = 0.0f; m_mat4x4[1][3] = -eye.m_y;
+    m_mat4x4[2][2] = 1.0f; m_mat4x4[2][3] = -eye.m_z;
+    m_mat4x4[3][2] = 0.0f; m_mat4x4[3][3] = 1.0f;
+  }
+
+  void
+  Matrix4x4::identity() {
+    m_mat4x4[0][0] = 1.0f; m_mat4x4[0][1] = 0.0f;
+    m_mat4x4[1][0] = 0.0f; m_mat4x4[1][1] = 1.0f;
+    m_mat4x4[2][0] = 0.0f; m_mat4x4[2][1] = 0.0f;
+    m_mat4x4[3][0] = 0.0f; m_mat4x4[3][1] = 0.0f;
+
+    m_mat4x4[0][2] = 0.0f; m_mat4x4[0][3] = 0.0f;
+    m_mat4x4[1][2] = 0.0f; m_mat4x4[1][3] = 0.0f;
+    m_mat4x4[2][2] = 1.0f; m_mat4x4[2][3] = 0.0f;
+    m_mat4x4[3][2] = 0.0f; m_mat4x4[3][3] = 1.0f;
+  }
+
   /*************************************************************************/
   /**
   * Operators overloads.
@@ -236,8 +339,6 @@ namespace gaEngineSDK {
     return result;
   }
 
-
-
   /*************************************************************************/
   /**
   * Gets.
@@ -253,4 +354,5 @@ namespace gaEngineSDK {
   Matrix4x4::getColumns() const {
     return 4;
   }
+
 }

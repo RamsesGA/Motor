@@ -22,6 +22,15 @@
     <Filter Include="Archivos de origen\GameObject">
       <UniqueIdentifier>{5bc608e3-4838-4c74-8416-3ebf351a3aab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\ResourceManager">
+      <UniqueIdentifier>{701073ee-70cd-4d20-8ca2-40ccbf8edaa4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Resource">
+      <UniqueIdentifier>{ba02ce8c-7d7d-40f4-9d88-24e8d7ff29b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Transform">
+      <UniqueIdentifier>{1639ff69-95ae-4585-9362-65f9ea5c49f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gaConstantBuffer.h">
@@ -73,6 +82,18 @@
     <ClInclude Include="include\gaGameObject.h">
       <Filter>Archivos de origen\GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="include\gaResourceManager.h">
+      <Filter>Archivos de origen\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaResource.h">
+      <Filter>Archivos de origen\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaRenderModels.h">
+      <Filter>Archivos de origen\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaTransform.h">
+      <Filter>Archivos de origen\Transform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gaBaseApp.cpp">
@@ -92,6 +113,21 @@
     </ClCompile>
     <ClCompile Include="src\gaSceneGraph.cpp">
       <Filter>Archivos de origen\SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaGameObject.cpp">
+      <Filter>Archivos de origen\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaResourceManager.cpp">
+      <Filter>Archivos de origen\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaResource.cpp">
+      <Filter>Archivos de origen\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaRenderModels.cpp">
+      <Filter>Archivos de origen\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaTransform.cpp">
+      <Filter>Archivos de origen\Transform</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

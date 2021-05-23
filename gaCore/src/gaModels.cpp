@@ -5,7 +5,7 @@
 
 namespace gaEngineSDK {
 
-  void 
+  void
   Model::init(String const& path, GraphicsApi* pGraphicApi) {
     //Read _file via assimp
     Assimp::Importer importer;

@@ -5,9 +5,6 @@
 #define D3D11
 //#define OGL
 
-void
-EXPECT_CAM(CameraDescriptor::E mainCamera);
-
 int32
 AppTest::onInit() {
 #ifdef D3D11
@@ -48,13 +45,7 @@ AppTest::onInit() {
 void
 AppTest::onInitCamera(bool isOGL) {
   //Inicializamos la matriz de identidad
-  m_world =
-  {
-    1,0,0,0,
-    0,1,0,0,
-    0,0,1,0,
-    0,0,0,1
-  };
+  m_world.identity();
 
   CameraDescriptor::E mainCamera;
   mainCamera.camLookAt = Vector3(0.0f, 1.0f, 0.0f);
@@ -66,13 +57,7 @@ AppTest::onInitCamera(bool isOGL) {
   mainCamera.camHeight = m_height;
   mainCamera.camWidth = m_width;
 
-  EXPECT_CAM(mainCamera);
-
   m_mainCamera.init(mainCamera, isOGL);
-
-  EXPECT_NEAR(m_mainCamera.getProjection().matrixData3(0).m_x, 1.5000f, Math::BIG_NUMBER);
-  EXPECT_NEAR(m_mainCamera.getProjection().matrixData3(1).m_y, 2.4142f, Math::BIG_NUMBER);
-  EXPECT_NEAR(m_mainCamera.getProjection().matrixData3(2).m_z, 1.0000f, Math::BIG_NUMBER);
 }
 
 void
@@ -255,31 +240,4 @@ AppTest::onMouseMove() {
 
     g_graphicApi().updateConstantBuffer(&cb, *m_pConstantBuffer1);
   }
-}
-
-/*****************************************************************************/
-/* 
-* EXPECT FUNCTIONS
-*/
-/*****************************************************************************/
-
-void
-EXPECT_CAM(CameraDescriptor::E mainCamera) {
-  EXPECT_FLOAT_EQ(mainCamera.camLookAt.m_x, 0.0f);
-  EXPECT_FLOAT_EQ(mainCamera.camLookAt.m_y, 1.0f);
-  EXPECT_FLOAT_EQ(mainCamera.camLookAt.m_z, 0.0f);
-
-  EXPECT_FLOAT_EQ(mainCamera.camEye.m_x, 0.0f);
-  EXPECT_FLOAT_EQ(mainCamera.camEye.m_y, 0.0f);
-  EXPECT_FLOAT_EQ(mainCamera.camEye.m_z, -12.0f);
-
-  EXPECT_FLOAT_EQ(mainCamera.camUp.m_x, 0.0f);
-  EXPECT_FLOAT_EQ(mainCamera.camUp.m_y, 1.0f);
-  EXPECT_FLOAT_EQ(mainCamera.camUp.m_z, 0.0f);
-
-  EXPECT_FLOAT_EQ(mainCamera.camFar, 3000.0f);
-
-  EXPECT_FLOAT_EQ(mainCamera.camNear, 0.01f);
-
-  EXPECT_FLOAT_EQ(mainCamera.camFoV, 0.78539816339f);
 }

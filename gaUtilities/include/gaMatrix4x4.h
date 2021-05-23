@@ -53,11 +53,7 @@ namespace gaEngineSDK {
       transpose();
       
       Matrix4x4
-      perspectiveFovLH(float FOV,
-                       float width,
-                       float height,
-                       float near,
-                       float far);
+      perspectiveFovLH(float FOV, float width, float height, float near, float far);
 
       /**
       * @brief Obtain a vector with the values of the matrix.
@@ -65,6 +61,42 @@ namespace gaEngineSDK {
       */
       Vector3
       matrixData3(uint32 index);
+
+      /*
+      * @brief Calculates x-axis rotation.
+      */
+      void
+      RotationX(float speedRotation);
+
+      /*
+      * @brief Calculates y-axis rotation.
+      */
+      void
+      RotationY(float speedRotation);
+
+      /*
+      * @brief Calculates z-axis rotation.
+      */
+      void
+      RotationZ(float speedRotation);
+
+      /*
+      * @brief Calculates the axis with three vector.
+      */
+      void
+      calculateAxis(Vector3 right, Vector3 up, Vector3 front);
+
+      /*
+      * @brief Calculates the position with the eye.
+      */
+      void
+      calculatePosition(Vector3 eye);
+
+      /**
+      * @brief Returns a identity matrix.
+      */
+      void
+      identity();
       
       /***********************************************************************/
       /**

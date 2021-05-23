@@ -7,12 +7,13 @@
 
 #include "gaPrerequisitesCore.h"
 #include "gaMesh.h"
+#include "gaResource.h"
 
 namespace gaEngineSDK {
 
   class Textures;
 
-  class GA_CORE_EXPORT Model
+  class GA_CORE_EXPORT Model : public Resource
   {
     public:
       /***********************************************************************/
@@ -22,8 +23,37 @@ namespace gaEngineSDK {
       /***********************************************************************/
       Model() = default;
 
-      virtual 
       ~Model() = default;
+
+      /***********************************************************************/
+      /*
+      * Herency methods.
+      */
+      /***********************************************************************/
+
+      /*
+      * @brief
+      */
+      void
+      onInit() override {};
+
+      /*
+      * @brief
+      */
+      void
+      onUpdate(const float& deltaTime) override {};
+
+      /*
+      * @brief
+      */
+      void
+      onDelete() override {};
+
+      /*
+      * @brief
+      */
+      void
+      onRelease() override {};
 
       /***********************************************************************/
       /*

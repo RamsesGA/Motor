@@ -1,5 +1,7 @@
 #pragma once
 
+#include "gaResource.h"
+
 /**
   * @brief Enum with all numbers with the type of bind flag for DX.
   */
@@ -121,7 +123,8 @@ namespace TEXTURE_FORMAT {
 }
 
 namespace gaEngineSDK {
-	class Textures
+
+	class Textures : public Resource
 	{
 	  public:
 	  	/***********************************************************************/
@@ -131,7 +134,36 @@ namespace gaEngineSDK {
 	  	/***********************************************************************/
 			Textures() = default;
 
-			virtual 
       ~Textures() = default;
+
+      /***********************************************************************/
+      /**
+      * Heredetary methods.
+      */
+      /***********************************************************************/
+
+      /*
+      * @brief
+      */
+      void
+      onInit() override {};
+
+      /*
+      * @brief
+      */
+      void
+      onUpdate(const float& deltaTime) override {};
+
+      /*
+      * @brief
+      */
+      void
+      onDelete() override {};
+
+      /*
+      * @brief
+      */
+      void
+      onRelease() override {};
 	};
 }

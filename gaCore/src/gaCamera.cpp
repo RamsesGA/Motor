@@ -3,9 +3,7 @@
 namespace gaEngineSDK {
   
   void
-  Camera::init(CameraDescriptor::E cameraDesc,
-  	           bool isOGL) {
-
+  Camera::init(CameraDescriptor::E cameraDesc, bool isOGL) {
 	  m_isOGL = isOGL;
 	  
 		m_cameraDesc.camUp     = cameraDesc.camUp;
@@ -60,22 +58,10 @@ namespace gaEngineSDK {
     float speedrot = 0.10f;
 
     if (sf::Keyboard::Up == param.key.code) {
-      rotation =
-      {
-        1,	0,				0,					0,
-        0,	cosf(speedrot),	-sinf(speedrot),	0,
-        0,	sinf(speedrot),	cosf(speedrot),		0,
-        0,	0,				0,					1
-      };
+      rotation.RotationX(speedrot);
     }
     else if (sf::Keyboard::Down == param.key.code) {
-      rotation =
-      {
-        1,	0,					0,					0,
-        0,	cosf(-speedrot),	-sinf(-speedrot),	0,
-        0,	sinf(-speedrot),	cosf(-speedrot),	0,
-        0,	0,					0,					1
-      };
+      rotation.RotationX(-speedrot);
     }
 
     m_view = m_view * rotation;
@@ -90,22 +76,10 @@ namespace gaEngineSDK {
     float speedrot = 0.10f;
 
     if (sf::Keyboard::Right == param.key.code) {
-      rotation =
-      {
-        cosf(speedrot),	-sinf(speedrot), 0,	0,
-        sinf(speedrot),	cosf(speedrot),	 0,	0,
-        0,				      0,					     1,	0,
-        0,				      0,					     0,	1
-      };
+      rotation.RotationZ(-speedrot);
     }
     else if (sf::Keyboard::Left == param.key.code) {
-      rotation =
-      {
-        cosf(-speedrot),	-sinf(-speedrot),	0, 0,
-        sinf(-speedrot),	cosf(-speedrot),	0, 0,
-        0,				        0,							  1, 0,
-        0,				        0,							  0, 1
-      };
+      rotation.RotationZ(speedrot);
     }
 
     m_view = m_view * rotation;
@@ -120,22 +94,10 @@ namespace gaEngineSDK {
     float speedrot = 0.10f;
 
     if (sf::Keyboard::Z == param.key.code) {
-      rotation =
-      {
-        cosf(speedrot),  0,	sinf(speedrot),	0,
-        0,					     1,	0,				      0,
-        -sinf(speedrot), 0,	cosf(speedrot),	0,
-        0,					     0,	0,				      1
-      };
+      rotation.RotationY(speedrot);
     }
     else if (sf::Keyboard::C == param.key.code) {
-      rotation =
-      {
-        cosf(-speedrot),  0,	sinf(-speedrot), 0,
-        0,						    1,	0,					     0,
-        -sinf(-speedrot), 0,	cosf(-speedrot), 0,
-        0,						    0,	0,					     1
-      };
+      rotation.RotationY(-speedrot);
     }
 
     m_view = m_view * rotation;
@@ -164,21 +126,9 @@ namespace gaEngineSDK {
   		m_cameraDesc.camEye -= m_up;
   	}
   
-  	m_axis =
-  	{
-  		m_right.m_x,	m_right.m_y,	m_right.m_z,	0,
-  		m_up.m_x,		  m_up.m_y,		  m_up.m_z,		  0,
-  		m_front.m_x,	m_front.m_y,	m_front.m_z,	0,
-  		0,			      0,			      0,			      1
-  	};
+    m_axis.calculateAxis(m_right, m_up, m_front);
   
-  	m_position =
-  	{
-  		1,	0,	0, -m_cameraDesc.camEye.m_x,
-  		0,	1,	0, -m_cameraDesc.camEye.m_y,
-  		0,	0,	1, -m_cameraDesc.camEye.m_z,
-  		0,	0,	0,	1
-  	};
+    m_position.calculatePosition(m_cameraDesc.camEye);
   
     m_position = m_position * m_axis;
   
@@ -195,21 +145,11 @@ namespace gaEngineSDK {
     float speedRot = 0.010f;
     float speedAngule = 0.5f;
 
-    Matrix4x4 Yaw =
-    {
-      1,0,0,0,
-      0,1,0,0,
-      0,0,1,0,
-      0,0,0,1
-    };
+    Matrix4x4 Yaw;
+    Yaw.identity();
 
-    Matrix4x4 Pitch =
-    {
-      1,0,0,0,
-      0,1,0,0,
-      0,0,1,0,
-      0,0,0,1
-    };
+    Matrix4x4 Pitch;
+    Pitch.identity();
 
     POINT Temp;
     GetCursorPos(&Temp);
@@ -239,13 +179,7 @@ namespace gaEngineSDK {
         m_angule = m_maxAngule;
       }
       else {
-        Pitch =
-        {
-          1,	0,									0,										0,
-          0,	cosf(speedAngule * Math::PI / 180),	-sinf(speedAngule * Math::PI / 180),	0,
-          0,	sinf(speedAngule * Math::PI / 180),	cosf(speedAngule * Math::PI / 180),		0,
-          0,	0,									0,										1
-        };
+        Pitch.RotationX(speedAngule * Math::PI / 180);
       }
     }
 
@@ -257,15 +191,8 @@ namespace gaEngineSDK {
         m_angule = -m_maxAngule;
       }
       else {
-        Pitch =
-        {
-          1,	0,										0,										0,
-          0,	cosf(-speedAngule * Math::PI / 180),	-sinf(-speedAngule * Math::PI / 180),	0,
-          0,	sinf(-speedAngule * Math::PI / 180),	cosf(-speedAngule * Math::PI / 180),	0,
-          0,	0,										0,										1
-        };
+        Pitch.RotationX(-speedAngule * Math::PI / 180);
       }
-
     }
 
     SetCursorPos((int32)m_originalMousePos.m_x, (int32)m_originalMousePos.m_y);
@@ -278,57 +205,28 @@ namespace gaEngineSDK {
     updateViewMatrix();
   }
   
-  ///
-  /// C R E A T E´s
-  /// 
+  /***************************************************************************/
+  /**
+  * Creates
+  */
+  /***************************************************************************/
   
   void 
   Camera::createView() {
   	//Usamos left hand
   	m_front = m_cameraDesc.camLookAt - m_cameraDesc.camEye;
-  	//m_front = m_front.normalize();
     m_front.normalize();
   	
     m_right = m_cameraDesc.camUp.crossProduct(m_front);
   	m_right = { m_right.m_x, 0, m_right.m_z };
-    //m_right = glm::normalize(m_right);
     m_right.normalize();
 
   	m_up = m_front.crossProduct(m_right);
-    //m_up = glm::normalize(m_up);
     m_up.normalize();
   
-  	m_axis =
-  	{
-  		m_right.m_x,	m_right.m_y,	m_right.m_z,	0,
-  		m_up.m_x,		  m_up.m_y,		  m_up.m_z,		  0,
-  		m_front.m_x,	m_front.m_y,	m_front.m_z,	0,
-  		0,			      0,			      0,			      1
-  	};
+    m_axis.calculateAxis(m_right, m_up, m_front);
   
-  	m_position =
-  	{
-  		1,	0,	0, -m_cameraDesc.camEye.m_x,
-  		0,	1,	0, -m_cameraDesc.camEye.m_y,
-  		0,	0,	1, -m_cameraDesc.camEye.m_z,
-  		0,	0,	0,	1
-  	};
-  
-  	/*m_axis =
-  	{
-  		m_right.m_x, m_up.m_x, m_front.m_x,    0,
-  		m_right.m_y, m_up.m_y, m_front.m_y,    0,
-  		m_right.m_z, m_up.m_z, m_front.m_z,    0,
-  		0,			0,     0,			 1
-  	};
-  
-  	m_position =
-  	{
-  		1,    0,    0,    0,
-  		0,    1,    0,    0,
-  		0,    0,    1,    0,
-  		-m_cameraDesc.s_eye.m_x, -m_cameraDesc.s_eye.m_y, -m_cameraDesc.s_eye.m_z, 1
-  	};*/
+    m_position.calculatePosition(m_cameraDesc.camEye);
   
     m_position = m_position * m_axis;
   	m_view = m_position;
@@ -343,9 +241,11 @@ namespace gaEngineSDK {
                                                  m_cameraDesc.camFar);
   }
   
-  ///
-  /// S E T´s
-  /// 
+  /***************************************************************************/
+  /**
+  * Sets
+  */
+  /***************************************************************************/
   
   void Camera::setOriginalMousePos(float x, float y) {
   	m_originalMousePos = { x, y };
@@ -355,9 +255,11 @@ namespace gaEngineSDK {
   	m_clickPressed = _bool;
   }
   
-  ///
-  /// G E T´s
-  /// 
+  /***************************************************************************/
+  /**
+  * Gets
+  */
+  /***************************************************************************/
   
   Matrix4x4
   Camera::getView() {

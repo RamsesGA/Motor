@@ -115,8 +115,14 @@ namespace gaEngineSDK {
   /**
   * @brief
   */
-  template<typename T, typename D = std::default_delete<T>>
-  using SPtr = std::unique_ptr<T, D>;
+  template<typename T>
+  using SPtr = std::shared_ptr<T>;
+
+  /**
+  * @brief
+  */
+  template<typename T>
+  using WeakSPtr = std::weak_ptr<T>;
   
   /**
   * @brief 
