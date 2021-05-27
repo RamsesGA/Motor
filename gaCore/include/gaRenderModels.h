@@ -5,6 +5,9 @@
 
 namespace gaEngineSDK
 {
+
+  class Model;
+
   class RenderModels : public GameObject
   {
     public:
@@ -46,5 +49,9 @@ namespace gaEngineSDK
       */
       void
       onDraw() override {};
+
+    private:
+
+      Model* m_pModel = nullptr;
   };
 }

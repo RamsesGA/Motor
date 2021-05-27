@@ -122,7 +122,7 @@ namespace gaEngineSDK {
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
     Mesh* newMesh = new Mesh();
-    newMesh->init(vertices, indices, textures, pGraphicApi);
+    newMesh->init(*vertices, *indices, textures, pGraphicApi);
 
     return newMesh;
   }

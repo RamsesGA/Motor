@@ -125,9 +125,4 @@ class AppTest : public BaseApp
     */
     ConstantBuffer* m_pConstantBuffer1 = nullptr;
     ConstantBuffer* m_pConstantBuffer2 = nullptr;
-
-    /*
-    * @brief Variable with the sampler state.
-    */
-
 };

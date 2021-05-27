@@ -9,13 +9,16 @@
 
 using namespace gaEngineSDK;
 
-/***************************************************************************/
+/*****************************************************************************/
 /**
 * Structs
 * 
 * @brief The creation of structs necessary for the API is done.
 */
-/***************************************************************************/
+/*****************************************************************************/
+
+const int32 MaxBones = 200;
+
 namespace ConstantBuffer1 {
 	struct E {
 		Matrix4x4 mView;
@@ -59,5 +62,11 @@ namespace Texture {
 		String type;
 		String path;
 		Textures* texture;
+	};
+}
+
+namespace ConstBuffBonesTransform {
+	struct E {
+		Matrix4x4 bonesTransform[MaxBones];
 	};
 }

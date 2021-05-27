@@ -13,13 +13,13 @@ namespace gaEngineSDK {
   }
 
   void 
-  Resource::setRSRCName(String name) {
-    m_RSRCName = name;
+  Resource::setRSRCName(const String& name) {
+    m_RSRCName.resize(name.size());
+    std::memcpy(m_RSRCName.data(), name.data(), name.size());
   }
 
   String
   Resource::getRSRCName() {
     return m_RSRCName;
   }
-
 }

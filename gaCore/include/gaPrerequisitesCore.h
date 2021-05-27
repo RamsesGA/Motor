@@ -41,3 +41,10 @@
   #define GA_CORE_EXPORT __attribute__((visibility("default")))
   #define GA_CORE_HIDDEN __attribute__((visibility("hidden")))
 #endif
+
+#define SAFE_RELEASE(ptr) { \
+  if (ptr) {                \
+    ptr->Release();         \
+    ptr = nullptr;          \
+  }                         \
+}

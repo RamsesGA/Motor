@@ -3,10 +3,10 @@
 
 namespace gaEngineSDK {
   void 
-  Mesh::init(Vector<Vertex::E>* pVertices, Vector<uint32>* pIndices, 
+  Mesh::init(Vector<Vertex::E> pVertices, Vector<uint32> pIndices, 
              Vector<Texture::E> textures, GraphicsApi* pGraphicApi) {
-    m_pVertices = pVertices;
-    m_pIndices = pIndices;
+    m_vVertices = pVertices;
+    m_vIndices = pIndices;
     m_textures = textures;
 
     setUpMesh(pGraphicApi);
@@ -14,11 +14,11 @@ namespace gaEngineSDK {
 
   void 
   Mesh::setUpMesh(GraphicsApi* pGraphicApi) {
-    m_pVertexBuffer = pGraphicApi->createVertexBuffer(m_pVertices->data(),
-                                                      sizeof(Vertex::E) * m_pVertices->size());
+    m_pVertexBuffer = pGraphicApi->createVertexBuffer(m_vVertices.data(),
+                                                      sizeof(Vertex::E) * m_vVertices.size());
 
-    m_pIndexBuffer = pGraphicApi->createIndexBuffer(m_pIndices->data(),
-                                                    sizeof(uint32) * m_pIndices->size());
+    m_pIndexBuffer = pGraphicApi->createIndexBuffer(m_vIndices.data(),
+                                                    sizeof(uint32) * m_vIndices.size());
   }
 
   void 
@@ -31,6 +31,6 @@ namespace gaEngineSDK {
 
     pGraphicApi->setVertexBuffer(*m_pVertexBuffer);
     pGraphicApi->setIndexBuffer(*m_pIndexBuffer);
-    pGraphicApi->drawIndex(m_pIndices->size(), 0, 0);
+    pGraphicApi->drawIndex(m_vIndices.size(), 0, 0);
   }
 }
