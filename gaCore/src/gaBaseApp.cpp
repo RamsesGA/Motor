@@ -25,23 +25,19 @@ namespace gaEngineSDK {
           m_sfmlWindow.close();
           break;
         }
-
         if (event.type == sf::Event::KeyPressed) {
           onKeyboardDown(event);
         }
-
         if (event.type == sf::Event::MouseButtonPressed) {
           if (sf::Mouse::Left == event.key.code) {
             onLeftMouseBtnDown();
           }
         }
-
         if (event.type == sf::Event::MouseButtonReleased) {
           if (sf::Mouse::Left == event.key.code) {
             onLeftMouseBtnUp();
           }
         }
-
         if (event.type == sf::Event::MouseMoved) {
           onMouseMove();
         }

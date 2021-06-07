@@ -3,9 +3,7 @@
 namespace gaEngineSDK {
   
   void
-  Camera::init(CameraDescriptor::E cameraDesc, bool isOGL) {
-	  m_isOGL = isOGL;
-	  
+  Camera::init(CameraDescriptor::E cameraDesc) {
 		m_cameraDesc.camUp     = cameraDesc.camUp;
 		m_cameraDesc.camFar    = cameraDesc.camFar;
 		m_cameraDesc.camFoV    = cameraDesc.camFoV;
@@ -22,7 +20,6 @@ namespace gaEngineSDK {
   
   void
   Camera::updateViewMatrix() {
-
     m_right = m_view.matrixData3(0);
 
     m_up = m_view.matrixData3(1);
@@ -213,23 +210,21 @@ namespace gaEngineSDK {
   
   void 
   Camera::createView() {
-  	//Usamos left hand
-  	m_front = m_cameraDesc.camLookAt - m_cameraDesc.camEye;
+    m_front = m_cameraDesc.camLookAt - m_cameraDesc.camEye;
     m_front.normalize();
-  	
+
     m_right = m_cameraDesc.camUp.crossProduct(m_front);
-  	m_right = { m_right.m_x, 0, m_right.m_z };
     m_right.normalize();
 
-  	m_up = m_front.crossProduct(m_right);
+    m_up = m_front.crossProduct(m_right);
     m_up.normalize();
-  
+
     m_axis.calculateAxis(m_right, m_up, m_front);
-  
+
     m_position.calculatePosition(m_cameraDesc.camEye);
-  
-    m_position = m_position * m_axis;
-  	m_view = m_position;
+    //m_position = m_position * m_axis;
+
+    m_view = m_axis * m_position;
   }
   
   void
@@ -247,11 +242,13 @@ namespace gaEngineSDK {
   */
   /***************************************************************************/
   
-  void Camera::setOriginalMousePos(float x, float y) {
+  void 
+  Camera::setOriginalMousePos(float x, float y) {
   	m_originalMousePos = { x, y };
   }
   
-  void Camera::setClickPressed(bool _bool) {
+  void 
+  Camera::setClickPressed(bool _bool) {
   	m_clickPressed = _bool;
   }
   
@@ -263,20 +260,12 @@ namespace gaEngineSDK {
   
   Matrix4x4
   Camera::getView() {
-  	if (m_isOGL) {
-  		return m_view.transpose();
-  	}
-  
   	return m_view;
   }
   
   Matrix4x4
   Camera::getProjection() {
-  	if (m_isOGL) {
-  		return m_projection;
-  	}
-  
-  	return m_projection.transpose();
+    return m_projection;
   }
   
   Vector2
@@ -284,7 +273,9 @@ namespace gaEngineSDK {
   	return m_originalMousePos;
   }
   
-  bool Camera::getClickPressed() {
+  bool 
+  Camera::getClickPressed() {
   	return m_clickPressed;
   }
+  
 }

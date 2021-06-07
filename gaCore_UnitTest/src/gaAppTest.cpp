@@ -1,19 +1,16 @@
-#include "gaAppTest.h"
 #include <Windows.h>
 #include <iostream>
+#include <gaModels.h>
+#include <gaResourceManager.h>
 
-#define D3D11
-//#define OGL
+#include "gaAppTest.h"
 
 int32
 AppTest::onInit() {
-#ifdef D3D11
   HINSTANCE hInstance = LoadLibraryExA("gaDirectX_d.dll", nullptr,
                                        LOAD_WITH_ALTERED_SEARCH_PATH);
-#elif defined OGL
-  HINSTANCE hInstance = LoadLibraryExA("gaOpenGL_d.dll", nullptr,
-                                       LOAD_WITH_ALTERED_SEARCH_PATH);
-#endif
+  //HINSTANCE hInstance = LoadLibraryExA("gaOpenGL_d.dll", nullptr,
+  //                                     LOAD_WITH_ALTERED_SEARCH_PATH);
 
   //In case of error
   if (!(hInstance)) {
@@ -43,7 +40,7 @@ AppTest::onInit() {
 }
 
 void
-AppTest::onInitCamera(bool isOGL) {
+AppTest::onInitCamera() {
   //Inicializamos la matriz de identidad
   m_world.identity();
 
@@ -57,22 +54,24 @@ AppTest::onInitCamera(bool isOGL) {
   mainCamera.camHeight = m_height;
   mainCamera.camWidth = m_width;
 
-  m_mainCamera.init(mainCamera, isOGL);
+  m_mainCamera.init(mainCamera);
 }
 
 void
 AppTest::onUpdate(float ) {
+  auto myGraphicsApi = g_graphicApi().instancePtr();
+
   ConstantBuffer1::E meshData;
-  meshData.mProjection = m_mainCamera.getProjection();
-  meshData.mView = m_mainCamera.getView();
+  meshData.mProjection = myGraphicsApi->matrix4x4Context(m_mainCamera.getProjection());
+  meshData.mView = myGraphicsApi->matrix4x4Context(m_mainCamera.getView());
 
   ConstantBuffer2::E cb;
   cb.mWorld = m_world;
   cb.vMeshColor = m_vMeshColor;
 
   try {
-    g_graphicApi().updateConstantBuffer(&meshData, *m_pConstantBuffer1);
-    g_graphicApi().updateConstantBuffer(&cb, *m_pConstantBuffer2);
+    myGraphicsApi->updateConstantBuffer(&meshData, *m_pConstantBuffer1);
+    myGraphicsApi->updateConstantBuffer(&cb, *m_pConstantBuffer2);
   }
   catch (exception* e) {
     std::cout << "- - > " << e->what() << '\n';
@@ -84,38 +83,40 @@ void
 AppTest::onRender() {
 
   try {
+    auto myGraphicsApi = g_graphicApi().instancePtr();
+
     //Guardamos los render targets
-    g_graphicApi().setRenderTarget(m_pRenderTargetView, m_pDepthStencil);
+    myGraphicsApi->setRenderTarget(m_pRenderTargetView, m_pDepthStencil);
 
     //Guardamos un viewport
-    g_graphicApi().setViewport(1, m_width, m_height);
+    myGraphicsApi->setViewport(1, m_width, m_height);
 
     //Clear the back buffer
-    g_graphicApi().clearYourRenderTargetView(m_pRenderTargetView, (87.0f / 255.0f),
+    myGraphicsApi->clearYourRenderTargetView(m_pRenderTargetView, (87.0f / 255.0f),
                                             (35.0f / 255.0f), (100.0f / 255.0f), 
                                              255.0f);
 
     // Clear the depth buffer to 1.0 (max depth)
-    g_graphicApi().clearYourDepthStencilView(m_pDepthStencil);
+    myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
 
     //Guardamos el input layout
-    g_graphicApi().setInputLayout(*m_pVertexLayout);
+    myGraphicsApi->setInputLayout(*m_pVertexLayout);
 
     //Guardamos el vertex buffer
-    g_graphicApi().setVertexBuffer(*m_pVertexBuffer);
+    myGraphicsApi->setVertexBuffer(*m_mesh->m_pVertexBuffer);
 
     //Guardamos el index buffer
-    g_graphicApi().setIndexBuffer(*m_pIndexBuffer);
+    myGraphicsApi->setIndexBuffer(*m_mesh->m_pIndexBuffer);
 
     //Guardamos la topología
-    g_graphicApi().setPrimitiveTopology(PRIMITIVE_TOPOLOGY::E::kTriangleList);
+    myGraphicsApi->setPrimitiveTopology(PRIMITIVE_TOPOLOGY::E::kTriangleList);
 
-    g_graphicApi().setShaders(*m_pBothShaders);
-    g_graphicApi().setYourVSConstantBuffers(m_pConstantBuffer1, 0, 1);
-    g_graphicApi().setYourVSConstantBuffers(m_pConstantBuffer2, 1, 1);
-    g_graphicApi().setYourPSConstantBuffers(m_pConstantBuffer2, 1, 1);
+    myGraphicsApi->setShaders(*m_pBothShaders);
+    myGraphicsApi->setYourVSConstantBuffers(m_pConstantBuffer1, 0, 1);
+    myGraphicsApi->setYourVSConstantBuffers(m_pConstantBuffer2, 1, 1);
+    myGraphicsApi->setYourPSConstantBuffers(m_pConstantBuffer2, 1, 1);
 
-    m_model->draw(&g_graphicApi());
+    m_model->draw();
   }
   catch (exception* e) {
     std::cout << "- - > " << e->what() << '\n';
@@ -129,6 +130,8 @@ AppTest::onRender() {
 void
 AppTest::onCreate() {
 
+  auto myGraphicsApi = g_graphicApi().instancePtr();
+
   onInitCamera();
 
   //
@@ -136,43 +139,37 @@ AppTest::onCreate() {
   //
 
   //Creamos el render target view
-  m_pRenderTargetView = g_graphicApi().getDefaultBackBuffer();
+  m_pRenderTargetView = myGraphicsApi->getDefaultBackBuffer();
 
   //Creamos el depth stencil view
-  m_pDepthStencil = g_graphicApi().getDefaultDepthStencil();
+  m_pDepthStencil = myGraphicsApi->getDefaultDepthStencil();
 
   try {
-
-#ifdef D3D11
     //Creamos el vertex shader y pixel shader.
-    m_pBothShaders = g_graphicApi().createShadersProgram(L"data/shaders/DX_CubeShader.fx", 
+    m_pBothShaders = myGraphicsApi->createShadersProgram(L"data/shaders/DX_color.fx",
                                                          "VS",
-                                                         L"data/shaders/DX_CubeShader.fx", 
+                                                         L"data/shaders/DX_color.fx",
                                                          "PS");
-#elif defined OGL
     //Creamos el vertex shader y pixel shader.
-    m_pBothShaders = g_graphicApi().createShadersProgram(L"data/shaders/OGL_VertexShader.txt",
-                                                         "main",
-                                                         L"data/shaders/OGL_PixelShader.txt",
-                                                         "main");
-    onInitCamera(true);
-#endif
+    //m_pBothShaders = myGraphicsApi->createShadersProgram(L"data/shaders/OGL_VertexShader.txt",
+    //                                                     "main",
+    //                                                     L"data/shaders/OGL_PixelShader.txt",
+    //                                                     "main");
 
     //Creamos el input layout 
-    m_pVertexLayout = g_graphicApi().createInputLayout(*m_pBothShaders);
+    m_pVertexLayout = myGraphicsApi->createInputLayout(*m_pBothShaders);
+
+    m_mesh = new Mesh();
 
     //Creamos el vertex buffer
-    m_pVertexBuffer = g_graphicApi().createVertexBuffer(nullptr, sizeof(Matrices::E));
+    m_mesh->m_pVertexBuffer = myGraphicsApi->createVertexBuffer(nullptr, sizeof(Matrices::E));
 
     //Creamos el index buffer 
-    m_pIndexBuffer = g_graphicApi().createIndexBuffer(nullptr, sizeof(ViewCB::E));
+    m_mesh->m_pIndexBuffer = myGraphicsApi->createIndexBuffer(nullptr, sizeof(ViewCB::E));
 
     //Creamos los constant buffers para el shader
-    m_pConstantBuffer1 = g_graphicApi().createConstantBuffer(sizeof(ConstantBuffer1::E));
-    m_pConstantBuffer2 = g_graphicApi().createConstantBuffer(sizeof(ConstantBuffer2::E));
-
-    //Creamos el sampler state
-
+    m_pConstantBuffer1 = myGraphicsApi->createConstantBuffer(sizeof(ConstantBuffer1::E));
+    m_pConstantBuffer2 = myGraphicsApi->createConstantBuffer(sizeof(ConstantBuffer2::E));
   }
   catch (exception* e) {
     std::cout << "- - > " << e->what() << '\n';
@@ -180,12 +177,14 @@ AppTest::onCreate() {
   }
 
   try {
+    m_resourceManager = new ResourceManager();
     m_model = new Model();
 
-    //m_model->init("data/models/2B/2B.obj", &g_graphicApi());
-    m_model->init("data/models/pod/POD.obj", &g_graphicApi());
-    //m_model->init("data/models/spartan/Spartan.fbx", &g_graphicApi());
-    //m_model->init("data/models/ugandan/Knuckles.fbx", &g_graphicApi());
+    //m_resourceManager->initLoadModel("data/models/2B/2B.obj");
+    //m_resourceManager->initLoadModel("data/models/pod/POD.obj");
+    //m_resourceManager->initLoadModel("data/models/spartan/Spartan.fbx");
+    //m_resourceManager->initLoadModel("data/models/ugandan/Knuckles.fbx");
+    m_model->init("data/models/grimoires/grimoires.fbx");
   }
   catch (exception* e) {
     std::cout << "- - > " << e->what() << '\n';
@@ -209,10 +208,12 @@ void
 AppTest::onKeyboardDown(sf::Event param) {
   m_mainCamera.inputDetection(param);
 
-  ConstantBuffer1::E cb;
-  cb.mView = m_mainCamera.getView();
+  auto myGraphicsApi = g_graphicApi().instancePtr();
 
-  g_graphicApi().updateConstantBuffer(&cb, *m_pConstantBuffer1);
+  ConstantBuffer1::E cb;
+  cb.mView = myGraphicsApi->matrix4x4Context(m_mainCamera.getView());
+
+  myGraphicsApi->updateConstantBuffer(&cb, *m_pConstantBuffer1);
 }
 
 void
@@ -231,13 +232,19 @@ AppTest::onLeftMouseBtnUp() {
 void
 AppTest::onMouseMove() {
   if (m_mainCamera.getClickPressed()) {
-    m_mainCamera.setOriginalMousePos(m_mainCamera.getOriginalMousePos().m_x,
-      m_mainCamera.getOriginalMousePos().m_y);
+    m_mainCamera.setOriginalMousePos
+    (
+      m_mainCamera.getOriginalMousePos().m_x,
+      m_mainCamera.getOriginalMousePos().m_y
+    );
+
     m_mainCamera.mouseRotation();
 
-    ConstantBuffer1::E cb;
-    cb.mView = m_mainCamera.getView();
+    auto myGraphicsApi = g_graphicApi().instancePtr();
 
-    g_graphicApi().updateConstantBuffer(&cb, *m_pConstantBuffer1);
+    ConstantBuffer1::E cb;
+    cb.mView = myGraphicsApi->matrix4x4Context(m_mainCamera.getView());
+
+    myGraphicsApi->updateConstantBuffer(&cb, *m_pConstantBuffer1);
   }
 }

@@ -40,8 +40,7 @@ namespace gaEngineSDK {
       * @param Variable to obtain the information of the camera description.
       */
       void 
-      init(CameraDescriptor::E cameraDesc,
-           bool isOGL);
+      init(CameraDescriptor::E cameraDesc);
       
       /**
       * @brief Function to update our view matrix.
@@ -168,11 +167,6 @@ namespace gaEngineSDK {
       * @brief Member to detect and notify if user clicked.
       */
       bool m_clickPressed = false;
-
-      /**
-      * @brief Member to detect if it is OGL or DX.
-      */
-      bool m_isOGL = false;
 
       /**
       * @brief Member to save angle.

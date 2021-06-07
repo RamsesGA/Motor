@@ -50,7 +50,7 @@ namespace gaEngineSDK {
       * @brief Let us convert our row in column and column in row.
       */
       Matrix4x4
-      transpose();
+      transpose() const;
       
       Matrix4x4
       perspectiveFovLH(float FOV, float width, float height, float near, float far);

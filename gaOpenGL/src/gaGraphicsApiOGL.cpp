@@ -1,4 +1,5 @@
 #include <exception>
+#include <gaMatrix4x4.h>
 
 #include "gaGraphicsApiOGL.h"
 #include "gaConstantBufferOGL.h"
@@ -86,7 +87,6 @@ namespace gaEngineSDK {
     // delete the rendering context  
     wglDeleteContext(m_renderingContext);
   }
-  
   
   /***************************************************************************/
   /**
@@ -228,6 +228,11 @@ namespace gaEngineSDK {
   
   void GraphicsApiOGL::unbindOGL() {
     glUseProgram(0);
+  }
+
+  Matrix4x4 
+  GraphicsApiOGL::matrix4x4Context(const Matrix4x4& mat4x4) {
+    return mat4x4;
   }
   
   /***************************************************************************/
@@ -727,7 +732,7 @@ namespace gaEngineSDK {
   void 
   GraphicsApiOGL::setSamplerState(const uint32 startSlot,
                                   Vector<SamplerState*>& samplerState,
-                                  Textures& texture) {
+                                  Textures* texture) {
     auto& sampler = reinterpret_cast<SamplerStateOGL&>(samplerState);
     auto& tex = reinterpret_cast<TexturesOGL&>(texture);
 

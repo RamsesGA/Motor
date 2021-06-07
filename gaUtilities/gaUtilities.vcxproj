@@ -172,7 +172,6 @@
     <ClCompile Include="src\gaDegrees.cpp" />
     <ClCompile Include="src\gaLinuxMath.cpp" />
     <ClCompile Include="src\gaMath.cpp" />
-    <ClCompile Include="src\gaMatrix.cpp" />
     <ClCompile Include="src\gaMatrix4x4.cpp" />
     <ClCompile Include="src\gaPlatformMath.cpp" />
     <ClCompile Include="src\gaQuaternions.cpp" />
@@ -189,7 +188,6 @@
     <ClInclude Include="include\gaDegrees.h" />
     <ClInclude Include="include\gaLinuxMath.h" />
     <ClInclude Include="include\gaMath.h" />
-    <ClInclude Include="include\gaMatrix.h" />
     <ClInclude Include="include\gaMatrix4x4.h" />
     <ClInclude Include="include\gaModule.h" />
     <ClInclude Include="include\gaPlatformDefines.h" />

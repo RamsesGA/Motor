@@ -6,8 +6,7 @@
 #include <assimp/cimport.h>
 
 #include "gaPrerequisitesCore.h"
-#include "gaMesh.h"
-#include "gaResource.h"
+#include "gaSamplerState.h"
 
 namespace gaEngineSDK {
 
@@ -117,6 +116,9 @@ namespace gaEngineSDK {
     Vector<SPtr<AnimationNode>> m_vChannels;
   };
 
+  class ResourceManager;
+  class Mesh;
+
   class GA_CORE_EXPORT Model : public Resource
   {
     public:
@@ -165,54 +167,26 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
 
-      /*
-      * @brief Function to initialize class members and start with assimp.
-      * @param Variable string with the address of the file.
-      * @param Variable with API information.
-      */
-      void 
-      init(String const& path, GraphicsApi* pGraphicApi);
+      void
+        init(String const& path);
 
-      /*
-      * @brief Function to draw based on mmeshes.
-      * @param Variable with API information.
-      */
-      void 
-      draw(GraphicsApi* pGraphicApi);
+      void
+        draw();
 
-      /*
-      * @brief Function to process node information.
-      * @param Assimp variable with node information
-      * @param Assimp variable with scene information.
-      * @param Variable with API information.
-      */
-      void 
-      processNode(aiNode* pNode, const aiScene* pScene, GraphicsApi* pGraphicApi);
+      void
+        processNode(aiNode* pNode, const aiScene* pScene);
 
-      /*
-      * @brief Function to process the information of the meshes.
-      * @param Assimp variable with the mesh information.
-      * @param Assimp variable with scene information.
-      * @param Variable with API information.
-      */
-      Mesh* 
-      processMesh(aiMesh* pMesh, const aiScene* pScene, GraphicsApi* pGraphicApi);
+      Mesh*
+        processMesh(aiMesh* pMesh, const aiScene* pScene);
 
-      /*
-      * @brief Function for loading the model texture.
-      * @param Assimp variable for the material.
-      * @param Assimp variable for the texture type.
-      * @param Variable with API information.
-      */
       Vector<Texture::E>
-      loadMaterialTextures(aiMaterial* pMat, aiTextureType type, GraphicsApi* pGraphicApi);
+        loadMaterialTextures(aiMaterial* pMat, aiTextureType type);
 
-      /*
-      * @brief Function to get the direction of the texture.
-      * @param String with the file name.
-      */
-      String 
-      getTexturePath(String file);
+      String
+        getTexturePath(String file);
+
+      void
+      setSamplers(SamplerState* sampler);
 
       /***********************************************************************/
       /*
@@ -238,24 +212,9 @@ namespace gaEngineSDK {
       /***********************************************************************/
     
       /*
-      * @brief Member to store the full name of the folder.
+      * @brief .
       */
-      String m_directory;
-      
-      /*
-      * @brief Member to store a string of samplers.
-      */
-      Vector <SamplerState*> m_pSampler;
-      
-      /*
-      * @brief Member to store a string of Meshes.
-      */
-      Vector<Mesh*> m_pMeshes;
-      
-      /*
-      * @brief Member to store a string of textures.
-      */
-      Vector<Texture::E> m_textures;
+      uint32 m_numAnimations = 0;
 
       /*
       * @brief .
@@ -275,6 +234,22 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      uint32 m_numAnimations;
+      ResourceManager* m_resourceManager;
+
+      /*
+      * @brief Member to store a string of samplers.
+      */
+      Vector<SamplerState*> m_pSamplers;
+
+
+
+
+      String m_modelDirectory;
+
+      String m_texturesDirectory;
+
+      Vector<Mesh*> m_pMeshes;
+
+      Vector<Texture::E> m_textures;
   };  
 }

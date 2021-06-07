@@ -1,4 +1,5 @@
 #include <exception>
+#include <gaMatrix4x4.h>
 
 #include "gaGraphicsApiDX.h"
 #include "gaConstantBufferDX.h"
@@ -108,7 +109,6 @@ namespace gaEngineSDK {
   
     delete m_pBackBuffer;
   }
-  
   
   /***************************************************************************/
   /**
@@ -269,10 +269,6 @@ namespace gaEngineSDK {
   
   Textures* 
   GraphicsApiDX::loadTextureFromFile(String srcFile) {
-  
-    //auto* texture = new TexturesDX();
-    //return texture;
-
     int32 width;
     int32 height;
     int32 components;
@@ -284,6 +280,7 @@ namespace gaEngineSDK {
     }
 
     auto* texture = new TexturesDX();
+
     D3D11_TEXTURE2D_DESC desc;
     ZeroMemory(&desc, sizeof(desc));
     desc.Width = width;
@@ -297,23 +294,23 @@ namespace gaEngineSDK {
     desc.MiscFlags = 0;
 
     if (1 == components) {
-      desc.Format = DXGI_FORMAT_R16_FLOAT;
+      desc.Format = DXGI_FORMAT_R8_UNORM;
     }
     else if (2 == components) {
-      desc.Format = DXGI_FORMAT_R16G16_FLOAT;
+      desc.Format = DXGI_FORMAT_R8G8_UNORM;
     }
     else if (3 == components) {
-      desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
+      desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     }
     else if (4 == components) {
-      desc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
+      desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     }
 
     //Texture data
     D3D11_SUBRESOURCE_DATA initData;
     ZeroMemory(&initData, sizeof(initData));
     initData.pSysMem = data;
-    initData.SysMemPitch = 1;
+    initData.SysMemPitch = width * 4;
 
     if (FAILED(m_pd3dDevice->CreateTexture2D(&desc, &initData, &texture->m_pTexture))) {
       delete texture;
@@ -339,8 +336,14 @@ namespace gaEngineSDK {
     return texture;
   }
   
-  void GraphicsApiDX::unbindOGL() {}
-  
+  void 
+  GraphicsApiDX::unbindOGL() {}
+
+  Matrix4x4 
+  GraphicsApiDX::matrix4x4Context(const Matrix4x4& mat4x4) {
+    return mat4x4.transpose();
+  }
+
   /***************************************************************************/
   /**
   * Updates.
@@ -944,11 +947,10 @@ namespace gaEngineSDK {
   void 
   GraphicsApiDX::setSamplerState(const uint32 startSlot,
                                  Vector<SamplerState*>& samplerState,
-                                 Textures& ) {
-  
+                                 Textures* texture) {
     for (uint32 i = 0; i < samplerState.size(); i++) {
       auto* sState = reinterpret_cast<SamplerStateDX*>(samplerState[i]);
-  
+
       m_pImmediateContext->PSSetSamplers(startSlot,
                                          (uint32)samplerState.size(),
                                          &sState->m_pSamplerState);

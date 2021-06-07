@@ -2,18 +2,18 @@
 
 #include <exception>
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-#include <assimp/cimport.h>
-
 #include <gaCamera.h>
-#include <gaModels.h>
 #include <gaBaseApp.h>
 #include <gaVector4.h>
 #include <gaMatrix4x4.h>
 #include <gaStructures.h>
 #include <gaGraphicsApi.h>
+#include <gaMesh.h>
+
+namespace gaEngineSDK {
+  class Models;
+  class ResourceManager;
+}
 
 using namespace gaEngineSDK;
 using std::exception;
@@ -40,7 +40,7 @@ class AppTest : public BaseApp
     onInit()override;
 
     void
-    onInitCamera(bool isOGL = false);
+    onInitCamera();
 
     void
     onUpdate(float deltaTime)override;
@@ -92,6 +92,11 @@ class AppTest : public BaseApp
     * @brief Variable with the information of the loaded model.
     */
     Model* m_model = nullptr;
+
+    /*
+    * @brief .
+    */
+    ResourceManager* m_resourceManager = nullptr;
   
     /*
     * @brief Variables with the information of the
@@ -111,18 +116,13 @@ class AppTest : public BaseApp
     Shaders* m_pBothShaders = nullptr;
   
     /*
-    * @brief Variable that stores the vertex buffer data.
-    */
-    VertexBuffer* m_pVertexBuffer = nullptr;
-  
-    /*
-    * @brief Variable that stores the index buffer data.
-    */
-    IndexBuffer* m_pIndexBuffer = nullptr;
-  
-    /*
     * @brief Variable that stores the CB data.
     */
     ConstantBuffer* m_pConstantBuffer1 = nullptr;
     ConstantBuffer* m_pConstantBuffer2 = nullptr;
+
+    /*
+    * @brief .
+    */
+    Mesh* m_mesh;
 };

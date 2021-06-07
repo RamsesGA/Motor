@@ -9,6 +9,7 @@
 #include <gaShaders.h>
 #include <gaVertexBuffer.h>
 #include <gaIndexBuffer.h>
+#include <SFML/Window.hpp>
 
 #include "gaPrerequisitesCore.h"
 
@@ -39,22 +40,25 @@ namespace gaEngineSDK {
       /***********************************************************************/
 
       bool 
-      initDevice(sf::WindowHandle hWnd)override;
+      initDevice(sf::WindowHandle hWnd) override;
 
       void 
       drawIndex(uint32 indexCount,
       		      uint32 startIndexLocation,
-      		      uint32 baseVertexLocation)override;
+      		      uint32 baseVertexLocation) override;
 
       void 
       swapChainPresent(uint32 syncInterval,
-      		             uint32 flags)override;
+      		             uint32 flags) override;
 
       Textures* 
-      loadTextureFromFile(String srcFile)override;
+      loadTextureFromFile(String srcFile) override;
 
       void 
-      unbindOGL()override;
+      unbindOGL() override;
+
+      Matrix4x4
+      matrix4x4Context(const Matrix4x4& mat4x4) override;
 
       /***********************************************************************/
       /**
@@ -64,7 +68,7 @@ namespace gaEngineSDK {
 
       void 
       updateConstantBuffer(const void* srcData,
-      		                 ConstantBuffer& updateDataCB)override;
+      		                 ConstantBuffer& updateDataCB) override;
 
       /***********************************************************************/
       /**
@@ -74,10 +78,10 @@ namespace gaEngineSDK {
 
       void 
       clearYourRenderTargetView(Textures* renderTarget,
-      		                      float r, float g, float b, float a)override;
+      		                      float r, float g, float b, float a) override;
 
       void 
-      clearYourDepthStencilView(Textures* depthStencil)override;
+      clearYourDepthStencilView(Textures* depthStencil) override;
 
       /***********************************************************************/
       /**
@@ -89,31 +93,31 @@ namespace gaEngineSDK {
       createShadersProgram(const WString& nameVS,
       		                 const String& entryPointVS, 
       	                   const WString& namePS,
-      		                 const String& entryPointPS)override;
+      		                 const String& entryPointPS) override;
 
       VertexBuffer* 
       createVertexBuffer(const void* data,
-      	                 const uint32 size)override;
+      	                 const uint32 size) override;
 
       IndexBuffer* 
       createIndexBuffer(const void* data,
-      	                const uint32 size)override;
+      	                const uint32 size) override;
 
       ConstantBuffer* 
-      createConstantBuffer(const uint32 bufferSize)override;
+      createConstantBuffer(const uint32 bufferSize) override;
 
       Textures*
       createTexture(const uint32 width,
                     const uint32 height,
                     const uint32 bindFlags,
                     TEXTURE_FORMAT::E textureFormat,
-                    const String fileName)override;
+                    const String fileName) override;
 
       SamplerState* 
-      createSamplerState()override;
+      createSamplerState() override;
 
       InputLayout* 
-      createInputLayout(Shaders& vertexShader)override;
+      createInputLayout(Shaders& vertexShader) override;
 
       /***********************************************************************/
       /**
@@ -122,75 +126,75 @@ namespace gaEngineSDK {
       /***********************************************************************/
 
       void 
-      setPixelShader(Shaders& pixelShader)override;
+      setPixelShader(Shaders& pixelShader) override;
 
       void 
-      setVertexShader(Shaders& vertexShader)override;
+      setVertexShader(Shaders& vertexShader) override;
 
       void 
-      setVertexBuffer(VertexBuffer& vertexBuffer)override;
+      setVertexBuffer(VertexBuffer& vertexBuffer) override;
 
       void 
-      setIndexBuffer(IndexBuffer& indexBuffer)override;
+      setIndexBuffer(IndexBuffer& indexBuffer) override;
 
       void 
       setConstantBuffer(bool isVertex,
       	                ConstantBuffer& constantBuffer,
       	                const uint32 startSlot,
-      	                const uint32 numBuffers)override;
+      	                const uint32 numBuffers) override;
 
       void 
       setSamplerState(const uint32 startSlot,
       	              Vector<SamplerState*>& samplerState,
-      	              Textures& texture)override;
+      	              Textures* texture) override;
 
       void 
       setShaderResourceView(Textures* shaderResourceView,
       	                    const uint32 startSlot,
-      	                    const uint32 numViews)override;
+      	                    const uint32 numViews) override;
 
       void 
       setRenderTarget(Textures* renderTarget,
-      	              Textures* depthStencil)override;
+      	              Textures* depthStencil) override;
 
       void 
       setDepthStencil(Textures& depthStencil,
-      	              const uint32 stencilRef)override;
+      	              const uint32 stencilRef) override;
 
       void 
-      setInputLayout(InputLayout& vertexLayout)override;
+      setInputLayout(InputLayout& vertexLayout) override;
 
       void 
       setViewport(const uint32 numViewports,
       	          const uint32 width, 
-      	          const uint32 heigth)override;
+      	          const uint32 heigth) override;
 
       void 
-      setPrimitiveTopology(const uint32 topology)override;
+      setPrimitiveTopology(const uint32 topology) override;
 
       void 
-      setYourVS(Shaders& vertexShader)override;
+      setYourVS(Shaders& vertexShader) override;
 
       void 
       setYourVSConstantBuffers(ConstantBuffer* constantBuffer,
       	                       const uint32 startSlot,
-      	                       const uint32 numBuffers)override;
+      	                       const uint32 numBuffers) override;
 
       void 
-      setYourPS(Shaders& pixelShader)override;
+      setYourPS(Shaders& pixelShader) override;
 
       void 
       setYourPSConstantBuffers(ConstantBuffer* constantBuffer,
       	                       const uint32 startSlot,
-      	                       const uint32 numBuffers)override;
+      	                       const uint32 numBuffers) override;
 
       void 
       setYourPSSampler(SamplerState& sampler,
       	               const uint32 startSlot,
-      	               const uint32 numSamplers)override;
+      	               const uint32 numSamplers) override;
 
       void 
-      setShaders(Shaders& shaders)override;
+      setShaders(Shaders& shaders) override;
 
       /***********************************************************************/
       /**
@@ -199,10 +203,10 @@ namespace gaEngineSDK {
       /***********************************************************************/
 
       Textures*
-      getDefaultBackBuffer()override;
+      getDefaultBackBuffer() override;
 
       Textures*
-      getDefaultDepthStencil()override;
+      getDefaultDepthStencil() override;
 
     private:
       /***********************************************************************/

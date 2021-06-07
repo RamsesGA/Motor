@@ -9,6 +9,7 @@
 
 #include "gaPrerequisitesCore.h"
 #include "gaStructures.h"
+#include "gaCamera.h"
 
 namespace gaEngineSDK {
 
@@ -114,6 +115,9 @@ namespace gaEngineSDK {
       */
       virtual void 
       unbindOGL() { };
+
+      virtual Matrix4x4
+      matrix4x4Context(const Matrix4x4&) { return Matrix4x4(); };
       
       /***********************************************************************/
       /**
@@ -292,7 +296,7 @@ namespace gaEngineSDK {
       virtual void 
       setSamplerState(const uint32 ,
                       Vector<SamplerState*>& ,
-                      Textures& ) { };
+                      Textures* ) { };
       
       /**
       * @brief Function to save the information of the shader resource view.

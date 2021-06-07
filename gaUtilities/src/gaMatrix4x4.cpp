@@ -66,7 +66,7 @@ namespace gaEngineSDK {
   /*************************************************************************/
 
   Matrix4x4 
-  Matrix4x4::transpose() {
+  Matrix4x4::transpose() const {
     Matrix4x4 trans;
 
     for (int32 i = 0; i < 4; ++i) {
@@ -99,15 +99,15 @@ namespace gaEngineSDK {
     matrixData.resize(3);
 
     matrixData.at(0).m_x = m_mat4x4[0][0];
-    matrixData.at(0).m_y = m_mat4x4[0][1];
-    matrixData.at(0).m_z = m_mat4x4[0][2];
+    matrixData.at(0).m_y = m_mat4x4[1][0];
+    matrixData.at(0).m_z = m_mat4x4[2][0];
                          
-    matrixData.at(1).m_x = m_mat4x4[1][0];
+    matrixData.at(1).m_x = m_mat4x4[0][1];
     matrixData.at(1).m_y = m_mat4x4[1][1];
-    matrixData.at(1).m_z = m_mat4x4[1][2];
+    matrixData.at(1).m_z = m_mat4x4[2][1];
                          
-    matrixData.at(2).m_x = m_mat4x4[2][0];
-    matrixData.at(2).m_y = m_mat4x4[2][1];
+    matrixData.at(2).m_x = m_mat4x4[0][2];
+    matrixData.at(2).m_y = m_mat4x4[1][2];
     matrixData.at(2).m_z = m_mat4x4[2][2];
 
     return matrixData.at(index);
@@ -179,28 +179,28 @@ namespace gaEngineSDK {
 
   void
   Matrix4x4::calculateAxis(Vector3 right, Vector3 up, Vector3 front) {
-    m_mat4x4[0][0] = right.m_x; m_mat4x4[0][1] = right.m_y;
-    m_mat4x4[1][0] = up.m_x;    m_mat4x4[1][1] = up.m_y;
-    m_mat4x4[2][0] = front.m_x; m_mat4x4[2][1] = front.m_y;
-    m_mat4x4[3][0] = 0.0f;      m_mat4x4[3][1] = 0.0f;
+    m_mat4x4[0][0] = right.m_x; m_mat4x4[0][1]    = up.m_x;
+    m_mat4x4[1][0] = right.m_y;    m_mat4x4[1][1] = up.m_y;
+    m_mat4x4[2][0] = right.m_z; m_mat4x4[2][1]    = up.m_z;
+    m_mat4x4[3][0] = 0.0f;      m_mat4x4[3][1]    = 0.0f;
 
-    m_mat4x4[0][2] = right.m_z; m_mat4x4[0][3] = 0.0f;
-    m_mat4x4[1][2] = up.m_z;    m_mat4x4[1][3] = 0.0f;
+    m_mat4x4[0][2] = front.m_x; m_mat4x4[0][3] = 0.0f;
+    m_mat4x4[1][2] = front.m_y; m_mat4x4[1][3] = 0.0f;
     m_mat4x4[2][2] = front.m_z; m_mat4x4[2][3] = 0.0f;
     m_mat4x4[3][2] = 0.0f;      m_mat4x4[3][3] = 1.0f;
   }
 
   void
   Matrix4x4::calculatePosition(Vector3 eye) {
-    m_mat4x4[0][0] = 1.0f; m_mat4x4[0][1] = 0.0f;
-    m_mat4x4[1][0] = 0.0f; m_mat4x4[1][1] = 1.0f;
-    m_mat4x4[2][0] = 0.0f; m_mat4x4[2][1] = 0.0f;
-    m_mat4x4[3][0] = 0.0f; m_mat4x4[3][1] = 0.0f;
+    m_mat4x4[0][0] = 1.0f;     m_mat4x4[0][1] = 0.0f;
+    m_mat4x4[1][0] = 0.0f;     m_mat4x4[1][1] = 1.0f;
+    m_mat4x4[2][0] = 0.0f;     m_mat4x4[2][1] = 0.0f;
+    m_mat4x4[3][0] = -eye.m_x; m_mat4x4[3][1] = -eye.m_y;
 
-    m_mat4x4[0][2] = 0.0f; m_mat4x4[0][3] = -eye.m_x;
-    m_mat4x4[1][2] = 0.0f; m_mat4x4[1][3] = -eye.m_y;
-    m_mat4x4[2][2] = 1.0f; m_mat4x4[2][3] = -eye.m_z;
-    m_mat4x4[3][2] = 0.0f; m_mat4x4[3][3] = 1.0f;
+    m_mat4x4[0][2] = 0.0f;     m_mat4x4[0][3] = 0.0f;
+    m_mat4x4[1][2] = 0.0f;     m_mat4x4[1][3] = 0.0f;
+    m_mat4x4[2][2] = 1.0f;     m_mat4x4[2][3] = 0.0f;
+    m_mat4x4[3][2] = -eye.m_z; m_mat4x4[3][3] = 1.0f;
   }
 
   void

@@ -13,7 +13,7 @@ namespace gaEngineSDK {
 			/***********************************************************************/
 			SamplerStateOGL() = default;
 
-			virtual ~SamplerStateOGL() = default;
+			~SamplerStateOGL() = default;
 
 		protected:
 		  /**

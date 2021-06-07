@@ -14,13 +14,13 @@ namespace gaEngineSDK {
 			/***********************************************************************/
 			SamplerStateDX() = default;
 
-			~SamplerStateDX() = default;
+			~SamplerStateDX() { SAFE_RELEASE(m_pSamplerState); };
 
 		protected:
 		  /**
 		  * @brief DX member to save the sampler state.
 		  */
-		  ID3D11SamplerState* m_pSamplerState;
+		  ID3D11SamplerState* m_pSamplerState = nullptr;
 
 			friend class GraphicsApiDX;
 	};

@@ -2,9 +2,9 @@
 
 #include "gaPrerequisitesCore.h"
 #include "gaStructures.h"
+#include "gaSamplerState.h"
 
 namespace gaEngineSDK {
-  class SamplerState;
   class VertexBuffer;
   class GraphicsApi;
   class IndexBuffer;
@@ -50,21 +50,31 @@ namespace gaEngineSDK {
       */
       void 
       init(Vector<Vertex::E> pVertices, Vector<uint32> pIndices,
-           Vector<Texture::E> textures, GraphicsApi* pGraphicApi);
+           Vector<Texture::E> textures);
 
       /*
       * @brief Function to save information for m_vertexBuffer and m_indexBuffer.
       * @param Variable with API information.
       */
       void 
-      setUpMesh(GraphicsApi* pGraphicApi);
+      setUpMesh();
       
       /*
       * @brief Function to save vertices and indices and finally draw.
       * @param Variable with API information.
       */
       void 
-      draw(GraphicsApi* pGraphicApi, Vector <SamplerState*> pSamplerState);
+      draw(Vector <SamplerState*> pSamplerState);
+
+      /*
+      * @brief Member to store vertex information.
+      */
+      VertexBuffer* m_pVertexBuffer;
+
+      /*
+      * @brief Member to store the index information.
+      */
+      IndexBuffer* m_pIndexBuffer;
 
     private:
       /***********************************************************************/
@@ -72,26 +82,6 @@ namespace gaEngineSDK {
       * Members.
       */
       /***********************************************************************/
-      
-      /*
-      * @brief Member to store vertex information.
-      */
-      VertexBuffer* m_pVertexBuffer;
-      
-      /*
-      * @brief Member to store the index information.
-      */
-      IndexBuffer* m_pIndexBuffer;
-      
-      /*
-      * @brief Member to store vertex information.
-      */
-      Vector<Vertex::E> m_vVertices;
-      
-      /*
-      * @brief Member to store index information.
-      */
-      Vector<uint32> m_vIndices;
 
       /*
       * @brief .
@@ -107,6 +97,26 @@ namespace gaEngineSDK {
       * @brief Member to store the texture information.
       */
       Vector<Texture::E> m_textures;
+
+      /*
+      * @brief .
+      */
+      Vector<Matrix4x4> m_bonesTransform;
+
+      /*
+      * @brief Member to store vertex information.
+      */
+      Vector<Vertex::E> m_vVertices;
+
+      /*
+      * @brief Member to store index information.
+      */
+      Vector<uint32> m_vIndices;
+
+      /*
+      * @brief .
+      */
+      Model* m_pModel;
 
       /*
       * @brief Member to save the info of this type of texture.
@@ -137,15 +147,5 @@ namespace gaEngineSDK {
       * @brief .
       */
       SPtr<SkeletalMesh> m_skeletalMesh;
-
-      /*
-      * @brief .
-      */
-      Model* m_pModel;
-
-      /*
-      * @brief .
-      */
-      Vector<Matrix4x4> m_bonesTransform;
   };
 }

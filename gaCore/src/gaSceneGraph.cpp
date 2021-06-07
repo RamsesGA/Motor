@@ -3,17 +3,13 @@
 namespace gaEngineSDK
 {
   void 
-  SceneGraph::onInit() {
-    GameObject* root = new GameObject();
-    root->setLayer();
+  SceneGraph::onInit(String nameRoot) {
+
   }
 
   void 
   SceneGraph::onUpdate(const float& deltaTime) {
-  }
 
-  void 
-  SceneGraph::onDelete() {
   }
 
   SPtr<GameObject> 
