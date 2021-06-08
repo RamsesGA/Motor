@@ -116,7 +116,7 @@ AppTest::onRender() {
     myGraphicsApi->setYourVSConstantBuffers(m_pConstantBuffer2, 1, 1);
     myGraphicsApi->setYourPSConstantBuffers(m_pConstantBuffer2, 1, 1);
 
-    m_model->draw();
+    m_model->draw(*m_resourceManager);
   }
   catch (exception* e) {
     std::cout << "- - > " << e->what() << '\n';
@@ -178,13 +178,12 @@ AppTest::onCreate() {
 
   try {
     m_resourceManager = new ResourceManager();
-    m_model = new Model();
 
     //m_resourceManager->initLoadModel("data/models/2B/2B.obj");
     //m_resourceManager->initLoadModel("data/models/pod/POD.obj");
     //m_resourceManager->initLoadModel("data/models/spartan/Spartan.fbx");
-    //m_resourceManager->initLoadModel("data/models/ugandan/Knuckles.fbx");
-    m_model->init("data/models/grimoires/grimoires.fbx");
+    m_resourceManager->initLoadModel("data/models/ugandan/Knuckles.fbx");
+    //m_resourceManager->initLoadModel("data/models/grimoires/grimoires.fbx");
   }
   catch (exception* e) {
     std::cout << "- - > " << e->what() << '\n';

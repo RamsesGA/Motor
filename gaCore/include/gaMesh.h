@@ -66,6 +66,94 @@ namespace gaEngineSDK {
       void 
       draw(Vector <SamplerState*> pSamplerState);
 
+      /***********************************************************************/
+      /*
+      * Sets.
+      */
+      /***********************************************************************/
+
+      /*
+      * @brief .
+      */
+      void
+      setVertexData(WeakSPtr<Vertex::E> vertexData);
+
+      /*
+      * @brief .
+      */
+      void
+      setVertexBuffer(VertexBuffer* vertexBuffer);
+
+      /*
+      * @brief .
+      */
+      void
+      setIndex(WeakSPtr<uint32> index);
+
+      /*
+      * @brief .
+      */
+      void
+      setIndexBuffer(IndexBuffer* indexBuffer);
+
+      /*
+      * @brief .
+      */
+      void
+      setIndexNum(uint32 indexNum);
+
+      /*
+      * @brief .
+      */
+      void
+      setVerticesNum(uint32 verticesNum);
+
+      /*
+      * @brief .
+      */
+      void
+      setDiffuseTexture(WeakSPtr<Textures> diffuse);
+
+      /*
+      * @brief .
+      */
+      void
+      setAlbedoTexture(WeakSPtr<Textures> albedo);
+
+      /*
+      * @brief .
+      */
+      void
+      setNormalsTexture(WeakSPtr<Textures> normals);
+
+      /*
+      * @brief .
+      */
+      void
+      setSpecularTexture(WeakSPtr<Textures> specular);
+
+      /*
+      * @brief .
+      */
+      void
+      setMetalnessTexture(WeakSPtr<Textures> metal);
+
+      /*
+      * @brief .
+      */
+      void
+      setRoughnessTexture(WeakSPtr<Textures> roughness);
+
+
+      /***********************************************************************/
+      /*
+      * Gets.
+      */
+      /***********************************************************************/
+
+      uint32
+      getVertices();
+
       /*
       * @brief Member to store vertex information.
       */
@@ -76,12 +164,52 @@ namespace gaEngineSDK {
       */
       IndexBuffer* m_pIndexBuffer;
 
+      /*
+      * @brief .
+      */
+      SPtr<SkeletalMesh> m_skeletalMesh = nullptr;
+
+      /*
+      * @brief .
+      */
+      Vector<Matrix4x4> m_bonesTransforms;
+
     private:
       /***********************************************************************/
       /*
       * Members.
       */
       /***********************************************************************/
+
+      /*
+      * @brief
+      */
+      bool m_hasDiffuse = false;
+
+      /*
+      * @brief
+      */
+      bool m_hasAlbedo = false;
+
+      /*
+      * @brief
+      */
+      bool m_hasNormal = false;
+
+      /*
+      * @brief
+      */
+      bool m_hasSpecular = false;
+
+      /*
+      * @brief
+      */
+      bool m_hasMetalness = false;
+
+      /*
+      * @brief
+      */
+      bool m_hasRoughness = false;
 
       /*
       * @brief .
@@ -92,7 +220,12 @@ namespace gaEngineSDK {
       * @brief .
       */
       uint32 m_numVertices;
-      
+
+      /*
+      * @brief .
+      */
+      String m_meshName;
+
       /*
       * @brief Member to store the texture information.
       */
@@ -126,7 +259,12 @@ namespace gaEngineSDK {
       /*
       * @brief Member to save the info of this type of texture.
       */
-      SPtr<Textures>m_normals;
+      SPtr<Textures> m_albedo;
+
+      /*
+      * @brief Member to save the info of this type of texture.
+      */
+      SPtr<Textures> m_normals;
 
       /*
       * @brief Member to save the info of this type of texture.
@@ -136,7 +274,7 @@ namespace gaEngineSDK {
       /*
       * @brief Member to save the info of this type of texture.
       */
-      SPtr<Textures>m_metalness;
+      SPtr<Textures> m_metalness;
 
       /*
       * @brief Member to save the info of this type of texture.
@@ -146,6 +284,21 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      SPtr<SkeletalMesh> m_skeletalMesh;
+      SPtr<Vertex::E> m_vertexData = nullptr;
+
+      /*
+      * @brief .
+      */
+      SPtr<VertexBuffer> m_vertexBuffer = nullptr;
+
+      /*
+      * @brief .
+      */
+      SPtr<IndexBuffer> m_indexBuffer = nullptr;
+
+      /*
+      * @brief .
+      */
+      SPtr<uint32> m_index = nullptr;
   };
 }

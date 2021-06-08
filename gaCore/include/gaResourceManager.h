@@ -4,12 +4,14 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <assimp/cimport.h>
+#include <gaModule.h>
 
 #include "gaPrerequisitesCore.h"
 #include "gaModels.h"
+#include "gaResource.h"
 
 namespace gaEngineSDK {
-  class GA_CORE_EXPORT ResourceManager
+  class GA_CORE_EXPORT ResourceManager : public Module <ResourceManager>
   {
     public:
       /***********************************************************************/
@@ -53,6 +55,15 @@ namespace gaEngineSDK {
       Mesh* 
       processMesh(aiMesh* pAMesh, const aiScene* pAScene);
 
+      void
+      processBonesInfo(aiMesh* pAMesh, Vertex::E* structureVertex, uint32 numVertexes);
+
+      void
+      processIndexInfo(uint32 numIndices);
+
+      void
+      processAnimationInfo();
+
       /*
       * @brief Function for loading the model texture.
       * @param Assimp variable for the material.
@@ -61,6 +72,18 @@ namespace gaEngineSDK {
       */
       Vector<Texture::E>
       loadMaterialTextures(aiMaterial* pAMat, aiTextureType Atype);
+
+      /*
+      * @brief .
+      */
+      void
+      loadModelNodes(WeakSPtr<ModelNodes> myNode, const aiNode* ainode);
+
+      /***********************************************************************/
+      /**
+      * Gets.
+      */
+      /***********************************************************************/
 
       /*
       * @brief Function to get the direction of the texture.
@@ -75,8 +98,13 @@ namespace gaEngineSDK {
       Vector<Mesh*>
       getMeshes();
 
-    protected:
+      /*
+      * @brief .
+      */
+      Vector<SamplerState*>
+      getSamplerInfo();
 
+    protected:
       /*
       * @brief .
       */
@@ -103,6 +131,11 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
+      Mesh* m_newMesh = nullptr;
+
+      /*
+      * @brief .
+      */
       SPtr<Model> m_newModel;
 
       /*
@@ -120,7 +153,17 @@ namespace gaEngineSDK {
       */
       String m_modelDirectory;
 
+      /*
+      * @brief Member to store the full name of the folder.
+      */
       String m_texturesDirectory;
 
+      /*
+      * @brief .
+      */
+      Vector<SPtr<Model>> m_vModels;
   };
+
+  GA_CORE_EXPORT ResourceManager&
+  g_resourceManager();
 }

@@ -19,6 +19,12 @@ namespace gaEngineSDK {
     Vector4 m_value;
   };
 
+  struct RotationKey {
+    //TODO implementar quaterniones, sope
+    //Quaternion m_value;
+    float m_time;
+  };
+
   struct ModelNodes {
     /*
     * @brief Member to define the name.
@@ -70,8 +76,7 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    Vector<Key> m_RotationKeys;
-
+    Vector<Key> m_vRotationKeys;
 
     /*
     * @brief .
@@ -81,7 +86,7 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    Vector<Key> m_PositionKeys;
+    Vector<Key> m_vPositionKeys;
 
     /*
     * @brief .
@@ -93,7 +98,7 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    String m_animationName;
+    String m_animationName = "Default Animation";
 
     /*
     * @brief .
@@ -108,7 +113,7 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    uint32 m_channels;
+    uint32 m_numChannels;
 
     /*
     * @brief .
@@ -166,33 +171,25 @@ namespace gaEngineSDK {
       * Methods.
       */
       /***********************************************************************/
-
       void
-        init(String const& path);
-
-      void
-        draw();
-
-      void
-        processNode(aiNode* pNode, const aiScene* pScene);
-
-      Mesh*
-        processMesh(aiMesh* pMesh, const aiScene* pScene);
-
-      Vector<Texture::E>
-        loadMaterialTextures(aiMaterial* pMat, aiTextureType type);
-
-      String
-        getTexturePath(String file);
+      draw(ResourceManager& resource);
 
       void
       setSamplers(SamplerState* sampler);
+
+      Vector<SamplerState*>
+      getSamplerInfo();
 
       /***********************************************************************/
       /*
       * Members.
       */
       /***********************************************************************/
+
+      /*
+      * @brief .
+      */
+      uint32 m_numAnimations = 0;
 
       /*
       * @brief .
@@ -204,27 +201,10 @@ namespace gaEngineSDK {
       */
       Vector<SPtr<AnimationData>> m_vAnimationData;
 
-    private:
-      /***********************************************************************/
-      /*
-      * Members.
-      */
-      /***********************************************************************/
-    
-      /*
-      * @brief .
-      */
-      uint32 m_numAnimations = 0;
-
       /*
       * @brief .
       */
       Matrix4x4 m_globalInverseTransform;
-
-      /*
-      * @brief .
-      */
-      SPtr<AnimationData> m_currentAnimation = nullptr;
 
       /*
       * @brief .
@@ -234,22 +214,28 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      ResourceManager* m_resourceManager;
+      Vector<char*> m_pAnimationsList;
+
+    private:
+      /***********************************************************************/
+      /*
+      * Members.
+      */
+      /***********************************************************************/
+
+      /*
+      * @brief .
+      */
+      SPtr<AnimationData> m_currentAnimation = nullptr;
+
+      /*
+      * @brief .
+      */
+      ResourceManager* m_resourceManager = nullptr;
 
       /*
       * @brief Member to store a string of samplers.
       */
       Vector<SamplerState*> m_pSamplers;
-
-
-
-
-      String m_modelDirectory;
-
-      String m_texturesDirectory;
-
-      Vector<Mesh*> m_pMeshes;
-
-      Vector<Texture::E> m_textures;
   };  
 }

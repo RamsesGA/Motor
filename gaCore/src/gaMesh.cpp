@@ -37,4 +37,87 @@ namespace gaEngineSDK {
     myGraphicApi->setIndexBuffer(*m_pIndexBuffer);
     myGraphicApi->drawIndex(m_vIndices.size(), 0, 0);
   }
+
+  /***************************************************************************/
+  /*
+  * Sets.
+  */
+  /***************************************************************************/
+
+  void 
+  Mesh::setVertexData(WeakSPtr<Vertex::E> vertexData) {
+    m_vertexData = vertexData.lock();
+  }
+
+  void
+  Mesh::setVertexBuffer(VertexBuffer* vertexBuffer) {
+    m_vertexBuffer.reset(vertexBuffer);
+  }
+
+  void 
+  Mesh::setIndex(WeakSPtr<uint32> index) {
+    m_index = index.lock();
+  }
+
+  void 
+  Mesh::setIndexBuffer(IndexBuffer* indexBuffer) {
+    m_indexBuffer.reset(indexBuffer);
+  }
+
+  void 
+  Mesh::setIndexNum(uint32 indexNum) {
+    m_numIndices = indexNum;
+  }
+
+  void 
+  Mesh::setVerticesNum(uint32 verticesNum) {
+    m_numVertices = verticesNum;
+  }
+
+  void
+  Mesh::setDiffuseTexture(WeakSPtr<Textures> diffuse) {
+    m_hasDiffuse = true;
+    m_diffuse = diffuse.lock();
+  }
+
+  void 
+  Mesh::setAlbedoTexture(WeakSPtr<Textures> albedo) {
+    m_hasAlbedo = true;
+    m_albedo = albedo.lock();
+  }
+
+  void 
+  Mesh::setNormalsTexture(WeakSPtr<Textures> normals) {
+    m_hasNormal = true;
+    m_normals = normals.lock();
+  }
+
+  void
+  Mesh::setSpecularTexture(WeakSPtr<Textures> specular) {
+    m_hasSpecular = true;
+    m_specular = specular.lock();
+  }
+
+  void 
+  Mesh::setMetalnessTexture(WeakSPtr<Textures> metal) {
+    m_hasMetalness = true;
+    m_metalness = metal.lock();
+  }
+
+  void 
+  Mesh::setRoughnessTexture(WeakSPtr<Textures> roughness) {
+    m_hasRoughness = true;
+    m_roughness = roughness.lock();
+  }
+
+  /***************************************************************************/
+  /*
+  * Gets.
+  */
+  /***************************************************************************/
+
+  uint32
+  Mesh::getVertices() {
+    return m_numVertices;
+  }
 }
