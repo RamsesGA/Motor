@@ -36,6 +36,30 @@ namespace gaEngineSDK {
     m_mat4x4[3][2] = z4; m_mat4x4[3][3] = w4;
   }
 
+  Matrix4x4::Matrix4x4(float x0, float y3, float z6, 
+                       float x1, float y4, float z7, 
+                       float x2, float y5, float z8) {
+    m_mat4x4[0][0] = x0;    
+    m_mat4x4[1][0] = x1;    
+    m_mat4x4[2][0] = x2;    
+    m_mat4x4[3][0] = 0.0f;  
+
+    m_mat4x4[3][0] = y3;
+    m_mat4x4[0][1] = y4;
+    m_mat4x4[1][1] = y5;
+    m_mat4x4[3][1] = 0.0f;
+
+    m_mat4x4[2][1] = z6;
+    m_mat4x4[3][1] = z7;
+    m_mat4x4[0][2] = z8;
+    m_mat4x4[3][2] = 0.0f;
+
+    m_mat4x4[0][3] = 0.0f; 
+    m_mat4x4[1][3] = 0.0f;
+    m_mat4x4[2][3] = 0.0f;
+    m_mat4x4[3][3] = 0.0f;
+  }
+
   Matrix4x4::Matrix4x4(const Matrix4x4& matrix){
     for (int32 i = 0; i < matrix.getColumns(); ++i) {
       for (int32 j = 0; j < matrix.getRows(); ++j) {
@@ -203,7 +227,7 @@ namespace gaEngineSDK {
     m_mat4x4[3][2] = -eye.m_z; m_mat4x4[3][3] = 1.0f;
   }
 
-  void
+  Matrix4x4&
   Matrix4x4::identity() {
     m_mat4x4[0][0] = 1.0f; m_mat4x4[0][1] = 0.0f;
     m_mat4x4[1][0] = 0.0f; m_mat4x4[1][1] = 1.0f;
@@ -214,6 +238,193 @@ namespace gaEngineSDK {
     m_mat4x4[1][2] = 0.0f; m_mat4x4[1][3] = 0.0f;
     m_mat4x4[2][2] = 1.0f; m_mat4x4[2][3] = 0.0f;
     m_mat4x4[3][2] = 0.0f; m_mat4x4[3][3] = 1.0f;
+    
+    return *this;
+  }
+
+  Matrix4x4& 
+  Matrix4x4::scale(Vector3 scal) {
+    scale(scal.m_x, scal.m_y, scal.m_z);
+    return *this;
+  }
+
+  Matrix4x4& 
+  Matrix4x4::scale(float sx, float sy, float sz) {
+    Matrix4x4 scal =
+      { 
+        sx, 0, 0, 0,
+        0, sy, 0, 0,
+        0, 0, sz, 0,
+        0, 0, 0, 1
+      };
+
+    *this *= scal;
+    return *this;
+  }
+
+  Matrix4x4& 
+  Matrix4x4::translate(const Vector3& vec3) {
+    translate(vec3.m_x, vec3.m_y, vec3.m_z);
+    return *this;
+  }
+
+  Matrix4x4& 
+  Matrix4x4::translate(float x, float y, float z) {
+    Matrix4x4 tras =
+      {
+        1, 0, 0, x,
+        0, 1, 0, y,
+        0, 0, 1, z,
+        0, 0, 0, 1
+      };
+
+    *this *= tras;
+    return *this;
+  }
+
+  Matrix4x4& 
+  Matrix4x4::invert() {
+    float determinant, invDeterminant;
+
+    Matrix4x4 mat0 = 
+    {
+      m_mat4x4[1][1], m_mat4x4[2][1], m_mat4x4[3][1],
+      m_mat4x4[1][2], m_mat4x4[2][2], m_mat4x4[3][2],
+      m_mat4x4[1][3], m_mat4x4[2][3], m_mat4x4[3][3]
+    };
+
+    Matrix4x4 mat1 = 
+    {
+      m_mat4x4[0][1], m_mat4x4[2][1], m_mat4x4[3][1],
+      m_mat4x4[0][2], m_mat4x4[2][2], m_mat4x4[3][2],
+      m_mat4x4[0][3], m_mat4x4[2][3], m_mat4x4[3][3]
+    };
+
+    Matrix4x4 mat2 = 
+    {
+      m_mat4x4[0][1], m_mat4x4[1][1], m_mat4x4[3][1],
+      m_mat4x4[0][2], m_mat4x4[1][2], m_mat4x4[3][2],
+      m_mat4x4[0][3], m_mat4x4[1][3], m_mat4x4[3][3]
+    };
+
+    Matrix4x4 mat3 = 
+    {
+      m_mat4x4[0][1], m_mat4x4[1][1], m_mat4x4[2][1],
+      m_mat4x4[0][2], m_mat4x4[1][2], m_mat4x4[2][2],
+      m_mat4x4[0][3], m_mat4x4[1][3], m_mat4x4[2][3]
+    };
+
+    Matrix4x4 mat4 = 
+    {
+      m_mat4x4[1][0], m_mat4x4[2][0], m_mat4x4[3][0],
+      m_mat4x4[1][2], m_mat4x4[2][2], m_mat4x4[3][2],
+      m_mat4x4[1][3], m_mat4x4[2][3], m_mat4x4[3][3]
+    };
+
+    Matrix4x4 mat5 = 
+    {
+      m_mat4x4[0][0], m_mat4x4[2][0], m_mat4x4[3][0],
+      m_mat4x4[0][2], m_mat4x4[2][2], m_mat4x4[3][2],
+      m_mat4x4[0][3], m_mat4x4[2][3], m_mat4x4[3][3]
+    };
+
+    Matrix4x4 mat6 = 
+    {
+      m_mat4x4[0][0], m_mat4x4[1][0], m_mat4x4[3][0],
+      m_mat4x4[0][2], m_mat4x4[1][2], m_mat4x4[3][2],
+      m_mat4x4[0][3], m_mat4x4[1][3], m_mat4x4[3][3]
+    };
+
+    Matrix4x4 mat7 = 
+    {
+      m_mat4x4[0][0], m_mat4x4[1][0], m_mat4x4[2][0],
+      m_mat4x4[0][2], m_mat4x4[1][2], m_mat4x4[2][2],
+      m_mat4x4[0][3], m_mat4x4[1][3], m_mat4x4[2][3]
+    };
+
+    Matrix4x4 mat8 = 
+    {
+      m_mat4x4[1][0], m_mat4x4[2][0], m_mat4x4[3][0],
+      m_mat4x4[1][1], m_mat4x4[2][1], m_mat4x4[3][1],
+      m_mat4x4[1][3], m_mat4x4[2][3], m_mat4x4[3][3]
+    };
+
+    Matrix4x4 mat9 = 
+    {
+      m_mat4x4[0][0], m_mat4x4[2][0], m_mat4x4[3][0],
+      m_mat4x4[0][1], m_mat4x4[2][1], m_mat4x4[3][1],
+      m_mat4x4[0][3], m_mat4x4[2][3], m_mat4x4[3][3]
+    };
+
+    Matrix4x4 mat10 = 
+    {
+      m_mat4x4[0][0], m_mat4x4[1][0], m_mat4x4[3][0],
+      m_mat4x4[0][1], m_mat4x4[1][1], m_mat4x4[3][1],
+      m_mat4x4[0][3], m_mat4x4[1][3], m_mat4x4[3][3]
+    };
+
+    Matrix4x4 mat11 = 
+    {
+      m_mat4x4[0][0], m_mat4x4[1][0], m_mat4x4[2][0],
+      m_mat4x4[0][1], m_mat4x4[1][1], m_mat4x4[2][1],
+      m_mat4x4[0][3], m_mat4x4[1][3], m_mat4x4[2][3]
+    };
+
+    Matrix4x4 mat12 = 
+    {
+      m_mat4x4[1][0], m_mat4x4[2][0], m_mat4x4[3][0],
+      m_mat4x4[1][1], m_mat4x4[2][1], m_mat4x4[3][1],
+      m_mat4x4[1][2], m_mat4x4[2][2], m_mat4x4[3][2]
+    };
+
+    Matrix4x4 mat13 = 
+    {
+      m_mat4x4[0][0], m_mat4x4[2][0], m_mat4x4[3][0],
+      m_mat4x4[0][1], m_mat4x4[2][1], m_mat4x4[3][1],
+      m_mat4x4[0][2], m_mat4x4[2][2], m_mat4x4[3][2]
+    };
+
+    Matrix4x4 mat14 = 
+    {
+      m_mat4x4[0][0], m_mat4x4[1][0], m_mat4x4[3][0],
+      m_mat4x4[0][1], m_mat4x4[1][1], m_mat4x4[3][1],
+      m_mat4x4[0][2], m_mat4x4[1][2], m_mat4x4[3][2] 
+    };
+
+    Matrix4x4 mat15 = 
+    {
+      m_mat4x4[0][0], m_mat4x4[1][0], m_mat4x4[2][0],
+      m_mat4x4[0][1], m_mat4x4[1][1], m_mat4x4[2][2],
+      m_mat4x4[0][2], m_mat4x4[1][2], m_mat4x4[2][2] 
+    };
+
+    determinant = getDeterminant();
+
+    if ((determinant >= -0.00001f) && (determinant <= 0.00001f)) {
+      //Can not inverse, make it identity matrix
+      return identity();
+    }
+
+    invDeterminant = 1.0f / determinant;
+
+    m_mat4x4[0][0] = (mat0.getDeterminant() * invDeterminant);
+    m_mat4x4[1][0] = -(mat1.getDeterminant() * invDeterminant);
+    m_mat4x4[2][0] = (mat2.getDeterminant() * invDeterminant);
+    m_mat4x4[3][0] = -(mat3.getDeterminant() * invDeterminant);
+    m_mat4x4[0][1] = -(mat4.getDeterminant() * invDeterminant);
+    m_mat4x4[1][1] = (mat5.getDeterminant() * invDeterminant);
+    m_mat4x4[2][1] = -(mat6.getDeterminant() * invDeterminant);
+    m_mat4x4[3][1] = (mat7.getDeterminant() * invDeterminant);
+    m_mat4x4[0][2] = (mat8.getDeterminant() * invDeterminant);
+    m_mat4x4[1][2] = -(mat9.getDeterminant() * invDeterminant);
+    m_mat4x4[2][2] = (mat10.getDeterminant() * invDeterminant);
+    m_mat4x4[3][2] = -(mat11.getDeterminant() * invDeterminant);
+    m_mat4x4[0][3] = -(mat12.getDeterminant() * invDeterminant);
+    m_mat4x4[1][3] = (mat13.getDeterminant() * invDeterminant);
+    m_mat4x4[2][3] = -(mat14.getDeterminant() * invDeterminant);
+    m_mat4x4[3][3] = (mat15.getDeterminant() * invDeterminant);
+
+    return *this;
   }
 
   /*************************************************************************/
@@ -321,6 +532,12 @@ namespace gaEngineSDK {
     return result;
   }
 
+  Matrix4x4& 
+  Matrix4x4::operator*=(Matrix4x4& mat) {
+    *this = *this * mat;
+    return *this;
+  }
+
   void 
   Matrix4x4::operator*=(float data) {
     *this = *this * data;
@@ -355,4 +572,43 @@ namespace gaEngineSDK {
     return 4;
   }
 
+  float
+  Matrix4x4::getDeterminant() {
+    float deter;
+
+    Matrix4x4 deter0 =
+    {
+      m_mat4x4[1][1], m_mat4x4[2][1], m_mat4x4[3][1],
+      m_mat4x4[1][2], m_mat4x4[2][2], m_mat4x4[3][2],
+      m_mat4x4[1][3], m_mat4x4[2][3], m_mat4x4[3][3]
+    };
+
+    Matrix4x4 deter1 =
+    {
+      m_mat4x4[0][1], m_mat4x4[2][1], m_mat4x4[3][1],
+      m_mat4x4[0][2], m_mat4x4[2][2], m_mat4x4[3][2],
+      m_mat4x4[0][3], m_mat4x4[2][3], m_mat4x4[3][3]
+    };
+
+    Matrix4x4 deter2 =
+    {
+      m_mat4x4[0][1], m_mat4x4[1][1], m_mat4x4[3][1],
+      m_mat4x4[0][2], m_mat4x4[1][2], m_mat4x4[3][2],
+      m_mat4x4[0][3], m_mat4x4[1][3], m_mat4x4[3][3]
+    };
+
+    Matrix4x4 deter3 =
+    {
+      m_mat4x4[0][1], m_mat4x4[1][1], m_mat4x4[2][1],
+      m_mat4x4[0][2], m_mat4x4[1][2], m_mat4x4[2][2],
+      m_mat4x4[0][3], m_mat4x4[1][3], m_mat4x4[2][3]
+    };
+
+    deter = (m_mat4x4[0][0] * deter0.getDeterminant()) -
+      (m_mat4x4[1][0] * deter1.getDeterminant()) +
+      (m_mat4x4[2][0] * deter2.getDeterminant()) -
+      (m_mat4x4[3][0] * deter3.getDeterminant());
+
+    return deter;
+  }
 }

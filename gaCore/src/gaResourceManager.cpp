@@ -23,12 +23,15 @@ namespace gaEngineSDK {
 
     auto myGraphicApi = g_graphicApi().instancePtr();
     m_newModel.reset(new Model());
+    m_newMesh = new Mesh();
 
     //Create texture sampler for model's textures
     m_newModel->setSamplers(myGraphicApi->createSamplerState());
 
     //Process assimp's root pNode recursively
     processNode(m_pAScene->mRootNode, m_pAScene);
+
+    processAnimationInfo();
   }
 
   void
@@ -42,6 +45,7 @@ namespace gaEngineSDK {
       aiMesh* _mesh = pAScene->mMeshes[pANode->mMeshes[i]];
       m_pMeshes.push_back(processMesh(_mesh, pAScene));
     }
+
     for (uint32 i = 0; i < pANode->mNumChildren; i++) {
       processNode(pANode->mChildren[i], pAScene);
     }
@@ -106,12 +110,9 @@ namespace gaEngineSDK {
       vertices.push_back(structVertex[i]);
     }
 
-    m_newMesh = new Mesh();
     processBonesInfo(pAMesh, structVertex, numVertex);
 
     //processIndexInfo((uint32)indices.size());
-
-    processAnimationInfo();
 
     aiMaterial* material = pAScene->mMaterials[pAMesh->mMaterialIndex];
 
@@ -120,6 +121,9 @@ namespace gaEngineSDK {
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
     m_newMesh->init(vertices, indices, textures);
+
+    SPtr<Mesh> meshToAdd(m_newMesh);
+    m_newModel->addMesh(meshToAdd);
 
     return m_newMesh;
   }
@@ -132,7 +136,6 @@ namespace gaEngineSDK {
     if (0 < pAMesh->mNumBones) {
       for (uint32 i = 0; i < pAMesh->mNumBones; ++i) {
         auto bone = pAMesh->mBones[i];
-
         uint32 boneIndex = 0;
         String boneName(bone->mName.data);
 
@@ -149,17 +152,12 @@ namespace gaEngineSDK {
 
         skeletal->bonesMap[boneName] = boneIndex;
 
-        auto uno = sizeof(skeletal->vBones[boneIndex].offSet);
-        auto dos = sizeof(pAMesh->mBones[i]->mOffsetMatrix);
-        auto tres = sizeof(Matrix4x4);
-
         //Checar si funciona el memcopy
-        //std::memcpy(&skeletal->vBones[boneIndex].offSet, &pAMesh->mBones[i]->mOffsetMatrix,
-        //            sizeof(Matrix4x4));
+        std::memcpy(&skeletal->vBones[boneIndex].offSet, &pAMesh->mBones[i]->mOffsetMatrix,
+                    sizeof(Matrix4x4));
 
         for (uint32 j = 0; j < pAMesh->mBones[i]->mNumWeights; ++j) {
           uint32 verID = pAMesh->mBones[i]->mWeights[j].mVertexId;
-
           float weight = pAMesh->mBones[i]->mWeights[j].mWeight;
 
           for (uint32 k = 0; k < 4; ++k) {
@@ -203,7 +201,7 @@ namespace gaEngineSDK {
     std::memcpy(&m_newModel->m_globalInverseTransform, &m_pAScene->mRootNode->mTransformation,
                 sizeof(Matrix4x4));
 
-    m_newModel->m_globalInverseTransform.transpose();
+    //m_newModel->m_globalInverseTransform.invert();
     ModelNodes* rootNode = new ModelNodes();
 
     m_newModel->m_modelNodes.reset(rootNode);
@@ -395,8 +393,7 @@ namespace gaEngineSDK {
   }
 
   Vector<SamplerState*>
-
-    ResourceManager::getSamplerInfo() {
+  ResourceManager::getSamplerInfo() {
     return m_newModel->getSamplerInfo();
   }
 

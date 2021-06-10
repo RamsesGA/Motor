@@ -4,6 +4,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <assimp/cimport.h>
+#include <gaQuaternions.h>
 
 #include "gaPrerequisitesCore.h"
 #include "gaSamplerState.h"
@@ -14,14 +15,11 @@ namespace gaEngineSDK {
 
   struct Key {
     float m_time;
-    //TODO: Transformar a quaternion el tipo de dato y si hay errores crear
-    //la estructura de key de rotación con un cuaternión en lugar de un vec4
     Vector4 m_value;
   };
 
   struct RotationKey {
-    //TODO implementar quaterniones, sope
-    //Quaternion m_value;
+    Quaternions m_value;
     float m_time;
   };
 
@@ -76,7 +74,7 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    Vector<Key> m_vRotationKeys;
+    Vector<RotationKey> m_vRotationKeys;
 
     /*
     * @brief .
@@ -138,47 +136,18 @@ namespace gaEngineSDK {
 
       /***********************************************************************/
       /*
-      * Herency methods.
-      */
-      /***********************************************************************/
-
-      /*
-      * @brief
-      */
-      void
-      onInit() override {};
-
-      /*
-      * @brief
-      */
-      void
-      onUpdate(const float& deltaTime) override {};
-
-      /*
-      * @brief
-      */
-      void
-      onDelete() override {};
-
-      /*
-      * @brief
-      */
-      void
-      onRelease() override {};
-
-      /***********************************************************************/
-      /*
       * Methods.
       */
       /***********************************************************************/
-      void
-      draw(ResourceManager& resource);
 
       void
       setSamplers(SamplerState* sampler);
 
       Vector<SamplerState*>
       getSamplerInfo();
+
+      void
+      addMesh(WeakSPtr<Mesh> mesh);
 
       /***********************************************************************/
       /*

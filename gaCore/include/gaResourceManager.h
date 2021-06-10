@@ -104,6 +104,16 @@ namespace gaEngineSDK {
       Vector<SamplerState*>
       getSamplerInfo();
 
+      /*
+      * @brief .
+      */
+      Mesh* m_newMesh = nullptr;
+
+      /*
+      * @brief .
+      */
+      SPtr<Model> m_newModel;
+
     protected:
       /*
       * @brief .
@@ -128,15 +138,7 @@ namespace gaEngineSDK {
       */
       const aiScene* m_pAScene;
 
-      /*
-      * @brief .
-      */
-      Mesh* m_newMesh = nullptr;
-
-      /*
-      * @brief .
-      */
-      SPtr<Model> m_newModel;
+      
 
       /*
       * @brief Member to store a string of Meshes.

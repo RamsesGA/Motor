@@ -15,6 +15,24 @@ namespace gaEngineSDK {
       PlatformMath() = default;
     
       ~PlatformMath() = default;
+
+      static float
+      unwindDegrees(float A);
+
+      static float
+      unwindRadians(float A);
+
+      static float
+      taylorSin(const float& x);
+
+      static float
+      taylorCos(const float& x);
+
+      static 
+      float abs(float val);
+
+      static 
+      float invSqrt(float val);
     
       /***********************************************************************/
       /**
@@ -63,6 +81,9 @@ namespace gaEngineSDK {
       */
       static float
       arcTan(float data);
+
+      static
+      float arcTan(float val, float val2);
     
       /***********************************************************************/
       /**
@@ -168,5 +189,9 @@ namespace gaEngineSDK {
       static const float BIG_NUMBER;
       static const float DELTA;
       static const float FOV;
+      static const float DEG2RAD;
+      static const float RAD2DEG;
+      static const float EPSILONF;
+      static const float TWO_PI;
   };
 }

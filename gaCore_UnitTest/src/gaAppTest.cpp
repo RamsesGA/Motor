@@ -2,6 +2,7 @@
 #include <iostream>
 #include <gaModels.h>
 #include <gaResourceManager.h>
+#include <gaRenderModels.h>
 
 #include "gaAppTest.h"
 
@@ -58,7 +59,7 @@ AppTest::onInitCamera() {
 }
 
 void
-AppTest::onUpdate(float ) {
+AppTest::onUpdate(float deltaTime) {
   auto myGraphicsApi = g_graphicApi().instancePtr();
 
   ConstantBuffer1::E meshData;
@@ -115,8 +116,12 @@ AppTest::onRender() {
     myGraphicsApi->setYourVSConstantBuffers(m_pConstantBuffer1, 0, 1);
     myGraphicsApi->setYourVSConstantBuffers(m_pConstantBuffer2, 1, 1);
     myGraphicsApi->setYourPSConstantBuffers(m_pConstantBuffer2, 1, 1);
+    myGraphicsApi->setYourVSConstantBuffers(m_pConstBufferBones, 2, 1);
+    myGraphicsApi->setYourPSConstantBuffers(m_pConstBufferBones, 2, 1);
 
-    m_model->draw(*m_resourceManager);
+    SPtr<ConstantBuffer> tempBufferBones;
+    tempBufferBones.reset(m_pConstBufferBones);
+    m_renderModel->drawModel(*m_resourceManager, tempBufferBones);
   }
   catch (exception* e) {
     std::cout << "- - > " << e->what() << '\n';
@@ -145,10 +150,15 @@ AppTest::onCreate() {
   m_pDepthStencil = myGraphicsApi->getDefaultDepthStencil();
 
   try {
+    m_renderModel = new RenderModels();
+    m_mesh = new Mesh();
+
     //Creamos el vertex shader y pixel shader.
-    m_pBothShaders = myGraphicsApi->createShadersProgram(L"data/shaders/DX_color.fx",
+    //DX_animation
+    //DX_color
+    m_pBothShaders = myGraphicsApi->createShadersProgram(L"data/shaders/DX_animation.fx",
                                                          "VS",
-                                                         L"data/shaders/DX_color.fx",
+                                                         L"data/shaders/DX_animation.fx",
                                                          "PS");
     //Creamos el vertex shader y pixel shader.
     //m_pBothShaders = myGraphicsApi->createShadersProgram(L"data/shaders/OGL_VertexShader.txt",
@@ -159,8 +169,6 @@ AppTest::onCreate() {
     //Creamos el input layout 
     m_pVertexLayout = myGraphicsApi->createInputLayout(*m_pBothShaders);
 
-    m_mesh = new Mesh();
-
     //Creamos el vertex buffer
     m_mesh->m_pVertexBuffer = myGraphicsApi->createVertexBuffer(nullptr, sizeof(Matrices::E));
 
@@ -170,6 +178,7 @@ AppTest::onCreate() {
     //Creamos los constant buffers para el shader
     m_pConstantBuffer1 = myGraphicsApi->createConstantBuffer(sizeof(ConstantBuffer1::E));
     m_pConstantBuffer2 = myGraphicsApi->createConstantBuffer(sizeof(ConstantBuffer2::E));
+    m_pConstBufferBones = myGraphicsApi->createConstantBuffer(sizeof(ConstBuffBonesTransform::E));
   }
   catch (exception* e) {
     std::cout << "- - > " << e->what() << '\n';
@@ -192,7 +201,6 @@ AppTest::onCreate() {
 
 void
 AppTest::onDestroySystem() {
-  //delete m_model;
   //delete m_pRenderTargetView;
   //delete m_pDepthStencil;
   //delete m_pVertexLayout;

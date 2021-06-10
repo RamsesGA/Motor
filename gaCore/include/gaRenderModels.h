@@ -2,13 +2,15 @@
 
 #include "gaPrerequisitesCore.h"
 #include "gaGameObject.h"
+#include "gaModels.h"
+#include "gaStructures.h"
+#include "gaConstantBuffer.h"
 
-namespace gaEngineSDK
-{
+namespace gaEngineSDK {
 
-  class Model;
+  struct ConstBuffBonesTransform::E;
 
-  class RenderModels : public GameObject
+  class GA_CORE_EXPORT RenderModels : public GameObject
   {
     public:
       /***********************************************************************/
@@ -30,28 +32,41 @@ namespace gaEngineSDK
       * @brief
       */
       void
-      onInit() override {};
+      init(WeakSPtr<Model> model);
     
       /*
       * @brief
       */
       void
-      onUpdate(const float& deltaTime) override {};
+      onUpdate(const float& deltaTime) override;
     
       /*
       * @brief
       */
       void
-      onDelete() override {};
-    
-      /*
-      * @brief
-      */
+      drawModel(ResourceManager& resource, WeakSPtr<ConstantBuffer> cbBone);
+
       void
-      onDraw() override {};
+      changeModel(uint32 numMeshNewMode);
+
+      void
+      noneAnimation();
 
     private:
+      /***********************************************************************/
+      /**
+      * Members.
+      */
+      /***********************************************************************/
 
-      Model* m_pModel = nullptr;
+      bool m_playAnimation = true;
+
+      float m_timeOfAnimation = 0.0f;
+
+      Vector<ConstBuffBonesTransform::E> m_meshBones;
+
+      SPtr<Model> m_pModel = nullptr;
+
+      SPtr<AnimationData> m_currentAnimation = nullptr;
   };
 }

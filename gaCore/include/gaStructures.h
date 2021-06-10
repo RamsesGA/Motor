@@ -53,7 +53,7 @@ namespace Vertex {
 		Vector4 normal = { 0.0f, 0.0f, 0.0f, 0.0f };
 		Vector4 tangent =   { 0.0f, 0.0f, 0.0f, 0.0f };
 		Vector2 texCoords = { 0.0f, 0.0f };
-		Vector4 color = { 255.0f, 255.0f, 255.0f, 255.0f };
+		//Vector4 color = { 255.0f, 255.0f, 255.0f, 255.0f };
 		float boneWeights[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 		uint32 boneIds[4] = { 0, 0, 0, 0 };
 	};

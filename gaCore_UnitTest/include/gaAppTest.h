@@ -13,6 +13,7 @@
 namespace gaEngineSDK {
   class Models;
   class ResourceManager;
+  class RenderModels;
 }
 
 using namespace gaEngineSDK;
@@ -72,7 +73,12 @@ class AppTest : public BaseApp
     * Members.
     */
     /*************************************************************************/
-  
+
+    /*
+    * @brief Variable with camera information.
+    */
+    Camera m_mainCamera;
+
     /*
     * @brief Material color.
     */
@@ -82,16 +88,6 @@ class AppTest : public BaseApp
     * @brief 4x4 matrix of the world.
     */
     Matrix4x4 m_world;
-  
-    /*
-    * @brief Variable with camera information.
-    */
-    Camera m_mainCamera;
-  
-    /*
-    * @brief Variable with the information of the loaded model.
-    */
-    Model* m_model = nullptr;
 
     /*
     * @brief .
@@ -120,9 +116,12 @@ class AppTest : public BaseApp
     */
     ConstantBuffer* m_pConstantBuffer1 = nullptr;
     ConstantBuffer* m_pConstantBuffer2 = nullptr;
+    ConstantBuffer* m_pConstBufferBones = nullptr;
 
     /*
     * @brief .
     */
     Mesh* m_mesh;
+
+    RenderModels* m_renderModel = nullptr;
 };

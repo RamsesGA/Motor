@@ -7,9 +7,8 @@
 
 namespace gaEngineSDK {
 
-
-  void
-  Model::draw(ResourceManager& resource) {
+  /*void
+    Model::draw(ResourceManager& resource) {
     auto myGraphicApi = g_graphicApi().instancePtr();
 
     if (nullptr == myGraphicApi) {
@@ -19,7 +18,7 @@ namespace gaEngineSDK {
     for (uint32 i = 0; i < resource.getMeshes().size(); i++) {
       resource.getMeshes()[i]->draw(resource.getSamplerInfo());
     }
-  }
+  }*/
 
   void
   Model::setSamplers(SamplerState* sampler) {
@@ -29,5 +28,12 @@ namespace gaEngineSDK {
   Vector<SamplerState*>
   Model::getSamplerInfo() {
     return m_pSamplers;
+  }
+
+  void 
+  Model::addMesh(WeakSPtr<Mesh> mesh) {
+    SPtr<Mesh> temp = mesh.lock();
+    temp->m_pModel = this;
+    m_vMeshes.push_back(mesh.lock());
   }
 }

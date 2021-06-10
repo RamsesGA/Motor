@@ -1,5 +1,7 @@
 #pragma once
 
+#include <gaQuaternions.h>
+
 #include "gaPrerequisitesCore.h"
 #include "gaStructures.h"
 #include "gaSamplerState.h"
@@ -21,7 +23,7 @@ namespace gaEngineSDK {
   };
 
   struct SkeletalMesh {
-    uint32 numBones;
+    uint32 numBones = 0;
     Map<String, int32> bonesMap;
     Vector<Bone> vBones;
   };
@@ -65,6 +67,40 @@ namespace gaEngineSDK {
       */
       void 
       draw(Vector <SamplerState*> pSamplerState);
+
+      void 
+      animated(const float& animationTime, SPtr<AnimationData> animation);
+
+      void 
+      boneTransform(const float& deltaTime, SPtr<AnimationData> animation);
+
+      void
+      readNodeHierarchy(const float& animationTime, WeakSPtr<ModelNodes> node,
+                        const Matrix4x4& parentTransform, SPtr<AnimationData> animation);
+
+      const AnimationNode*
+      findNodeAnim(AnimationData* animation, const String& nodeName);
+
+      Vector3
+      calcInterpolatedScaling(const float& animationTime, const AnimationNode* animationNode);
+
+      Matrix4x4
+      calcInterpolatedRotation(const float& animationTime, const AnimationNode* animationNode);
+
+      Vector3
+      calcInterpolatedPosition(const float& animationTime, const AnimationNode* animationNode);
+
+      uint32
+      findScaling(const float& animationTime, const AnimationNode* animationNode);
+
+      uint32
+      findRotation(const float& animationTime, const AnimationNode* animationNode);
+
+      uint32
+      findPosition(const float& animationTime, const AnimationNode* animationNode);
+
+      Matrix4x4
+      nlerp(Quaternions a, Quaternions b, const float& blend);
 
       /***********************************************************************/
       /*
@@ -154,15 +190,42 @@ namespace gaEngineSDK {
       uint32
       getVertices();
 
+      uint32
+      getNumIndices();
+
+      SPtr<Textures> 
+      getDiffuse();
+
+      SPtr<Textures> 
+      getAlbedo();
+
+      SPtr<Textures> 
+      getNormals();
+
+      SPtr<Textures> 
+      getSpecular();
+
+      SPtr<Textures> 
+      getMetalness();
+
+      SPtr<Textures> 
+      getRoughness();
+
+      /***********************************************************************/
+      /*
+      * Members.
+      */
+      /***********************************************************************/
+
       /*
       * @brief Member to store vertex information.
       */
-      VertexBuffer* m_pVertexBuffer;
+      VertexBuffer* m_pVertexBuffer = nullptr;
 
       /*
       * @brief Member to store the index information.
       */
-      IndexBuffer* m_pIndexBuffer;
+      IndexBuffer* m_pIndexBuffer = nullptr;
 
       /*
       * @brief .
@@ -174,12 +237,22 @@ namespace gaEngineSDK {
       */
       Vector<Matrix4x4> m_bonesTransforms;
 
-    private:
-      /***********************************************************************/
       /*
-      * Members.
+      * @brief .
       */
-      /***********************************************************************/
+      ConstBuffBonesTransform::E* m_cbBonesTransform;
+
+      /*
+      * @brief Member to store the texture information.
+      */
+      Vector<Texture::E> m_textures;
+
+      /*
+      * @brief .
+      */
+      Model* m_pModel = nullptr;
+
+    private:
 
       /*
       * @brief
@@ -214,22 +287,17 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      uint32 m_numIndices;
+      uint32 m_numIndices = 0;
 
       /*
       * @brief .
       */
-      uint32 m_numVertices;
+      uint32 m_numVertices = 0;
 
       /*
       * @brief .
       */
-      String m_meshName;
-
-      /*
-      * @brief Member to store the texture information.
-      */
-      Vector<Texture::E> m_textures;
+      String m_meshName = "Default_Name_Mesh";
 
       /*
       * @brief .
@@ -246,40 +314,37 @@ namespace gaEngineSDK {
       */
       Vector<uint32> m_vIndices;
 
-      /*
-      * @brief .
-      */
-      Model* m_pModel;
+      
 
       /*
       * @brief Member to save the info of this type of texture.
       */
-      SPtr<Textures> m_diffuse;
+      SPtr<Textures> m_diffuse = nullptr;
 
       /*
       * @brief Member to save the info of this type of texture.
       */
-      SPtr<Textures> m_albedo;
+      SPtr<Textures> m_albedo = nullptr;
 
       /*
       * @brief Member to save the info of this type of texture.
       */
-      SPtr<Textures> m_normals;
+      SPtr<Textures> m_normals = nullptr;
 
       /*
       * @brief Member to save the info of this type of texture.
       */
-      SPtr<Textures> m_specular;
+      SPtr<Textures> m_specular = nullptr;
 
       /*
       * @brief Member to save the info of this type of texture.
       */
-      SPtr<Textures> m_metalness;
+      SPtr<Textures> m_metalness = nullptr;
 
       /*
       * @brief Member to save the info of this type of texture.
       */
-      SPtr<Textures> m_roughness;
+      SPtr<Textures> m_roughness = nullptr;
 
       /*
       * @brief .

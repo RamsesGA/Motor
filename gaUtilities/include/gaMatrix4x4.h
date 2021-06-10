@@ -24,6 +24,10 @@ namespace gaEngineSDK {
                 float x2, float y2, float z2, float w2, 
                 float x3, float y3, float z3, float w3, 
                 float x4, float y4, float z4, float w4);
+
+      Matrix4x4(float x0, float x3, float x6,
+                float x1, float x4, float x7,
+                float x2, float x5, float x8);
       
       /**
       * @brief Copy the members of one class instance to another.
@@ -93,10 +97,40 @@ namespace gaEngineSDK {
       calculatePosition(Vector3 eye);
 
       /**
-      * @brief Returns a identity matrix.
+      * @brief .
       */
-      void
+      Matrix4x4&
       identity();
+
+      /**
+      * @brief .
+      */
+      Matrix4x4&
+      scale(Vector3 scal);
+
+      /**
+      * @brief .
+      */
+      Matrix4x4&
+      scale(float sx, float sy, float sz);
+
+      /**
+      * @brief .
+      */
+      Matrix4x4&
+      translate(const Vector3 & vec3);
+
+      /**
+      * @brief .
+      */
+      Matrix4x4&
+      translate(float x, float y, float z);
+
+      /**
+      * @brief .
+      */
+      Matrix4x4&
+      invert();
       
       /***********************************************************************/
       /**
@@ -142,7 +176,16 @@ namespace gaEngineSDK {
       */
       Matrix4x4
       operator*(float data)const;
+
+      /**
+      * @brief .
+      */
+      Matrix4x4&
+      operator*=(Matrix4x4& mat);
       
+      /**
+      * @brief .
+      */
       void
       operator*=(float data);
       
@@ -176,15 +219,20 @@ namespace gaEngineSDK {
       int32
       getColumns() const;
 
-    private:
+      /**
+      * @brief .
+      */
+      float
+      getDeterminant();
+
       /***********************************************************************/
       /**
       * Members.
       */
       /***********************************************************************/
-
       union {
         float m_mat4x4[4][4];
       };
+      
   };
 }
