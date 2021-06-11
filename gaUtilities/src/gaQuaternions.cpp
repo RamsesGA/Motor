@@ -319,7 +319,7 @@ namespace gaEngineSDK {
   Quaternions::getMatrix() const {
     Matrix4x4 mat;
 
-    mat.m_mat4x4[0][0] = (1.0f - 2.0f) * (m_y * m_y + m_z * m_z);
+    mat.m_mat4x4[0][0] = 1.0f - 2.0f * (m_y * m_y + m_z * m_z);
     mat.m_mat4x4[1][0] = 2.0f * (m_x * m_y - m_z * m_w);
     mat.m_mat4x4[2][0] = 2.0f * (m_x * m_z + m_y * m_w); 
     mat.m_mat4x4[3][0] = 0;

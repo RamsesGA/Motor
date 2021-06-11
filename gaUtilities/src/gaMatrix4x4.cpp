@@ -10,15 +10,15 @@ namespace gaEngineSDK {
   /*************************************************************************/
 
   Matrix4x4::Matrix4x4() {
-    m_mat4x4[0][0] = 0.0f; m_mat4x4[0][1] = 0.0f;
-    m_mat4x4[1][0] = 0.0f; m_mat4x4[1][1] = 0.0f;
+    m_mat4x4[0][0] = 1.0f; m_mat4x4[0][1] = 0.0f;
+    m_mat4x4[1][0] = 0.0f; m_mat4x4[1][1] = 1.0f;
     m_mat4x4[2][0] = 0.0f; m_mat4x4[2][1] = 0.0f;
     m_mat4x4[3][0] = 0.0f; m_mat4x4[3][1] = 0.0f;
 
     m_mat4x4[0][2] = 0.0f; m_mat4x4[0][3] = 0.0f;
     m_mat4x4[1][2] = 0.0f; m_mat4x4[1][3] = 0.0f;
-    m_mat4x4[2][2] = 0.0f; m_mat4x4[2][3] = 0.0f;
-    m_mat4x4[3][2] = 0.0f; m_mat4x4[3][3] = 0.0f;
+    m_mat4x4[2][2] = 1.0f; m_mat4x4[2][3] = 0.0f;
+    m_mat4x4[3][2] = 0.0f; m_mat4x4[3][3] = 1.0f;
   }
 
   Matrix4x4::Matrix4x4(float x1, float y1, float z1, float w1,
@@ -39,25 +39,15 @@ namespace gaEngineSDK {
   Matrix4x4::Matrix4x4(float x0, float y3, float z6, 
                        float x1, float y4, float z7, 
                        float x2, float y5, float z8) {
-    m_mat4x4[0][0] = x0;    
-    m_mat4x4[1][0] = x1;    
-    m_mat4x4[2][0] = x2;    
-    m_mat4x4[3][0] = 0.0f;  
+    m_mat4x4[0][0] = x0;   m_mat4x4[0][1] = y3;
+    m_mat4x4[1][0] = x1;   m_mat4x4[1][1] = y4;
+    m_mat4x4[2][0] = x2;   m_mat4x4[2][1] = y5;
+    m_mat4x4[3][0] = 0.0f; m_mat4x4[3][1] = 0.0f;
 
-    m_mat4x4[3][0] = y3;
-    m_mat4x4[0][1] = y4;
-    m_mat4x4[1][1] = y5;
-    m_mat4x4[3][1] = 0.0f;
-
-    m_mat4x4[2][1] = z6;
-    m_mat4x4[3][1] = z7;
-    m_mat4x4[0][2] = z8;
-    m_mat4x4[3][2] = 0.0f;
-
-    m_mat4x4[0][3] = 0.0f; 
-    m_mat4x4[1][3] = 0.0f;
-    m_mat4x4[2][3] = 0.0f;
-    m_mat4x4[3][3] = 0.0f;
+    m_mat4x4[0][2] = z6;   m_mat4x4[0][3] = 0.0f;
+    m_mat4x4[1][2] = z7;   m_mat4x4[1][3] = 0.0f;
+    m_mat4x4[2][2] = z8;   m_mat4x4[2][3] = 0.0f;
+    m_mat4x4[3][2] = 0.0f; m_mat4x4[3][3] = 0.0f;
   }
 
   Matrix4x4::Matrix4x4(const Matrix4x4& matrix){
@@ -89,8 +79,8 @@ namespace gaEngineSDK {
   */
   /*************************************************************************/
 
-  Matrix4x4 
-  Matrix4x4::transpose() const {
+  Matrix4x4& 
+  Matrix4x4::transpose() {
     Matrix4x4 trans;
 
     for (int32 i = 0; i < 4; ++i) {
@@ -98,8 +88,8 @@ namespace gaEngineSDK {
         trans(i, j) = this->m_mat4x4[j][i];
       }
     }
-
-    return trans;
+    *this = trans;
+    return *this;
   }
 
   Matrix4x4 
@@ -283,148 +273,95 @@ namespace gaEngineSDK {
   }
 
   Matrix4x4& 
-  Matrix4x4::invert() {
-    float determinant, invDeterminant;
+  Matrix4x4::invert(Matrix4x4 matrix) {
+    float tempParamMatrix[4][4];
+    float inverseMatrix[4][4];
 
-    Matrix4x4 mat0 = 
-    {
-      m_mat4x4[1][1], m_mat4x4[2][1], m_mat4x4[3][1],
-      m_mat4x4[1][2], m_mat4x4[2][2], m_mat4x4[3][2],
-      m_mat4x4[1][3], m_mat4x4[2][3], m_mat4x4[3][3]
-    };
+    tempParamMatrix[0][0] = matrix.m_mat4x4[0][0];
+    tempParamMatrix[1][0] = matrix.m_mat4x4[1][0];
+    tempParamMatrix[2][0] = matrix.m_mat4x4[2][0];
+    tempParamMatrix[3][0] = matrix.m_mat4x4[3][0];
 
-    Matrix4x4 mat1 = 
-    {
-      m_mat4x4[0][1], m_mat4x4[2][1], m_mat4x4[3][1],
-      m_mat4x4[0][2], m_mat4x4[2][2], m_mat4x4[3][2],
-      m_mat4x4[0][3], m_mat4x4[2][3], m_mat4x4[3][3]
-    };
+    tempParamMatrix[0][1] = matrix.m_mat4x4[0][1];
+    tempParamMatrix[1][1] = matrix.m_mat4x4[1][1];
+    tempParamMatrix[2][1] = matrix.m_mat4x4[2][1];
+    tempParamMatrix[3][1] = matrix.m_mat4x4[3][1];
+                                  
+    tempParamMatrix[0][2] = matrix.m_mat4x4[0][2];
+    tempParamMatrix[1][2] = matrix.m_mat4x4[1][2];
+    tempParamMatrix[2][2] = matrix.m_mat4x4[2][2];
+    tempParamMatrix[3][2] = matrix.m_mat4x4[3][2];
 
-    Matrix4x4 mat2 = 
-    {
-      m_mat4x4[0][1], m_mat4x4[1][1], m_mat4x4[3][1],
-      m_mat4x4[0][2], m_mat4x4[1][2], m_mat4x4[3][2],
-      m_mat4x4[0][3], m_mat4x4[1][3], m_mat4x4[3][3]
-    };
+    tempParamMatrix[0][3] = matrix.m_mat4x4[0][3];
+    tempParamMatrix[1][3] = matrix.m_mat4x4[1][3];
+    tempParamMatrix[2][3] = matrix.m_mat4x4[2][3];
+    tempParamMatrix[3][3] = matrix.m_mat4x4[3][3];
 
-    Matrix4x4 mat3 = 
-    {
-      m_mat4x4[0][1], m_mat4x4[1][1], m_mat4x4[2][1],
-      m_mat4x4[0][2], m_mat4x4[1][2], m_mat4x4[2][2],
-      m_mat4x4[0][3], m_mat4x4[1][3], m_mat4x4[2][3]
-    };
+    float det = getDeterminant(tempParamMatrix);
 
-    Matrix4x4 mat4 = 
-    {
-      m_mat4x4[1][0], m_mat4x4[2][0], m_mat4x4[3][0],
-      m_mat4x4[1][2], m_mat4x4[2][2], m_mat4x4[3][2],
-      m_mat4x4[1][3], m_mat4x4[2][3], m_mat4x4[3][3]
-    };
-
-    Matrix4x4 mat5 = 
-    {
-      m_mat4x4[0][0], m_mat4x4[2][0], m_mat4x4[3][0],
-      m_mat4x4[0][2], m_mat4x4[2][2], m_mat4x4[3][2],
-      m_mat4x4[0][3], m_mat4x4[2][3], m_mat4x4[3][3]
-    };
-
-    Matrix4x4 mat6 = 
-    {
-      m_mat4x4[0][0], m_mat4x4[1][0], m_mat4x4[3][0],
-      m_mat4x4[0][2], m_mat4x4[1][2], m_mat4x4[3][2],
-      m_mat4x4[0][3], m_mat4x4[1][3], m_mat4x4[3][3]
-    };
-
-    Matrix4x4 mat7 = 
-    {
-      m_mat4x4[0][0], m_mat4x4[1][0], m_mat4x4[2][0],
-      m_mat4x4[0][2], m_mat4x4[1][2], m_mat4x4[2][2],
-      m_mat4x4[0][3], m_mat4x4[1][3], m_mat4x4[2][3]
-    };
-
-    Matrix4x4 mat8 = 
-    {
-      m_mat4x4[1][0], m_mat4x4[2][0], m_mat4x4[3][0],
-      m_mat4x4[1][1], m_mat4x4[2][1], m_mat4x4[3][1],
-      m_mat4x4[1][3], m_mat4x4[2][3], m_mat4x4[3][3]
-    };
-
-    Matrix4x4 mat9 = 
-    {
-      m_mat4x4[0][0], m_mat4x4[2][0], m_mat4x4[3][0],
-      m_mat4x4[0][1], m_mat4x4[2][1], m_mat4x4[3][1],
-      m_mat4x4[0][3], m_mat4x4[2][3], m_mat4x4[3][3]
-    };
-
-    Matrix4x4 mat10 = 
-    {
-      m_mat4x4[0][0], m_mat4x4[1][0], m_mat4x4[3][0],
-      m_mat4x4[0][1], m_mat4x4[1][1], m_mat4x4[3][1],
-      m_mat4x4[0][3], m_mat4x4[1][3], m_mat4x4[3][3]
-    };
-
-    Matrix4x4 mat11 = 
-    {
-      m_mat4x4[0][0], m_mat4x4[1][0], m_mat4x4[2][0],
-      m_mat4x4[0][1], m_mat4x4[1][1], m_mat4x4[2][1],
-      m_mat4x4[0][3], m_mat4x4[1][3], m_mat4x4[2][3]
-    };
-
-    Matrix4x4 mat12 = 
-    {
-      m_mat4x4[1][0], m_mat4x4[2][0], m_mat4x4[3][0],
-      m_mat4x4[1][1], m_mat4x4[2][1], m_mat4x4[3][1],
-      m_mat4x4[1][2], m_mat4x4[2][2], m_mat4x4[3][2]
-    };
-
-    Matrix4x4 mat13 = 
-    {
-      m_mat4x4[0][0], m_mat4x4[2][0], m_mat4x4[3][0],
-      m_mat4x4[0][1], m_mat4x4[2][1], m_mat4x4[3][1],
-      m_mat4x4[0][2], m_mat4x4[2][2], m_mat4x4[3][2]
-    };
-
-    Matrix4x4 mat14 = 
-    {
-      m_mat4x4[0][0], m_mat4x4[1][0], m_mat4x4[3][0],
-      m_mat4x4[0][1], m_mat4x4[1][1], m_mat4x4[3][1],
-      m_mat4x4[0][2], m_mat4x4[1][2], m_mat4x4[3][2] 
-    };
-
-    Matrix4x4 mat15 = 
-    {
-      m_mat4x4[0][0], m_mat4x4[1][0], m_mat4x4[2][0],
-      m_mat4x4[0][1], m_mat4x4[1][1], m_mat4x4[2][2],
-      m_mat4x4[0][2], m_mat4x4[1][2], m_mat4x4[2][2] 
-    };
-
-    determinant = getDeterminant();
-
-    if ((determinant >= -0.00001f) && (determinant <= 0.00001f)) {
-      //Can not inverse, make it identity matrix
-      return identity();
+    if (0.0f == det) {
+      return matrix;
     }
 
-    invDeterminant = 1.0f / determinant;
+    // Find adjoint
+    float adj[4][4];
+    adjoint(tempParamMatrix, adj);
 
-    m_mat4x4[0][0] = (mat0.getDeterminant() * invDeterminant);
-    m_mat4x4[1][0] = -(mat1.getDeterminant() * invDeterminant);
-    m_mat4x4[2][0] = (mat2.getDeterminant() * invDeterminant);
-    m_mat4x4[3][0] = -(mat3.getDeterminant() * invDeterminant);
-    m_mat4x4[0][1] = -(mat4.getDeterminant() * invDeterminant);
-    m_mat4x4[1][1] = (mat5.getDeterminant() * invDeterminant);
-    m_mat4x4[2][1] = -(mat6.getDeterminant() * invDeterminant);
-    m_mat4x4[3][1] = (mat7.getDeterminant() * invDeterminant);
-    m_mat4x4[0][2] = (mat8.getDeterminant() * invDeterminant);
-    m_mat4x4[1][2] = -(mat9.getDeterminant() * invDeterminant);
-    m_mat4x4[2][2] = (mat10.getDeterminant() * invDeterminant);
-    m_mat4x4[3][2] = -(mat11.getDeterminant() * invDeterminant);
-    m_mat4x4[0][3] = -(mat12.getDeterminant() * invDeterminant);
-    m_mat4x4[1][3] = (mat13.getDeterminant() * invDeterminant);
-    m_mat4x4[2][3] = -(mat14.getDeterminant() * invDeterminant);
-    m_mat4x4[3][3] = (mat15.getDeterminant() * invDeterminant);
+    // Find Inverse using formula "inverse(A) = adj(A)/det(A)"
+    for (int32 i = 0; i < 4; i++) {
+      for (int32 j = 0; j < 4; j++) {
+        inverseMatrix[i][j] = adj[i][j] / float(det);
+      }
+    }
 
-    return *this;
+    matrix.m_mat4x4[0][0] = inverseMatrix[0][0];
+    matrix.m_mat4x4[1][0] = inverseMatrix[1][0];
+    matrix.m_mat4x4[2][0] = inverseMatrix[2][0];
+    matrix.m_mat4x4[3][0] = inverseMatrix[3][0];
+
+    matrix.m_mat4x4[0][1] = inverseMatrix[0][1];
+    matrix.m_mat4x4[1][1] = inverseMatrix[1][1];
+    matrix.m_mat4x4[2][1] = inverseMatrix[2][1];
+    matrix.m_mat4x4[3][1] = inverseMatrix[3][1];
+
+    matrix.m_mat4x4[0][2] = inverseMatrix[0][2];
+    matrix.m_mat4x4[1][2] = inverseMatrix[1][2];
+    matrix.m_mat4x4[2][2] = inverseMatrix[2][2];
+    matrix.m_mat4x4[3][2] = inverseMatrix[3][2];
+
+    matrix.m_mat4x4[0][3] = inverseMatrix[0][3];
+    matrix.m_mat4x4[1][3] = inverseMatrix[1][3];
+    matrix.m_mat4x4[2][3] = inverseMatrix[2][3];
+    matrix.m_mat4x4[3][3] = inverseMatrix[3][3];
+
+    return matrix;
+  }
+
+  void 
+  Matrix4x4::adjoint(float tempMatrix[4][4], float adj[4][4]) {
+    if (4 == 1) {
+      adj[0][0] = 1;
+      return;
+    }
+
+    // temp is used to store cofactors of A[][]
+    int sign = 1;
+    float temp[4][4];
+
+    for (int i = 0; i < 4; i++) {
+      for (int j = 0; j < 4; j++) {
+        // Get cofactor of A[i][j]
+        getCofactor(tempMatrix, temp, i, j, 4);
+
+        // sign of adj[j][i] positive if sum of row
+        // and column indexes is even.
+        sign = ((i + j) % 2 == 0) ? 1 : -1;
+
+        // Interchanging rows and columns to get the
+        // transpose of the cofactor matrix
+        adj[j][i] = (sign) * (getDeterminant(temp, 4 - 1));
+      }
+    }
   }
 
   /*************************************************************************/
@@ -573,42 +510,55 @@ namespace gaEngineSDK {
   }
 
   float
-  Matrix4x4::getDeterminant() {
-    float deter;
+  Matrix4x4::getDeterminant(float tempMatrix[4][4], float n) {
+    // Initialize result
+    float D = 0;
 
-    Matrix4x4 deter0 =
-    {
-      m_mat4x4[1][1], m_mat4x4[2][1], m_mat4x4[3][1],
-      m_mat4x4[1][2], m_mat4x4[2][2], m_mat4x4[3][2],
-      m_mat4x4[1][3], m_mat4x4[2][3], m_mat4x4[3][3]
-    };
+    //  Base case : if matrix contains single element
+    if (n == 1) {
+      return tempMatrix[0][0];
+    }
 
-    Matrix4x4 deter1 =
-    {
-      m_mat4x4[0][1], m_mat4x4[2][1], m_mat4x4[3][1],
-      m_mat4x4[0][2], m_mat4x4[2][2], m_mat4x4[3][2],
-      m_mat4x4[0][3], m_mat4x4[2][3], m_mat4x4[3][3]
-    };
+    // To store cofactors
+    float temp[4][4]; 
 
-    Matrix4x4 deter2 =
-    {
-      m_mat4x4[0][1], m_mat4x4[1][1], m_mat4x4[3][1],
-      m_mat4x4[0][2], m_mat4x4[1][2], m_mat4x4[3][2],
-      m_mat4x4[0][3], m_mat4x4[1][3], m_mat4x4[3][3]
-    };
+    // To store sign multiplier
+    float sign = 1.0f;
 
-    Matrix4x4 deter3 =
-    {
-      m_mat4x4[0][1], m_mat4x4[1][1], m_mat4x4[2][1],
-      m_mat4x4[0][2], m_mat4x4[1][2], m_mat4x4[2][2],
-      m_mat4x4[0][3], m_mat4x4[1][3], m_mat4x4[2][3]
-    };
+     // Iterate for each element of first row
+    for (int32 f = 0; f < n; f++) {
+      // Getting Cofactor of A[0][f]
+      getCofactor(tempMatrix, temp, 0, f, n);
+      D += sign * tempMatrix[0][f] * getDeterminant(temp, n - 1);
 
-    deter = (m_mat4x4[0][0] * deter0.getDeterminant()) -
-      (m_mat4x4[1][0] * deter1.getDeterminant()) +
-      (m_mat4x4[2][0] * deter2.getDeterminant()) -
-      (m_mat4x4[3][0] * deter3.getDeterminant());
+      // terms are to be added with alternate sign
+      sign = -sign;
+    }
 
-    return deter;
+    return D;
+  }
+
+  void
+  gaEngineSDK::Matrix4x4::getCofactor(float tempMatrix[4][4], 
+                                      float tempMatrix2[4][4], int p, int q, int n) {
+    int i = 0, j = 0;
+
+    // Looping for each element of the matrix
+    for (int row = 0; row < n; row++) {
+      for (int col = 0; col < n; col++) {
+        //  Copying into temporary matrix only those element
+        //  which are not in given row and column
+        if (row != p && col != q) {
+          tempMatrix2[i][j++] = tempMatrix[row][col];
+
+          // Row is filled, so increase row index and
+          // reset col index
+          if (j == n - 1) {
+            j = 0;
+            i++;
+          }
+        }
+      }
+    }
   }
 }

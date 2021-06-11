@@ -7,6 +7,7 @@
 #include "gaSamplerState.h"
 
 namespace gaEngineSDK {
+  class ResourceManager;
   class VertexBuffer;
   class GraphicsApi;
   class IndexBuffer;
@@ -69,13 +70,14 @@ namespace gaEngineSDK {
       draw(Vector <SamplerState*> pSamplerState);
 
       void 
-      animated(const float& animationTime, SPtr<AnimationData> animation);
+      animated(ResourceManager& resource, const float& animationTime, SPtr<AnimationData> animation);
 
       void 
-      boneTransform(const float& deltaTime, SPtr<AnimationData> animation);
+      boneTransform(ResourceManager& resource, const float& deltaTime, SPtr<AnimationData> animation);
 
       void
-      readNodeHierarchy(const float& animationTime, WeakSPtr<ModelNodes> node,
+      readNodeHierarchy(ResourceManager& resource, 
+                        const float& animationTime, WeakSPtr<ModelNodes> node,
                         const Matrix4x4& parentTransform, SPtr<AnimationData> animation);
 
       const AnimationNode*
@@ -246,11 +248,6 @@ namespace gaEngineSDK {
       * @brief Member to store the texture information.
       */
       Vector<Texture::E> m_textures;
-
-      /*
-      * @brief .
-      */
-      Model* m_pModel = nullptr;
 
     private:
 

@@ -5,14 +5,16 @@
 
 namespace gaEngineSDK {
   void 
-  RenderModels::init(WeakSPtr<Model> model) {
-    m_pModel = model.lock();
-    changeModel((uint32)m_pModel->m_vMeshes.size());
+  RenderModels::init() {
   }
 
   void 
-  RenderModels::onUpdate(const float& deltaTime) {
-    if (nullptr == m_pModel) {
+  RenderModels::update(ResourceManager& resource, const float& deltaTime) {
+    if (nullptr == m_pResourceMang) {
+      m_pResourceMang.reset(&resource);
+    }
+
+    if (nullptr == m_pResourceMang) {
       m_timeOfAnimation = 0.0f;
       return;
     }
@@ -28,9 +30,9 @@ namespace gaEngineSDK {
 
       uint32 meshNum = 0;
 
-      for (auto mesh : m_pModel.get()->m_vMeshes) {
+      for (auto mesh : m_pResourceMang->getMeshes()) {
         mesh->m_cbBonesTransform = &m_meshBones[meshNum];
-        mesh->animated(m_timeOfAnimation, m_currentAnimation);
+        mesh->animated(resource ,m_timeOfAnimation, m_currentAnimation);
         ++meshNum;
       }
     }
@@ -38,41 +40,34 @@ namespace gaEngineSDK {
 
   void 
   RenderModels::drawModel(ResourceManager& resource, WeakSPtr<ConstantBuffer> cbBone) {
-    if ((m_pModel == nullptr) ||
-        (nullptr == &cbBone)) {
-      return;
+    if (m_pResourceMang == nullptr) {
+      m_pResourceMang.reset(&resource);
     }
 
     uint32 meshNum = 0;
     auto myGraphicApi = g_graphicApi().instancePtr();
 
-    for (auto mesh : m_pModel.get()->m_vMeshes) {
+    for (auto mesh : m_pResourceMang->getMeshes()) {
       myGraphicApi->updateConstantBuffer(&m_meshBones[meshNum], *cbBone.lock().get());
 
-      auto tempAlgo = resource.getSamplerInfo();
+      if (0 != m_pResourceMang->getMeshes()[meshNum]->m_textures.size()) {
+        auto tempAlgo = resource.getSamplerInfo();
 
-      myGraphicApi->setSamplerState(0, tempAlgo, resource.m_newMesh->m_textures[meshNum].texture);
-      myGraphicApi->setShaderResourceView(resource.m_newMesh->m_textures[meshNum].texture, meshNum, 1);
+        myGraphicApi->setSamplerState(0, tempAlgo, m_pResourceMang->getMeshes()[meshNum]->m_textures[meshNum].texture);
+        myGraphicApi->setShaderResourceView(m_pResourceMang->getMeshes()[meshNum]->m_textures[meshNum].texture, meshNum, 1);
+      }
+      
+      myGraphicApi->setVertexBuffer(*mesh->m_pVertexBuffer);
+      myGraphicApi->setIndexBuffer(*mesh->m_pIndexBuffer);
 
-      myGraphicApi->setVertexBuffer(*mesh.get()->m_pVertexBuffer);
-      myGraphicApi->setIndexBuffer(*mesh.get()->m_pIndexBuffer);
-
-      myGraphicApi->drawIndex(mesh.get()->getNumIndices(), 0, 0);
+      myGraphicApi->drawIndex(mesh->getNumIndices(), 0, 0);
       ++meshNum;
-    }
-  }
-
-  void
-  RenderModels::changeModel(uint32 numMeshNewMode) {
-    m_meshBones.clear();
-    m_meshBones.resize(numMeshNewMode);
+     }
   }
 
   void 
-  RenderModels::noneAnimation() {
+  RenderModels::setMeshBones(ResourceManager& resource) {
     m_meshBones.clear();
-    if (nullptr != m_pModel) {
-      m_meshBones.resize(m_pModel->m_vMeshes.size());
-    }
+    m_meshBones.resize(resource.getMeshes().size());
   }
 }

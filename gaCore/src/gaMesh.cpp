@@ -1,6 +1,7 @@
 #include "gaMesh.h"
 #include "gaGraphicsApi.h"
 #include "gaModels.h"
+#include "gaResourceManager.h"
 
 namespace gaEngineSDK {
   void 
@@ -39,25 +40,26 @@ namespace gaEngineSDK {
   }
 
   void
-  Mesh::animated(const float& animationTime, SPtr<AnimationData> animation) {
+  Mesh::animated(ResourceManager& resource, const float& animationTime, SPtr<AnimationData> animation) {
     if (nullptr != animation) {
-      boneTransform(animationTime, animation);
+      boneTransform(resource, animationTime, animation);
     }
   }
 
   void 
-  Mesh::boneTransform(const float& deltaTime, SPtr<AnimationData> animation) {
+  Mesh::boneTransform(ResourceManager& resource, const float& deltaTime, SPtr<AnimationData> animation) {
     Matrix4x4 identityMatrix;
     identityMatrix.identity();
 
     float timInTicks = deltaTime * animation->m_ticksPerSecond;
     float timeAnimation = fmod(timInTicks, (float)animation->m_animDuration);
 
-    readNodeHierarchy(timeAnimation, m_pModel->m_modelNodes, identityMatrix, animation);
+    readNodeHierarchy(resource, timeAnimation, resource.getModel()->m_modelNodes, identityMatrix, animation);
   }
 
   void 
-  Mesh::readNodeHierarchy(const float& animationTime, WeakSPtr<ModelNodes> node, 
+  Mesh::readNodeHierarchy(ResourceManager& resource,
+                          const float& animationTime, WeakSPtr<ModelNodes> node, 
                           const Matrix4x4& parentTransform, SPtr<AnimationData> animation) {
     ModelNodes* animNode = node.lock().get();
     String nodeName(animNode->m_name);
@@ -90,14 +92,14 @@ namespace gaEngineSDK {
     //True if nodeName exist in bone_mapping	
     if (m_skeletalMesh->bonesMap.find(nodeName) != m_skeletalMesh->bonesMap.end()) {
       uint32 bonesIndex = m_skeletalMesh->bonesMap[nodeName];
-
-      m_cbBonesTransform->bonesTransform[bonesIndex] = m_pModel->m_globalInverseTransform *
+      
+      m_cbBonesTransform->bonesTransform[bonesIndex] = resource.getModel()->m_globalInverseTransform *
                                                        globalTransform * 
                                                        m_skeletalMesh->vBones[bonesIndex].offSet;
     }
 
     for (uint32 i = 0; i < animNode->m_numChildrens; ++i) {
-      readNodeHierarchy(animationTime, animNode->m_vChildrenNodes[i], globalTransform, animation);
+      readNodeHierarchy(resource, animationTime, animNode->m_vChildrenNodes[i], globalTransform, animation);
     }
   }
 
@@ -165,6 +167,7 @@ namespace gaEngineSDK {
 
     if (1 == animationNode->m_numRotationKeys) {
       final = animationNode->m_vRotationKeys[0].m_value.getMatrix();
+      final.transpose();
       return final;
     }
 
@@ -295,6 +298,7 @@ namespace gaEngineSDK {
 
     Matrix4x4 final;
     final = result.getMatrix();
+    final.transpose();
 
     return final;
   }

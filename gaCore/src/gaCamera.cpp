@@ -52,7 +52,7 @@ namespace gaEngineSDK {
   Camera::pitchX(sf::Event param) {
     Matrix4x4 rotation;
 
-    float speedrot = 0.10f;
+    float speedrot = 1.35f;
 
     if (sf::Keyboard::Up == param.key.code) {
       rotation.RotationX(speedrot);
@@ -70,7 +70,7 @@ namespace gaEngineSDK {
   Camera::rollZ(sf::Event param) {
     Matrix4x4 rotation;
 
-    float speedrot = 0.10f;
+    float speedrot = 1.35f;
 
     if (sf::Keyboard::Right == param.key.code) {
       rotation.RotationZ(-speedrot);
@@ -88,7 +88,7 @@ namespace gaEngineSDK {
   Camera::yawY(sf::Event param) {
     Matrix4x4 rotation;
 
-    float speedrot = 0.10f;
+    float speedrot = 1.35f;
 
     if (sf::Keyboard::Z == param.key.code) {
       rotation.RotationY(speedrot);
@@ -102,25 +102,29 @@ namespace gaEngineSDK {
     updateViewMatrix();
   }
   
+  //Se va a mover 15 frames por segundo, necesito pasarle el Delta time
+  //y que esta se vuelva su velocidad: ej: 10 * deltaTime
   void 
   Camera::move(sf::Event param) {
+    float speedMove = 10.0f;
+
   	if (sf::Keyboard::W == param.key.code) {
-  		m_cameraDesc.camEye += m_front;
+  		m_cameraDesc.camEye += m_front * speedMove;
   	}
   	else if (sf::Keyboard::S == param.key.code) {
-  		m_cameraDesc.camEye -= m_front;
+  		m_cameraDesc.camEye -= m_front * speedMove;
   	}
   	else if (sf::Keyboard::A == param.key.code) {
-  		m_cameraDesc.camEye -= m_right;
+  		m_cameraDesc.camEye -= m_right * speedMove;
   	}
   	else if (sf::Keyboard::D == param.key.code) {
-  		m_cameraDesc.camEye += m_right;
+  		m_cameraDesc.camEye += m_right * speedMove;
   	}
   	else if (sf::Keyboard::Q == param.key.code) {
-  		m_cameraDesc.camEye += m_up;
+  		m_cameraDesc.camEye += m_up * speedMove;
   	}
   	else if (sf::Keyboard::E == param.key.code) {
-  		m_cameraDesc.camEye -= m_up;
+  		m_cameraDesc.camEye -= m_up * speedMove;
   	}
   
     m_axis.calculateAxis(m_right, m_up, m_front);

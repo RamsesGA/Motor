@@ -32,13 +32,13 @@ namespace gaEngineSDK {
       * @brief
       */
       void
-      init(WeakSPtr<Model> model);
+      init();
     
       /*
       * @brief
       */
       void
-      onUpdate(const float& deltaTime) override;
+      update(ResourceManager& resource, const float& deltaTime);
     
       /*
       * @brief
@@ -47,10 +47,9 @@ namespace gaEngineSDK {
       drawModel(ResourceManager& resource, WeakSPtr<ConstantBuffer> cbBone);
 
       void
-      changeModel(uint32 numMeshNewMode);
+      setMeshBones(ResourceManager& resource);
 
-      void
-      noneAnimation();
+      SPtr<AnimationData> m_currentAnimation = nullptr;
 
     private:
       /***********************************************************************/
@@ -65,8 +64,7 @@ namespace gaEngineSDK {
 
       Vector<ConstBuffBonesTransform::E> m_meshBones;
 
-      SPtr<Model> m_pModel = nullptr;
+      SPtr<ResourceManager> m_pResourceMang = nullptr;
 
-      SPtr<AnimationData> m_currentAnimation = nullptr;
   };
 }

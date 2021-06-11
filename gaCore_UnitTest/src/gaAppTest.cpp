@@ -47,9 +47,9 @@ AppTest::onInitCamera() {
 
   CameraDescriptor::E mainCamera;
   mainCamera.camLookAt = Vector3(0.0f, 1.0f, 0.0f);
-  mainCamera.camEye = Vector3(0.0f, 0.0f, -12.0f);
+  mainCamera.camEye = Vector3(0.0f, 0.0f, -700.0f);
   mainCamera.camUp = Vector3(0.0f, 1.0f, 0.0f);
-  mainCamera.camFar = 3000.0f;
+  mainCamera.camFar = 300000.0f;
   mainCamera.camNear = 0.01f;
   mainCamera.camFoV = Math::FOV;
   mainCamera.camHeight = m_height;
@@ -73,6 +73,8 @@ AppTest::onUpdate(float deltaTime) {
   try {
     myGraphicsApi->updateConstantBuffer(&meshData, *m_pConstantBuffer1);
     myGraphicsApi->updateConstantBuffer(&cb, *m_pConstantBuffer2);
+
+    m_renderModel->update(*m_resourceManager, deltaTime);
   }
   catch (exception* e) {
     std::cout << "- - > " << e->what() << '\n';
@@ -116,12 +118,10 @@ AppTest::onRender() {
     myGraphicsApi->setYourVSConstantBuffers(m_pConstantBuffer1, 0, 1);
     myGraphicsApi->setYourVSConstantBuffers(m_pConstantBuffer2, 1, 1);
     myGraphicsApi->setYourPSConstantBuffers(m_pConstantBuffer2, 1, 1);
-    myGraphicsApi->setYourVSConstantBuffers(m_pConstBufferBones, 2, 1);
-    myGraphicsApi->setYourPSConstantBuffers(m_pConstBufferBones, 2, 1);
+    myGraphicsApi->setYourVSConstantBuffers(m_tempBufferBones.get(), 2, 1);
+    //myGraphicsApi->setYourPSConstantBuffers(m_pConstBufferBones, 2, 1);
 
-    SPtr<ConstantBuffer> tempBufferBones;
-    tempBufferBones.reset(m_pConstBufferBones);
-    m_renderModel->drawModel(*m_resourceManager, tempBufferBones);
+    m_renderModel->drawModel(*m_resourceManager, m_tempBufferBones);
   }
   catch (exception* e) {
     std::cout << "- - > " << e->what() << '\n';
@@ -152,6 +152,7 @@ AppTest::onCreate() {
   try {
     m_renderModel = new RenderModels();
     m_mesh = new Mesh();
+    m_resourceManager = new ResourceManager();
 
     //Creamos el vertex shader y pixel shader.
     //DX_animation
@@ -179,6 +180,7 @@ AppTest::onCreate() {
     m_pConstantBuffer1 = myGraphicsApi->createConstantBuffer(sizeof(ConstantBuffer1::E));
     m_pConstantBuffer2 = myGraphicsApi->createConstantBuffer(sizeof(ConstantBuffer2::E));
     m_pConstBufferBones = myGraphicsApi->createConstantBuffer(sizeof(ConstBuffBonesTransform::E));
+    m_tempBufferBones.reset(m_pConstBufferBones);
   }
   catch (exception* e) {
     std::cout << "- - > " << e->what() << '\n';
@@ -186,13 +188,21 @@ AppTest::onCreate() {
   }
 
   try {
-    m_resourceManager = new ResourceManager();
-
     //m_resourceManager->initLoadModel("data/models/2B/2B.obj");
     //m_resourceManager->initLoadModel("data/models/pod/POD.obj");
-    //m_resourceManager->initLoadModel("data/models/spartan/Spartan.fbx");
-    m_resourceManager->initLoadModel("data/models/ugandan/Knuckles.fbx");
+    m_resourceManager->initLoadModel("data/models/spartan/Spartan.fbx");
+    //m_resourceManager->initLoadModel("data/models/ugandan/Knuckles.fbx");
     //m_resourceManager->initLoadModel("data/models/grimoires/grimoires.fbx");
+
+    //Esto solo es para guardar los huesos y las animaciones
+    //En caso de que no, evitamos un error
+    if (0 != m_resourceManager->getMeshes().size()) {
+      m_renderModel->setMeshBones(*m_resourceManager);
+
+      if (0 != m_resourceManager->getModel()->m_vAnimationData.size()) {
+        m_renderModel->m_currentAnimation = m_resourceManager->getModel()->m_vAnimationData[0];
+      }
+    }
   }
   catch (exception* e) {
     std::cout << "- - > " << e->what() << '\n';

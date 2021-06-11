@@ -341,7 +341,10 @@ namespace gaEngineSDK {
 
   Matrix4x4 
   GraphicsApiDX::matrix4x4Context(const Matrix4x4& mat4x4) {
-    return mat4x4.transpose();
+    Matrix4x4 temp;
+    temp = mat4x4;
+    temp.transpose();
+    return temp;
   }
 
   /***************************************************************************/

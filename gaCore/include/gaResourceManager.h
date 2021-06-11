@@ -104,15 +104,14 @@ namespace gaEngineSDK {
       Vector<SamplerState*>
       getSamplerInfo();
 
-      /*
-      * @brief .
-      */
-      Mesh* m_newMesh = nullptr;
+      Vector<SPtr<Model>>
+      getVecModels();
+      
+      Mesh*
+      getMesh();
 
-      /*
-      * @brief .
-      */
-      SPtr<Model> m_newModel;
+      SPtr<Model>
+      getModel();
 
     protected:
       /*
@@ -138,12 +137,20 @@ namespace gaEngineSDK {
       */
       const aiScene* m_pAScene;
 
-      
+      /*
+      * @brief .
+      */
+      Mesh* m_newMesh = nullptr;
+
+      /*
+      * @brief .
+      */
+      SPtr<Model> m_newModel;
 
       /*
       * @brief Member to store a string of Meshes.
       */
-      Vector<Mesh*> m_pMeshes;
+      Vector<Mesh*> m_pVMeshes;
 
       /*
       * @brief Member to store a string of textures.

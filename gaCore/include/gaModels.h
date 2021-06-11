@@ -146,9 +146,6 @@ namespace gaEngineSDK {
       Vector<SamplerState*>
       getSamplerInfo();
 
-      void
-      addMesh(WeakSPtr<Mesh> mesh);
-
       /***********************************************************************/
       /*
       * Members.

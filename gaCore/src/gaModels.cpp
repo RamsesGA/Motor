@@ -29,11 +29,4 @@ namespace gaEngineSDK {
   Model::getSamplerInfo() {
     return m_pSamplers;
   }
-
-  void 
-  Model::addMesh(WeakSPtr<Mesh> mesh) {
-    SPtr<Mesh> temp = mesh.lock();
-    temp->m_pModel = this;
-    m_vMeshes.push_back(mesh.lock());
-  }
 }

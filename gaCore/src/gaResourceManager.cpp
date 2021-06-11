@@ -7,12 +7,9 @@ namespace gaEngineSDK {
   ResourceManager::initLoadModel(String const& path) {
     //Read _file via assimp
     m_pAScene = m_aImporter.ReadFile(path,
-                                     aiProcessPreset_TargetRealtime_Fast |
+                                     aiProcessPreset_TargetRealtime_MaxQuality |
                                      aiProcess_ConvertToLeftHanded |
-                                     aiProcess_FindInstances |
-                                     aiProcess_ValidateDataStructure |
-                                     aiProcess_OptimizeMeshes |
-                                     aiProcess_Debone);
+                                     aiProcess_Triangulate);
     //Check for errors
     if (!m_pAScene || m_pAScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !m_pAScene->mRootNode) {
       throw new std::exception("Error, al leer el path del modelo o el modelo no existe");
@@ -23,7 +20,6 @@ namespace gaEngineSDK {
 
     auto myGraphicApi = g_graphicApi().instancePtr();
     m_newModel.reset(new Model());
-    m_newMesh = new Mesh();
 
     //Create texture sampler for model's textures
     m_newModel->setSamplers(myGraphicApi->createSamplerState());
@@ -43,7 +39,7 @@ namespace gaEngineSDK {
       * The pAScene contains all the data, pNode is just to keep stuff organized.
       */
       aiMesh* _mesh = pAScene->mMeshes[pANode->mMeshes[i]];
-      m_pMeshes.push_back(processMesh(_mesh, pAScene));
+      m_pVMeshes.push_back(processMesh(_mesh, pAScene));
     }
 
     for (uint32 i = 0; i < pANode->mNumChildren; i++) {
@@ -60,6 +56,7 @@ namespace gaEngineSDK {
     //DVertex::E structVertex;
     uint32 numVertex = pAMesh->mNumVertices;
     Vertex::E* structVertex = new Vertex::E[numVertex];
+    m_newMesh = new Mesh();
 
     if (!pAMesh->HasFaces()) {
       throw new std::exception("Error, no se detectaron caras");
@@ -110,7 +107,7 @@ namespace gaEngineSDK {
       vertices.push_back(structVertex[i]);
     }
 
-    processBonesInfo(pAMesh, structVertex, numVertex);
+    processBonesInfo(pAMesh, vertices.data(), numVertex);
 
     //processIndexInfo((uint32)indices.size());
 
@@ -122,8 +119,10 @@ namespace gaEngineSDK {
 
     m_newMesh->init(vertices, indices, textures);
 
-    SPtr<Mesh> meshToAdd(m_newMesh);
-    m_newModel->addMesh(meshToAdd);
+    auto myGraphicApi = g_graphicApi().instancePtr();
+
+   /* m_newMesh->setVertexBuffer(myGraphicApi->createVertexBuffer(structVertex,
+                               sizeof(Vertex::E)));*/
 
     return m_newMesh;
   }
@@ -183,10 +182,10 @@ namespace gaEngineSDK {
     m_newMesh->m_skeletalMesh.reset(skeletal);
     m_newMesh->setVertexData(SPtrVertexData);
 
-    auto myGraphicApi = g_graphicApi().instancePtr();
+    //auto myGraphicApi = g_graphicApi().instancePtr();
 
-    m_newMesh->setVertexBuffer(myGraphicApi->createVertexBuffer(structureVertex,
-                                                              sizeof(Vertex::E)));
+    //m_newMesh->setVertexBuffer(myGraphicApi->createVertexBuffer(structureVertex,
+    //                                                          sizeof(Vertex::E)));
     m_newMesh->m_bonesTransforms.clear();
     m_newMesh->m_bonesTransforms.resize(skeletal->numBones);
   }
@@ -201,7 +200,11 @@ namespace gaEngineSDK {
     std::memcpy(&m_newModel->m_globalInverseTransform, &m_pAScene->mRootNode->mTransformation,
                 sizeof(Matrix4x4));
 
-    //m_newModel->m_globalInverseTransform.invert();
+    m_newModel->m_globalInverseTransform.transpose();
+
+    m_newModel->m_globalInverseTransform = 
+    m_newModel->m_globalInverseTransform.invert(m_newModel->m_globalInverseTransform);
+
     ModelNodes* rootNode = new ModelNodes();
 
     m_newModel->m_modelNodes.reset(rootNode);
@@ -389,12 +392,27 @@ namespace gaEngineSDK {
 
   Vector<Mesh*> 
   ResourceManager::getMeshes() {
-    return m_pMeshes;
+    return m_pVMeshes;
   }
 
   Vector<SamplerState*>
   ResourceManager::getSamplerInfo() {
     return m_newModel->getSamplerInfo();
+  }
+
+  Vector<SPtr<Model>>
+  ResourceManager::getVecModels() {
+    return m_vModels;
+  }
+
+  Mesh* 
+  ResourceManager::getMesh() {
+    return m_newMesh;
+  }
+
+  SPtr<Model> 
+  ResourceManager::getModel() {
+    return m_newModel;
   }
 
   void

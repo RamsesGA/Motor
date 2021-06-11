@@ -124,4 +124,6 @@ class AppTest : public BaseApp
     Mesh* m_mesh;
 
     RenderModels* m_renderModel = nullptr;
+
+    SPtr<ConstantBuffer> m_tempBufferBones;
 };
