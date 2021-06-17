@@ -5,8 +5,8 @@
 
 namespace gaEngineSDK {
   void 
-  Mesh::init(Vector<Vertex::E> pVertices, Vector<uint32> pIndices, 
-             Vector<Texture::E> textures) {
+  Mesh::init(Vector<Vertex> pVertices, Vector<uint32> pIndices, 
+             Vector<Texture> textures) {
     m_vVertices = pVertices;
     m_vIndices = pIndices;
     m_textures = textures;
@@ -19,7 +19,7 @@ namespace gaEngineSDK {
     auto myGraphicApi = g_graphicApi().instancePtr();
 
     m_pVertexBuffer = myGraphicApi->createVertexBuffer(m_vVertices.data(),
-                                                       sizeof(Vertex::E) * m_vVertices.size());
+                                                       sizeof(Vertex) * m_vVertices.size());
 
     m_pIndexBuffer = myGraphicApi->createIndexBuffer(m_vIndices.data(),
                                                      sizeof(uint32) * m_vIndices.size());
@@ -29,7 +29,7 @@ namespace gaEngineSDK {
   Mesh::draw(Vector <SamplerState*> pSamplerState) {
     auto myGraphicApi = g_graphicApi().instancePtr();
 
-    for (uint32 i = 0; i < m_textures.size(); i++) {
+    for (uint32 i = 0; i < m_textures.size(); ++i) {
       myGraphicApi->setSamplerState(0, pSamplerState, m_textures[i].texture);
       myGraphicApi->setShaderResourceView(m_textures[i].texture, i, 1);
     }
@@ -49,7 +49,6 @@ namespace gaEngineSDK {
   void 
   Mesh::boneTransform(ResourceManager& resource, const float& deltaTime, SPtr<AnimationData> animation) {
     Matrix4x4 identityMatrix;
-    identityMatrix.identity();
 
     float timInTicks = deltaTime * animation->m_ticksPerSecond;
     float timeAnimation = fmod(timInTicks, (float)animation->m_animDuration);
@@ -83,7 +82,9 @@ namespace gaEngineSDK {
       //translation
       Vector3 translateVector = calcInterpolatedPosition(animationTime, animationNode);
       Matrix4x4 translateMatrix;
+
       translateMatrix.translate(translateVector);
+
       nodeTransform = translateMatrix * rotationMatrix * scalingMatrix;
     }
 
@@ -121,9 +122,9 @@ namespace gaEngineSDK {
     Vector3 scaling;
 
     if (1 == animationNode->m_numScalingKeys) {
-      scaling.m_x = animationNode->m_scalingKeys[0].m_value.m_x;
-      scaling.m_y = animationNode->m_scalingKeys[0].m_value.m_y;
-      scaling.m_z = animationNode->m_scalingKeys[0].m_value.m_z;
+      scaling.x = animationNode->m_scalingKeys[0].m_value.x;
+      scaling.y = animationNode->m_scalingKeys[0].m_value.y;
+      scaling.z = animationNode->m_scalingKeys[0].m_value.z;
       return scaling;
     }
 
@@ -140,21 +141,21 @@ namespace gaEngineSDK {
     GA_ASSERT(factor >= 0.0f && factor <= 1.0f);
 
     Vector3 start;
-    start.m_x = animationNode->m_scalingKeys[scalingIndex].m_value.m_x;
-    start.m_y = animationNode->m_scalingKeys[scalingIndex].m_value.m_y;
-    start.m_z = animationNode->m_scalingKeys[scalingIndex].m_value.m_z;
+    start.x = animationNode->m_scalingKeys[scalingIndex].m_value.x;
+    start.y = animationNode->m_scalingKeys[scalingIndex].m_value.y;
+    start.z = animationNode->m_scalingKeys[scalingIndex].m_value.z;
 
     Vector3 end;
-    end.m_x = animationNode->m_scalingKeys[nextScalingIndex].m_value.m_x;
-    end.m_y = animationNode->m_scalingKeys[nextScalingIndex].m_value.m_y;
-    end.m_z = animationNode->m_scalingKeys[nextScalingIndex].m_value.m_z;
+    end.x = animationNode->m_scalingKeys[nextScalingIndex].m_value.x;
+    end.y = animationNode->m_scalingKeys[nextScalingIndex].m_value.y;
+    end.z = animationNode->m_scalingKeys[nextScalingIndex].m_value.z;
 
     Vector3 delta = end - start;
 
     Vector3 temp;
-    temp.m_x = factor * delta.m_x;
-    temp.m_y = factor * delta.m_y;
-    temp.m_z = factor * delta.m_z;
+    temp.x = factor * delta.x;
+    temp.y = factor * delta.y;
+    temp.z = factor * delta.z;
 
     scaling = start + temp;
 
@@ -195,9 +196,9 @@ namespace gaEngineSDK {
     Vector3 pos;
 
     if (1 == animationNode->m_numPositionKeys) {
-      pos.m_x = animationNode->m_vPositionKeys[0].m_value.m_x;
-      pos.m_y = animationNode->m_vPositionKeys[0].m_value.m_y;
-      pos.m_z = animationNode->m_vPositionKeys[0].m_value.m_z;
+      pos.x = animationNode->m_vPositionKeys[0].m_value.x;
+      pos.y = animationNode->m_vPositionKeys[0].m_value.y;
+      pos.z = animationNode->m_vPositionKeys[0].m_value.z;
       return pos;
     }
 
@@ -214,21 +215,21 @@ namespace gaEngineSDK {
     GA_ASSERT(factor >= 0.0f && factor <= 1.0f);
 
     Vector3 start;
-    start.m_x = animationNode->m_vPositionKeys[positionIndex].m_value.m_x;
-    start.m_y = animationNode->m_vPositionKeys[positionIndex].m_value.m_y;
-    start.m_z = animationNode->m_vPositionKeys[positionIndex].m_value.m_z;
+    start.x = animationNode->m_vPositionKeys[positionIndex].m_value.x;
+    start.y = animationNode->m_vPositionKeys[positionIndex].m_value.y;
+    start.z = animationNode->m_vPositionKeys[positionIndex].m_value.z;
 
     Vector3 end;
-    end.m_x = animationNode->m_vPositionKeys[nextPositionIndex].m_value.m_x;
-    end.m_y = animationNode->m_vPositionKeys[nextPositionIndex].m_value.m_y;
-    end.m_z = animationNode->m_vPositionKeys[nextPositionIndex].m_value.m_z;
+    end.x = animationNode->m_vPositionKeys[nextPositionIndex].m_value.x;
+    end.y = animationNode->m_vPositionKeys[nextPositionIndex].m_value.y;
+    end.z = animationNode->m_vPositionKeys[nextPositionIndex].m_value.z;
 
     Vector3 delta = end - start;
     
     Vector3 temp;
-    temp.m_x = factor * delta.m_x;
-    temp.m_y = factor * delta.m_y;
-    temp.m_z = factor * delta.m_z;
+    temp.x = factor * delta.x;
+    temp.y = factor * delta.y;
+    temp.z = factor * delta.z;
 
     pos = start + temp;
 
@@ -279,20 +280,20 @@ namespace gaEngineSDK {
 
     Quaternions result;
 
-    float dotProduct = a.m_x * b.m_x + a.m_y * b.m_y + a.m_z * b.m_z + a.m_w * b.m_w;
+    float dotProduct = a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
     float oneMinusBlend = 1.0f - blend;
 
     if (dotProduct < 0.0f) {
-      result.m_x = a.m_x * oneMinusBlend + blend * -b.m_x;
-      result.m_y = a.m_y * oneMinusBlend + blend * -b.m_y;
-      result.m_z = a.m_z * oneMinusBlend + blend * -b.m_z;
-      result.m_w = a.m_w * oneMinusBlend + blend * -b.m_w;
+      result.x = a.x * oneMinusBlend + blend * -b.x;
+      result.y = a.y * oneMinusBlend + blend * -b.y;
+      result.z = a.z * oneMinusBlend + blend * -b.z;
+      result.w = a.w * oneMinusBlend + blend * -b.w;
     }
     else {
-      result.m_x = a.m_x * oneMinusBlend + blend * b.m_x;
-      result.m_y = a.m_y * oneMinusBlend + blend * b.m_y;
-      result.m_z = a.m_z * oneMinusBlend + blend * b.m_z;
-      result.m_w = a.m_w * oneMinusBlend + blend * b.m_w;
+      result.x = a.x * oneMinusBlend + blend * b.x;
+      result.y = a.y * oneMinusBlend + blend * b.y;
+      result.z = a.z * oneMinusBlend + blend * b.z;
+      result.w = a.w * oneMinusBlend + blend * b.w;
     }
     result.normalize();
 
@@ -310,7 +311,7 @@ namespace gaEngineSDK {
   /***************************************************************************/
 
   void 
-  Mesh::setVertexData(WeakSPtr<Vertex::E> vertexData) {
+  Mesh::setVertexData(WeakSPtr<Vertex> vertexData) {
     m_vertexData = vertexData.lock();
   }
 

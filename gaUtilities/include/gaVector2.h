@@ -17,7 +17,7 @@ namespace gaEngineSDK {
       /**
       * @brief Constructor to start a vector with x and y.
       */
-      Vector2(float x = 0.0f, float y = 0.0f);
+      Vector2(float X = 0.0f, float Y = 0.0f);
 
       ~Vector2() = default;
     
@@ -146,7 +146,7 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
 
-      float m_x = 0.0f;
-      float m_y = 0.0f;
+      float x = 0.0f;
+      float y = 0.0f;
   };
 }

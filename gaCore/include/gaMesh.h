@@ -52,8 +52,8 @@ namespace gaEngineSDK {
       * @param Variable with API information.
       */
       void 
-      init(Vector<Vertex::E> pVertices, Vector<uint32> pIndices,
-           Vector<Texture::E> textures);
+      init(Vector<Vertex> pVertices, Vector<uint32> pIndices,
+           Vector<Texture> textures);
 
       /*
       * @brief Function to save information for m_vertexBuffer and m_indexBuffer.
@@ -114,7 +114,7 @@ namespace gaEngineSDK {
       * @brief .
       */
       void
-      setVertexData(WeakSPtr<Vertex::E> vertexData);
+      setVertexData(WeakSPtr<Vertex> vertexData);
 
       /*
       * @brief .
@@ -242,12 +242,12 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      ConstBuffBonesTransform::E* m_cbBonesTransform;
+      ConstBuffBonesTransform* m_cbBonesTransform = nullptr;
 
       /*
       * @brief Member to store the texture information.
       */
-      Vector<Texture::E> m_textures;
+      Vector<Texture> m_textures;
 
     private:
 
@@ -304,7 +304,7 @@ namespace gaEngineSDK {
       /*
       * @brief Member to store vertex information.
       */
-      Vector<Vertex::E> m_vVertices;
+      Vector<Vertex> m_vVertices;
 
       /*
       * @brief Member to store index information.
@@ -346,7 +346,7 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      SPtr<Vertex::E> m_vertexData = nullptr;
+      SPtr<Vertex> m_vertexData = nullptr;
 
       /*
       * @brief .

@@ -2,76 +2,76 @@
 #include "gaDegrees.h"
 
 namespace gaEngineSDK {
-  Quaternions::Quaternions(const float& x, const float& y, const float& z) {
-    m_x = x;
-    m_y = y;
-    m_z = z;
-    m_w = 0.0f;
+  Quaternions::Quaternions(const float& X, const float& Y, const float& Z) {
+    x = X;
+    y = Y;
+    z = Z;
+    w = 0.0f;
   }
 
-  Quaternions::Quaternions(const Radians& x, const Radians& y, const Radians& z) {
-    float fSinPitch = Math::taylorSin(x.valueRadians() * 0.5f);
-    float fCosPitch = Math::taylorCos(x.valueRadians() * 0.5f);
-    float fSinYaw = Math::taylorSin(y.valueRadians() * 0.5f);
-    float fCosYaw = Math::taylorCos(y.valueRadians() * 0.5f);
-    float fSinRoll = Math::taylorSin(z.valueRadians() * 0.5f);
-    float fCosRoll = Math::taylorCos(z.valueRadians() * 0.5f);
+  Quaternions::Quaternions(const Radians& X, const Radians& Y, const Radians& Z) {
+    float fSinPitch = Math::taylorSin(X.valueRadians() * 0.5f);
+    float fCosPitch = Math::taylorCos(X.valueRadians() * 0.5f);
+    float fSinYaw = Math::taylorSin(Y.valueRadians() * 0.5f);
+    float fCosYaw = Math::taylorCos(Y.valueRadians() * 0.5f);
+    float fSinRoll = Math::taylorSin(Z.valueRadians() * 0.5f);
+    float fCosRoll = Math::taylorCos(Z.valueRadians() * 0.5f);
     float fCosPitchCosYaw(fCosPitch * fCosYaw);
     float fSinPitchSinYaw(fSinPitch * fSinYaw);
     
-    m_z = fCosRoll * fCosPitch * fSinYaw - fSinRoll * fSinPitch * fCosYaw;
-    m_x = fSinRoll * fCosPitchCosYaw - fCosRoll * fSinPitchSinYaw;
-    m_y = fCosRoll * fSinPitch * fCosYaw + fSinRoll * fCosPitch * fSinYaw;
-    m_w = fCosRoll * fCosPitchCosYaw + fSinRoll * fSinPitchSinYaw;
+    z = fCosRoll * fCosPitch * fSinYaw - fSinRoll * fSinPitch * fCosYaw;
+    x = fSinRoll * fCosPitchCosYaw - fCosRoll * fSinPitchSinYaw;
+    y = fCosRoll * fSinPitch * fCosYaw + fSinRoll * fCosPitch * fSinYaw;
+    w = fCosRoll * fCosPitchCosYaw + fSinRoll * fSinPitchSinYaw;
   }
 
-  Quaternions::Quaternions(const Degrees& x, const Degrees& y, const Degrees& z) {
-    float fSinPitch = Math::taylorSin(x.valueRadians() * 0.5f);
-    float fCosPitch = Math::taylorCos(x.valueRadians() * 0.5f);
-    float fSinYaw = Math::taylorSin(y.valueRadians() * 0.5f);
-    float fCosYaw = Math::taylorCos(y.valueRadians() * 0.5f);
-    float fSinRoll = Math::taylorSin(z.valueRadians() * 0.5f);
-    float fCosRoll = Math::taylorCos(z.valueRadians() * 0.5f);
+  Quaternions::Quaternions(const Degrees& X, const Degrees& Y, const Degrees& Z) {
+    float fSinPitch = Math::taylorSin(X.valueRadians() * 0.5f);
+    float fCosPitch = Math::taylorCos(X.valueRadians() * 0.5f);
+    float fSinYaw = Math::taylorSin(Y.valueRadians() * 0.5f);
+    float fCosYaw = Math::taylorCos(Y.valueRadians() * 0.5f);
+    float fSinRoll = Math::taylorSin(Z.valueRadians() * 0.5f);
+    float fCosRoll = Math::taylorCos(Z.valueRadians() * 0.5f);
     
     float fCosPitchCosYaw(fCosPitch * fCosYaw);
     float fSinPitchSinYaw(fSinPitch * fSinYaw);
     
-    m_z = fSinRoll * fCosPitchCosYaw - fCosRoll * fSinPitchSinYaw;
-    m_x = fCosRoll * fSinPitch * fCosYaw + fSinRoll * fCosPitch * fSinYaw;
-    m_y = fCosRoll * fCosPitch * fSinYaw - fSinRoll * fSinPitch * fCosYaw;
-    m_w = fCosRoll * fCosPitchCosYaw + fSinRoll * fSinPitchSinYaw;
+    z = fSinRoll * fCosPitchCosYaw - fCosRoll * fSinPitchSinYaw;
+    x = fCosRoll * fSinPitch * fCosYaw + fSinRoll * fCosPitch * fSinYaw;
+    y = fCosRoll * fCosPitch * fSinYaw - fSinRoll * fSinPitch * fCosYaw;
+    w = fCosRoll * fCosPitchCosYaw + fSinRoll * fSinPitchSinYaw;
   }
 
-  Quaternions::Quaternions(Vector3 vec3, const float& w) {
-    m_x = vec3.m_x;
-    m_y = vec3.m_y;
-    m_z = vec3.m_z;
-    m_w = w;
+  Quaternions::Quaternions(Vector3 vec3, const float& W) {
+    x = vec3.x;
+    y = vec3.y;
+    z = vec3.z;
+    w = W;
   }
 
   Quaternions::Quaternions(const Quaternions& quaternion) {
-    m_x = quaternion.m_x;
-    m_y = quaternion.m_y;
-    m_z = quaternion.m_z;
-    m_w = quaternion.m_w;
+    x = quaternion.x;
+    y = quaternion.y;
+    z = quaternion.z;
+    w = quaternion.w;
   }
 
   Quaternions&
   Quaternions::operator=(const Quaternions& quaternion) {
-    m_x = quaternion.m_x;
-    m_y = quaternion.m_y;
-    m_z = quaternion.m_z;
-    m_w = quaternion.m_w;
+    x = quaternion.x;
+    y = quaternion.y;
+    z = quaternion.z;
+    w = quaternion.w;
 
     return *this;
   }
 
   Quaternions&
   Quaternions::operator+=(const Quaternions& quaternion) {
-    m_x += quaternion.m_x;
-    m_y += quaternion.m_y;
-    m_z += quaternion.m_z;
-    m_w += quaternion.m_w;
+    x += quaternion.x;
+    y += quaternion.y;
+    z += quaternion.z;
+    w += quaternion.w;
 
     return *this;
   }
@@ -80,20 +80,20 @@ namespace gaEngineSDK {
   Quaternions::operator+(const Quaternions& quaternion) const {
     Quaternions tmpQuaternion;
     
-    tmpQuaternion.m_x = m_x + quaternion.m_x;
-    tmpQuaternion.m_y = m_y + quaternion.m_y;
-    tmpQuaternion.m_z = m_z + quaternion.m_z;
-    tmpQuaternion.m_w = m_w + quaternion.m_w;
+    tmpQuaternion.x = x + quaternion.x;
+    tmpQuaternion.y = y + quaternion.y;
+    tmpQuaternion.z = z + quaternion.z;
+    tmpQuaternion.w = w + quaternion.w;
 
     return tmpQuaternion;
   }
 
   Quaternions&
   Quaternions::operator-=(const Quaternions& quaternion) {
-    m_x -= quaternion.m_x;
-    m_y -= quaternion.m_y;
-    m_z -= quaternion.m_z;
-    m_w -= quaternion.m_w;
+    x -= quaternion.x;
+    y -= quaternion.y;
+    z -= quaternion.z;
+    w -= quaternion.w;
 
     return *this;
   }
@@ -102,10 +102,10 @@ namespace gaEngineSDK {
   Quaternions::operator-(const Quaternions& quaternion) const {
     Quaternions tmpQuaternion;
 
-    tmpQuaternion.m_x = m_x - quaternion.m_x;
-    tmpQuaternion.m_y = m_y - quaternion.m_y;
-    tmpQuaternion.m_z = m_z - quaternion.m_z;
-    tmpQuaternion.m_w = m_w - quaternion.m_w;
+    tmpQuaternion.x = x - quaternion.x;
+    tmpQuaternion.y = y - quaternion.y;
+    tmpQuaternion.z = z - quaternion.z;
+    tmpQuaternion.w = w - quaternion.w;
 
     return tmpQuaternion;
   }
@@ -122,47 +122,47 @@ namespace gaEngineSDK {
   Quaternions::operator*(const Quaternions& quaternion) const {
     Quaternions tmpQuaternion;
     
-    tmpQuaternion.m_x = m_w * quaternion.m_x + m_x * quaternion.m_w + m_y * 
-                              quaternion.m_z - m_z * quaternion.m_y;
+    tmpQuaternion.x = w * quaternion.x + x * quaternion.w + y * 
+                              quaternion.z - z * quaternion.y;
 
-    tmpQuaternion.m_y = m_w * quaternion.m_y + m_y * quaternion.m_w + m_z * 
-                              quaternion.m_x - m_x * quaternion.m_z;
+    tmpQuaternion.y = w * quaternion.y + y * quaternion.w + z * 
+                              quaternion.x - x * quaternion.z;
 
-    tmpQuaternion.m_z = m_w * quaternion.m_z + m_z * quaternion.m_w + m_x * 
-                              quaternion.m_y - m_y * quaternion.m_x;
+    tmpQuaternion.z = w * quaternion.z + z * quaternion.w + x * 
+                              quaternion.y - y * quaternion.x;
 
-    tmpQuaternion.m_w = m_w * quaternion.m_w - m_x * quaternion.m_x - m_y * 
-                              quaternion.m_y - m_z * quaternion.m_z;
+    tmpQuaternion.w = w * quaternion.w - x * quaternion.x - y * 
+                              quaternion.y - z * quaternion.z;
     
     return tmpQuaternion;
   }
 
   Quaternions&
   Quaternions::operator*=(const float& scale) {
-    m_x *= scale;
-    m_y *= scale;
-    m_z *= scale;
-    m_w *= scale;
+    x *= scale;
+    y *= scale;
+    z *= scale;
+    w *= scale;
     return *this;
   }
 
   Quaternions Quaternions::operator*(const float& scale) const {
     Quaternions tmpQuaternion;
 
-    tmpQuaternion.m_x = m_x * scale;
-    tmpQuaternion.m_y = m_y * scale;
-    tmpQuaternion.m_z = m_z * scale;
-    tmpQuaternion.m_w = m_w * scale;
+    tmpQuaternion.x = x * scale;
+    tmpQuaternion.y = y * scale;
+    tmpQuaternion.z = z * scale;
+    tmpQuaternion.w = w * scale;
 
     return tmpQuaternion;
   }
 
   bool
   Quaternions::operator==(const Quaternions& quaternion) const {
-    if (Math::abs(m_x - quaternion.m_x) < (Math::EPSILONF) &&
-        Math::abs(m_y - quaternion.m_y) < (Math::EPSILONF) &&
-        Math::abs(m_z - quaternion.m_z) < (Math::EPSILONF) &&
-        Math::abs(m_w - quaternion.m_w) < (Math::EPSILONF)) {
+    if (Math::abs(x - quaternion.x) < (Math::EPSILONF) &&
+        Math::abs(y - quaternion.y) < (Math::EPSILONF) &&
+        Math::abs(z - quaternion.z) < (Math::EPSILONF) &&
+        Math::abs(w - quaternion.w) < (Math::EPSILONF)) {
 
       return true;
     }
@@ -172,10 +172,10 @@ namespace gaEngineSDK {
 
   bool
   Quaternions::operator!=(const Quaternions& quaternion) const {
-    if (Math::abs(m_x - quaternion.m_x) > (Math::EPSILONF) ||
-        Math::abs(m_y - quaternion.m_y) > (Math::EPSILONF) ||
-        Math::abs(m_z - quaternion.m_z) > (Math::EPSILONF) ||
-        Math::abs(m_w - quaternion.m_w) > (Math::EPSILONF)) {
+    if (Math::abs(x - quaternion.x) > (Math::EPSILONF) ||
+        Math::abs(y - quaternion.y) > (Math::EPSILONF) ||
+        Math::abs(z - quaternion.z) > (Math::EPSILONF) ||
+        Math::abs(w - quaternion.w) > (Math::EPSILONF)) {
       return true;
     }
     
@@ -206,7 +206,7 @@ namespace gaEngineSDK {
   }
 
   float Quaternions::squareMagnitude() const {
-    return m_x * m_x + m_y * m_y + m_z * m_z + m_w * m_w;
+    return x * x + y * y + z * z + w * w;
   }
 
   Quaternions&
@@ -225,10 +225,10 @@ namespace gaEngineSDK {
     inverMag = Math::invSqrt(inverMag);
 
     Quaternions tmpQuaternion;
-    tmpQuaternion.m_x = m_x * inverMag;
-    tmpQuaternion.m_y = m_y * inverMag;
-    tmpQuaternion.m_z = m_z * inverMag;
-    tmpQuaternion.m_w = m_w * inverMag;
+    tmpQuaternion.x = x * inverMag;
+    tmpQuaternion.y = y * inverMag;
+    tmpQuaternion.z = z * inverMag;
+    tmpQuaternion.w = w * inverMag;
 
     return tmpQuaternion;
   }
@@ -242,8 +242,8 @@ namespace gaEngineSDK {
 
   Quaternions 
   Quaternions::getConjugate() const {
-    float scalar = m_w;
-    Vector3 tmpAxis = { m_x, m_y, m_z };
+    float scalar = w;
+    Vector3 tmpAxis = { x, y, z };
 
     tmpAxis *= -1;
 
@@ -266,8 +266,8 @@ namespace gaEngineSDK {
     
     Quaternions tmpConjugate = getConjugate();
     
-    float scalar = tmpConjugate.m_w * invSMagnitude;
-    Vector3 tmpAxis = { tmpConjugate.m_x, tmpConjugate.m_y, tmpConjugate.m_z };
+    float scalar = tmpConjugate.w * invSMagnitude;
+    Vector3 tmpAxis = { tmpConjugate.x, tmpConjugate.y, tmpConjugate.z };
 
     tmpAxis *= invSMagnitude;
 
@@ -275,18 +275,18 @@ namespace gaEngineSDK {
   }
 
   Quaternions&
-  Quaternions::rotate(const float& x, const float& y, const float& z, bool degree) {
+  Quaternions::rotate(const float& X, const float& Y, const float& Z, bool degree) {
     if (!degree) {
-      return rotate(x * Math::RAD2DEG, y * Math::RAD2DEG, z * Math::RAD2DEG);
+      return rotate(X * Math::RAD2DEG, Y * Math::RAD2DEG, Z * Math::RAD2DEG);
     }
     else {
-      return rotate(x, y, z);
+      return rotate(X, Y, Z);
     }
   }
     
   Quaternions&
-  Quaternions::rotate(Degrees x, Degrees y, Degrees z) {
-    Quaternions q2(x, y, z), q = *this, qinv = q;
+  Quaternions::rotate(Degrees X, Degrees Y, Degrees Z) {
+    Quaternions q2(X, Y, Z), q = *this, qinv = q;
     qinv.conjugate();
     
     *this = q * q2 * qinv;
@@ -298,19 +298,19 @@ namespace gaEngineSDK {
   Quaternions::getEuler() {
     Vector3 euler;
     
-    euler.m_z  = Math::arcTan(2 * (m_x * m_y + m_w * m_z), 
-                              m_w * m_w + m_x * m_x - m_y * m_y - m_z * m_z);
+    euler.z  = Math::arcTan(2 * (x * y + w * z), 
+                              w * w + x * x - y * y - z * z);
 
-    euler.m_z *= Math::RAD2DEG;
+    euler.z *= Math::RAD2DEG;
 
-    euler.m_y  = Math::arcSin(-2 * (m_x * m_z - m_w * m_y));
+    euler.y  = Math::arcSin(-2 * (x * z - w * y));
 
-    euler.m_y *= Math::RAD2DEG;
+    euler.y *= Math::RAD2DEG;
 
-    euler.m_x  = Math::arcTan((2) * (m_y * m_z + m_w * m_x), 
-                              m_w * m_w - m_x * m_x - m_y * m_y + m_z * m_z);
+    euler.x  = Math::arcTan((2) * (y * z + w * x), 
+                              w * w - x * x - y * y + z * z);
 
-    euler.m_x *= Math::RAD2DEG;
+    euler.x *= Math::RAD2DEG;
     
     return euler;
   }
@@ -319,19 +319,19 @@ namespace gaEngineSDK {
   Quaternions::getMatrix() const {
     Matrix4x4 mat;
 
-    mat.m_mat4x4[0][0] = 1.0f - 2.0f * (m_y * m_y + m_z * m_z);
-    mat.m_mat4x4[1][0] = 2.0f * (m_x * m_y - m_z * m_w);
-    mat.m_mat4x4[2][0] = 2.0f * (m_x * m_z + m_y * m_w); 
+    mat.m_mat4x4[0][0] = 1.0f - 2.0f * (y * y + z * z);
+    mat.m_mat4x4[1][0] = 2.0f * (x * y - z * w);
+    mat.m_mat4x4[2][0] = 2.0f * (x * z + y * w); 
     mat.m_mat4x4[3][0] = 0;
     
-    mat.m_mat4x4[0][1] = 2.0f * (m_x * m_y + m_z * m_w);
-    mat.m_mat4x4[1][1] = 1.0f - 2.0f * (m_x * m_x + m_z * m_z);
-    mat.m_mat4x4[2][1] = 2.0f * (m_y * m_z - m_x * m_w);
+    mat.m_mat4x4[0][1] = 2.0f * (x * y + z * w);
+    mat.m_mat4x4[1][1] = 1.0f - 2.0f * (x * x + z * z);
+    mat.m_mat4x4[2][1] = 2.0f * (y * z - x * w);
     mat.m_mat4x4[3][1] = 0;
     
-    mat.m_mat4x4[0][2] = 2.0f * (m_x * m_z - m_y * m_w);
-    mat.m_mat4x4[1][2] = 2.0f * (m_y * m_z + m_x * m_w);
-    mat.m_mat4x4[2][2] = 1.0f - 2.0f * (m_x * m_x + m_y * m_y);
+    mat.m_mat4x4[0][2] = 2.0f * (x * z - y * w);
+    mat.m_mat4x4[1][2] = 2.0f * (y * z + x * w);
+    mat.m_mat4x4[2][2] = 1.0f - 2.0f * (x * x + y * y);
     mat.m_mat4x4[3][2] = 0;
     
     mat.m_mat4x4[0][3] = 0; 

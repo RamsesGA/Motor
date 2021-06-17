@@ -169,6 +169,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\gaAnimations.h" />
     <ClInclude Include="include\gaBaseApp.h" />
     <ClInclude Include="include\gaCamera.h" />
     <ClInclude Include="include\gaConstantBuffer.h" />
@@ -193,6 +194,7 @@
     <ClInclude Include="include\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\gaAnimations.cpp" />
     <ClCompile Include="src\gaBaseApp.cpp" />
     <ClCompile Include="src\gaCamera.cpp" />
     <ClCompile Include="src\gaGameObject.cpp" />

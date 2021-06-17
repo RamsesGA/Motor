@@ -61,7 +61,7 @@ namespace gaEngineSDK {
       unbindOGL() override;
 
       Matrix4x4
-      matrix4x4Context(const Matrix4x4& mat4x4) override;
+      matrixPolicy(const Matrix4x4& mat4x4) override;
 
       /***********************************************************************/
       /**
@@ -168,9 +168,8 @@ namespace gaEngineSDK {
       setInputLayout(InputLayout& vertexLayout) override;
 
       void 
-      setViewport(const uint32 numViewports,
-      	          const uint32 width, 
-      	          const uint32 heigth) override;
+      setViewports(const uint32 numViewports, const uint32 width, 
+                   const uint32 heigth) override;
 
       void 
       setPrimitiveTopology(const uint32 topology) override;

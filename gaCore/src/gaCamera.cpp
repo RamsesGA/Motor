@@ -3,16 +3,7 @@
 namespace gaEngineSDK {
   
   void
-  Camera::init(CameraDescriptor::E cameraDesc) {
-		m_cameraDesc.camUp     = cameraDesc.camUp;
-		m_cameraDesc.camFar    = cameraDesc.camFar;
-		m_cameraDesc.camFoV    = cameraDesc.camFoV;
-		m_cameraDesc.camEye    = cameraDesc.camEye;
-		m_cameraDesc.camNear   = cameraDesc.camNear;
-	  m_cameraDesc.camWidth  = cameraDesc.camWidth;
-		m_cameraDesc.camHeight = cameraDesc.camHeight;
-		m_cameraDesc.camLookAt = cameraDesc.camLookAt;
-	  
+  Camera::init() {
 	  createView();
 	  createProjectionMatrix();
 	  updateViewMatrix();
@@ -155,24 +146,24 @@ namespace gaEngineSDK {
     POINT Temp;
     GetCursorPos(&Temp);
 
-    firstPos.m_x = (float)Temp.x;
-    secondPos.m_y = (float)Temp.y;
+    firstPos.x = (float)Temp.x;
+    secondPos.y = (float)Temp.y;
 
-    if (firstPos.m_x < m_originalMousePos.m_x) {
+    if (firstPos.x < m_originalMousePos.x) {
       m_cameraDesc.camLookAt -= m_right * speedRot;
       m_cameraDesc.camUp = m_up;
 
       createView();
     }
 
-    if (firstPos.m_x > m_originalMousePos.m_x) {
+    if (firstPos.x > m_originalMousePos.x) {
       m_cameraDesc.camLookAt += m_right * speedRot;
       m_cameraDesc.camUp = m_up;
 
       createView();
     }
 
-    if ((secondPos.m_y < m_originalMousePos.m_y) && 
+    if ((secondPos.y < m_originalMousePos.y) && 
         (m_angule < m_maxAngule)) {
       m_angule += speedAngule;
 
@@ -184,7 +175,7 @@ namespace gaEngineSDK {
       }
     }
 
-    if ((secondPos.m_y > m_originalMousePos.m_y) && 
+    if ((secondPos.y > m_originalMousePos.y) && 
         (m_angule > -m_maxAngule)) {
       m_angule -= speedAngule;
 
@@ -196,7 +187,7 @@ namespace gaEngineSDK {
       }
     }
 
-    SetCursorPos((int32)m_originalMousePos.m_x, (int32)m_originalMousePos.m_y);
+    SetCursorPos((int32)m_originalMousePos.x, (int32)m_originalMousePos.y);
     m_view = m_view * Yaw;
 
     updateViewMatrix();
@@ -254,6 +245,46 @@ namespace gaEngineSDK {
   void 
   Camera::setClickPressed(bool _bool) {
   	m_clickPressed = _bool;
+  }
+
+  void
+  Camera::setLookAt(Vector3 lookAt) {
+    m_cameraDesc.camLookAt = lookAt;
+  }
+
+  void 
+  Camera::setEye(Vector3 eye) {
+    m_cameraDesc.camEye = eye;
+  }
+
+  void
+  Camera::setUp(Vector3 up) {
+    m_cameraDesc.camUp = up;
+  }
+
+  void 
+  Camera::setFar(float farCam) {
+    m_cameraDesc.camFar = farCam;
+  }
+
+  void 
+  Camera::setNear(float nearCam) {
+    m_cameraDesc.camNear = nearCam;
+  }
+
+  void
+  Camera::setFoV(float fieldOfView) {
+    m_cameraDesc.camFoV = fieldOfView;
+  }
+
+  void 
+  Camera::setHeight(float height) {
+    m_cameraDesc.camHeight = height;
+  }
+
+  void 
+  Camera::setWidth(float width) {
+    m_cameraDesc.camWidth = width;
   }
   
   /***************************************************************************/

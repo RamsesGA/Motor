@@ -9,19 +9,18 @@
 
 namespace gaEngineSDK {
 
-  namespace CameraDescriptor {
-    struct GA_CORE_EXPORT E {
-      uint32 camWidth = 0;
-      uint32 camHeight = 0;
-      float camNear = 0.0f;
-      float camFar = 0.0f;
-      float camFoV = 0.0f;
+  struct CameraDescriptor {
+    uint32 camWidth = 0;
+    uint32 camHeight = 0;
 
-      Vector3 camEye = { 0.0f, 0.0f, 0.0f };
-      Vector3 camLookAt = { 0.0f, 0.0f, 0.0f };
-      Vector3 camUp = { 0.0f, 0.0f, 0.0f };
-    };
-  }
+    float camNear = 0.0f;
+    float camFar = 0.0f;
+    float camFoV = 0.0f;
+
+    Vector3 camEye = { 0.0f, 0.0f, 0.0f };
+    Vector3 camLookAt = { 0.0f, 0.0f, 0.0f };
+    Vector3 camUp = { 0.0f, 0.0f, 0.0f };
+  };
   
   class GA_CORE_EXPORT Camera
   {
@@ -40,7 +39,7 @@ namespace gaEngineSDK {
       * @param Variable to obtain the information of the camera description.
       */
       void 
-      init(CameraDescriptor::E cameraDesc);
+      init();
       
       /**
       * @brief Function to update our view matrix.
@@ -125,6 +124,54 @@ namespace gaEngineSDK {
       */
       void 
       setClickPressed(bool isClicked);
+
+      /**
+      * @brief .
+      */
+      void
+      setLookAt(Vector3 lookAt);
+
+      /**
+      * @brief .
+      */
+      void
+      setEye(Vector3 eye);
+
+      /**
+      * @brief .
+      */
+      void
+      setUp(Vector3 up);
+
+      /**
+      * @brief .
+      */
+      void
+      setFar(float farCam = 30000.0f);
+
+      /**
+      * @brief .
+      */
+      void
+      setNear(float nearCam = 0.01f);
+
+      /**
+      * @brief .
+      */
+      void
+      setFoV(float fieldOfView = Math::FOV);
+      
+      /**
+      * @brief .
+      */
+      void
+      setHeight(float height);
+
+      /**
+      * @brief .
+      */
+      void
+      setWidth(float width);
 
       /***********************************************************************/
       /**
@@ -236,6 +283,6 @@ namespace gaEngineSDK {
       /**
       * @brief Member to connect to the structure and define its values.
       */
-      CameraDescriptor::E m_cameraDesc;
+      CameraDescriptor m_cameraDesc;
   };
 }

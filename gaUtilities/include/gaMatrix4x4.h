@@ -124,7 +124,7 @@ namespace gaEngineSDK {
       * @brief .
       */
       Matrix4x4&
-      translate(float x, float y, float z);
+      translate(float X, float Y, float Z);
 
       /**
       * @brief .

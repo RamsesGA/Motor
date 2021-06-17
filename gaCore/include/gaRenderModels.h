@@ -8,8 +8,6 @@
 
 namespace gaEngineSDK {
 
-  struct ConstBuffBonesTransform::E;
-
   class GA_CORE_EXPORT RenderModels : public GameObject
   {
     public:
@@ -27,12 +25,6 @@ namespace gaEngineSDK {
       * Methods.
       */
       /***********************************************************************/
-    
-      /*
-      * @brief
-      */
-      void
-      init();
     
       /*
       * @brief
@@ -62,7 +54,7 @@ namespace gaEngineSDK {
 
       float m_timeOfAnimation = 0.0f;
 
-      Vector<ConstBuffBonesTransform::E> m_meshBones;
+      Vector<ConstBuffBonesTransform> m_meshBones;
 
       SPtr<ResourceManager> m_pResourceMang = nullptr;
 

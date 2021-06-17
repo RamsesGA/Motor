@@ -18,15 +18,12 @@ namespace gaEngineSDK {
       /**
       * @brief Constructor with default definition.
       */
-      Vector4I(int32 x = 0,
-               int32 y = 0,
-               int32 z = 0,
-               int32 w = 1);
+      Vector4I(int32 X = 0, int32 Y = 0, int32 Z = 0, int32 W = 1);
 
       /**
       * @brief Constructor where can be initialized with a vector 3.
       */
-      Vector4I(const Vector3I & vector3, int32 w = 1);
+      Vector4I(const Vector3I & vector3, int32 W = 1);
 
       /**
       * @brief Constructor.
@@ -156,10 +153,10 @@ namespace gaEngineSDK {
 
       union {
         struct {
-          int32 m_x;
-          int32 m_y;
-          int32 m_z;
-          int32 m_w;
+          int32 x;
+          int32 y;
+          int32 z;
+          int32 w;
         };
       };
   };

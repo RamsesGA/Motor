@@ -3,10 +3,10 @@
 
 namespace gaEngineSDK {
 
-  Vector3I::Vector3I(int32 x, int32 y, int32 z) {
-    m_x = x;
-    m_y = y;
-    m_z = z;
+  Vector3I::Vector3I(int32 X, int32 Y, int32 Z) {
+    x = X;
+    y = Y;
+    z = Z;
   }
 
   /***************************************************************************/
@@ -17,14 +17,13 @@ namespace gaEngineSDK {
 
   int32 
   Vector3I::dotProduct(const Vector3I& vector) const {
-    return (m_x * vector.m_x) + (m_y * vector.m_y) + (m_z * vector.m_z);
+    return (x * vector.x) + (y * vector.y) + (z * vector.z);
   }
 
   Vector3I
   Vector3I::crossProduct(const Vector3I& vector) const {
-    return Vector3I(m_y * vector.m_z - m_z * vector.m_y,
-                    m_z * vector.m_x - m_x * vector.m_z,
-                    m_x * vector.m_y - m_y * vector.m_x);
+    return Vector3I(y * vector.z - z * vector.y, z * vector.x - x * vector.z, 
+                    x * vector.y - y * vector.x);
   }
 
   /***************************************************************************/
@@ -35,9 +34,7 @@ namespace gaEngineSDK {
 
   bool 
   Vector3I::operator<(const Vector3I& vector) {
-    if ((m_x < vector.m_x) &&
-        (m_y < vector.m_y) &&
-        (m_z < vector.m_z)) {
+    if ((x < vector.x) && (y < vector.y) && (z < vector.z)) {
       return true;
     }
     return false;
@@ -45,9 +42,7 @@ namespace gaEngineSDK {
 
   bool 
   Vector3I::operator>(const Vector3I& vector) {
-    if ((m_x > vector.m_x) &&
-        (m_y > vector.m_y) &&
-        (m_z > vector.m_z)) {
+    if ((x > vector.x) && (y > vector.y) && (z > vector.z)) {
       return true;
     }
     return false;
@@ -55,17 +50,15 @@ namespace gaEngineSDK {
 
   Vector3I& 
   Vector3I::operator=(const Vector3I& vector) {
-    m_x = vector.m_x;
-    m_y = vector.m_y;
-    m_z = vector.m_z;
+    x = vector.x;
+    y = vector.y;
+    z = vector.z;
     return *this;
   }
 
   bool 
   Vector3I::operator==(const Vector3I& vector) {
-    if ((m_x == vector.m_x) &&
-        (m_y == vector.m_y) &&
-        (m_z == vector.m_z)) {
+    if ((x == vector.x) && (y == vector.y) && (z == vector.z)) {
       return true;
     }
     return false;
@@ -73,46 +66,40 @@ namespace gaEngineSDK {
 
   Vector3I 
   Vector3I::operator+(const Vector3I& vector) const {
-    return Vector3I(m_x + vector.m_x,
-                    m_y + vector.m_y,
-                    m_z + vector.m_z);
+    return Vector3I(x + vector.x, y + vector.y, z + vector.z);
   }
 
   Vector3I& 
   Vector3I::operator+=(const Vector3I& vector) {
-    m_x += vector.m_x;
-    m_y += vector.m_y;
-    m_z += vector.m_z;
+    x += vector.x;
+    y += vector.y;
+    z += vector.z;
     return *this;
   }
 
   Vector3I 
   Vector3I::operator-(const Vector3I& vector) const {
-    return Vector3I(m_x - vector.m_x,
-                    m_y - vector.m_y,
-                    m_z - vector.m_z);
+    return Vector3I(x - vector.x, y - vector.y, z - vector.z);
   }
 
   Vector3I& 
   Vector3I::operator-=(const Vector3I& vector) {
-    m_x -= vector.m_x;
-    m_y -= vector.m_y;
-    m_z -= vector.m_z;
+    x -= vector.x;
+    y -= vector.y;
+    z -= vector.z;
     return *this;
   }
 
   Vector3I 
   Vector3I::operator*(const int32 vector) const {
-    return Vector3I(vector * m_x,
-                    vector * m_y,
-                    vector * m_z);
+    return Vector3I(vector * x, vector * y, vector * z);
   }
 
   Vector3I&
   Vector3I::operator*=(const int32 vector) {
-    m_x *= vector;
-    m_y *= vector;
-    m_z *= vector;
+    x *= vector;
+    y *= vector;
+    z *= vector;
     return *this;
   }
 
@@ -120,8 +107,7 @@ namespace gaEngineSDK {
   Vector3I::operator*(const Vector3I& vector) const {
     Vector3I vectorTemp(0, 0, 0);
 
-    return Vector3I(vectorTemp.m_x = m_x * vector.m_x,
-                    vectorTemp.m_y = m_y * vector.m_y,
-                    vectorTemp.m_z = m_z * vector.m_z);
+    return Vector3I(vectorTemp.x = x * vector.x, vectorTemp.y = y * vector.y,
+                    vectorTemp.z = z * vector.z);
   }
 }

@@ -3,22 +3,12 @@
 
 namespace gaEngineSDK {
 
-  Vector4::Vector4(float x, 
-                   float y, 
-                   float z, 
-                   float w) {
-    m_x = x;
-    m_y = y;
-    m_z = z;
-    m_w = w;
+  Vector4::Vector4(float X, float Y, float Z, float W) {
+    x = X;
+    y = Y;
+    z = Z;
+    w = W;
   }
-
-  /*Vector4::Vector4(const Vector3& vec3, float w){
-    m_x = vec3.m_x;
-    m_y = vec3.m_y;
-    m_z = vec3.m_z;
-    m_w = w;
-  }*/
 
   /*************************************************************************/
   /**
@@ -28,7 +18,7 @@ namespace gaEngineSDK {
 
   float
   Vector4::magnitude() {
-    return (Math::sqrtf((m_x * m_x) + (m_y * m_y) + (m_z * m_z) + (m_w * m_w)));
+    return (Math::sqrtf((x * x) + (y * y) + (z * z) + (w * w)));
   }
 
   void 
@@ -37,25 +27,22 @@ namespace gaEngineSDK {
 
     if (magn > 0.0f) {
       float oneOverMag = 1.0f / magn;
-      m_x = m_x * oneOverMag;
-      m_y = m_y * oneOverMag;
-      m_z = m_z * oneOverMag;
-      m_w = m_w * oneOverMag;
+      x = x * oneOverMag;
+      y = y * oneOverMag;
+      z = z * oneOverMag;
+      w = w * oneOverMag;
     }
     else {
-      m_x = 0.0f;
-      m_y = 0.0f;
-      m_z = 0.0f;
-      m_w = 0.0f;
+      x = 0.0f;
+      y = 0.0f;
+      z = 0.0f;
+      w = 0.0f;
     }
   }
 
   float 
   Vector4::dotProduct(const Vector4& vector) const {
-    return (m_x * vector.m_x) +
-           (m_y * vector.m_y) +
-           (m_z * vector.m_z) +
-           (m_w * vector.m_w);
+    return (x * vector.x) + (y * vector.y) + (z * vector.z) + (w * vector.w);
   }
 
   /*************************************************************************/
@@ -66,10 +53,7 @@ namespace gaEngineSDK {
 
   bool 
   Vector4::operator<(const Vector4& vector) const {
-    if ((m_x < vector.m_x) &&
-        (m_y < vector.m_y) &&
-        (m_z < vector.m_z) &&
-        (m_w < vector.m_w)) {
+    if ((x < vector.x) && (y < vector.y) && (z < vector.z) && (w < vector.w)) {
       return true;
     }
     return false;
@@ -77,10 +61,7 @@ namespace gaEngineSDK {
 
   bool
   Vector4::operator>(const Vector4& vector) const {
-    if ((m_x > vector.m_x) &&
-        (m_y > vector.m_y) &&
-        (m_z > vector.m_z) &&
-        (m_w > vector.m_w)) {
+    if ((x > vector.x) && (y > vector.y) && (z > vector.z) && (w > vector.w)) {
       return true;
     }
     return false;
@@ -88,19 +69,16 @@ namespace gaEngineSDK {
 
   Vector4& 
   Vector4::operator=(const Vector4& vector) {
-    m_x = vector.m_x;
-    m_y = vector.m_y;
-    m_z = vector.m_z;
-    m_w = vector.m_w;
+    x = vector.x;
+    y = vector.y;
+    z = vector.z;
+    w = vector.w;
     return *this;
   }
 
   bool 
   Vector4::operator==(const Vector4& vector) const {
-    if ((m_x == vector.m_x) &&
-        (m_y == vector.m_y) &&
-        (m_z == vector.m_z) &&
-        (m_w == vector.m_w)) {
+    if ((x == vector.x) && (y == vector.y) && (z == vector.z) && (w == vector.w)) {
       return true;
     }
     return false;
@@ -108,52 +86,43 @@ namespace gaEngineSDK {
 
   Vector4 
   Vector4::operator+(const Vector4& vector) const {
-    return Vector4(m_x + vector.m_x,
-                   m_y + vector.m_y,
-                   m_z + vector.m_z,
-                   m_w + vector.m_w);
+    return Vector4(x + vector.x, y + vector.y, z + vector.z, w + vector.w);
   }
 
   Vector4&
   Vector4::operator+=(const Vector4& vector) {
-    m_x += vector.m_x;
-    m_y += vector.m_y;
-    m_z += vector.m_z;
-    m_w += vector.m_w;
+    x += vector.x;
+    y += vector.y;
+    z += vector.z;
+    w += vector.w;
     return *this;
   }
 
   Vector4 
   Vector4::operator-(const Vector4& vector) const {
-    return Vector4(m_x - vector.m_x,
-                   m_y - vector.m_y,
-                   m_z - vector.m_z,
-                   m_w - vector.m_w);
+    return Vector4(x - vector.x, y - vector.y, z - vector.z, w - vector.w);
   }
 
   Vector4& 
   Vector4::operator-=(const Vector4& vector) {
-    m_x -= vector.m_x;
-    m_y -= vector.m_y;
-    m_z -= vector.m_z;
-    m_w -= vector.m_w;
+    x -= vector.x;
+    y -= vector.y;
+    z -= vector.z;
+    w -= vector.w;
     return *this;
   }
 
   Vector4 
   Vector4::operator*(const float vector) const {
-    return Vector4(vector * m_x,
-                   vector * m_y,
-                   vector * m_z,
-                   vector * m_w);
+    return Vector4(vector * x, vector * y, vector * z, vector * w);
   }
 
   Vector4& 
   Vector4::operator*=(const float vector) {
-    m_x *= vector;
-    m_y *= vector;
-    m_z *= vector;
-    m_w *= vector;
+    x *= vector;
+    y *= vector;
+    z *= vector;
+    w *= vector;
     return *this;
   }
 
@@ -161,9 +130,7 @@ namespace gaEngineSDK {
   Vector4::operator*(const Vector4& vector) const {
     Vector4 vectorTemp(0.0f, 0.0f, 0.0f, 0.0f);
 
-    return Vector4(vectorTemp.m_x = m_x * vector.m_x,
-                   vectorTemp.m_y = m_y * vector.m_y,
-                   vectorTemp.m_z = m_z * vector.m_z,
-                   vectorTemp.m_w = m_w * vector.m_w);
+    return Vector4(vectorTemp.x = x * vector.x, vectorTemp.y = y * vector.y,
+                   vectorTemp.z = z * vector.z, vectorTemp.w = w * vector.w);
   }
 }

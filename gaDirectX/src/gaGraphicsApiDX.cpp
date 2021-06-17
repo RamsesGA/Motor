@@ -53,7 +53,7 @@ namespace gaEngineSDK {
   AnalyzeVertexShaderDX(const WString& nameVS) {
     String bufferAnalyze;
   
-    for (uint32 i = 0; i < nameVS.size(); i++) {
+    for (uint32 i = 0; i < nameVS.size(); ++i) {
       bufferAnalyze += nameVS[i];
   
       if (('_' == bufferAnalyze[i]) &&
@@ -73,7 +73,7 @@ namespace gaEngineSDK {
   AnalyzePixelShaderDX(const WString& namePS) {
     String bufferAnalyze;
   
-    for (uint32 i = 0; i < namePS.size(); i++) {
+    for (uint32 i = 0; i < namePS.size(); ++i) {
       bufferAnalyze += namePS[i];
   
       if (('_' == bufferAnalyze[i]) &&
@@ -163,7 +163,7 @@ namespace gaEngineSDK {
     sd.SampleDesc.Quality = 0;
     sd.Windowed = TRUE;
     
-    for (uint32 driverTypeIndex = 0; driverTypeIndex < driverTypes.size(); driverTypeIndex++) {
+    for (uint32 driverTypeIndex = 0; driverTypeIndex < driverTypes.size(); ++driverTypeIndex) {
       hr = D3D11CreateDeviceAndSwapChain(nullptr, driverTypes[driverTypeIndex],
                                          nullptr, createDeviceFlags,
                                          featureLevels.data(), (uint32)featureLevels.size(),
@@ -340,7 +340,7 @@ namespace gaEngineSDK {
   GraphicsApiDX::unbindOGL() {}
 
   Matrix4x4 
-  GraphicsApiDX::matrix4x4Context(const Matrix4x4& mat4x4) {
+  GraphicsApiDX::matrixPolicy(const Matrix4x4& mat4x4) {
     Matrix4x4 temp;
     temp = mat4x4;
     temp.transpose();
@@ -763,7 +763,7 @@ namespace gaEngineSDK {
     uint32 byteOffset = 0;
     Vector<D3D11_INPUT_ELEMENT_DESC> inputLayoutDesc;
   
-    for (uint32 i = 0; i < shaderDesc.InputParameters; i++) {
+    for (uint32 i = 0; i < shaderDesc.InputParameters; ++i) {
       D3D11_SIGNATURE_PARAMETER_DESC paramDesc;
       pVertexShaderReflection->GetInputParameterDesc(i, &paramDesc);
   
@@ -913,7 +913,7 @@ namespace gaEngineSDK {
 
     auto& vBuffer = reinterpret_cast<VertexBufferDX&>(vertexBuffer);
   
-    uint32 stride = sizeof(Vertex::E);
+    uint32 stride = sizeof(Vertex);
     uint32 offset = 0;
   
     m_pImmediateContext->IASetVertexBuffers(0, 1, &vBuffer.m_pVertexBuffer, &stride, &offset);
@@ -951,7 +951,7 @@ namespace gaEngineSDK {
   GraphicsApiDX::setSamplerState(const uint32 startSlot,
                                  Vector<SamplerState*>& samplerState,
                                  Textures* texture) {
-    for (uint32 i = 0; i < samplerState.size(); i++) {
+    for (uint32 i = 0; i < samplerState.size(); ++i) {
       auto* sState = reinterpret_cast<SamplerStateDX*>(samplerState[i]);
 
       m_pImmediateContext->PSSetSamplers(startSlot,
@@ -1006,9 +1006,8 @@ namespace gaEngineSDK {
   }
   
   void 
-  GraphicsApiDX::setViewport(const uint32 numViewports,
-                             const uint32 width, 
-                             const uint32 heigth) {
+  GraphicsApiDX::setViewports(const uint32 numViewports, const uint32 width, 
+                              const uint32 heigth) {
     D3D11_VIEWPORT vp;
     vp.Width = (float)width;
     vp.Height = (float)heigth;

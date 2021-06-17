@@ -39,7 +39,7 @@ namespace gaEngineSDK {
   AnalyzeVertexShaderOGL(const WString& _nameVS) {
     String bufferAnalyze;
 
-    for (uint32 i = 0; i < _nameVS.size(); i++) {
+    for (uint32 i = 0; i < _nameVS.size(); ++i) {
 
       bufferAnalyze += _nameVS[i];
 
@@ -60,7 +60,7 @@ namespace gaEngineSDK {
   AnalyzePixelShaderOGL(const WString& _namePS) {
     String bufferAnalyze;
 
-    for (uint32 i = 0; i < _namePS.size(); i++) {
+    for (uint32 i = 0; i < _namePS.size(); ++i) {
 
       bufferAnalyze += _namePS[i];
 
@@ -139,7 +139,7 @@ namespace gaEngineSDK {
     m_width = rc.right - rc.left;
     m_height = rc.bottom - rc.top;
 
-    setViewport(1, m_width, m_height);
+    setViewports(1, m_width, m_height);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -231,7 +231,7 @@ namespace gaEngineSDK {
   }
 
   Matrix4x4 
-  GraphicsApiOGL::matrix4x4Context(const Matrix4x4& mat4x4) {
+  GraphicsApiOGL::matrixPolicy(const Matrix4x4& mat4x4) {
     return mat4x4;
   }
   
@@ -593,7 +593,7 @@ namespace gaEngineSDK {
 
     glGetProgramiv(shader.m_rendererID, GL_ACTIVE_ATTRIBUTES, &total);
 
-    for (uint32 i = 0; i < total; i++) {
+    for (uint32 i = 0; i < total; ++i) {
       char name[100];
       memset(name, ' ', 100);
 
@@ -699,7 +699,7 @@ namespace gaEngineSDK {
 
     auto& vertex = reinterpret_cast<VertexBufferOGL&>(vertexBuffer);
 
-    glBindVertexBuffer(0, vertex.m_vertexBufferObject, 0, sizeof(Vertex::E));
+    glBindVertexBuffer(0, vertex.m_vertexBufferObject, 0, sizeof(Vertex));
   }
   
   void 
@@ -801,9 +801,8 @@ namespace gaEngineSDK {
   }
   
   void 
-  GraphicsApiOGL::setViewport(const uint32 numViewports,
-                              const uint32 width, 
-                              const uint32 heigth) {
+  GraphicsApiOGL::setViewports(const uint32 numViewports, const uint32 width, 
+                               const uint32 heigth) {
     glViewport(0, 0, width, heigth);
   }
   

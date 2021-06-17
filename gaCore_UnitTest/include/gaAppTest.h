@@ -114,8 +114,8 @@ class AppTest : public BaseApp
     /*
     * @brief Variable that stores the CB data.
     */
-    ConstantBuffer* m_pConstantBuffer1 = nullptr;
-    ConstantBuffer* m_pConstantBuffer2 = nullptr;
+    ConstantBuffer* m_pBufferCamera = nullptr;
+    ConstantBuffer* m_pBufferWorld = nullptr;
     ConstantBuffer* m_pConstBufferBones = nullptr;
 
     /*

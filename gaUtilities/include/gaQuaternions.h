@@ -12,16 +12,16 @@ namespace gaEngineSDK {
     public:
       /***********************************************************************/
       /**
-     * Constructor and Destructor.
-    */
+      * Constructor and Destructor.
+      */
       /***********************************************************************/
       Quaternions() = default;
 
-      Quaternions(const float& x, const float& y, const float& z);
+      Quaternions(const float& X, const float& Y, const float& Z);
 
-      Quaternions(const Radians& x, const Radians& y, const Radians& z);
+      Quaternions(const Radians& X, const Radians& Y, const Radians& Z);
 
-      Quaternions(const Degrees& x, const Degrees& y, const Degrees& z);
+      Quaternions(const Degrees& X, const Degrees& Y, const Degrees& Z);
 
       Quaternions(Vector3 vec3, const float& w);
 
@@ -205,14 +205,14 @@ namespace gaEngineSDK {
       * @return this quaternion rotated
       */
       Quaternions&
-      rotate(const float& x, const float& y, const float& z, bool degree);
+      rotate(const float& X, const float& Y, const float& Z, bool degree);
 
       /**
       * @brief get to rotate this quaternion.
       * @return this quaternion rotated
       */
       Quaternions&
-      rotate(Degrees x, Degrees y, Degrees z);
+      rotate(Degrees X, Degrees Y, Degrees Z);
 
       /**
       * @brief get to rotate this quaternion.
@@ -233,21 +233,21 @@ namespace gaEngineSDK {
       /**
       * @brief The quaternion's X-component.
       */
-      float m_x;
+      float x;
       
       /**
       * @brief The quaternion's Y-component.
       */
-      float m_y;
+      float y;
       
       /**
       * @brief The quaternion's Z-component.
       */
-      float m_z;
+      float z;
       
       /**
       * @brief The quaternion's W-component.
       */
-      float m_w;
+      float w;
   };
 }

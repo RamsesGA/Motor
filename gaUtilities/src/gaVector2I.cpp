@@ -3,9 +3,9 @@
 
 namespace gaEngineSDK {
 
-  Vector2I::Vector2I(int32 x, int32 y) {
-    m_x = x;
-    m_y = y;
+  Vector2I::Vector2I(int32 X, int32 Y) {
+    x = X;
+    y = Y;
   }
 
   /***************************************************************************/
@@ -16,7 +16,7 @@ namespace gaEngineSDK {
 
   int32 
   Vector2I::dotProduct(const Vector2I& vector) const {
-    return (m_x * vector.m_x) + (m_y * vector.m_y);
+    return (x * vector.x) + (y * vector.y);
   }
 
   /***************************************************************************/
@@ -27,7 +27,7 @@ namespace gaEngineSDK {
 
   bool 
   Vector2I::operator<(const Vector2I& vector) {
-    if (m_x < vector.m_x && m_y < vector.m_y) {
+    if (x < vector.x && y < vector.y) {
       return true;
     }
     return false;
@@ -35,7 +35,7 @@ namespace gaEngineSDK {
 
   bool 
   Vector2I::operator>(const Vector2I& vector) {
-    if (m_x > vector.m_x && m_y > vector.m_y) {
+    if (x > vector.x && y > vector.y) {
       return true;
     }
     return false;
@@ -43,14 +43,14 @@ namespace gaEngineSDK {
 
   Vector2I& 
   Vector2I::operator=(const Vector2I& vector) {
-    m_x = vector.m_x;
-    m_y = vector.m_y;
+    x = vector.x;
+    y = vector.y;
     return *this;
   }
 
   bool 
   Vector2I::operator==(const Vector2I& vector) {
-    if (m_x == vector.m_x && m_y == vector.m_y) {
+    if (x == vector.x && y == vector.y) {
       return true;
     }
     return false;
@@ -58,37 +58,37 @@ namespace gaEngineSDK {
 
   Vector2I 
   Vector2I::operator+(const Vector2I& vector) const {
-    return Vector2I(m_x + vector.m_x, m_y + vector.m_y);
+    return Vector2I(x + vector.x, y + vector.y);
   }
 
   Vector2I& 
   Vector2I::operator+=(const Vector2I& vector) {
-    m_x += vector.m_x;
-    m_y += vector.m_y;
+    x += vector.x;
+    y += vector.y;
     return *this;
   }
 
   Vector2I
   Vector2I::operator-(const Vector2I& vector) const {
-    return Vector2I(m_x - vector.m_x, m_y - vector.m_y);
+    return Vector2I(x - vector.x, y - vector.y);
   }
 
   Vector2I& 
   Vector2I::operator-=(const Vector2I& vector) {
-    m_x -= vector.m_x;
-    m_y -= vector.m_y;
+    x -= vector.x;
+    y -= vector.y;
     return *this;
   }
 
   Vector2I 
   Vector2I::operator*(const int32 vector) const {
-    return Vector2I(vector * m_x, vector * m_y);
+    return Vector2I(vector * x, vector * y);
   }
 
   Vector2I& 
   Vector2I::operator*=(const int32 vector) {
-    m_x *= vector;
-    m_y *= vector;
+    x *= vector;
+    y *= vector;
     return *this;
   }
 
@@ -97,7 +97,6 @@ namespace gaEngineSDK {
     Vector2I vectorTemp(0,0);
 
     return 
-    Vector2I(vectorTemp.m_x = m_x * vector.m_x,
-      vectorTemp.m_y = m_y * vector.m_y);
+    Vector2I(vectorTemp.x = x * vector.x, vectorTemp.y = y * vector.y);
   }
 }

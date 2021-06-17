@@ -5,10 +5,6 @@
 
 namespace gaEngineSDK {
   void 
-  RenderModels::init() {
-  }
-
-  void 
   RenderModels::update(ResourceManager& resource, const float& deltaTime) {
     if (nullptr == m_pResourceMang) {
       m_pResourceMang.reset(&resource);

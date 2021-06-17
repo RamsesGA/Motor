@@ -17,9 +17,7 @@ namespace gaEngineSDK {
       /**
       * @brief Constructor to start a vector with x and y.
       */
-      Vector3I(int32 x = 0,
-               int32 y = 0,
-               int32 z = 0);
+      Vector3I(int32 X = 0, int32 Y = 0, int32 Z = 0);
     
       ~Vector3I() = default;
     
@@ -146,9 +144,9 @@ namespace gaEngineSDK {
 
       union {
         struct {
-          int32 m_x;
-          int32 m_y;
-          int32 m_z;
+          int32 x;
+          int32 y;
+          int32 z;
         };
       };
   };

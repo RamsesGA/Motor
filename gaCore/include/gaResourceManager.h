@@ -56,7 +56,7 @@ namespace gaEngineSDK {
       processMesh(aiMesh* pAMesh, const aiScene* pAScene);
 
       void
-      processBonesInfo(aiMesh* pAMesh, Vertex::E* structureVertex, uint32 numVertexes);
+      processBonesInfo(aiMesh* pAMesh, Vertex* structureVertex, uint32 numVertexes);
 
       void
       processIndexInfo(uint32 numIndices);
@@ -70,7 +70,7 @@ namespace gaEngineSDK {
       * @param Assimp variable for the texture type.
       * @param Variable with API information.
       */
-      Vector<Texture::E>
+      Vector<Texture>
       loadMaterialTextures(aiMaterial* pAMat, aiTextureType Atype);
 
       /*
@@ -155,7 +155,7 @@ namespace gaEngineSDK {
       /*
       * @brief Member to store a string of textures.
       */
-      Vector<Texture::E> m_textures;
+      Vector<Texture> m_textures;
 
       /*
       * @brief Member to store the full name of the folder.

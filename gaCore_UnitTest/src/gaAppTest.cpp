@@ -45,34 +45,33 @@ AppTest::onInitCamera() {
   //Inicializamos la matriz de identidad
   m_world.identity();
 
-  CameraDescriptor::E mainCamera;
-  mainCamera.camLookAt = Vector3(0.0f, 1.0f, 0.0f);
-  mainCamera.camEye = Vector3(0.0f, 0.0f, -700.0f);
-  mainCamera.camUp = Vector3(0.0f, 1.0f, 0.0f);
-  mainCamera.camFar = 300000.0f;
-  mainCamera.camNear = 0.01f;
-  mainCamera.camFoV = Math::FOV;
-  mainCamera.camHeight = m_height;
-  mainCamera.camWidth = m_width;
+  m_mainCamera.setLookAt(Vector3(0.0f, 1.0f, 0.0f));
+  m_mainCamera.setEye(Vector3(0.0f, 0.0f, -700.0f));
+  m_mainCamera.setUp(Vector3(0.0f, 1.0f, 0.0f));
+  m_mainCamera.setFar();
+  m_mainCamera.setNear();
+  m_mainCamera.setFoV();
+  m_mainCamera.setWidth(m_width);
+  m_mainCamera.setHeight(m_height);
 
-  m_mainCamera.init(mainCamera);
+  m_mainCamera.init();
 }
 
 void
 AppTest::onUpdate(float deltaTime) {
   auto myGraphicsApi = g_graphicApi().instancePtr();
 
-  ConstantBuffer1::E meshData;
-  meshData.mProjection = myGraphicsApi->matrix4x4Context(m_mainCamera.getProjection());
-  meshData.mView = myGraphicsApi->matrix4x4Context(m_mainCamera.getView());
+  ConstantBuffer1 meshData;
+  meshData.mProjection = myGraphicsApi->matrixPolicy(m_mainCamera.getProjection());
+  meshData.mView = myGraphicsApi->matrixPolicy(m_mainCamera.getView());
 
-  ConstantBuffer2::E cb;
+  ConstantBuffer2 cb;
   cb.mWorld = m_world;
   cb.vMeshColor = m_vMeshColor;
 
   try {
-    myGraphicsApi->updateConstantBuffer(&meshData, *m_pConstantBuffer1);
-    myGraphicsApi->updateConstantBuffer(&cb, *m_pConstantBuffer2);
+    myGraphicsApi->updateConstantBuffer(&meshData, *m_pBufferCamera);
+    myGraphicsApi->updateConstantBuffer(&cb, *m_pBufferWorld);
 
     m_renderModel->update(*m_resourceManager, deltaTime);
   }
@@ -92,7 +91,7 @@ AppTest::onRender() {
     myGraphicsApi->setRenderTarget(m_pRenderTargetView, m_pDepthStencil);
 
     //Guardamos un viewport
-    myGraphicsApi->setViewport(1, m_width, m_height);
+    myGraphicsApi->setViewports(1, m_width, m_height);
 
     //Clear the back buffer
     myGraphicsApi->clearYourRenderTargetView(m_pRenderTargetView, (87.0f / 255.0f),
@@ -115,11 +114,10 @@ AppTest::onRender() {
     myGraphicsApi->setPrimitiveTopology(PRIMITIVE_TOPOLOGY::E::kTriangleList);
 
     myGraphicsApi->setShaders(*m_pBothShaders);
-    myGraphicsApi->setYourVSConstantBuffers(m_pConstantBuffer1, 0, 1);
-    myGraphicsApi->setYourVSConstantBuffers(m_pConstantBuffer2, 1, 1);
-    myGraphicsApi->setYourPSConstantBuffers(m_pConstantBuffer2, 1, 1);
+    myGraphicsApi->setYourVSConstantBuffers(m_pBufferCamera, 0, 1);
+    myGraphicsApi->setYourVSConstantBuffers(m_pBufferWorld, 1, 1);
+    myGraphicsApi->setYourPSConstantBuffers(m_pBufferWorld, 1, 1);
     myGraphicsApi->setYourVSConstantBuffers(m_tempBufferBones.get(), 2, 1);
-    //myGraphicsApi->setYourPSConstantBuffers(m_pConstBufferBones, 2, 1);
 
     m_renderModel->drawModel(*m_resourceManager, m_tempBufferBones);
   }
@@ -162,24 +160,24 @@ AppTest::onCreate() {
                                                          L"data/shaders/DX_animation.fx",
                                                          "PS");
     //Creamos el vertex shader y pixel shader.
-    //m_pBothShaders = myGraphicsApi->createShadersProgram(L"data/shaders/OGL_VertexShader.txt",
+    //m_pBothShaders = myGraphicsApi->createShadersProgram(L"data/shaders/OGL_VS_animation.txt",
     //                                                     "main",
-    //                                                     L"data/shaders/OGL_PixelShader.txt",
+    //                                                     L"data/shaders/OGL_PS_animation.txt",
     //                                                     "main");
 
     //Creamos el input layout 
     m_pVertexLayout = myGraphicsApi->createInputLayout(*m_pBothShaders);
 
     //Creamos el vertex buffer
-    m_mesh->m_pVertexBuffer = myGraphicsApi->createVertexBuffer(nullptr, sizeof(Matrices::E));
+    m_mesh->m_pVertexBuffer = myGraphicsApi->createVertexBuffer(nullptr, sizeof(Matrices));
 
     //Creamos el index buffer 
-    m_mesh->m_pIndexBuffer = myGraphicsApi->createIndexBuffer(nullptr, sizeof(ViewCB::E));
+    m_mesh->m_pIndexBuffer = myGraphicsApi->createIndexBuffer(nullptr, sizeof(ViewCB));
 
     //Creamos los constant buffers para el shader
-    m_pConstantBuffer1 = myGraphicsApi->createConstantBuffer(sizeof(ConstantBuffer1::E));
-    m_pConstantBuffer2 = myGraphicsApi->createConstantBuffer(sizeof(ConstantBuffer2::E));
-    m_pConstBufferBones = myGraphicsApi->createConstantBuffer(sizeof(ConstBuffBonesTransform::E));
+    m_pBufferCamera = myGraphicsApi->createConstantBuffer(sizeof(ConstantBuffer1));
+    m_pBufferWorld = myGraphicsApi->createConstantBuffer(sizeof(ConstantBuffer2));
+    m_pConstBufferBones = myGraphicsApi->createConstantBuffer(sizeof(ConstBuffBonesTransform));
     m_tempBufferBones.reset(m_pConstBufferBones);
   }
   catch (exception* e) {
@@ -190,16 +188,16 @@ AppTest::onCreate() {
   try {
     //m_resourceManager->initLoadModel("data/models/2B/2B.obj");
     //m_resourceManager->initLoadModel("data/models/pod/POD.obj");
-    m_resourceManager->initLoadModel("data/models/spartan/Spartan.fbx");
-    //m_resourceManager->initLoadModel("data/models/ugandan/Knuckles.fbx");
+    //m_resourceManager->initLoadModel("data/models/spartan/Spartan.fbx");
+    m_resourceManager->initLoadModel("data/models/ugandan/Knuckles.fbx");
     //m_resourceManager->initLoadModel("data/models/grimoires/grimoires.fbx");
 
     //Esto solo es para guardar los huesos y las animaciones
     //En caso de que no, evitamos un error
-    if (0 != m_resourceManager->getMeshes().size()) {
+    if (!m_resourceManager->getMeshes().empty()) {
       m_renderModel->setMeshBones(*m_resourceManager);
 
-      if (0 != m_resourceManager->getModel()->m_vAnimationData.size()) {
+      if (!m_resourceManager->getModel()->m_vAnimationData.empty()) {
         m_renderModel->m_currentAnimation = m_resourceManager->getModel()->m_vAnimationData[0];
       }
     }
@@ -217,8 +215,8 @@ AppTest::onDestroySystem() {
   //delete m_pBothShaders;
   //delete m_pVertexBuffer;
   //delete m_pIndexBuffer;
-  //delete m_pConstantBuffer1;
-  //delete m_pConstantBuffer2;
+  //delete m_pBufferCamera;
+  //delete m_pBufferWorld;
 }
 
 void
@@ -227,10 +225,10 @@ AppTest::onKeyboardDown(sf::Event param) {
 
   auto myGraphicsApi = g_graphicApi().instancePtr();
 
-  ConstantBuffer1::E cb;
-  cb.mView = myGraphicsApi->matrix4x4Context(m_mainCamera.getView());
+  ConstantBuffer1 cb;
+  cb.mView = myGraphicsApi->matrixPolicy(m_mainCamera.getView());
 
-  myGraphicsApi->updateConstantBuffer(&cb, *m_pConstantBuffer1);
+  myGraphicsApi->updateConstantBuffer(&cb, *m_pBufferCamera);
 }
 
 void
@@ -251,17 +249,17 @@ AppTest::onMouseMove() {
   if (m_mainCamera.getClickPressed()) {
     m_mainCamera.setOriginalMousePos
     (
-      m_mainCamera.getOriginalMousePos().m_x,
-      m_mainCamera.getOriginalMousePos().m_y
+      m_mainCamera.getOriginalMousePos().x,
+      m_mainCamera.getOriginalMousePos().y
     );
 
     m_mainCamera.mouseRotation();
 
     auto myGraphicsApi = g_graphicApi().instancePtr();
 
-    ConstantBuffer1::E cb;
-    cb.mView = myGraphicsApi->matrix4x4Context(m_mainCamera.getView());
+    ConstantBuffer1 cb;
+    cb.mView = myGraphicsApi->matrixPolicy(m_mainCamera.getView());
 
-    myGraphicsApi->updateConstantBuffer(&cb, *m_pConstantBuffer1);
+    myGraphicsApi->updateConstantBuffer(&cb, *m_pBufferCamera);
   }
 }

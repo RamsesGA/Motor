@@ -20,10 +20,7 @@ namespace gaEngineSDK {
       /**
       * @brief Constructor with default definition.
       */
-      Vector4(float x = 0.0f,
-              float y = 0.0f,
-              float z = 0.0f,
-              float w = 1.0f);
+      Vector4(float X = 0.0f, float Y = 0.0f, float Z = 0.0f, float W = 1.0f);
 
       ~Vector4() = default;
     
@@ -152,9 +149,9 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
 
-      float m_x = 0.0f;
-      float m_y = 0.0f;
-      float m_z = 0.0f;
-      float m_w = 0.0f;
+      float x = 0.0f;
+      float y = 0.0f;
+      float z = 0.0f;
+      float w = 0.0f;
   };
 }

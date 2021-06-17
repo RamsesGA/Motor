@@ -62,15 +62,15 @@ namespace gaEngineSDK {
                        const Vector3& vecY,
                        const Vector3& vecZ,
                        const Vector3& vecW) {
-    m_mat4x4[0][0] = vecX.m_x; m_mat4x4[0][1] = vecX.m_y;
-    m_mat4x4[1][0] = vecY.m_x; m_mat4x4[1][1] = vecY.m_y;
-    m_mat4x4[2][0] = vecZ.m_x; m_mat4x4[2][1] = vecZ.m_y;
-    m_mat4x4[3][0] = vecW.m_x; m_mat4x4[3][1] = vecW.m_y;
+    m_mat4x4[0][0] = vecX.x; m_mat4x4[0][1] = vecX.y;
+    m_mat4x4[1][0] = vecY.x; m_mat4x4[1][1] = vecY.y;
+    m_mat4x4[2][0] = vecZ.x; m_mat4x4[2][1] = vecZ.y;
+    m_mat4x4[3][0] = vecW.x; m_mat4x4[3][1] = vecW.y;
 
-    m_mat4x4[0][2] = vecX.m_z; m_mat4x4[0][3] = 0.0f;
-    m_mat4x4[1][2] = vecY.m_z; m_mat4x4[1][3] = 0.0f;
-    m_mat4x4[2][2] = vecZ.m_z; m_mat4x4[2][3] = 0.0f;
-    m_mat4x4[3][2] = vecW.m_z; m_mat4x4[3][3] = 1.0f;
+    m_mat4x4[0][2] = vecX.z; m_mat4x4[0][3] = 0.0f;
+    m_mat4x4[1][2] = vecY.z; m_mat4x4[1][3] = 0.0f;
+    m_mat4x4[2][2] = vecZ.z; m_mat4x4[2][3] = 0.0f;
+    m_mat4x4[3][2] = vecW.z; m_mat4x4[3][3] = 1.0f;
   }
 
   /*************************************************************************/
@@ -112,17 +112,17 @@ namespace gaEngineSDK {
     Vector<Vector3>matrixData;
     matrixData.resize(3);
 
-    matrixData.at(0).m_x = m_mat4x4[0][0];
-    matrixData.at(0).m_y = m_mat4x4[1][0];
-    matrixData.at(0).m_z = m_mat4x4[2][0];
+    matrixData.at(0).x = m_mat4x4[0][0];
+    matrixData.at(0).y = m_mat4x4[1][0];
+    matrixData.at(0).z = m_mat4x4[2][0];
                          
-    matrixData.at(1).m_x = m_mat4x4[0][1];
-    matrixData.at(1).m_y = m_mat4x4[1][1];
-    matrixData.at(1).m_z = m_mat4x4[2][1];
+    matrixData.at(1).x = m_mat4x4[0][1];
+    matrixData.at(1).y = m_mat4x4[1][1];
+    matrixData.at(1).z = m_mat4x4[2][1];
                          
-    matrixData.at(2).m_x = m_mat4x4[0][2];
-    matrixData.at(2).m_y = m_mat4x4[1][2];
-    matrixData.at(2).m_z = m_mat4x4[2][2];
+    matrixData.at(2).x = m_mat4x4[0][2];
+    matrixData.at(2).y = m_mat4x4[1][2];
+    matrixData.at(2).z = m_mat4x4[2][2];
 
     return matrixData.at(index);
   }
@@ -193,14 +193,14 @@ namespace gaEngineSDK {
 
   void
   Matrix4x4::calculateAxis(Vector3 right, Vector3 up, Vector3 front) {
-    m_mat4x4[0][0] = right.m_x; m_mat4x4[0][1]    = up.m_x;
-    m_mat4x4[1][0] = right.m_y;    m_mat4x4[1][1] = up.m_y;
-    m_mat4x4[2][0] = right.m_z; m_mat4x4[2][1]    = up.m_z;
+    m_mat4x4[0][0] = right.x; m_mat4x4[0][1]    = up.x;
+    m_mat4x4[1][0] = right.y;    m_mat4x4[1][1] = up.y;
+    m_mat4x4[2][0] = right.z; m_mat4x4[2][1]    = up.z;
     m_mat4x4[3][0] = 0.0f;      m_mat4x4[3][1]    = 0.0f;
 
-    m_mat4x4[0][2] = front.m_x; m_mat4x4[0][3] = 0.0f;
-    m_mat4x4[1][2] = front.m_y; m_mat4x4[1][3] = 0.0f;
-    m_mat4x4[2][2] = front.m_z; m_mat4x4[2][3] = 0.0f;
+    m_mat4x4[0][2] = front.x; m_mat4x4[0][3] = 0.0f;
+    m_mat4x4[1][2] = front.y; m_mat4x4[1][3] = 0.0f;
+    m_mat4x4[2][2] = front.z; m_mat4x4[2][3] = 0.0f;
     m_mat4x4[3][2] = 0.0f;      m_mat4x4[3][3] = 1.0f;
   }
 
@@ -209,12 +209,12 @@ namespace gaEngineSDK {
     m_mat4x4[0][0] = 1.0f;     m_mat4x4[0][1] = 0.0f;
     m_mat4x4[1][0] = 0.0f;     m_mat4x4[1][1] = 1.0f;
     m_mat4x4[2][0] = 0.0f;     m_mat4x4[2][1] = 0.0f;
-    m_mat4x4[3][0] = -eye.m_x; m_mat4x4[3][1] = -eye.m_y;
+    m_mat4x4[3][0] = -eye.x; m_mat4x4[3][1] = -eye.y;
 
     m_mat4x4[0][2] = 0.0f;     m_mat4x4[0][3] = 0.0f;
     m_mat4x4[1][2] = 0.0f;     m_mat4x4[1][3] = 0.0f;
     m_mat4x4[2][2] = 1.0f;     m_mat4x4[2][3] = 0.0f;
-    m_mat4x4[3][2] = -eye.m_z; m_mat4x4[3][3] = 1.0f;
+    m_mat4x4[3][2] = -eye.z; m_mat4x4[3][3] = 1.0f;
   }
 
   Matrix4x4&
@@ -234,7 +234,7 @@ namespace gaEngineSDK {
 
   Matrix4x4& 
   Matrix4x4::scale(Vector3 scal) {
-    scale(scal.m_x, scal.m_y, scal.m_z);
+    scale(scal.x, scal.y, scal.z);
     return *this;
   }
 
@@ -254,17 +254,17 @@ namespace gaEngineSDK {
 
   Matrix4x4& 
   Matrix4x4::translate(const Vector3& vec3) {
-    translate(vec3.m_x, vec3.m_y, vec3.m_z);
+    translate(vec3.x, vec3.y, vec3.z);
     return *this;
   }
 
   Matrix4x4& 
-  Matrix4x4::translate(float x, float y, float z) {
+  Matrix4x4::translate(float X, float Y, float Z) {
     Matrix4x4 tras =
       {
-        1, 0, 0, x,
-        0, 1, 0, y,
-        0, 0, 1, z,
+        1, 0, 0, X,
+        0, 1, 0, Y,
+        0, 0, 1, Z,
         0, 0, 0, 1
       };
 
@@ -308,8 +308,8 @@ namespace gaEngineSDK {
     adjoint(tempParamMatrix, adj);
 
     // Find Inverse using formula "inverse(A) = adj(A)/det(A)"
-    for (int32 i = 0; i < 4; i++) {
-      for (int32 j = 0; j < 4; j++) {
+    for (int32 i = 0; i < 4; ++i) {
+      for (int32 j = 0; j < 4; ++j) {
         inverseMatrix[i][j] = adj[i][j] / float(det);
       }
     }
@@ -348,8 +348,8 @@ namespace gaEngineSDK {
     int sign = 1;
     float temp[4][4];
 
-    for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < 4; j++) {
+    for (int i = 0; i < 4; ++i) {
+      for (int j = 0; j < 4; ++j) {
         // Get cofactor of A[i][j]
         getCofactor(tempMatrix, temp, i, j, 4);
 
@@ -526,7 +526,7 @@ namespace gaEngineSDK {
     float sign = 1.0f;
 
      // Iterate for each element of first row
-    for (int32 f = 0; f < n; f++) {
+    for (int32 f = 0; f < n; ++f) {
       // Getting Cofactor of A[0][f]
       getCofactor(tempMatrix, temp, 0, f, n);
       D += sign * tempMatrix[0][f] * getDeterminant(temp, n - 1);
@@ -544,8 +544,8 @@ namespace gaEngineSDK {
     int i = 0, j = 0;
 
     // Looping for each element of the matrix
-    for (int row = 0; row < n; row++) {
-      for (int col = 0; col < n; col++) {
+    for (int row = 0; row < n; ++row) {
+      for (int col = 0; col < n; ++col) {
         //  Copying into temporary matrix only those element
         //  which are not in given row and column
         if (row != p && col != q) {

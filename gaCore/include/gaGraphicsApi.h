@@ -75,40 +75,40 @@ namespace gaEngineSDK {
       /**
       * @brief Function to initialize the device and generate 
       *    the back buffer and depth stencil for DX by default.
-      * @param hWnd, handle to a window.
+      * @param handle to a window.
       * @return true or false.
       */
       virtual bool 
-      initDevice(sf::WindowHandle ) { return false; };
+      initDevice(sf::WindowHandle hWnd) { return false; };
       
       /**
       * @brief Function to send to draw the indices of a declared object.
-      * @param indexCount.
-      * @param startIndexLocation.
-      * @param baseVertexLocation.
+      * @param .
+      * @param .
+      * @param .
       */
       virtual void 
-      drawIndex(uint32 ,
-                uint32 ,
-                uint32 ) { };
+      drawIndex(uint32 indexCount,
+                uint32 startIndexLocation,
+                uint32 baseVertexLocation) { };
       
       /**
       * @brief Function to exchange buffers and update your information.
-      * @param syncInterval, An integer that specifies how to synchronize presentation 
+      * @param An integer that specifies how to synchronize presentation 
       *        of a frame with the vertical blank.
-      * @param flags, An integer value that contains swap-chain presentation options.
+      * @param An integer value that contains swap-chain presentation options.
       */
       virtual void 
-      swapChainPresent(uint32 ,
-                       uint32 ) { };
+      swapChainPresent(uint32 syncInterval,
+                       uint32 flags) { };
       
       /**
       * @brief Function to load textures in file.
-      * @param srcFile, String with the address of the file.
+      * @param String with the address of the file.
       * @return Textures pointer.
       */
       virtual Textures* 
-      loadTextureFromFile(String ) { return nullptr; };
+      loadTextureFromFile(String srcFile) { return nullptr; };
       
       /**
       * @brief OGL function to separate a program.
@@ -116,8 +116,11 @@ namespace gaEngineSDK {
       virtual void 
       unbindOGL() { };
 
+      /**
+      * @brief .
+      */
       virtual Matrix4x4
-      matrix4x4Context(const Matrix4x4&) { return Matrix4x4(); };
+      matrixPolicy(const Matrix4x4& matContext) { return Matrix4x4(); };
       
       /***********************************************************************/
       /**
@@ -127,13 +130,13 @@ namespace gaEngineSDK {
       
       /**
       * @brief Function to update constant buffers.
-      * @param srcData, The distance (in bytes) from the 
+      * @param The distance (in bytes) from the 
       *        beginning of one line of a texture to the next line.
-      * @param updateDataCB, Constant buffers contain shader constant data.
+      * @param Constant buffers contain shader constant data.
       */
       virtual void 
-      updateConstantBuffer(const void* ,
-                           ConstantBuffer& ) { };
+      updateConstantBuffer(const void* srcData,
+                           ConstantBuffer& updateDataCB) { };
       
       /***********************************************************************/
       /**
@@ -143,19 +146,19 @@ namespace gaEngineSDK {
       
       /**
       * @brief Function to clean our render target view.
-      * @param renderTarget.
-      * @param r, g, b, a.
+      * @param .
+      * @param .
       */
       virtual void 
-      clearYourRenderTargetView(Textures* ,
-                                float , float , float , float ) { };
+      clearYourRenderTargetView(Textures* renderTarget,
+                                float r, float g, float b, float a) { };
       
       /**
       * @brief Function to clean our depth stencil view.
-      * @param depthStencil.
+      * @param .
       */
       virtual void 
-      clearYourDepthStencilView(Textures* ) { };
+      clearYourDepthStencilView(Textures* depthStencil) { };
       
       /***********************************************************************/
       /**
@@ -166,45 +169,45 @@ namespace gaEngineSDK {
       /**
       * @brief Function to generate the vertex shader and vertex resource.
       *         Function to generate the pixel shader or fragment shader.
-      * @param nameVS of vertex shader.
-      * @param entryPointVS of vertex shader.
-      * @param namePS of pixel shader.
-      * @param entryPointPS of pixel shader.
+      * @param name vertex shader.
+      * @param entry point vertex shader.
+      * @param name pixel shader.
+      * @param entry point pixel shader.
       * @return Shaders points.
       */
       virtual Shaders* 
-      createShadersProgram(const WString& ,
-                           const String& , 
-                           const WString& ,
-                           const String& ) { return nullptr; };
+      createShadersProgram(const WString& nameVS,
+                           const String& entryPointVS,
+                           const WString& namePS,
+                           const String& entryPointPS) { return nullptr; };
       
       /**
       * @brief Function to generate the vertex buffer.
-      * @param data.
-      * @param size.
+      * @param .
+      * @param .
       * @return VertexBuffer pointer.
       */
       virtual VertexBuffer* 
-      createVertexBuffer(const void* ,
-                         const uint32 ) { return nullptr; };
+      createVertexBuffer(const void* data,
+                         const uint32 size) { return nullptr; };
       
       /**
       * @brief Function to generate the index buffer.
-      * @param data.
-      * @param size.
+      * @param .
+      * @param .
       * @return IndexBuffer pointer.
       */
       virtual IndexBuffer*
-      createIndexBuffer(const void* ,
-                        const uint32 ) { return nullptr; };
+      createIndexBuffer(const void* data,
+                        const uint32 size) { return nullptr; };
       
       /**
       * @brief Function to generate constant buffers.
-      * @param bufferSize.
+      * @param .
       * @return ConstantBuffer pointer.
       */
       virtual ConstantBuffer* 
-      createConstantBuffer(const uint32 ) { return nullptr; };
+      createConstantBuffer(const uint32 bufferSize) { return nullptr; };
       
       /**
       * @brief Function to generate the following: 
@@ -219,11 +222,11 @@ namespace gaEngineSDK {
       * @return Textures pointer.
       */
       virtual Textures* 
-      createTexture(const uint32 ,
-                    const uint32 ,
-                    const uint32 ,
-                    TEXTURE_FORMAT::E ,
-                    const String ) { return nullptr; };
+      createTexture(const uint32 width,
+                    const uint32 height,
+                    const uint32 bindFlags,
+                    TEXTURE_FORMAT::E textureFormat,
+                    const String fileName) { return nullptr; };
       
       /**
       * @brief Function to generate the sampler state.
@@ -234,11 +237,11 @@ namespace gaEngineSDK {
       
       /**
       * @brief Function to generate the input layout.
-      * @param vertexShader.
+      * @param .
       * @return InputLayout pointer.
       */
       virtual InputLayout* 
-      createInputLayout(Shaders& ) { return nullptr; };
+      createInputLayout(Shaders& vertexShader) { return nullptr; };
       
       /***********************************************************************/
       /**
@@ -248,163 +251,161 @@ namespace gaEngineSDK {
       
       /**
       * @brief Function to save the information of the pixel shader.
-      * @param pixelShader.
+      * @param .
       */
       virtual void 
-      setPixelShader(Shaders& ) { };
+      setPixelShader(Shaders& pixelShader) { };
       
       /**
       * @brief Function to save vertex shader information.
-      * @param vertexShader.
+      * @param .
       */
       virtual void 
-      setVertexShader(Shaders& ) { };
+      setVertexShader(Shaders& vertexShader) { };
       
       /**
       * @brief Function to save vertex buffer information.
-      * @param vertexBuffer.
+      * @param .
       */
       virtual void 
-      setVertexBuffer(VertexBuffer& ) { };
+      setVertexBuffer(VertexBuffer& vertexBuffer) { };
       
       /**
       * @brief Function to save the index buffer information.
-      * @param indexBuffer.
+      * @param .
       */
       virtual void 
-      setIndexBuffer(IndexBuffer& ) { };
+      setIndexBuffer(IndexBuffer& indexBuffer) { };
       
       /**
       * @brief Function to save the information of the constant buffers.
-      * @param isVertex.
-      * @param constantBuffer.
-      * @param startSlot.
-      * @param numBuffers.
+      * @param .
+      * @param .
+      * @param .
+      * @param .
       */
       virtual void 
-      setConstantBuffer(bool ,
-                        ConstantBuffer& ,
-                        const uint32 ,
-                        const uint32 ) { };
+      setConstantBuffer(bool isVertex,
+                        ConstantBuffer& constantBuffer,
+                        const uint32 startSlot,
+                        const uint32 numBuffers) { };
       
       /**
       * @brief Function to save the information of the sampler state.
-      * @param startSlot.
-      * @param samplerState.
-      * @param texture.
+      * @param .
+      * @param .
+      * @param .
       */
       virtual void 
-      setSamplerState(const uint32 ,
-                      Vector<SamplerState*>& ,
-                      Textures* ) { };
+      setSamplerState(const uint32 startSlot,
+                      Vector<SamplerState*>& samplerState,
+                      Textures* texture) { };
       
       /**
       * @brief Function to save the information of the shader resource view.
-      * @param shaderResourceView.
-      * @param startSlot.
-      * @param numViews.
+      * @param .
+      * @param .
+      * @param .
       */
       virtual void 
-      setShaderResourceView(Textures* ,
-                            const uint32 ,
-                            const uint32 ) { };
+      setShaderResourceView(Textures* shaderResourceView,
+                            const uint32 startSlot,
+                            const uint32 numViews) { };
       
       /**
       * @brief Function to save the information of the render target.
-      * @param renderTarget.
-      * @param depthStencil.
+      * @param .
+      * @param .
       */
       virtual void 
-      setRenderTarget(Textures* ,
-                      Textures* ) { };
+      setRenderTarget(Textures* renderTarget,
+                      Textures* depthStencil) { };
       
       /**
       * @brief Function to save the depth stencil information.
-      * @param depthStencil.
-      * @param stencilRef.
+      * @param .
+      * @param .
       */
       virtual void 
-      setDepthStencil(Textures& ,
-                      const uint32 ) { };
+      setDepthStencil(Textures& depthStencil,
+                      const uint32 stencilRef) { };
       
       /**
       * @brief Function to save the information of the input layout.
-      * @param vertexLayout.
+      * @param .
       */
       virtual void 
-      setInputLayout(InputLayout& ) { };
+      setInputLayout(InputLayout& vertexLayout) { };
       
       /**
       * @brief Function to save the viewport information.
-      * @param numViewports.
-      * @param width.
-      * @param heigth.
+      * @param .
+      * @param .
+      * @param .
       */
       virtual void 
-      setViewport(const uint32 ,
-                  const uint32 , 
-                  const uint32 ) { };
+      setViewports(const uint32 numViewports, const uint32 width, const uint32 heigth) { };
       
       /**
       * @brief Function to save the topology information.
-      * @param topology.
+      * @param .
       */
       virtual void 
-      setPrimitiveTopology(const uint32 ) { };
+      setPrimitiveTopology(const uint32 topology) { };
       
       /**
       * @brief Function to call VSSetShader.
-      * @param vertexShader.
+      * @param .
       */
       virtual void 
-      setYourVS(Shaders& ) { };
+      setYourVS(Shaders& vertexShader) { };
       
       /**
       * @brief Function to call VSSetConstantBuffers.
-      * @param constantBuffer.
-      * @param startSlot.
-      * @param numBuffers.
+      * @param .
+      * @param .
+      * @param .
       */
       virtual void 
-      setYourVSConstantBuffers(ConstantBuffer* ,
-                               const uint32 ,
-                               const uint32 ) { };
+      setYourVSConstantBuffers(ConstantBuffer* constantBuffer,
+                               const uint32 startSlot,
+                               const uint32 numBuffers) { };
       
       /**
       * @brief Function to call PSSetShader.
-      * @param pixelShader.
+      * @param .
       */
       virtual void 
-      setYourPS(Shaders& ) { };
+      setYourPS(Shaders& pixelShader) { };
       
       /**
       * @brief Function to call PSSetConstantBuffers.
-      * @param constantBuffer.
-      * @param startSlot.
-      * @param numBuffers.
+      * @param .
+      * @param .
+      * @param .
       */
       virtual void 
-      setYourPSConstantBuffers(ConstantBuffer* ,
-                               const uint32 ,
-                               const uint32 ) { };
+      setYourPSConstantBuffers(ConstantBuffer* constantBuffer,
+                               const uint32 startSlot,
+                               const uint32 numBuffers) { };
       
       /**
       * @brief Function to call PSSetSamplers.
-      * @param sampler.
-      * @param startSlot.
-      * @param numSamplers.
+      * @param .
+      * @param .
+      * @param .
       */
       virtual void 
-      setYourPSSampler(SamplerState& ,
-                       const uint32 ,
-                       const uint32 ) { };
+      setYourPSSampler(SamplerState& sampler,
+                       const uint32 startSlot,
+                       const uint32 numSamplers) { };
       
       /**
       * @brief Function to call program and link for OGL.
-      * @param shaders.
+      * @param .
       */
       virtual void 
-      setShaders(Shaders& ) { };
+      setShaders(Shaders& shaders) { };
       
       /***********************************************************************/
       /**

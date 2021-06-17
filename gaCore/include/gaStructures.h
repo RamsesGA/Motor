@@ -19,59 +19,45 @@ using namespace gaEngineSDK;
 
 const int32 MaxBones = 200;
 
-namespace ConstantBuffer1 {
-	struct E {
-		Matrix4x4 mView;
-		Matrix4x4 mProjection;
-	};
-}
+struct ConstantBuffer1 {
+	Matrix4x4 mView;
+	Matrix4x4 mProjection;
+};
 
-namespace ConstantBuffer2 {
-	struct E {
-		Matrix4x4 mWorld;
-		Vector4 vMeshColor;
-	};
-}
+struct ConstantBuffer2 {
+	Matrix4x4 mWorld;
+	Vector4 vMeshColor;
+};
 
-namespace Matrices {
-	struct E {
-		Matrix4x4 World;
-		Matrix4x4 Projection;
-		Vector4   Color;
-	};
-}
+struct Matrices {
+	Matrix4x4 World;
+	Matrix4x4 Projection;
+	Vector4   Color;
+};
 
-namespace ViewCB {
-	struct E {
-		Matrix4x4 View;
-	};
-}
+struct ViewCB {
+	Matrix4x4 View;
+};
 
-namespace Vertex {
-	struct E {
-		Vector4 position =  { 0.0f, 0.0f, 0.0f, 1.0f };
-		Vector4 normal = { 0.0f, 0.0f, 0.0f, 0.0f };
-		Vector4 tangent =   { 0.0f, 0.0f, 0.0f, 0.0f };
-		Vector2 texCoords = { 0.0f, 0.0f };
-		//Vector4 color = { 255.0f, 255.0f, 255.0f, 255.0f };
-		float boneWeights[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-		uint32 boneIds[4] = { 0, 0, 0, 0 };
-	};
-}
+struct Vertex {
+	Vector4 position = { 0.0f, 0.0f, 0.0f, 1.0f };
+	Vector4 normal = { 0.0f, 0.0f, 0.0f, 0.0f };
+	Vector4 tangent = { 0.0f, 0.0f, 0.0f, 0.0f };
+	Vector2 texCoords = { 0.0f, 0.0f };
+	//Vector4 color = { 255.0f, 255.0f, 255.0f, 255.0f };
+	float boneWeights[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	uint32 boneIds[4] = { 0, 0, 0, 0 };
+};
 
-namespace Texture {
-	struct E {
-		String type;
-		String path;
-		Textures* texture;
-	};
-}
+struct Texture {
+	String type;
+	String path;
+	Textures* texture;
+};
 
-namespace ConstBuffBonesTransform {
-	struct E {
-		Matrix4x4 bonesTransform[MaxBones];
-	};
-}
+struct ConstBuffBonesTransform {
+	Matrix4x4 bonesTransform[MaxBones];
+};
 
 namespace FILTER {
 	enum E {
@@ -119,18 +105,15 @@ namespace COMPARISON_FUNC {
 	};
 }
 
-namespace SAMPLER_DESC {
-	struct E {
-		FILTER::E               myFilter;
-		TEXTURE_ADDRESS_MODE::E myAddressU;
-		TEXTURE_ADDRESS_MODE::E myAddressV;
-		TEXTURE_ADDRESS_MODE::E myAddressW;
-		COMPARISON_FUNC::E      myComparisonFunc;
-		uint32                  myMaxAnisotropy;
-		float                   myMipLODBias;
-		float                   myBorderColor[4];
-		float                   myMinLOD;
-		float                   myMaxLOD;
-	};
-}
-	
+struct SAMPLER_DESC {
+	FILTER::E               myFilter;
+	TEXTURE_ADDRESS_MODE::E myAddressU;
+	TEXTURE_ADDRESS_MODE::E myAddressV;
+	TEXTURE_ADDRESS_MODE::E myAddressW;
+	COMPARISON_FUNC::E      myComparisonFunc;
+	uint32                  myMaxAnisotropy;
+	float                   myMipLODBias;
+	float                   myBorderColor[4];
+	float                   myMinLOD;
+	float                   myMaxLOD;
+};
