@@ -48,8 +48,8 @@ namespace gaEngineSDK {
       		      uint32 baseVertexLocation) override;
 
       void 
-      swapChainPresent(uint32 syncInterval,
-      		             uint32 flags) override;
+      swapChainPresent(uint32 syncInterval = 0,
+      		             uint32 flags = 0) override;
 
       Textures* 
       loadTextureFromFile(String srcFile) override;
@@ -77,8 +77,7 @@ namespace gaEngineSDK {
       /***********************************************************************/
 
       void 
-      clearYourRenderTargetView(Textures* renderTarget,
-      		                      float r, float g, float b, float a) override;
+      clearYourRenderTargetView(Textures* renderTarget, Vector4 rgba) override;
 
       void 
       clearYourDepthStencilView(Textures* depthStencil) override;
@@ -177,7 +176,7 @@ namespace gaEngineSDK {
       void 
       setYourVSConstantBuffers(ConstantBuffer* constantBuffer,
       	                       const uint32 startSlot,
-      	                       const uint32 numBuffers) override;
+      	                       const uint32 numBuffers = 1) override;
 
       void 
       setYourPS(Shaders& pixelShader) override;
@@ -185,7 +184,7 @@ namespace gaEngineSDK {
       void 
       setYourPSConstantBuffers(ConstantBuffer* constantBuffer,
       	                       const uint32 startSlot,
-      	                       const uint32 numBuffers) override;
+      	                       const uint32 numBuffers = 1) override;
 
       void 
       setYourPSSampler(SamplerState& sampler,

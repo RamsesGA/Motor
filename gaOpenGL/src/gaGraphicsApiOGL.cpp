@@ -9,7 +9,7 @@
 #include "gaShadersOGL.h"
 #include "gaVertexBufferOGL.h"
 #include "gaIndexBufferOGL.h"
-//#include <stb_image.h>
+#include "stb_image.h"
 
 namespace gaEngineSDK {
 
@@ -176,54 +176,50 @@ namespace gaEngineSDK {
   
   Textures* 
   GraphicsApiOGL::loadTextureFromFile(String srcFile) {
+    int32 width;
+    int32 height;
+    int32 components;
+    unsigned char* data = stbi_load(srcFile.c_str(),
+                                    &width, &height, &components, 0);
+    if (!data) {
+      return nullptr;
+      stbi_image_free(data);
+    }
+    else {
+      GLenum format = GL_ZERO;
+      if (1 == components) {
+        format = GL_RED;
+      }
+      else if (2 == components) {
+        format = GL_RG;
+      }
+      else if (3 == components) {
+        format = GL_RGB;
+      }
+      else if (4 == components) {
+        format = GL_RGBA;
+      }
 
-    auto* texture = new TexturesOGL();
+      auto* texture = new TexturesOGL();
 
-    return texture;
-    //int32 width;
-    //int32 height;
-    //int32 components;
-    //unsigned char* data = stbi_load(srcFile.c_str(),
-    //                                &width, &height, &components, 0);
-    //if (!data) {
-    //  return nullptr;
-    //  stbi_image_free(data);
-    //}
-    //else {
-    //  GLenum format = GL_ZERO;
-    //  if (1 == components) {
-    //    format = GL_RED;
-    //  }
-    //  else if (2 == components) {
-    //    format = GL_RG;
-    //  }
-    //  else if (3 == components) {
-    //    format = GL_RGB;
-    //  }
-    //  else if (4 == components) {
-    //    format = GL_RGBA;
-    //  }
-    //  auto* texture = new TexturesOGL();
-    //  glGenTextures(1, &texture->m_texture);
-    //  glBindTexture(GL_TEXTURE_2D, texture->m_texture);
-    //  glTexImage2D(GL_TEXTURE_2D,
-    //               0,
-    //               format,
-    //               width,
-    //               height,
-    //               0,
-    //               format,
-    //               GL_UNSIGNED_BYTE,
-    //               data);
-    //  glGenerateMipmap(GL_TEXTURE_2D);
-    //  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    //  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    //  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    //  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    //  glBindTexture(GL_TEXTURE_2D, 0);
-    //  stbi_image_free(data);
-    //  return texture;
-    //}
+      glGenTextures(1, &texture->m_texture);
+      glBindTexture(GL_TEXTURE_2D, texture->m_texture);
+
+      glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+
+      glGenerateMipmap(GL_TEXTURE_2D);
+
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+      glBindTexture(GL_TEXTURE_2D, 0);
+
+      stbi_image_free(data);
+
+      return texture;
+    }
   }
   
   void GraphicsApiOGL::unbindOGL() {
@@ -268,13 +264,8 @@ namespace gaEngineSDK {
   /***************************************************************************/
   
   void 
-  GraphicsApiOGL::clearYourRenderTargetView(Textures* renderTarget,
-                                            float r, float g, float b, float a) {
-    //if (nullptr == renderTarget) {
-    //  throw new std::exception("Error, parametro nulo en Clear Render Target View OGL");
-    //}
-
-    glClearColor(r, g, b, a);
+  GraphicsApiOGL::clearYourRenderTargetView(Textures* renderTarget, Vector4 rgba) {
+    glClearColor(rgba.x, rgba.y, rgba.z, rgba.w);
 
     glClear(GL_COLOR_BUFFER_BIT);
   }
@@ -399,6 +390,11 @@ namespace gaEngineSDK {
       // The maxLength includes the NULL character
       Vector<char> infoLog(maxLength);
       glGetProgramInfoLog(shaders->m_rendererID, maxLength, &maxLength, &infoLog[0]);
+
+      String caca;
+      for (uint32 z = 0; z < infoLog.size(); ++z) {
+        caca += infoLog[z];
+      }
 
       // We don't need the program anymore.
       glDeleteProgram(shaders->m_rendererID);
@@ -634,6 +630,13 @@ namespace gaEngineSDK {
             offSet += 16;
           }
           break;
+
+        case GL_INT_VEC4:
+          sizeComponent = 4;
+          if (!firstOffSet) {
+            offSet += 16;
+          }
+          break;
       }
 
       glVertexAttribFormat(location, sizeComponent, GL_FLOAT, false, offSet);
@@ -733,16 +736,16 @@ namespace gaEngineSDK {
   GraphicsApiOGL::setSamplerState(const uint32 startSlot,
                                   Vector<SamplerState*>& samplerState,
                                   Textures* texture) {
-    auto& sampler = reinterpret_cast<SamplerStateOGL&>(samplerState);
-    auto& tex = reinterpret_cast<TexturesOGL&>(texture);
-
-    glBindSampler(tex.m_texture, sampler.m_samplerState);
-
-    uint32 detectError = glGetError();
-
-    if (detectError != 0) {
-      exit(1);
-    }
+    //auto& sampler = reinterpret_cast<SamplerStateOGL&>(samplerState);
+    //auto& tex = reinterpret_cast<TexturesOGL&>(texture);
+    //
+    //glBindSampler(tex.m_texture, sampler.m_samplerState);
+    //
+    //uint32 detectError = glGetError();
+    //
+    //if (detectError != 0) {
+    //  exit(1);
+    //}
   }
   
   void

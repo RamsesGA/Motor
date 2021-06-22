@@ -53,7 +53,8 @@ namespace gaEngineSDK {
   AnalyzeVertexShaderDX(const WString& nameVS) {
     String bufferAnalyze;
   
-    for (uint32 i = 0; i < nameVS.size(); ++i) {
+    uint32 tempVSsize = nameVS.size();
+    for (uint32 i = 0; i < tempVSsize; ++i) {
       bufferAnalyze += nameVS[i];
   
       if (('_' == bufferAnalyze[i]) &&
@@ -73,7 +74,8 @@ namespace gaEngineSDK {
   AnalyzePixelShaderDX(const WString& namePS) {
     String bufferAnalyze;
   
-    for (uint32 i = 0; i < namePS.size(); ++i) {
+    uint32 tempPSsize = namePS.size();
+    for (uint32 i = 0; i < tempPSsize; ++i) {
       bufferAnalyze += namePS[i];
   
       if (('_' == bufferAnalyze[i]) &&
@@ -163,7 +165,8 @@ namespace gaEngineSDK {
     sd.SampleDesc.Quality = 0;
     sd.Windowed = TRUE;
     
-    for (uint32 driverTypeIndex = 0; driverTypeIndex < driverTypes.size(); ++driverTypeIndex) {
+    uint32 tempDriverTypesSize = driverTypes.size();
+    for (uint32 driverTypeIndex = 0; driverTypeIndex < tempDriverTypesSize; ++driverTypeIndex) {
       hr = D3D11CreateDeviceAndSwapChain(nullptr, driverTypes[driverTypeIndex],
                                          nullptr, createDeviceFlags,
                                          featureLevels.data(), (uint32)featureLevels.size(),
@@ -374,13 +377,12 @@ namespace gaEngineSDK {
   /***************************************************************************/
   
   void 
-  GraphicsApiDX::clearYourRenderTargetView(Textures* renderTarget,
-                                           float r, float g, float b, float a) {
+  GraphicsApiDX::clearYourRenderTargetView(Textures* renderTarget, Vector4 rgba) {
     if (nullptr == renderTarget) {
       throw new std::exception("Error, parametro nulo en Clear Render Target View DX");
     }
 
-    float ClearColor[4] = { r, g, b, a };
+    float ClearColor[4] = { rgba.x, rgba.y, rgba.z, rgba.w};
   
     auto* renderTGT = reinterpret_cast<TexturesDX*>(renderTarget);
   
@@ -763,7 +765,8 @@ namespace gaEngineSDK {
     uint32 byteOffset = 0;
     Vector<D3D11_INPUT_ELEMENT_DESC> inputLayoutDesc;
   
-    for (uint32 i = 0; i < shaderDesc.InputParameters; ++i) {
+    uint32 tempInputParams = shaderDesc.InputParameters;
+    for (uint32 i = 0; i < tempInputParams; ++i) {
       D3D11_SIGNATURE_PARAMETER_DESC paramDesc;
       pVertexShaderReflection->GetInputParameterDesc(i, &paramDesc);
   
@@ -951,7 +954,8 @@ namespace gaEngineSDK {
   GraphicsApiDX::setSamplerState(const uint32 startSlot,
                                  Vector<SamplerState*>& samplerState,
                                  Textures* texture) {
-    for (uint32 i = 0; i < samplerState.size(); ++i) {
+    uint32 tempSamplerSize = samplerState.size();
+    for (uint32 i = 0; i < tempSamplerSize; ++i) {
       auto* sState = reinterpret_cast<SamplerStateDX*>(samplerState[i]);
 
       m_pImmediateContext->PSSetSamplers(startSlot,

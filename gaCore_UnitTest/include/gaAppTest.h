@@ -16,7 +16,6 @@ namespace gaEngineSDK {
   class RenderModels;
 }
 
-using namespace gaEngineSDK;
 using std::exception;
 
 class AppTest : public BaseApp 

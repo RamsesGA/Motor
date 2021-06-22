@@ -70,6 +70,13 @@ AppTest::onUpdate(float deltaTime) {
   cb.vMeshColor = m_vMeshColor;
 
   try {
+    //Clear the back buffer
+    Vector4 rgba = { (87.0f / 255.0f), (35.0f / 255.0f), (100.0f / 255.0f), (255.0f) };
+    myGraphicsApi->clearYourRenderTargetView(m_pRenderTargetView, rgba);
+
+    // Clear the depth buffer to 1.0 (max depth)
+    myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
+
     myGraphicsApi->updateConstantBuffer(&meshData, *m_pBufferCamera);
     myGraphicsApi->updateConstantBuffer(&cb, *m_pBufferWorld);
 
@@ -93,14 +100,6 @@ AppTest::onRender() {
     //Guardamos un viewport
     myGraphicsApi->setViewports(1, m_width, m_height);
 
-    //Clear the back buffer
-    myGraphicsApi->clearYourRenderTargetView(m_pRenderTargetView, (87.0f / 255.0f),
-                                            (35.0f / 255.0f), (100.0f / 255.0f), 
-                                             255.0f);
-
-    // Clear the depth buffer to 1.0 (max depth)
-    myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
-
     //Guardamos el input layout
     myGraphicsApi->setInputLayout(*m_pVertexLayout);
 
@@ -111,13 +110,16 @@ AppTest::onRender() {
     myGraphicsApi->setIndexBuffer(*m_mesh->m_pIndexBuffer);
 
     //Guardamos la topología
-    myGraphicsApi->setPrimitiveTopology(PRIMITIVE_TOPOLOGY::E::kTriangleList);
+    myGraphicsApi->setPrimitiveTopology(PRIMITIVE_TOPOLOGY::kTriangleList);
 
     myGraphicsApi->setShaders(*m_pBothShaders);
-    myGraphicsApi->setYourVSConstantBuffers(m_pBufferCamera, 0, 1);
-    myGraphicsApi->setYourVSConstantBuffers(m_pBufferWorld, 1, 1);
-    myGraphicsApi->setYourPSConstantBuffers(m_pBufferWorld, 1, 1);
-    myGraphicsApi->setYourVSConstantBuffers(m_tempBufferBones.get(), 2, 1);
+
+    myGraphicsApi->setYourVSConstantBuffers(m_pBufferCamera, 0);
+    myGraphicsApi->setYourVSConstantBuffers(m_pBufferWorld, 1);
+
+    myGraphicsApi->setYourPSConstantBuffers(m_pBufferWorld, 1);
+
+    myGraphicsApi->setYourVSConstantBuffers(m_tempBufferBones.get(), 2);
 
     m_renderModel->drawModel(*m_resourceManager, m_tempBufferBones);
   }
@@ -127,7 +129,7 @@ AppTest::onRender() {
   }
   
   // Present our back buffer to our front buffer
-  g_graphicApi().swapChainPresent(0, 0);
+  g_graphicApi().swapChainPresent();
 }
 
 void
@@ -159,10 +161,11 @@ AppTest::onCreate() {
                                                          "VS",
                                                          L"data/shaders/DX_animation.fx",
                                                          "PS");
+
     //Creamos el vertex shader y pixel shader.
-    //m_pBothShaders = myGraphicsApi->createShadersProgram(L"data/shaders/OGL_VS_animation.txt",
+    //m_pBothShaders = myGraphicsApi->createShadersProgram(L"data/shaders/OGL_VSAnim.fx",
     //                                                     "main",
-    //                                                     L"data/shaders/OGL_PS_animation.txt",
+    //                                                     L"data/shaders/OGL_PSAnim.fx",
     //                                                     "main");
 
     //Creamos el input layout 
@@ -178,6 +181,7 @@ AppTest::onCreate() {
     m_pBufferCamera = myGraphicsApi->createConstantBuffer(sizeof(ConstantBuffer1));
     m_pBufferWorld = myGraphicsApi->createConstantBuffer(sizeof(ConstantBuffer2));
     m_pConstBufferBones = myGraphicsApi->createConstantBuffer(sizeof(ConstBuffBonesTransform));
+
     m_tempBufferBones.reset(m_pConstBufferBones);
   }
   catch (exception* e) {
@@ -188,8 +192,8 @@ AppTest::onCreate() {
   try {
     //m_resourceManager->initLoadModel("data/models/2B/2B.obj");
     //m_resourceManager->initLoadModel("data/models/pod/POD.obj");
-    //m_resourceManager->initLoadModel("data/models/spartan/Spartan.fbx");
-    m_resourceManager->initLoadModel("data/models/ugandan/Knuckles.fbx");
+    m_resourceManager->initLoadModel("data/models/spartan/Spartan.fbx");
+    //m_resourceManager->initLoadModel("data/models/ugandan/Knuckles.fbx");
     //m_resourceManager->initLoadModel("data/models/grimoires/grimoires.fbx");
 
     //Esto solo es para guardar los huesos y las animaciones

@@ -13,13 +13,13 @@ namespace gaEngineSDK {
 	  	/***********************************************************************/
 			TexturesOGL() = default;
 
-			virtual ~TexturesOGL() = default;
+			~TexturesOGL() = default;
 
 	  protected:
 			/**
 			* @brief Member to save position information.
 			*/
-			uint32 m_texture;
+			uint32 m_texture = 0;
 			
 			/**
 			* @brief Member to save position information.
@@ -29,12 +29,12 @@ namespace gaEngineSDK {
 			/**
 			* @brief It can be the render target view of DX.
 			*/
-			uint32 m_framebuffer;
+			uint32 m_framebuffer = 0;
 			
 			/**
 			* @brief It can be the depth Stencil.
 			*/
-			uint32 m_renderBufferObject;
+			uint32 m_renderBufferObject = 0;
 
 			friend class GraphicsApiOGL;
 	};

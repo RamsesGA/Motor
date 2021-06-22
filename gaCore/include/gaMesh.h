@@ -61,13 +61,6 @@ namespace gaEngineSDK {
       */
       void 
       setUpMesh();
-      
-      /*
-      * @brief Function to save vertices and indices and finally draw.
-      * @param Variable with API information.
-      */
-      void 
-      draw(Vector <SamplerState*> pSamplerState);
 
       void 
       animated(ResourceManager& resource, const float& animationTime, SPtr<AnimationData> animation);

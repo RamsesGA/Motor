@@ -52,7 +52,7 @@ namespace gaEngineSDK {
       * @param Assimp variable with scene information.
       * @param Variable with API information.
       */
-      Mesh* 
+      SPtr<Mesh>
       processMesh(aiMesh* pAMesh, const aiScene* pAScene);
 
       void
@@ -95,7 +95,7 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      Vector<Mesh*>
+      Vector<SPtr<Mesh>>
       getMeshes();
 
       /*
@@ -133,6 +133,21 @@ namespace gaEngineSDK {
       Assimp::Importer m_aImporter;
 
       /*
+      * @brief Member to store a string of textures.
+      */
+      Vector<Texture> m_textures;
+
+      /*
+      * @brief Member to store the full name of the folder.
+      */
+      String m_modelDirectory;
+
+      /*
+      * @brief Member to store the full name of the folder.
+      */
+      String m_texturesDirectory;
+
+      /*
       * @brief .
       */
       const aiScene* m_pAScene;
@@ -150,22 +165,7 @@ namespace gaEngineSDK {
       /*
       * @brief Member to store a string of Meshes.
       */
-      Vector<Mesh*> m_pVMeshes;
-
-      /*
-      * @brief Member to store a string of textures.
-      */
-      Vector<Texture> m_textures;
-
-      /*
-      * @brief Member to store the full name of the folder.
-      */
-      String m_modelDirectory;
-
-      /*
-      * @brief Member to store the full name of the folder.
-      */
-      String m_texturesDirectory;
+      Vector<SPtr<Mesh>> m_vMeshes;
 
       /*
       * @brief .

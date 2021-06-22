@@ -99,8 +99,8 @@ namespace gaEngineSDK {
       * @param An integer value that contains swap-chain presentation options.
       */
       virtual void 
-      swapChainPresent(uint32 syncInterval,
-                       uint32 flags) { };
+      swapChainPresent(uint32 syncInterval = 0,
+                       uint32 flags = 0) { };
       
       /**
       * @brief Function to load textures in file.
@@ -150,8 +150,7 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void 
-      clearYourRenderTargetView(Textures* renderTarget,
-                                float r, float g, float b, float a) { };
+      clearYourRenderTargetView(Textures* renderTarget, Vector4 rgba) { };
       
       /**
       * @brief Function to clean our depth stencil view.
@@ -369,7 +368,7 @@ namespace gaEngineSDK {
       virtual void 
       setYourVSConstantBuffers(ConstantBuffer* constantBuffer,
                                const uint32 startSlot,
-                               const uint32 numBuffers) { };
+                               const uint32 numBuffers = 1) { };
       
       /**
       * @brief Function to call PSSetShader.
@@ -387,7 +386,7 @@ namespace gaEngineSDK {
       virtual void 
       setYourPSConstantBuffers(ConstantBuffer* constantBuffer,
                                const uint32 startSlot,
-                               const uint32 numBuffers) { };
+                               const uint32 numBuffers = 1) { };
       
       /**
       * @brief Function to call PSSetSamplers.

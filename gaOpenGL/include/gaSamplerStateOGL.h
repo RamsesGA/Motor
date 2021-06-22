@@ -19,7 +19,7 @@ namespace gaEngineSDK {
 		  /**
 		  * @brief Member to store the generated sampler state.
 		  */
-			uint32 m_samplerState;
+			uint32 m_samplerState = 0;
 
 			friend class GraphicsApiOGL;
 	};

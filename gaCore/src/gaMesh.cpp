@@ -25,20 +25,6 @@ namespace gaEngineSDK {
                                                      sizeof(uint32) * m_vIndices.size());
   }
 
-  void 
-  Mesh::draw(Vector <SamplerState*> pSamplerState) {
-    auto myGraphicApi = g_graphicApi().instancePtr();
-
-    for (uint32 i = 0; i < m_textures.size(); ++i) {
-      myGraphicApi->setSamplerState(0, pSamplerState, m_textures[i].texture);
-      myGraphicApi->setShaderResourceView(m_textures[i].texture, i, 1);
-    }
-
-    myGraphicApi->setVertexBuffer(*m_pVertexBuffer);
-    myGraphicApi->setIndexBuffer(*m_pIndexBuffer);
-    myGraphicApi->drawIndex(m_vIndices.size(), 0, 0);
-  }
-
   void
   Mesh::animated(ResourceManager& resource, const float& animationTime, SPtr<AnimationData> animation) {
     if (nullptr != animation) {
@@ -99,7 +85,8 @@ namespace gaEngineSDK {
                                                        m_skeletalMesh->vBones[bonesIndex].offSet;
     }
 
-    for (uint32 i = 0; i < animNode->m_numChildrens; ++i) {
+    uint32 tempNumChildrens = animNode->m_numChildrens;
+    for (uint32 i = 0; i < tempNumChildrens; ++i) {
       readNodeHierarchy(resource, animationTime, animNode->m_vChildrenNodes[i], globalTransform, animation);
     }
   }
@@ -107,7 +94,8 @@ namespace gaEngineSDK {
   const AnimationNode* 
   Mesh::findNodeAnim(AnimationData* animation, const String& nodeName) {
     //Channel in animation contains aiNodeAnim (aiNodeAnim its transformation for bones)
-    for (uint32 i = 0; i < animation->m_numChannels; ++i) {
+    uint32 tempNumChannels = animation->m_numChannels;
+    for (uint32 i = 0; i < tempNumChannels; ++i) {
       const AnimationNode* animNode = animation->m_vChannels[i].get();
 
       if (nodeName == animNode->m_nodeName) {
@@ -238,7 +226,8 @@ namespace gaEngineSDK {
 
   uint32 
   Mesh::findScaling(const float& animationTime, const AnimationNode* animationNode) {
-    for (uint32 i = 0; i < animationNode->m_numScalingKeys - 1; ++i) {
+    uint32 tempNumScalingKeys = animationNode->m_numScalingKeys - 1;
+    for (uint32 i = 0; i < tempNumScalingKeys; ++i) {
       if (animationTime < (float)animationNode->m_scalingKeys[i + 1].m_time) {
         return i;
       }
@@ -250,7 +239,8 @@ namespace gaEngineSDK {
 
   uint32 
   Mesh::findRotation(const float& animationTime, const AnimationNode* animationNode) {
-    for (uint32 i = 0; i < animationNode->m_numRotationKeys - 1; ++i) {
+    uint32 tempNumRotKeys = animationNode->m_numRotationKeys - 1;
+    for (uint32 i = 0; i < tempNumRotKeys; ++i) {
       if (animationTime < (float)animationNode->m_vRotationKeys[i + 1].m_time) {
         return i;
       }
@@ -262,7 +252,8 @@ namespace gaEngineSDK {
 
   uint32 
   Mesh::findPosition(const float& animationTime, const AnimationNode* animationNode) {
-    for (uint32 i = 0; i < animationNode->m_numPositionKeys - 1; ++i) {
+    uint32 tempNumPosKeys = animationNode->m_numPositionKeys - 1;
+    for (uint32 i = 0; i < tempNumPosKeys; ++i) {
       if (animationTime < (float)animationNode->m_vPositionKeys[i + 1].m_time) {
         return i;
       }
