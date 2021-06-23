@@ -215,12 +215,12 @@ namespace gaEngineSDK {
       /*
       * @brief Member to store vertex information.
       */
-      VertexBuffer* m_pVertexBuffer = nullptr;
+      SPtr<VertexBuffer> m_pVertexBuffer = nullptr;
 
       /*
       * @brief Member to store the index information.
       */
-      IndexBuffer* m_pIndexBuffer = nullptr;
+      SPtr<IndexBuffer> m_pIndexBuffer = nullptr;
 
       /*
       * @brief .

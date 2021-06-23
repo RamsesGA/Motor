@@ -18,11 +18,11 @@ namespace gaEngineSDK {
   Mesh::setUpMesh() {
     auto myGraphicApi = g_graphicApi().instancePtr();
 
-    m_pVertexBuffer = myGraphicApi->createVertexBuffer(m_vVertices.data(),
-                                                       sizeof(Vertex) * m_vVertices.size());
+    m_pVertexBuffer.reset(myGraphicApi->createVertexBuffer(m_vVertices.data(),
+                          sizeof(Vertex) * m_vVertices.size()));
 
-    m_pIndexBuffer = myGraphicApi->createIndexBuffer(m_vIndices.data(),
-                                                     sizeof(uint32) * m_vIndices.size());
+    m_pIndexBuffer.reset(myGraphicApi->createIndexBuffer(m_vIndices.data(),
+                         sizeof(uint32) * m_vIndices.size()));
   }
 
   void

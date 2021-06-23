@@ -88,9 +88,7 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void 
-      drawIndex(uint32 indexCount,
-                uint32 startIndexLocation,
-                uint32 baseVertexLocation) { };
+      drawIndex(uint32 indexCount, uint32 startIndexLocation, uint32 baseVertexLocation) { };
       
       /**
       * @brief Function to exchange buffers and update your information.
@@ -99,8 +97,7 @@ namespace gaEngineSDK {
       * @param An integer value that contains swap-chain presentation options.
       */
       virtual void 
-      swapChainPresent(uint32 syncInterval = 0,
-                       uint32 flags = 0) { };
+      swapChainPresent(uint32 syncInterval = 0, uint32 flags = 0) { };
       
       /**
       * @brief Function to load textures in file.
@@ -135,8 +132,7 @@ namespace gaEngineSDK {
       * @param Constant buffers contain shader constant data.
       */
       virtual void 
-      updateConstantBuffer(const void* srcData,
-                           ConstantBuffer& updateDataCB) { };
+      updateConstantBuffer(const void* srcData, WeakSPtr<ConstantBuffer> updateDataCB) { };
       
       /***********************************************************************/
       /**
@@ -150,14 +146,14 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void 
-      clearYourRenderTargetView(Textures* renderTarget, Vector4 rgba) { };
+      clearYourRenderTargetView(WeakSPtr<Textures> renderTarget, Vector4 rgba) { };
       
       /**
       * @brief Function to clean our depth stencil view.
       * @param .
       */
       virtual void 
-      clearYourDepthStencilView(Textures* depthStencil) { };
+      clearYourDepthStencilView(WeakSPtr<Textures> depthStencil) { };
       
       /***********************************************************************/
       /**
@@ -175,8 +171,7 @@ namespace gaEngineSDK {
       * @return Shaders points.
       */
       virtual Shaders* 
-      createShadersProgram(const WString& nameVS,
-                           const String& entryPointVS,
+      createShadersProgram(const WString& nameVS, const String& entryPointVS,
                            const WString& namePS,
                            const String& entryPointPS) { return nullptr; };
       
@@ -187,8 +182,7 @@ namespace gaEngineSDK {
       * @return VertexBuffer pointer.
       */
       virtual VertexBuffer* 
-      createVertexBuffer(const void* data,
-                         const uint32 size) { return nullptr; };
+      createVertexBuffer(const void* data, const uint32 size) { return nullptr; };
       
       /**
       * @brief Function to generate the index buffer.
@@ -197,8 +191,7 @@ namespace gaEngineSDK {
       * @return IndexBuffer pointer.
       */
       virtual IndexBuffer*
-      createIndexBuffer(const void* data,
-                        const uint32 size) { return nullptr; };
+      createIndexBuffer(const void* data, const uint32 size) { return nullptr; };
       
       /**
       * @brief Function to generate constant buffers.
@@ -221,11 +214,8 @@ namespace gaEngineSDK {
       * @return Textures pointer.
       */
       virtual Textures* 
-      createTexture(const uint32 width,
-                    const uint32 height,
-                    const uint32 bindFlags,
-                    TEXTURE_FORMAT::E textureFormat,
-                    const String fileName) { return nullptr; };
+      createTexture(const uint32 width, const uint32 height, const uint32 bindFlags,
+                    TEXTURE_FORMAT::E textureFormat, const String fileName) {return nullptr;};
       
       /**
       * @brief Function to generate the sampler state.
@@ -240,7 +230,7 @@ namespace gaEngineSDK {
       * @return InputLayout pointer.
       */
       virtual InputLayout* 
-      createInputLayout(Shaders& vertexShader) { return nullptr; };
+      createInputLayout(WeakSPtr<Shaders> vertexShader) { return nullptr; };
       
       /***********************************************************************/
       /**
@@ -253,28 +243,28 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void 
-      setPixelShader(Shaders& pixelShader) { };
+      setPixelShader(WeakSPtr<Shaders> pixelShader) { };
       
       /**
       * @brief Function to save vertex shader information.
       * @param .
       */
       virtual void 
-      setVertexShader(Shaders& vertexShader) { };
+      setVertexShader(WeakSPtr<Shaders> vertexShader) { };
       
       /**
       * @brief Function to save vertex buffer information.
       * @param .
       */
       virtual void 
-      setVertexBuffer(VertexBuffer& vertexBuffer) { };
+      setVertexBuffer(WeakSPtr<VertexBuffer> vertexBuffer) { };
       
       /**
       * @brief Function to save the index buffer information.
       * @param .
       */
       virtual void 
-      setIndexBuffer(IndexBuffer& indexBuffer) { };
+      setIndexBuffer(WeakSPtr<IndexBuffer> indexBuffer) { };
       
       /**
       * @brief Function to save the information of the constant buffers.
@@ -284,8 +274,7 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void 
-      setConstantBuffer(bool isVertex,
-                        ConstantBuffer& constantBuffer,
+      setConstantBuffer(bool isVertex, WeakSPtr<ConstantBuffer> constantBuffer,
                         const uint32 startSlot,
                         const uint32 numBuffers) { };
       
@@ -296,9 +285,8 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void 
-      setSamplerState(const uint32 startSlot,
-                      Vector<SamplerState*>& samplerState,
-                      Textures* texture) { };
+      setSamplerState(const uint32 startSlot, Vector<SamplerState*>& samplerState,
+                      WeakSPtr<Textures> texture) { };
       
       /**
       * @brief Function to save the information of the shader resource view.
@@ -307,8 +295,7 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void 
-      setShaderResourceView(Textures* shaderResourceView,
-                            const uint32 startSlot,
+      setShaderResourceView(WeakSPtr<Textures> shaderResourceView, const uint32 startSlot,
                             const uint32 numViews) { };
       
       /**
@@ -317,8 +304,7 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void 
-      setRenderTarget(Textures* renderTarget,
-                      Textures* depthStencil) { };
+      setRenderTarget(WeakSPtr<Textures> renderTarget, WeakSPtr<Textures> depthStencil) { };
       
       /**
       * @brief Function to save the depth stencil information.
@@ -326,15 +312,14 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void 
-      setDepthStencil(Textures& depthStencil,
-                      const uint32 stencilRef) { };
+      setDepthStencil(WeakSPtr<Textures> depthStencil, const uint32 stencilRef) { };
       
       /**
       * @brief Function to save the information of the input layout.
       * @param .
       */
       virtual void 
-      setInputLayout(InputLayout& vertexLayout) { };
+      setInputLayout(WeakSPtr<InputLayout> vertexLayout) { };
       
       /**
       * @brief Function to save the viewport information.
@@ -343,21 +328,21 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void 
-      setViewports(const uint32 numViewports, const uint32 width, const uint32 heigth) { };
+      setViewports(const uint32 width, const uint32 heigth, const uint32 numViewports = 1) { };
       
       /**
       * @brief Function to save the topology information.
       * @param .
       */
       virtual void 
-      setPrimitiveTopology(const uint32 topology) { };
+      setPrimitiveTopology(const uint32 topology = PRIMITIVE_TOPOLOGY::kTriangleList) { };
       
       /**
       * @brief Function to call VSSetShader.
       * @param .
       */
       virtual void 
-      setYourVS(Shaders& vertexShader) { };
+      setYourVS(WeakSPtr<Shaders> vertexShader) { };
       
       /**
       * @brief Function to call VSSetConstantBuffers.
@@ -366,7 +351,7 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void 
-      setYourVSConstantBuffers(ConstantBuffer* constantBuffer,
+      setYourVSConstantBuffers(WeakSPtr<ConstantBuffer> constantBuffer, 
                                const uint32 startSlot,
                                const uint32 numBuffers = 1) { };
       
@@ -375,7 +360,7 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void 
-      setYourPS(Shaders& pixelShader) { };
+      setYourPS(WeakSPtr<Shaders> pixelShader) { };
       
       /**
       * @brief Function to call PSSetConstantBuffers.
@@ -384,8 +369,7 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void 
-      setYourPSConstantBuffers(ConstantBuffer* constantBuffer,
-                               const uint32 startSlot,
+      setYourPSConstantBuffers(WeakSPtr<ConstantBuffer> constantBuffer, const uint32 startSlot,
                                const uint32 numBuffers = 1) { };
       
       /**
@@ -395,8 +379,7 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void 
-      setYourPSSampler(SamplerState& sampler,
-                       const uint32 startSlot,
+      setYourPSSampler(WeakSPtr<SamplerState> sampler, const uint32 startSlot,
                        const uint32 numSamplers) { };
       
       /**
@@ -404,7 +387,7 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void 
-      setShaders(Shaders& shaders) { };
+      setShaders(WeakSPtr<Shaders> shaders) { };
       
       /***********************************************************************/
       /**

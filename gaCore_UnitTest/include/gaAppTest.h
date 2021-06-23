@@ -91,36 +91,36 @@ class AppTest : public BaseApp
     /*
     * @brief .
     */
-    ResourceManager* m_resourceManager = nullptr;
+    SPtr<ResourceManager> m_resourceManager = nullptr;
   
     /*
     * @brief Variables with the information of the
     *        render target and depth stencil, both of the texture class.
     */
-    Textures* m_pRenderTargetView = nullptr;
-    Textures* m_pDepthStencil = nullptr;
+    SPtr<Textures> m_pRenderTargetView = nullptr;
+    SPtr<Textures> m_pDepthStencil = nullptr;
   
     /*
     * @brief Variable that stores the vertex layout data.
     */
-    InputLayout* m_pVertexLayout = nullptr;
+    SPtr<InputLayout> m_pVertexLayout = nullptr;
   
     /*
     * @brief Variable that saves the data of the shaders to be read.
     */
-    Shaders* m_pBothShaders = nullptr;
+    SPtr<Shaders> m_pBothShaders = nullptr;
   
     /*
     * @brief Variable that stores the CB data.
     */
-    ConstantBuffer* m_pBufferCamera = nullptr;
-    ConstantBuffer* m_pBufferWorld = nullptr;
+    SPtr<ConstantBuffer> m_pBufferCamera = nullptr;
+    SPtr<ConstantBuffer> m_pBufferWorld = nullptr;
     ConstantBuffer* m_pConstBufferBones = nullptr;
 
     /*
     * @brief .
     */
-    Mesh* m_mesh;
+    SPtr<Mesh> m_mesh;
 
     RenderModels* m_renderModel = nullptr;
 

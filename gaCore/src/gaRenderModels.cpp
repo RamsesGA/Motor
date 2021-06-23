@@ -35,19 +35,19 @@ namespace gaEngineSDK {
   }
 
   void 
-  RenderModels::drawModel(ResourceManager& resource, WeakSPtr<ConstantBuffer> cbBone) {
-    if (m_pResourceMang == nullptr) {
-      m_pResourceMang.reset(&resource);
+  RenderModels::drawModel(WeakSPtr<ResourceManager> resource, WeakSPtr<ConstantBuffer> cbBone) {
+    if (nullptr == m_pResourceMang) {
+      m_pResourceMang.reset(resource.lock().get());
     }
 
     uint32 meshNum = 0;
     auto myGraphicApi = g_graphicApi().instancePtr();
 
     for (auto mesh : m_pResourceMang->getMeshes()) {
-      myGraphicApi->updateConstantBuffer(&m_meshBones[meshNum], *cbBone.lock().get());
+      myGraphicApi->updateConstantBuffer(&m_meshBones[meshNum], cbBone);
 
       if (0 != m_pResourceMang->getMeshes()[meshNum]->m_textures.size()) {
-        auto tempAlgo = resource.getSamplerInfo();
+        auto tempAlgo = m_pResourceMang.get()->getSamplerInfo();
 
         myGraphicApi->setSamplerState(0, tempAlgo, 
           m_pResourceMang->getMeshes()[meshNum]->m_textures[meshNum].texture);
@@ -56,8 +56,8 @@ namespace gaEngineSDK {
           m_pResourceMang->getMeshes()[meshNum]->m_textures[meshNum].texture, meshNum, 1);
       }
       
-      myGraphicApi->setVertexBuffer(*mesh->m_pVertexBuffer);
-      myGraphicApi->setIndexBuffer(*mesh->m_pIndexBuffer);
+      myGraphicApi->setVertexBuffer(mesh->m_pVertexBuffer);
+      myGraphicApi->setIndexBuffer(mesh->m_pIndexBuffer);
 
       myGraphicApi->drawIndex(mesh->getNumIndices(), 0, 0);
       ++meshNum;

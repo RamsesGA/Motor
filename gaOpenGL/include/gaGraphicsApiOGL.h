@@ -43,13 +43,11 @@ namespace gaEngineSDK {
       initDevice(sf::WindowHandle hWnd) override;
 
       void 
-      drawIndex(uint32 indexCount,
-      		      uint32 startIndexLocation,
-      		      uint32 baseVertexLocation) override;
+      drawIndex(uint32 indexCount, uint32 startIndexLocation, 
+                uint32 baseVertexLocation) override;
 
       void 
-      swapChainPresent(uint32 syncInterval = 0,
-      		             uint32 flags = 0) override;
+      swapChainPresent(uint32 syncInterval = 0, uint32 flags = 0) override;
 
       Textures* 
       loadTextureFromFile(String srcFile) override;
@@ -67,8 +65,8 @@ namespace gaEngineSDK {
       /***********************************************************************/
 
       void 
-      updateConstantBuffer(const void* srcData,
-      		                 ConstantBuffer& updateDataCB) override;
+      updateConstantBuffer(const void* srcData, 
+                           WeakSPtr<ConstantBuffer> updateDataCB) override;
 
       /***********************************************************************/
       /**
@@ -77,10 +75,10 @@ namespace gaEngineSDK {
       /***********************************************************************/
 
       void 
-      clearYourRenderTargetView(Textures* renderTarget, Vector4 rgba) override;
+      clearYourRenderTargetView(WeakSPtr<Textures> renderTarget, Vector4 rgba) override;
 
       void 
-      clearYourDepthStencilView(Textures* depthStencil) override;
+      clearYourDepthStencilView(WeakSPtr<Textures> depthStencil) override;
 
       /***********************************************************************/
       /**
@@ -89,34 +87,27 @@ namespace gaEngineSDK {
       /***********************************************************************/
 
       Shaders* 
-      createShadersProgram(const WString& nameVS,
-      		                 const String& entryPointVS, 
-      	                   const WString& namePS,
-      		                 const String& entryPointPS) override;
+      createShadersProgram(const WString& nameVS, const String& entryPointVS, 
+      	                   const WString& namePS, const String& entryPointPS) override;
 
       VertexBuffer* 
-      createVertexBuffer(const void* data,
-      	                 const uint32 size) override;
+      createVertexBuffer(const void* data, const uint32 size) override;
 
       IndexBuffer* 
-      createIndexBuffer(const void* data,
-      	                const uint32 size) override;
+      createIndexBuffer(const void* data, const uint32 size) override;
 
       ConstantBuffer* 
       createConstantBuffer(const uint32 bufferSize) override;
 
       Textures*
-      createTexture(const uint32 width,
-                    const uint32 height,
-                    const uint32 bindFlags,
-                    TEXTURE_FORMAT::E textureFormat,
-                    const String fileName) override;
+      createTexture(const uint32 width, const uint32 height, const uint32 bindFlags,
+                    TEXTURE_FORMAT::E textureFormat, const String fileName) override;
 
       SamplerState* 
       createSamplerState() override;
 
       InputLayout* 
-      createInputLayout(Shaders& vertexShader) override;
+      createInputLayout(WeakSPtr<Shaders> vertexShader) override;
 
       /***********************************************************************/
       /**
@@ -125,74 +116,66 @@ namespace gaEngineSDK {
       /***********************************************************************/
 
       void 
-      setPixelShader(Shaders& pixelShader) override;
+      setPixelShader(WeakSPtr<Shaders> pixelShader) override;
 
       void 
-      setVertexShader(Shaders& vertexShader) override;
+      setVertexShader(WeakSPtr<Shaders> vertexShader) override;
 
       void 
-      setVertexBuffer(VertexBuffer& vertexBuffer) override;
+      setVertexBuffer(WeakSPtr<VertexBuffer> vertexBuffer) override;
 
       void 
-      setIndexBuffer(IndexBuffer& indexBuffer) override;
+      setIndexBuffer(WeakSPtr<IndexBuffer> indexBuffer) override;
 
       void 
-      setConstantBuffer(bool isVertex,
-      	                ConstantBuffer& constantBuffer,
-      	                const uint32 startSlot,
-      	                const uint32 numBuffers) override;
+      setConstantBuffer(bool isVertex, WeakSPtr<ConstantBuffer> constantBuffer,
+      	                const uint32 startSlot, const uint32 numBuffers) override;
 
       void 
-      setSamplerState(const uint32 startSlot,
-      	              Vector<SamplerState*>& samplerState,
-      	              Textures* texture) override;
+      setSamplerState(const uint32 startSlot, Vector<SamplerState*>& samplerState,
+      	              WeakSPtr<Textures> texture) override;
 
       void 
-      setShaderResourceView(Textures* shaderResourceView,
-      	                    const uint32 startSlot,
+      setShaderResourceView(WeakSPtr<Textures> shaderResourceView, const uint32 startSlot,
       	                    const uint32 numViews) override;
 
       void 
-      setRenderTarget(Textures* renderTarget,
-      	              Textures* depthStencil) override;
+      setRenderTarget(WeakSPtr<Textures> renderTarget, 
+                      WeakSPtr<Textures> depthStencil) override;
 
       void 
-      setDepthStencil(Textures& depthStencil,
-      	              const uint32 stencilRef) override;
+      setDepthStencil(WeakSPtr<Textures> depthStencil, const uint32 stencilRef) override;
 
       void 
-      setInputLayout(InputLayout& vertexLayout) override;
+      setInputLayout(WeakSPtr<InputLayout> vertexLayout) override;
 
       void 
-      setViewports(const uint32 numViewports, const uint32 width, 
-                   const uint32 heigth) override;
+      setViewports(const uint32 width, const uint32 heigth, 
+                   const uint32 numViewports = 1) override;
 
       void 
-      setPrimitiveTopology(const uint32 topology) override;
+      setPrimitiveTopology(const uint32 topology = PRIMITIVE_TOPOLOGY::kTriangleList) override;
 
       void 
-      setYourVS(Shaders& vertexShader) override;
+      setYourVS(WeakSPtr<Shaders> vertexShader) override;
 
       void 
-      setYourVSConstantBuffers(ConstantBuffer* constantBuffer,
-      	                       const uint32 startSlot,
+      setYourVSConstantBuffers(WeakSPtr<ConstantBuffer> constantBuffer, const uint32 startSlot,
       	                       const uint32 numBuffers = 1) override;
 
       void 
-      setYourPS(Shaders& pixelShader) override;
+      setYourPS(WeakSPtr<Shaders> pixelShader) override;
 
       void 
-      setYourPSConstantBuffers(ConstantBuffer* constantBuffer,
-      	                       const uint32 startSlot,
-      	                       const uint32 numBuffers = 1) override;
+      setYourPSConstantBuffers(WeakSPtr<ConstantBuffer> constantBuffer,
+      	                       const uint32 startSlot, const uint32 numBuffers = 1) override;
 
       void 
-      setYourPSSampler(SamplerState& sampler,
-      	               const uint32 startSlot,
+      setYourPSSampler(WeakSPtr<SamplerState> sampler, const uint32 startSlot,
       	               const uint32 numSamplers) override;
 
       void 
-      setShaders(Shaders& shaders) override;
+      setShaders(WeakSPtr<Shaders> shaders) override;
 
       /***********************************************************************/
       /**

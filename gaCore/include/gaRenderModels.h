@@ -36,7 +36,7 @@ namespace gaEngineSDK {
       * @brief
       */
       void
-      drawModel(ResourceManager& resource, WeakSPtr<ConstantBuffer> cbBone);
+      drawModel(WeakSPtr<ResourceManager> resource, WeakSPtr<ConstantBuffer> cbBone);
 
       void
       setMeshBones(ResourceManager& resource);

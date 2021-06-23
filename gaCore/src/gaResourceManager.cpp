@@ -348,7 +348,7 @@ namespace gaEngineSDK {
         auto myGraphicApi = g_graphicApi().instancePtr();
 
         Texture meshTexture;
-        meshTexture.texture = myGraphicApi->loadTextureFromFile(srcFile);
+        meshTexture.texture.reset(myGraphicApi->loadTextureFromFile(srcFile));
         meshTexture.path = srcFile;
         textures.push_back(meshTexture);
         m_textures.push_back(meshTexture);

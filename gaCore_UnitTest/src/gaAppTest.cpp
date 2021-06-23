@@ -77,8 +77,8 @@ AppTest::onUpdate(float deltaTime) {
     // Clear the depth buffer to 1.0 (max depth)
     myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
 
-    myGraphicsApi->updateConstantBuffer(&meshData, *m_pBufferCamera);
-    myGraphicsApi->updateConstantBuffer(&cb, *m_pBufferWorld);
+    myGraphicsApi->updateConstantBuffer(&meshData, m_pBufferCamera);
+    myGraphicsApi->updateConstantBuffer(&cb, m_pBufferWorld);
 
     m_renderModel->update(*m_resourceManager, deltaTime);
   }
@@ -98,30 +98,30 @@ AppTest::onRender() {
     myGraphicsApi->setRenderTarget(m_pRenderTargetView, m_pDepthStencil);
 
     //Guardamos un viewport
-    myGraphicsApi->setViewports(1, m_width, m_height);
+    myGraphicsApi->setViewports(m_width, m_height);
 
     //Guardamos el input layout
-    myGraphicsApi->setInputLayout(*m_pVertexLayout);
+    myGraphicsApi->setInputLayout(m_pVertexLayout);
 
     //Guardamos el vertex buffer
-    myGraphicsApi->setVertexBuffer(*m_mesh->m_pVertexBuffer);
+    myGraphicsApi->setVertexBuffer(m_mesh->m_pVertexBuffer);
 
     //Guardamos el index buffer
-    myGraphicsApi->setIndexBuffer(*m_mesh->m_pIndexBuffer);
+    myGraphicsApi->setIndexBuffer(m_mesh->m_pIndexBuffer);
 
     //Guardamos la topología
-    myGraphicsApi->setPrimitiveTopology(PRIMITIVE_TOPOLOGY::kTriangleList);
+    myGraphicsApi->setPrimitiveTopology();
 
-    myGraphicsApi->setShaders(*m_pBothShaders);
+    myGraphicsApi->setShaders(m_pBothShaders);
 
     myGraphicsApi->setYourVSConstantBuffers(m_pBufferCamera, 0);
     myGraphicsApi->setYourVSConstantBuffers(m_pBufferWorld, 1);
 
     myGraphicsApi->setYourPSConstantBuffers(m_pBufferWorld, 1);
 
-    myGraphicsApi->setYourVSConstantBuffers(m_tempBufferBones.get(), 2);
+    myGraphicsApi->setYourVSConstantBuffers(m_tempBufferBones, 2);
 
-    m_renderModel->drawModel(*m_resourceManager, m_tempBufferBones);
+    m_renderModel->drawModel(m_resourceManager, m_tempBufferBones);
   }
   catch (exception* e) {
     std::cout << "- - > " << e->what() << '\n';
@@ -139,29 +139,24 @@ AppTest::onCreate() {
 
   onInitCamera();
 
-  //
-  // C R E A T E´s
-  //
-
   //Creamos el render target view
-  m_pRenderTargetView = myGraphicsApi->getDefaultBackBuffer();
+  m_pRenderTargetView.reset(myGraphicsApi->getDefaultBackBuffer());
 
   //Creamos el depth stencil view
-  m_pDepthStencil = myGraphicsApi->getDefaultDepthStencil();
+  m_pDepthStencil.reset(myGraphicsApi->getDefaultDepthStencil());
 
   try {
     m_renderModel = new RenderModels();
-    m_mesh = new Mesh();
-    m_resourceManager = new ResourceManager();
+    m_mesh.reset(new Mesh());
+    m_resourceManager.reset(new ResourceManager());
 
     //Creamos el vertex shader y pixel shader.
     //DX_animation
     //DX_color
-    m_pBothShaders = myGraphicsApi->createShadersProgram(L"data/shaders/DX_animation.fx",
-                                                         "VS",
-                                                         L"data/shaders/DX_animation.fx",
-                                                         "PS");
-
+    m_pBothShaders.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_animation.fx",
+                                                             "VS",
+                                                             L"data/shaders/DX_animation.fx",
+                                                             "PS"));
     //Creamos el vertex shader y pixel shader.
     //m_pBothShaders = myGraphicsApi->createShadersProgram(L"data/shaders/OGL_VSAnim.fx",
     //                                                     "main",
@@ -169,17 +164,17 @@ AppTest::onCreate() {
     //                                                     "main");
 
     //Creamos el input layout 
-    m_pVertexLayout = myGraphicsApi->createInputLayout(*m_pBothShaders);
+    m_pVertexLayout.reset(myGraphicsApi->createInputLayout(m_pBothShaders));
 
     //Creamos el vertex buffer
-    m_mesh->m_pVertexBuffer = myGraphicsApi->createVertexBuffer(nullptr, sizeof(Matrices));
+    m_mesh->m_pVertexBuffer.reset(myGraphicsApi->createVertexBuffer(nullptr, sizeof(Matrices)));
 
     //Creamos el index buffer 
-    m_mesh->m_pIndexBuffer = myGraphicsApi->createIndexBuffer(nullptr, sizeof(ViewCB));
+    m_mesh->m_pIndexBuffer.reset(myGraphicsApi->createIndexBuffer(nullptr, sizeof(ViewCB)));
 
     //Creamos los constant buffers para el shader
-    m_pBufferCamera = myGraphicsApi->createConstantBuffer(sizeof(ConstantBuffer1));
-    m_pBufferWorld = myGraphicsApi->createConstantBuffer(sizeof(ConstantBuffer2));
+    m_pBufferCamera.reset(myGraphicsApi->createConstantBuffer(sizeof(ConstantBuffer1)));
+    m_pBufferWorld.reset(myGraphicsApi->createConstantBuffer(sizeof(ConstantBuffer2)));
     m_pConstBufferBones = myGraphicsApi->createConstantBuffer(sizeof(ConstBuffBonesTransform));
 
     m_tempBufferBones.reset(m_pConstBufferBones);
@@ -192,8 +187,8 @@ AppTest::onCreate() {
   try {
     //m_resourceManager->initLoadModel("data/models/2B/2B.obj");
     //m_resourceManager->initLoadModel("data/models/pod/POD.obj");
-    m_resourceManager->initLoadModel("data/models/spartan/Spartan.fbx");
-    //m_resourceManager->initLoadModel("data/models/ugandan/Knuckles.fbx");
+    //m_resourceManager->initLoadModel("data/models/spartan/Spartan.fbx");
+    m_resourceManager->initLoadModel("data/models/ugandan/Knuckles.fbx");
     //m_resourceManager->initLoadModel("data/models/grimoires/grimoires.fbx");
 
     //Esto solo es para guardar los huesos y las animaciones
@@ -232,7 +227,7 @@ AppTest::onKeyboardDown(sf::Event param) {
   ConstantBuffer1 cb;
   cb.mView = myGraphicsApi->matrixPolicy(m_mainCamera.getView());
 
-  myGraphicsApi->updateConstantBuffer(&cb, *m_pBufferCamera);
+  myGraphicsApi->updateConstantBuffer(&cb, m_pBufferCamera);
 }
 
 void
@@ -264,6 +259,6 @@ AppTest::onMouseMove() {
     ConstantBuffer1 cb;
     cb.mView = myGraphicsApi->matrixPolicy(m_mainCamera.getView());
 
-    myGraphicsApi->updateConstantBuffer(&cb, *m_pBufferCamera);
+    myGraphicsApi->updateConstantBuffer(&cb, m_pBufferCamera);
   }
 }

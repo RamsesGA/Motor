@@ -52,7 +52,7 @@ struct Vertex {
 struct Texture {
 	String type;
 	String path;
-	Textures* texture;
+	SPtr<Textures> texture;
 };
 
 struct ConstBuffBonesTransform {
