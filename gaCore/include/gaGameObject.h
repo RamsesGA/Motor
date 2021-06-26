@@ -1,24 +1,25 @@
 #pragma once
 
 #include "gaPrerequisitesCore.h"
+#include "gaComponent.h"
 
 namespace gaEngineSDK
 {
   class GA_CORE_EXPORT GameObject 
   {
     public:
-      /*************************************************************************/
+      /***********************************************************************/
       /**
       * Constructor and destructor.
       */
-      /*************************************************************************/
+      /***********************************************************************/
       GameObject() = default;
       
       ~GameObject() = default;
     
       /***********************************************************************/
       /**
-      * Virtual methods.
+      * Methods.
       */
       /***********************************************************************/
 
@@ -26,29 +27,62 @@ namespace gaEngineSDK
       * @brief
       */
       virtual void
-      onInit() {};
+      update(const float& deltaTime);
 
       /*
       * @brief
       */
       virtual void
-      onUpdate(const float& deltaTime) {};
+      draw();
 
-      /*
-      * @brief
-      */
-      virtual void
-      onDelete() {};
+      SPtr<Component>
+      addComponent(TYPE_COMPONENTS::E typeComponent, SPtr<Component> component = nullptr);
 
-      /*
-      * @brief
-      */
-      virtual void
-      onDraw() {};
+      void
+      removeComponent(TYPE_COMPONENTS::E typeComponent);
 
       /***********************************************************************/
       /**
-      * Sets and Gets.
+      * Gets.
+      */
+      /***********************************************************************/
+
+      /*
+      * @brief
+      */
+      uint32
+      getID();
+
+      /*
+      * @brief
+      */
+      uint32
+      getLayer();
+
+      /*
+      * @brief
+      */
+      SPtr<GameObject>
+      getParent();
+
+      /*
+      * @brief
+      */
+      Vector<SPtr<GameObject>>
+      getChildrens();
+
+      /*
+      * @brief
+      */
+      bool
+      getIsSelected();
+
+      SPtr<Component>
+      getComponent(TYPE_COMPONENTS::E typeComponent);
+
+      /***********************************************************************/
+      /**
+      * Sets.
       */
       /***********************************************************************/
 
@@ -61,32 +95,14 @@ namespace gaEngineSDK
       /*
       * @brief
       */
-      uint32
-      getID();
-
-      /*
-      * @brief
-      */
       void
       setLayer(uint32 layer = 0);
 
       /*
       * @brief
       */
-      uint32
-      getLayer();
-
-      /*
-      * @brief
-      */
       void
       setParent(WeakSPtr<GameObject> parent);
-
-      /*
-      * @brief
-      */
-      SPtr<GameObject>
-      getParent();
       
       /*
       * @brief
@@ -97,9 +113,11 @@ namespace gaEngineSDK
       /*
       * @brief
       */
-      Vector<SPtr<GameObject>>
-      getChildrens();
+      void
+      setIsSelected(bool isSelect);
       
+
+    protected:
       /***********************************************************************/
       /**
       * Members.
@@ -109,9 +127,7 @@ namespace gaEngineSDK
       /*
       * @brief
       */
-      bool isSelected = false;
-
-    protected:
+      bool m_isSelected = false;
 
       /*
       * @brief
@@ -132,5 +148,10 @@ namespace gaEngineSDK
       * @brief
       */
       Vector<SPtr<GameObject>> m_vChildrens;
+
+      /*
+      * @brief
+      */
+      Map<TYPE_COMPONENTS::E, SPtr<Component>> m_mapComponents;
   };
 }

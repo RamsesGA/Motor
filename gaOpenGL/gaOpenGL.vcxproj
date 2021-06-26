@@ -173,10 +173,12 @@
     <ClInclude Include="include\gaGraphicsApiOGL.h" />
     <ClInclude Include="include\gaIndexBufferOGL.h" />
     <ClInclude Include="include\gaInputLayoutOGL.h" />
+    <ClInclude Include="include\gaPixelShaderOGL.h" />
     <ClInclude Include="include\gaSamplerStateOGL.h" />
     <ClInclude Include="include\gaShadersOGL.h" />
     <ClInclude Include="include\gaTexturesOGL.h" />
     <ClInclude Include="include\gaVertexBufferOGL.h" />
+    <ClInclude Include="include\gaVertexShaderOGL.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gaGraphicsApiOGL.cpp" />

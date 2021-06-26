@@ -408,6 +408,20 @@ namespace gaEngineSDK {
 
     return shaders;
   }
+
+  SPtr<VertexShader> 
+  GraphicsApiOGL::loadVertexShaderFromFile(const char* vertexFilePath, 
+                                           const char* vertexMainFuntion, 
+                                           const char* shaderVersion) {
+    return SPtr<VertexShader>();
+  }
+
+  SPtr<PixelShader> 
+  GraphicsApiOGL::loadPixelShaderFromFile(const char* pixelFilePath, 
+                                          const char* pixelMainFuntion, 
+                                          const char* shaderVersion) {
+    return SPtr<PixelShader>();
+  }
   
   VertexBuffer* 
   GraphicsApiOGL::createVertexBuffer(const void* data, const uint32 size) {

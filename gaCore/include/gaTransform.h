@@ -5,7 +5,7 @@
 
 namespace gaEngineSDK
 {
-  class Transform : public GameObject
+  class Transform final : public GameObject
   {
     public:
       /*************************************************************************/
@@ -22,29 +22,18 @@ namespace gaEngineSDK
       * Methods.
       */
       /***********************************************************************/
-    
+
       /*
       * @brief
       */
       void
-      onInit() override {};
-    
+      update(const float& deltaTime) override {};
+
       /*
       * @brief
       */
       void
-      onUpdate(const float& deltaTime) override {};
-    
-      /*
-      * @brief
-      */
-      void
-      onDelete() override {};
-    
-      /*
-      * @brief
-      */
-      void
-      onDraw() override {};
+      draw() override {};
+
   };
 }

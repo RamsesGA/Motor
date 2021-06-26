@@ -33,6 +33,12 @@
     <ClInclude Include="include\gaVertexBufferDX.h">
       <Filter>Archivos de origen\GraphicApi</Filter>
     </ClInclude>
+    <ClInclude Include="include\gaVertexShaderDX.h">
+      <Filter>Archivos de origen\GraphicApi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaPixelShaderDX.h">
+      <Filter>Archivos de origen\GraphicApi</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gaGraphicsApiDX.cpp">

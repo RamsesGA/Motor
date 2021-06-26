@@ -7,6 +7,8 @@
 #include <gaConstantBuffer.h>
 #include <gaTextures.h>
 #include <gaShaders.h>
+#include <gaVertexShader.h>
+#include <gaPixelShader.h>
 #include <gaVertexBuffer.h>
 #include <gaIndexBuffer.h>
 #include <SFML/Window.hpp>
@@ -89,6 +91,14 @@ namespace gaEngineSDK {
       Shaders* 
       createShadersProgram(const WString& nameVS, const String& entryPointVS, 
       	                   const WString& namePS, const String& entryPointPS) override;
+
+      SPtr<VertexShader>
+      loadVertexShaderFromFile(const char* vertexFilePath, const char* vertexMainFuntion,
+                               const char* shaderVersion) override;
+
+      SPtr<PixelShader>
+      loadPixelShaderFromFile(const char* pixelFilePath, const char* pixelMainFuntion,
+                              const char* shaderVersion) override;
 
       VertexBuffer* 
       createVertexBuffer(const void* data, const uint32 size) override;

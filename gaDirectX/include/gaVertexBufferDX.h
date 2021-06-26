@@ -20,7 +20,7 @@ namespace gaEngineSDK {
 			/**
 			* @brief DX member to save the buffer.
 			*/
-			ID3D11Buffer* m_pVertexBuffer;
+			ID3D11Buffer* m_pVertexBuffer = nullptr;
 
 			friend class GraphicsApiDX;
 	};

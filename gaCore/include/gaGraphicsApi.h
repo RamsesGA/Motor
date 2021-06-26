@@ -38,6 +38,8 @@ namespace gaEngineSDK {
   class Shaders;
   class VertexBuffer;
   class IndexBuffer;
+  class VertexShader;
+  class PixelShader;
   
   /**
   * @brief Parent class where we can add 
@@ -174,6 +176,24 @@ namespace gaEngineSDK {
       createShadersProgram(const WString& nameVS, const String& entryPointVS,
                            const WString& namePS,
                            const String& entryPointPS) { return nullptr; };
+
+      /**
+      * @brief Function to load and save vertex shader from file.
+      * @param 
+      * @return A shared ptr with the vertex shader created.
+      */
+      virtual SPtr<VertexShader>
+      loadVertexShaderFromFile(const char* vertexFilePath, const char* vertexMainFuntion,
+                               const char* shaderVersion) { return nullptr; };
+
+      /**
+       * @brief Function to load and save pixel shader from file.
+       * @param 
+       * @return A shared ptr with the pixel shader created.
+       */
+      virtual SPtr<PixelShader>
+      loadPixelShaderFromFile(const char* pixelFilePath, const char* pixelMainFuntion,
+                              const char* shaderVersion) { return nullptr; };
       
       /**
       * @brief Function to generate the vertex buffer.

@@ -12,7 +12,7 @@ namespace gaEngineSDK {
                                      aiProcess_Triangulate);
     //Check for errors
     if (!m_pAScene || m_pAScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !m_pAScene->mRootNode) {
-      throw new std::exception("Error, al leer el path del modelo o el modelo no existe");
+      return;
     }
 
     //Creamos el directorio del modelo y de su textura
@@ -60,7 +60,7 @@ namespace gaEngineSDK {
     m_newMesh = new Mesh();
 
     if (!pAMesh->HasFaces()) {
-      throw new std::exception("Error, no se detectaron caras");
+      return nullptr;
     }
 
     //Go through each of the _mesh's faces and retrieve the corresponding indices.

@@ -19,14 +19,14 @@
     <Filter Include="Archivos de origen\SceneGraph">
       <UniqueIdentifier>{bf415c7d-1ffc-43d0-acbb-6621eb306de8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Archivos de origen\GameObject">
-      <UniqueIdentifier>{5bc608e3-4838-4c74-8416-3ebf351a3aab}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Archivos de origen\Transform">
       <UniqueIdentifier>{1639ff69-95ae-4585-9362-65f9ea5c49f8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Archivos de origen\Resource">
       <UniqueIdentifier>{3ad69f90-fbb5-42b3-8fcf-a407e954f496}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Actor/Componente">
+      <UniqueIdentifier>{4dbbbc4b-1606-4cd2-b2d4-2277318acf39}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -76,9 +76,6 @@
     <ClInclude Include="include\gaSceneGraph.h">
       <Filter>Archivos de origen\SceneGraph</Filter>
     </ClInclude>
-    <ClInclude Include="include\gaGameObject.h">
-      <Filter>Archivos de origen\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="include\gaRenderModels.h">
       <Filter>Archivos de origen\Models</Filter>
     </ClInclude>
@@ -96,6 +93,18 @@
     </ClInclude>
     <ClInclude Include="include\gaAnimations.h">
       <Filter>Archivos de origen\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaVertexShader.h">
+      <Filter>Archivos de origen\GraphicApi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaPixelShader.h">
+      <Filter>Archivos de origen\GraphicApi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaGameObject.h">
+      <Filter>Archivos de origen\Actor/Componente</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaComponent.h">
+      <Filter>Archivos de origen\Actor/Componente</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -117,9 +126,6 @@
     <ClCompile Include="src\gaSceneGraph.cpp">
       <Filter>Archivos de origen\SceneGraph</Filter>
     </ClCompile>
-    <ClCompile Include="src\gaGameObject.cpp">
-      <Filter>Archivos de origen\GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="src\gaRenderModels.cpp">
       <Filter>Archivos de origen\Models</Filter>
     </ClCompile>
@@ -137,6 +143,12 @@
     </ClCompile>
     <ClCompile Include="src\gaAnimations.cpp">
       <Filter>Archivos de origen\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaGameObject.cpp">
+      <Filter>Archivos de origen\Actor/Componente</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaComponent.cpp">
+      <Filter>Archivos de origen\Actor/Componente</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
