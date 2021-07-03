@@ -304,8 +304,6 @@ namespace gaEngineSDK {
       */
       Vector<uint32> m_vIndices;
 
-      
-
       /*
       * @brief Member to save the info of this type of texture.
       */

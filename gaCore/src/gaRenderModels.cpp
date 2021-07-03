@@ -45,16 +45,6 @@ namespace gaEngineSDK {
 
     for (auto mesh : m_pResourceMang->getMeshes()) {
       myGraphicApi->updateConstantBuffer(&m_meshBones[meshNum], cbBone);
-
-      if (0 != m_pResourceMang->getMeshes()[meshNum]->m_textures.size()) {
-        auto tempAlgo = m_pResourceMang.get()->getSamplerInfo();
-
-        myGraphicApi->setSamplerState(0, tempAlgo, 
-          m_pResourceMang->getMeshes()[meshNum]->m_textures[meshNum].texture);
-
-        myGraphicApi->setShaderResourceView(
-          m_pResourceMang->getMeshes()[meshNum]->m_textures[meshNum].texture, meshNum, 1);
-      }
       
       myGraphicApi->setVertexBuffer(mesh->m_pVertexBuffer);
       myGraphicApi->setIndexBuffer(mesh->m_pIndexBuffer);

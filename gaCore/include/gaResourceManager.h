@@ -79,6 +79,12 @@ namespace gaEngineSDK {
       void
       loadModelNodes(WeakSPtr<ModelNodes> myNode, const aiNode* ainode);
 
+      /*
+      * @brief .
+      */
+      String
+      deleteSlashs(String file);
+
       /***********************************************************************/
       /**
       * Gets.
@@ -101,15 +107,24 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      Vector<SamplerState*>
+      SPtr<SamplerState>
       getSamplerInfo();
 
+      /*
+      * @brief .
+      */
       Vector<SPtr<Model>>
       getVecModels();
       
+      /*
+      * @brief .
+      */
       Mesh*
       getMesh();
 
+      /*
+      * @brief .
+      */
       SPtr<Model>
       getModel();
 

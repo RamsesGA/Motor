@@ -736,19 +736,34 @@ namespace gaEngineSDK {
   }
   
   void 
-  GraphicsApiOGL::setSamplerState(const uint32 startSlot, Vector<SamplerState*>& samplerState,
-                                  WeakSPtr<Textures> texture) {
-    //auto& sampler = reinterpret_cast<SamplerStateOGL&>(samplerState);
-    //auto& tex = reinterpret_cast<TexturesOGL&>(texture);
-    //
-    //glBindSampler(tex.m_texture, sampler.m_samplerState);
-    //
-    //uint32 detectError = glGetError();
-    //
-    //if (detectError != 0) {
-    //  exit(1);
-    //}
+  GraphicsApiOGL::setSamplerState(WeakSPtr<SamplerState> sampler, WeakSPtr<Textures> texture, 
+                                  uint32 startSlot, uint32 numSamplers) {
+    if ((nullptr != sampler.lock().get()) && (nullptr != texture.lock().get())) {
+      //auto& sampler = reinterpret_cast<SamplerStateOGL&>(samplerState);
+      //auto& tex = reinterpret_cast<TexturesOGL&>(texture);
+      //
+      //glBindSampler(tex.m_texture, sampler.m_samplerState);
+      //
+      //uint32 detectError = glGetError();
+      //
+      //if (detectError != 0) {
+      //  exit(1);
+      //}
+    }
   }
+
+  void 
+  GraphicsApiOGL::setSamplerVertexShader(WeakSPtr<SamplerState> sampler, 
+                                         WeakSPtr<Textures> texture, 
+                                         uint32 startSlot, uint32 numSamplers) {
+  }
+
+  void
+  GraphicsApiOGL::setSamplerPixelShader(WeakSPtr<SamplerState> sampler, 
+                                        WeakSPtr<Textures> texture, 
+                                        uint32 startSlot, uint32 numSamplers) {
+  }
+
   
   void
   GraphicsApiOGL::setShaderResourceView(WeakSPtr<Textures> shaderResourceView,

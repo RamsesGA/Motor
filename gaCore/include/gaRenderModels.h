@@ -1,14 +1,14 @@
 #pragma once
 
 #include "gaPrerequisitesCore.h"
-#include "gaGameObject.h"
 #include "gaModels.h"
 #include "gaStructures.h"
 #include "gaConstantBuffer.h"
+#include "gaComponent.h"
 
 namespace gaEngineSDK {
 
-  class GA_CORE_EXPORT RenderModels : public GameObject
+  class GA_CORE_EXPORT RenderModels : public Component
   {
     public:
       /***********************************************************************/
@@ -33,14 +33,20 @@ namespace gaEngineSDK {
       update(ResourceManager& resource, const float& deltaTime);
     
       /*
-      * @brief
+      * @brief .
       */
       void
       drawModel(WeakSPtr<ResourceManager> resource, WeakSPtr<ConstantBuffer> cbBone);
 
+      /*
+      * @brief .
+      */
       void
       setMeshBones(ResourceManager& resource);
 
+      /*
+      * @brief .
+      */
       SPtr<AnimationData> m_currentAnimation = nullptr;
 
     private:
@@ -50,13 +56,24 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
 
+      /*
+      * @brief .
+      */
       bool m_playAnimation = true;
 
+      /*
+      * @brief .
+      */
       float m_timeOfAnimation = 0.0f;
 
+      /*
+      * @brief .
+      */
       Vector<ConstBuffBonesTransform> m_meshBones;
 
+      /*
+      * @brief .
+      */
       SPtr<ResourceManager> m_pResourceMang = nullptr;
-
   };
 }

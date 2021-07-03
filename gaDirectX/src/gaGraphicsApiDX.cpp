@@ -273,7 +273,7 @@ namespace gaEngineSDK {
     int32 components;
 
     unsigned char* data = stbi_load(srcFile.c_str(),
-                                    &width, &height, &components, 0);
+                                    &width, &height, &components, 4);
     if (!data) {
       return nullptr;
     }
@@ -291,25 +291,15 @@ namespace gaEngineSDK {
     desc.Usage = D3D11_USAGE_DEFAULT;
     desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
     desc.MiscFlags = 0;
-
-    if (1 == components) {
-      desc.Format = DXGI_FORMAT_R8_UNORM;
-    }
-    else if (2 == components) {
-      desc.Format = DXGI_FORMAT_R8G8_UNORM;
-    }
-    else if (3 == components) {
-      desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    }
-    else if (4 == components) {
-      desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    }
+    desc.CPUAccessFlags = 0;
+    desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
     //Texture data
     D3D11_SUBRESOURCE_DATA initData;
     ZeroMemory(&initData, sizeof(initData));
     initData.pSysMem = data;
     initData.SysMemPitch = width * 4;
+    initData.SysMemSlicePitch = width * height * 4;
 
     if (FAILED(m_pd3dDevice->CreateTexture2D(&desc, &initData, &texture->m_pTexture))) {
       delete texture;
@@ -716,6 +706,7 @@ namespace gaEngineSDK {
     sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
     sampDesc.MinLOD = 0;
     sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+    sampDesc.MipLODBias = 0;
   
     hr = m_pd3dDevice->CreateSamplerState(&sampDesc, &samplerState->m_pSamplerState);
 
@@ -935,15 +926,35 @@ namespace gaEngineSDK {
   }
   
   void 
-  GraphicsApiDX::setSamplerState(const uint32 startSlot, Vector<SamplerState*>& samplerState,
-                                 WeakSPtr<Textures> texture) {
-    uint32 tempSamplerSize = samplerState.size();
-    for (uint32 i = 0; i < tempSamplerSize; ++i) {
-      auto* sState = reinterpret_cast<SamplerStateDX*>(samplerState[i]);
+  GraphicsApiDX::setSamplerState(WeakSPtr<SamplerState> sampler, WeakSPtr<Textures> texture, 
+                                 uint32 startSlot, uint32 numSamplers) {
+    if (nullptr != sampler.lock().get()) {
+      SPtr<SamplerState> tempSampler = sampler.lock();
 
-      m_pImmediateContext->PSSetSamplers(startSlot,
-                                         (uint32)samplerState.size(),
-                                         &sState->m_pSamplerState);
+      setSamplerVertexShader(tempSampler,texture, startSlot, numSamplers);
+      setSamplerPixelShader(tempSampler, texture, startSlot, numSamplers);
+    }
+  }
+
+  void 
+  GraphicsApiDX::setSamplerVertexShader(WeakSPtr<SamplerState> sampler,
+                                        WeakSPtr<Textures> texture, 
+                                        uint32 startSlot, uint32 numSamplers) {
+    if (nullptr != sampler.lock().get()) {
+      SamplerStateDX* samplerDX = reinterpret_cast<SamplerStateDX*>(sampler.lock().get());
+
+      m_pImmediateContext->VSSetSamplers(startSlot, numSamplers, &samplerDX->m_pSamplerState);
+    }
+  }
+
+  void
+  GraphicsApiDX::setSamplerPixelShader(WeakSPtr<SamplerState> sampler, 
+                                       WeakSPtr<Textures> texture, 
+                                       uint32 startSlot, uint32 numSamplers) {
+    if (nullptr != sampler.lock().get()) {
+      SamplerStateDX* samplerDX = reinterpret_cast<SamplerStateDX*>(sampler.lock().get());
+
+      m_pImmediateContext->PSSetSamplers(startSlot, numSamplers, &samplerDX->m_pSamplerState);
     }
   }
   

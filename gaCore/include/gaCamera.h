@@ -6,6 +6,7 @@
 #include <SFML/Window/Event.hpp>
 
 #include "gaPrerequisitesCore.h"
+#include "gaComponent.h"
 
 namespace gaEngineSDK {
 
@@ -22,7 +23,7 @@ namespace gaEngineSDK {
     Vector3 camUp = { 0.0f, 0.0f, 0.0f };
   };
   
-  class GA_CORE_EXPORT Camera
+  class GA_CORE_EXPORT Camera : public Component
   {
     public:
       /***********************************************************************/

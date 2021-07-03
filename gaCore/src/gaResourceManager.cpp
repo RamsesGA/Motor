@@ -21,8 +21,9 @@ namespace gaEngineSDK {
     auto myGraphicApi = g_graphicApi().instancePtr();
     m_newModel.reset(new Model());
 
+    SPtr<SamplerState> tempSamp(myGraphicApi->createSamplerState());
     //Create texture sampler for model's textures
-    m_newModel->setSamplers(myGraphicApi->createSamplerState());
+    m_newModel->setSampler(tempSamp);
 
     //Process assimp's root pNode recursively
     processNode(m_pAScene->mRootNode, m_pAScene);
@@ -203,8 +204,7 @@ namespace gaEngineSDK {
 
   void 
   ResourceManager::processAnimationInfo() {
-    std::memcpy(&m_newModel->m_globalInverseTransform, &m_pAScene->mRootNode->mTransformation,
-                sizeof(Matrix4x4));
+    std::memcpy(&m_newModel->m_globalInverseTransform, &m_pAScene->mRootNode->mTransformation, sizeof(Matrix4x4));
 
     m_newModel->m_globalInverseTransform.transpose();
 
@@ -216,14 +216,14 @@ namespace gaEngineSDK {
 
     loadModelNodes(m_newModel->m_modelNodes, m_pAScene->mRootNode);
 
-    m_newModel->m_pAnimationsList.push_back((char*)"None");
+    m_newModel->setAnimList("None");
 
     uint32 tempNumAnims = m_pAScene->mNumAnimations;
     for (uint32 i = 0; i < tempNumAnims; ++i) {
       AnimationData* newAnimation = new AnimationData;
 
       newAnimation->m_animationName = m_pAScene->mAnimations[i]->mName.C_Str();
-      m_newModel->m_pAnimationsList.push_back((char*)newAnimation->m_animationName.c_str());
+      m_newModel->setAnimList(newAnimation->m_animationName);
 
       if (m_pAScene->mAnimations[i]->mTicksPerSecond != 0.0) {
         newAnimation->m_ticksPerSecond = (float)m_pAScene->mAnimations[i]->mTicksPerSecond;
@@ -309,11 +309,11 @@ namespace gaEngineSDK {
         newAnimation->m_vChannels[j] = newAnimNode;
       }
       SPtr<AnimationData> anim(newAnimation);
-      m_newModel->m_vAnimationData.push_back(anim);
+      m_newModel->setAnimData(anim);
     }
 
     if (0 < m_pAScene->mNumAnimations) {
-      m_newModel->m_numAnimations = (uint32)m_pAScene->mNumAnimations;
+      m_newModel->setNumAnims((uint32)m_pAScene->mNumAnimations);
     }
 
     SPtr<Model> modelCreate(m_newModel);
@@ -332,14 +332,16 @@ namespace gaEngineSDK {
       pAMat->GetTexture(Atype, i, &aistr);
 
       String srcFile = String(aistr.C_Str());
-      srcFile = m_texturesDirectory + '/' + getTexturePath(srcFile);
+      srcFile = m_texturesDirectory + getTexturePath(srcFile);
+
+      srcFile = deleteSlashs(srcFile);
 
       bool skip = false;
 
       uint32 tempTextureSize = m_textures.size();
-      for (uint32 i = 0; i < tempTextureSize; ++i) {
-        if (std::strcmp(m_textures[i].path.data(), srcFile.data()) == 0) {
-          textures.push_back(m_textures[i]);
+      for (uint32 j = 0; j < tempTextureSize; ++j) {
+        if (std::strcmp(m_textures[j].path.data(), srcFile.data()) == 0) {
+          textures.push_back(m_textures[j]);
           skip = true;
           break;
         }
@@ -380,6 +382,26 @@ namespace gaEngineSDK {
   }
 
   String 
+  ResourceManager::deleteSlashs(String file) {
+    uint32 tempSize = file.size();
+    String tempStr;
+    for (uint32 i = 0; i < tempSize; ++i) {
+      tempStr += file[i];
+
+      if ('\\' == tempStr[i]) {
+        uint32 tempSlashPos = tempStr.rfind('\\');
+        tempStr.erase(tempSlashPos, 1);
+      }
+      else if ('//' == tempStr[i]) {
+        int32 tempSlashPos = tempStr.rfind('//');
+        tempStr.erase(tempSlashPos, 1);
+      }
+    }
+
+    return tempStr;
+  }
+
+  String 
   ResourceManager::getTexturePath(String file) {
     size_t realPos = 0;
     size_t posInvSlash = file.rfind('\\');
@@ -408,9 +430,9 @@ namespace gaEngineSDK {
     return m_vMeshes;
   }
 
-  Vector<SamplerState*>
+  SPtr<SamplerState>
   ResourceManager::getSamplerInfo() {
-    return m_newModel->getSamplerInfo();
+    return m_newModel->getSampler();
   }
 
   Vector<SPtr<Model>>
@@ -445,7 +467,7 @@ namespace gaEngineSDK {
         miniPaht.clear();
       }
     }
-    m_texturesDirectory += miniPaht;
+    m_texturesDirectory += miniPaht + '/';
     miniPaht.clear();
   }
 }

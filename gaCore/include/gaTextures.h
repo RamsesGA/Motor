@@ -134,7 +134,7 @@ namespace gaEngineSDK {
 	  	/***********************************************************************/
 			Textures() = default;
 
-      ~Textures() { onRelease(); };
+      ~Textures() = default;
 
       /***********************************************************************/
       /**
@@ -144,35 +144,5 @@ namespace gaEngineSDK {
 
       virtual void*
       getTexture() { return nullptr; };
-
-      /***********************************************************************/
-      /**
-      * Heredetary methods.
-      */
-      /***********************************************************************/
-
-      /*
-      * @brief
-      */
-      void
-      onInit() override {};
-
-      /*
-      * @brief
-      */
-      void
-      onUpdate(const float& deltaTime) override {};
-
-      /*
-      * @brief
-      */
-      void
-      onDelete() override {};
-
-      /*
-      * @brief
-      */
-      virtual void
-      onRelease() override {};
 	};
 }

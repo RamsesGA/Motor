@@ -39,7 +39,8 @@ namespace gaEngineSDK {
     float timInTicks = deltaTime * animation->m_ticksPerSecond;
     float timeAnimation = fmod(timInTicks, (float)animation->m_animDuration);
 
-    readNodeHierarchy(resource, timeAnimation, resource.getModel()->m_modelNodes, identityMatrix, animation);
+    readNodeHierarchy(resource, timeAnimation, resource.getModel()->m_modelNodes,
+                      identityMatrix, animation);
   }
 
   void 

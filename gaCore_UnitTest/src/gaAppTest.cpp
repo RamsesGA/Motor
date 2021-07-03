@@ -181,8 +181,9 @@ AppTest::onCreate() {
 
   //m_resourceManager->initLoadModel("data/models/2B/2B.obj");
   //m_resourceManager->initLoadModel("data/models/pod/POD.obj");
+  m_resourceManager->initLoadModel("data/models/vela/Vela2.fbx");
   //m_resourceManager->initLoadModel("data/models/spartan/Spartan.fbx");
-  m_resourceManager->initLoadModel("data/models/ugandan/Knuckles.fbx");
+  //m_resourceManager->initLoadModel("data/models/ugandan/Knuckles.fbx");
   //m_resourceManager->initLoadModel("data/models/grimoires/grimoires.fbx");
 
   /***************************************************************************/
@@ -196,8 +197,8 @@ AppTest::onCreate() {
   if (!m_resourceManager->getMeshes().empty()) {
     m_renderModel->setMeshBones(*m_resourceManager);
 
-    if (!m_resourceManager->getModel()->m_vAnimationData.empty()) {
-      m_renderModel->m_currentAnimation = m_resourceManager->getModel()->m_vAnimationData[0];
+    if (!m_resourceManager->getModel()->getAnimData().empty()) {
+      m_renderModel->m_currentAnimation = m_resourceManager->getModel()->getAnimData()[0];
     }
   }
 }

@@ -303,10 +303,33 @@ namespace gaEngineSDK {
       * @param .
       * @param .
       * @param .
+      * @param .
       */
       virtual void 
-      setSamplerState(const uint32 startSlot, Vector<SamplerState*>& samplerState,
-                      WeakSPtr<Textures> texture) { };
+      setSamplerState(WeakSPtr<SamplerState> sampler, WeakSPtr<Textures> texture, 
+                      uint32 startSlot, uint32 numSamplers = 1) { };
+       
+      /**
+      * @brief Function to save the information of the vertex sampler state.
+      * @param .
+      * @param .
+      * @param .
+      * @param .
+      */
+      virtual void
+      setSamplerVertexShader(WeakSPtr<SamplerState> sampler, WeakSPtr<Textures> texture, 
+                             uint32 startSlot, uint32 numSamplers = 1) { };
+
+      /**
+      * @brief Function to save the information of the vertex sampler state.
+      * @param .
+      * @param .
+      * @param .
+      * @param .
+      */
+      virtual void
+      setSamplerPixelShader(WeakSPtr<SamplerState> sampler, WeakSPtr<Textures> texture, 
+                            uint32 startSlot, uint32 numSamplers = 1) { };
       
       /**
       * @brief Function to save the information of the shader resource view.

@@ -6,11 +6,10 @@ namespace gaEngineSDK {
 
   namespace TYPE_COMPONENTS {
     enum E {
-      TRANSFORM = 0,
-      RENDERMODEL,
-      TEXTURE,
-      CAMERA,
-      KNUMCOMPONENTS
+      kRenderModel = 0,
+      kCamera,
+      kTexture,
+      KNumComponents
     };
   };
 
@@ -38,14 +37,26 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      TYPE_COMPONENTS::E
-      getTypeComponents() const;
+      virtual void
+      update(const float& deltatime);
+
+      /***********************************************************************/
+      /**
+      * Gets.
+      */
+      /***********************************************************************/
 
       /*
       * @brief .
       */
-      virtual void
-      update(const float& deltatime);
+      TYPE_COMPONENTS::E
+      getTypeComponents() const;
+
+      /***********************************************************************/
+      /**
+      * Sets.
+      */
+      /***********************************************************************/
 
       /*
       * @brief .

@@ -132,20 +132,115 @@ namespace gaEngineSDK {
       /***********************************************************************/
       Model() = default;
 
-      ~Model() { onRelease(); };
+      ~Model() = default;
 
       /***********************************************************************/
       /*
-      * Methods.
+      * Gets.
       */
       /***********************************************************************/
 
+      /*
+      * @brief .
+      */
+      uint32
+      getNumAnims();
+
+      /*
+      * @brief .
+      */
+      Vector<String>
+      getAnimList();
+
+      /*
+      * @brief .
+      */
+      SPtr<SamplerState>
+      getSampler();
+
+      /*
+      * @brief .
+      */
+      SPtr<AnimationData>
+      getCurrentAnim();
+
+      /*
+      * @brief .
+      */
+      SPtr<ResourceManager>
+      getResourceMgrInfo();
+
+      /*
+      * @brief .
+      */
+      Vector<SPtr<Mesh>>
+      getMeshesInfo();
+
+      /*
+      * @brief .
+      */
+      Vector<SPtr<AnimationData>>
+      getAnimData();
+
+      /***********************************************************************/
+      /*
+      * Sets.
+      */
+      /***********************************************************************/
+
+      /*
+      * @brief .
+      */
       void
-      setSamplers(SamplerState* sampler);
+      setNumAnims(uint32 numAnims);
 
-      Vector<SamplerState*>
-      getSamplerInfo();
+      /*
+      * @brief .
+      */
+      void
+      setAnimList(String animName);
 
+      /*
+      * @brief .
+      */
+      void
+      setSampler(WeakSPtr<SamplerState> sampler);
+
+      /*
+      * @brief .
+      */
+      void
+      setCurrentAnim(WeakSPtr<AnimationData> currentAnim);
+
+      /*
+      * @brief .
+      */
+      void
+      setResourceMgrInfo(WeakSPtr<ResourceManager> resourceMgr);
+
+      /*
+      * @brief .
+      */
+      void
+      setMeshesInfo(SPtr<Mesh> meshInfo);
+
+      /*
+      * @brief .
+      */
+      void
+      setAnimData(SPtr<AnimationData> animData);
+
+      /*
+      * @brief .
+      */
+      Matrix4x4 m_globalInverseTransform;
+
+      /*
+      * @brief .
+      */
+      SPtr<ModelNodes> m_modelNodes = nullptr;
+
+    private:
       /***********************************************************************/
       /*
       * Members.
@@ -160,34 +255,12 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      Vector<SPtr<Mesh>> m_vMeshes;
+      Vector<String> m_animationsList;
 
       /*
-      * @brief .
+      * @brief Member to store a string of samplers.
       */
-      Vector<SPtr<AnimationData>> m_vAnimationData;
-
-      /*
-      * @brief .
-      */
-      Matrix4x4 m_globalInverseTransform;
-
-      /*
-      * @brief .
-      */
-      SPtr<ModelNodes> m_modelNodes = nullptr;
-
-      /*
-      * @brief .
-      */
-      Vector<char*> m_pAnimationsList;
-
-    private:
-      /***********************************************************************/
-      /*
-      * Members.
-      */
-      /***********************************************************************/
+      SPtr<SamplerState> m_sampler = nullptr;
 
       /*
       * @brief .
@@ -197,11 +270,16 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      ResourceManager* m_resourceManager = nullptr;
+      SPtr<ResourceManager> m_resourceManager = nullptr;
 
       /*
-      * @brief Member to store a string of samplers.
+      * @brief .
       */
-      Vector<SamplerState*> m_pSamplers;
+      Vector<SPtr<Mesh>> m_vMeshes;
+
+      /*
+      * @brief .
+      */
+      Vector<SPtr<AnimationData>> m_vAnimationData;
   };  
 }

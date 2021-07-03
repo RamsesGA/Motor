@@ -1,4 +1,5 @@
 #include "gaGameObject.h"
+#include "gaRenderModels.h"
 #include "gaCamera.h"
 
 namespace gaEngineSDK {
@@ -17,6 +18,7 @@ namespace gaEngineSDK {
       return nullptr;
     }
 
+    //We save the component and the gameobject.
     if (nullptr != component) {
       component->setGameObject(this);
       m_mapComponents.insert(std::pair <TYPE_COMPONENTS::E, 
@@ -24,23 +26,21 @@ namespace gaEngineSDK {
       return component;
     }
 
-    //TODO: falta complementar
     Component* addComponent = nullptr;
     switch (typeComponent) {
 
-      case gaEngineSDK::TYPE_COMPONENTS::TRANSFORM:
+      case gaEngineSDK::TYPE_COMPONENTS::kRenderModel:
+        addComponent = new RenderModels();
         break;
 
-      case gaEngineSDK::TYPE_COMPONENTS::RENDERMODEL:
+      case gaEngineSDK::TYPE_COMPONENTS::kCamera:
+        addComponent = new Camera();
         break;
 
-      case gaEngineSDK::TYPE_COMPONENTS::TEXTURE:
+      case gaEngineSDK::TYPE_COMPONENTS::kTexture:
         break;
 
-      case gaEngineSDK::TYPE_COMPONENTS::CAMERA:
-        break;
-
-      case gaEngineSDK::TYPE_COMPONENTS::KNUMCOMPONENTS:
+      case gaEngineSDK::TYPE_COMPONENTS::KNumComponents:
         break;
 
       default:

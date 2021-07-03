@@ -4,11 +4,12 @@
 
 namespace gaEngineSDK
 {
-  namespace RESOURCE_TYPE {
+  namespace RESOURCE_TYPES {
     enum E {
-      UNKNOWN = 0,
-      MODEL,
-      TEXTURE,
+      kUnknown = 0,
+      kModel,
+      kTexture,
+      kNumResourcesTypes
       //TODO: AÑADIR MAS TIPOS DE RECURSOS
     };
   }
@@ -27,37 +28,7 @@ namespace gaEngineSDK
     
       /***********************************************************************/
       /**
-      * Methods.
-      */
-      /***********************************************************************/
-    
-      /*
-      * @brief
-      */
-      virtual void
-      onInit() {};
-    
-      /*
-      * @brief
-      */
-      virtual void
-      onUpdate(const float& deltaTime) {};
-    
-      /*
-      * @brief
-      */
-      virtual void
-      onDelete() {};
-    
-      /*
-      * @brief
-      */
-      virtual void
-      onRelease() {};
-
-      /***********************************************************************/
-      /**
-      * Sets and Gets.
+      * Sets.
       */
       /***********************************************************************/
 
@@ -68,16 +39,22 @@ namespace gaEngineSDK
       setId(int32 id = 0);
 
       /*
-      * @brief Method to get the id.
-      */
-      int32
-      getId();
-
-      /*
       * @brief Method to set the resource name.
       */
       void
       setRSRCName(const String& name = "default");
+
+      /***********************************************************************/
+      /**
+      * Gets.
+      */
+      /***********************************************************************/
+
+      /*
+      * @brief Method to get the id.
+      */
+      int32
+      getId();
 
       /*
       * @brief Method to get the rtesource name.
@@ -95,11 +72,18 @@ namespace gaEngineSDK
       /*
       * @brief Member to save the id.
       */
-      int32 m_id;
+      int32 m_id = 0;
 
       /*
       * @brief Resource member name.
       */
       String m_RSRCName;
+
+      /*
+      * @brief Resource member type.
+      */
+      RESOURCE_TYPES::E m_RSRCType = RESOURCE_TYPES::kUnknown;
+
+      friend class ResourceManager;
   };
 }

@@ -36,33 +36,60 @@ class AppTest : public BaseApp
     */
     /*************************************************************************/
 
+    /*
+    * @brief .
+    */
     int32
     onInit()override;
 
     void
     onInitCamera();
 
+    /*
+    * @brief .
+    */
     void
     onUpdate(float deltaTime)override;
 
+    /*
+    * @brief .
+    */
     void
     onRender()override;
 
+    /*
+    * @brief .
+    */
     void
     onCreate()override;
 
+    /*
+    * @brief .
+    */
     void
     onDestroySystem()override;
 
+    /*
+    * @brief .
+    */
     void
     onKeyboardDown(sf::Event param)override;
 
+    /*
+    * @brief .
+    */
     void
     onLeftMouseBtnDown()override;
 
+    /*
+    * @brief .
+    */
     void
     onLeftMouseBtnUp()override;
 
+    /*
+    * @brief .
+    */
     void
     onMouseMove()override;
 
@@ -122,7 +149,13 @@ class AppTest : public BaseApp
     */
     SPtr<Mesh> m_mesh;
 
+    /*
+    * @brief .
+    */
     RenderModels* m_renderModel = nullptr;
 
+    /*
+    * @brief .
+    */
     SPtr<ConstantBuffer> m_tempBufferBones;
 };
