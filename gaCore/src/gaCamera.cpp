@@ -11,11 +11,11 @@ namespace gaEngineSDK {
   
   void
   Camera::updateViewMatrix() {
-    m_right = m_view.matrixData3(0);
+    m_right = m_view.getColumnMatrixInfo(0);
 
-    m_up = m_view.matrixData3(1);
+    m_up = m_view.getColumnMatrixInfo(1);
 
-    m_front = m_view.matrixData3(2);
+    m_front = m_view.getColumnMatrixInfo(2);
 	  
 	  m_cameraDesc.camLookAt = m_cameraDesc.camEye + m_front;
   }

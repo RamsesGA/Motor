@@ -106,6 +106,9 @@
     <ClInclude Include="include\gaComponent.h">
       <Filter>Archivos de origen\Actor/Componente</Filter>
     </ClInclude>
+    <ClInclude Include="include\gaActor.h">
+      <Filter>Archivos de origen\Actor/Componente</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gaBaseApp.cpp">
@@ -148,6 +151,9 @@
       <Filter>Archivos de origen\Actor/Componente</Filter>
     </ClCompile>
     <ClCompile Include="src\gaComponent.cpp">
+      <Filter>Archivos de origen\Actor/Componente</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaActor.cpp">
       <Filter>Archivos de origen\Actor/Componente</Filter>
     </ClCompile>
   </ItemGroup>

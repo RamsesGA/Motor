@@ -108,7 +108,7 @@ namespace gaEngineSDK {
   }
 
   Vector3 
-  Matrix4x4::matrixData3(uint32 index) {
+  Matrix4x4::getColumnMatrixInfo(uint32 index) {
     Vector<Vector3>matrixData;
     matrixData.resize(3);
 
@@ -193,27 +193,27 @@ namespace gaEngineSDK {
 
   void
   Matrix4x4::calculateAxis(Vector3 right, Vector3 up, Vector3 front) {
-    m_mat4x4[0][0] = right.x; m_mat4x4[0][1]    = up.x;
-    m_mat4x4[1][0] = right.y;    m_mat4x4[1][1] = up.y;
-    m_mat4x4[2][0] = right.z; m_mat4x4[2][1]    = up.z;
-    m_mat4x4[3][0] = 0.0f;      m_mat4x4[3][1]    = 0.0f;
+    m_mat4x4[0][0] = right.x; m_mat4x4[0][1] = up.x;
+    m_mat4x4[1][0] = right.y; m_mat4x4[1][1] = up.y;
+    m_mat4x4[2][0] = right.z; m_mat4x4[2][1] = up.z;
+    m_mat4x4[3][0] = 0.0f;    m_mat4x4[3][1] = 0.0f;
 
     m_mat4x4[0][2] = front.x; m_mat4x4[0][3] = 0.0f;
     m_mat4x4[1][2] = front.y; m_mat4x4[1][3] = 0.0f;
     m_mat4x4[2][2] = front.z; m_mat4x4[2][3] = 0.0f;
-    m_mat4x4[3][2] = 0.0f;      m_mat4x4[3][3] = 1.0f;
+    m_mat4x4[3][2] = 0.0f;    m_mat4x4[3][3] = 1.0f;
   }
 
   void
   Matrix4x4::calculatePosition(Vector3 eye) {
-    m_mat4x4[0][0] = 1.0f;     m_mat4x4[0][1] = 0.0f;
-    m_mat4x4[1][0] = 0.0f;     m_mat4x4[1][1] = 1.0f;
-    m_mat4x4[2][0] = 0.0f;     m_mat4x4[2][1] = 0.0f;
+    m_mat4x4[0][0] = 1.0f;   m_mat4x4[0][1] = 0.0f;
+    m_mat4x4[1][0] = 0.0f;   m_mat4x4[1][1] = 1.0f;
+    m_mat4x4[2][0] = 0.0f;   m_mat4x4[2][1] = 0.0f;
     m_mat4x4[3][0] = -eye.x; m_mat4x4[3][1] = -eye.y;
 
-    m_mat4x4[0][2] = 0.0f;     m_mat4x4[0][3] = 0.0f;
-    m_mat4x4[1][2] = 0.0f;     m_mat4x4[1][3] = 0.0f;
-    m_mat4x4[2][2] = 1.0f;     m_mat4x4[2][3] = 0.0f;
+    m_mat4x4[0][2] = 0.0f;   m_mat4x4[0][3] = 0.0f;
+    m_mat4x4[1][2] = 0.0f;   m_mat4x4[1][3] = 0.0f;
+    m_mat4x4[2][2] = 1.0f;   m_mat4x4[2][3] = 0.0f;
     m_mat4x4[3][2] = -eye.z; m_mat4x4[3][3] = 1.0f;
   }
 

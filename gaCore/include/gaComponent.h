@@ -7,9 +7,9 @@ namespace gaEngineSDK {
   namespace TYPE_COMPONENTS {
     enum E {
       kRenderModel = 0,
+      kTransform,
       kCamera,
       kTexture,
-      KNumComponents
     };
   };
 
@@ -64,7 +64,7 @@ namespace gaEngineSDK {
       void
       setGameObject(GameObject* newObj);
 
-    private:
+    protected:
       /***********************************************************************/
       /**
       * Members.

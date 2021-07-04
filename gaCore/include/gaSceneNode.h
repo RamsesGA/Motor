@@ -1,7 +1,7 @@
 #pragma once
 
 #include "gaPrerequisitesCore.h"
-#include "gaGameObject.h"
+#include "gaActor.h"
 
 namespace gaEngineSDK {
   class SceneNode
@@ -41,6 +41,6 @@ namespace gaEngineSDK {
 
       Vector<WeakSPtr<SceneNode>> m_pNodesChild;
 
-      WeakSPtr<GameObject> m_pGameObject;
+      WeakSPtr<Actor> m_pActor;
   };
 }

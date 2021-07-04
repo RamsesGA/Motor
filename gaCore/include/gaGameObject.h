@@ -35,9 +35,9 @@ namespace gaEngineSDK
       virtual void
       draw();
 
-      SPtr<Component>
-      addComponent(TYPE_COMPONENTS::E typeComponent, SPtr<Component> component = nullptr);
-
+      /*
+      * @brief
+      */
       void
       removeComponent(TYPE_COMPONENTS::E typeComponent);
 
@@ -115,6 +115,12 @@ namespace gaEngineSDK
       */
       void
       setIsSelected(bool isSelect);
+
+      /*
+      * @brief
+      */
+      SPtr<Component>
+      setComponent(TYPE_COMPONENTS::E typeComponent, SPtr<Component> component = nullptr);
       
 
     protected:

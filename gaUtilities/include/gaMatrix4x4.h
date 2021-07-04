@@ -64,7 +64,7 @@ namespace gaEngineSDK {
       * @return One vector with XYZ values.
       */
       Vector3
-      matrixData3(uint32 index);
+      getColumnMatrixInfo(uint32 index);
 
       /*
       * @brief Calculates x-axis rotation.

@@ -1,11 +1,12 @@
 #pragma once
 
-#include "gaPrerequisitesCore.h"
-#include "gaGameObject.h"
+#include <gaVector3.h>
 
-namespace gaEngineSDK
-{
-  class Transform final : public GameObject
+#include "gaPrerequisitesCore.h"
+#include "gaComponent.h"
+
+namespace gaEngineSDK {
+  class GA_CORE_EXPORT Transform final : public Component
   {
     public:
       /*************************************************************************/
@@ -13,7 +14,7 @@ namespace gaEngineSDK
       * Constructor and destructor.
       */
       /*************************************************************************/
-      Transform() = default;
+      Transform();
     
       ~Transform() = default;
     
@@ -23,17 +24,33 @@ namespace gaEngineSDK
       */
       /***********************************************************************/
 
-      /*
-      * @brief
-      */
       void
-      update(const float& deltaTime) override {};
+      update(const float& deltatime) override;
+
+
+    private:
+      /***********************************************************************/
+      /**
+      * Members.
+      */
+      /***********************************************************************/
 
       /*
-      * @brief
+      * @brief .
       */
-      void
-      draw() override {};
+      Vector3 m_position = {0.0f, 0.0f, 0.0f};
 
+      /*
+      * @brief .
+      */
+      Vector3 m_rotation = { 0.0f, 0.0f, 0.0f };
+
+      /*
+      * @brief .
+      */
+      Vector3 m_scale = { 0.0f, 0.0f, 0.0f };
+
+
+      friend class GameObject;
   };
 }

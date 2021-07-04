@@ -1,6 +1,7 @@
 #include "gaGameObject.h"
 #include "gaRenderModels.h"
 #include "gaCamera.h"
+#include "gaTransform.h"
 
 namespace gaEngineSDK {
   void 
@@ -8,57 +9,6 @@ namespace gaEngineSDK {
   
   void 
   GameObject::draw() { }
-
-  SPtr<Component> 
-  GameObject::addComponent(TYPE_COMPONENTS::E typeComponent, SPtr<Component> component) {
-    auto comp = m_mapComponents.find(typeComponent);
-
-    //Component alredy exist in this object.
-    if (comp != m_mapComponents.end()) {
-      return nullptr;
-    }
-
-    //We save the component and the gameobject.
-    if (nullptr != component) {
-      component->setGameObject(this);
-      m_mapComponents.insert(std::pair <TYPE_COMPONENTS::E, 
-                             SPtr<Component>>(typeComponent, component));
-      return component;
-    }
-
-    Component* addComponent = nullptr;
-    switch (typeComponent) {
-
-      case gaEngineSDK::TYPE_COMPONENTS::kRenderModel:
-        addComponent = new RenderModels();
-        break;
-
-      case gaEngineSDK::TYPE_COMPONENTS::kCamera:
-        addComponent = new Camera();
-        break;
-
-      case gaEngineSDK::TYPE_COMPONENTS::kTexture:
-        break;
-
-      case gaEngineSDK::TYPE_COMPONENTS::KNumComponents:
-        break;
-
-      default:
-        return nullptr;
-    }
-
-    //If the component don´t exists.
-    if (nullptr == addComponent) {
-      return nullptr;
-    }
-
-    addComponent->setGameObject(this);
-
-    m_mapComponents.insert(std::pair<TYPE_COMPONENTS::E, 
-                           SPtr<Component>>(typeComponent, addComponent));
-
-    return SPtr<Component>(addComponent);
-  }
 
   void 
   GameObject::removeComponent(TYPE_COMPONENTS::E typeComponent) {
@@ -139,5 +89,57 @@ namespace gaEngineSDK {
   void 
   GameObject::setIsSelected(bool isSelect) {
     m_isSelected = isSelect;
+  }
+
+  SPtr<Component> 
+  GameObject::setComponent(TYPE_COMPONENTS::E typeComponent, SPtr<Component> component) {
+    auto comp = m_mapComponents.find(typeComponent);
+
+    //Component alredy exist in this object.
+    if (comp != m_mapComponents.end()) {
+      return nullptr;
+    }
+
+    //We save the component and the gameobject.
+    if (nullptr != component) {
+      component->setGameObject(this);
+      m_mapComponents.insert(std::pair <TYPE_COMPONENTS::E, 
+                             SPtr<Component>>(typeComponent, component));
+      return component;
+    }
+
+    Component* addComponent = nullptr;
+    switch (typeComponent) {
+
+      case gaEngineSDK::TYPE_COMPONENTS::kRenderModel:
+        addComponent = new RenderModels();
+        break;
+
+      case gaEngineSDK::TYPE_COMPONENTS::kTransform:
+        addComponent = new Transform();
+        break;
+
+      case gaEngineSDK::TYPE_COMPONENTS::kCamera:
+        addComponent = new Camera();
+        break;
+
+      case gaEngineSDK::TYPE_COMPONENTS::kTexture:
+        break;
+
+      default:
+        return nullptr;
+    }
+
+    //If the component don´t exists.
+    if (nullptr == addComponent) {
+      return nullptr;
+    }
+
+    addComponent->setGameObject(this);
+
+    m_mapComponents.insert(std::pair<TYPE_COMPONENTS::E, 
+                           SPtr<Component>>(typeComponent, addComponent));
+
+    return SPtr<Component>(addComponent);
   }
 }

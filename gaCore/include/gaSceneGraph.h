@@ -1,9 +1,8 @@
 #pragma once
 
-#include <gaModule.h>
-
 #include "gaPrerequisitesCore.h"
-#include "gaGameObject.h"
+#include "gaModule.h"
+#include "gaActor.h"
 #include "gaSceneNode.h"
 
 namespace gaEngineSDK {
@@ -29,13 +28,13 @@ namespace gaEngineSDK {
       * @brief
       */
       void
-      onInit(String nameRoot);
+      init(String nameRoot);
 
       /*
       * @brief
       */
       void
-      onUpdate(const float& deltaTime);
+      update(const float& deltaTime);
 
       /*
       * @brief
@@ -50,24 +49,24 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
 
-      ///*
-      //* @brief
-      //*/
-      Vector <SPtr<GameObject>> m_vGameObjects;
-
-      ///*
-      //* @brief
-      //*/
-      SPtr<GameObject> m_selectedObj = nullptr;
-
-      ///*
-      //* @brief sceneNode?
-      //*/
-      SPtr<GameObject> m_root = nullptr;
+      /*
+      * @brief sceneNode?
+      */
+      SPtr<Actor> m_root = nullptr;
 
       /*
       * @brief
       */
       SPtr<SceneNode> m_rootNode = nullptr;
+
+      /*
+      * @brief
+      */
+      SPtr<Actor> m_selectedActor = nullptr;
+
+      /*
+      * @brief
+      */
+      Vector<SPtr<Actor>> m_vActors;
   };
 }

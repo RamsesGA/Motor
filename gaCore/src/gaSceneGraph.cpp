@@ -1,14 +1,19 @@
 #include "gaSceneGraph.h"
+#include "gaTransform.h"
 
 namespace gaEngineSDK
 {
   void 
-  SceneGraph::onInit(String nameRoot) {
+  SceneGraph::init(String nameRoot) {
+    Actor* tempRootActor = new Actor();
 
+    tempRootActor->setLayer();
+    tempRootActor->setIsSelected(true);
+    tempRootActor->setComponent(TYPE_COMPONENTS::kTransform);
   }
 
   void 
-  SceneGraph::onUpdate(const float& deltaTime) {
+  SceneGraph::update(const float& deltaTime) {
 
   }
 
