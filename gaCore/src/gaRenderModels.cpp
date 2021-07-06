@@ -6,11 +6,11 @@
 namespace gaEngineSDK {
   void 
   RenderModels::update(ResourceManager& resource, const float& deltaTime) {
-    if (nullptr == m_pResourceMang) {
-      m_pResourceMang.reset(&resource);
+    if (nullptr == m_pResource) {
+      m_pResource.reset(&resource);
     }
-
-    if (nullptr == m_pResourceMang) {
+    
+    if (nullptr == m_pResource) {
       m_timeOfAnimation = 0.0f;
       return;
     }
@@ -26,32 +26,32 @@ namespace gaEngineSDK {
 
       uint32 meshNum = 0;
 
-      for (auto mesh : m_pResourceMang->getMeshes()) {
-        mesh->m_cbBonesTransform = &m_meshBones[meshNum];
-        mesh->animated(resource ,m_timeOfAnimation, m_currentAnimation);
+      for (auto mesh : m_pResource->getMeshes()) {
+        mesh->m_cbBonesTrans = &m_meshBones[meshNum];
+        mesh->animated(m_timeOfAnimation, m_currentAnimation, m_pResource);
         ++meshNum;
       }
     }
   }
 
   void 
-  RenderModels::drawModel(WeakSPtr<ResourceManager> resource, WeakSPtr<ConstantBuffer> cbBone) {
-    if (nullptr == m_pResourceMang) {
-      m_pResourceMang.reset(resource.lock().get());
+  RenderModels::drawModel() {
+    if (nullptr != m_pResource) {
+      auto myGraphicApi = g_graphicApi().instancePtr();
+
+      uint32 meshNum = 0;
+
+      for (auto mesh : m_pResource->getMeshes()) {
+        myGraphicApi->updateConstantBuffer(&m_meshBones[meshNum], 
+                                           myGraphicApi->getConstBufferBones());
+
+        myGraphicApi->setVertexBuffer(mesh->m_pVertexBuffer);
+        myGraphicApi->setIndexBuffer(mesh->m_pIndexBuffer);
+
+        myGraphicApi->drawIndex(mesh->getNumIndices(), 0, 0);
+        ++meshNum;
+      }
     }
-
-    uint32 meshNum = 0;
-    auto myGraphicApi = g_graphicApi().instancePtr();
-
-    for (auto mesh : m_pResourceMang->getMeshes()) {
-      myGraphicApi->updateConstantBuffer(&m_meshBones[meshNum], cbBone);
-      
-      myGraphicApi->setVertexBuffer(mesh->m_pVertexBuffer);
-      myGraphicApi->setIndexBuffer(mesh->m_pIndexBuffer);
-
-      myGraphicApi->drawIndex(mesh->getNumIndices(), 0, 0);
-      ++meshNum;
-     }
   }
 
   void 

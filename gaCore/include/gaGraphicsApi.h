@@ -431,6 +431,13 @@ namespace gaEngineSDK {
       */
       virtual void 
       setShaders(WeakSPtr<Shaders> shaders) { };
+
+      /**
+      * @brief Function to set constant buffer for bones.
+      * @param 
+      */
+      virtual void
+      setConstBufferBones(WeakSPtr<ConstantBuffer> cbBones) { };
       
       /***********************************************************************/
       /**
@@ -452,6 +459,13 @@ namespace gaEngineSDK {
       virtual Textures*
       getDefaultDepthStencil() { return nullptr; };
 
+      /**
+      * @brief Function to get constant buffer for bones.
+      * @return Smart pointer with CB info.
+      */
+      virtual SPtr<ConstantBuffer>
+      getConstBufferBones() { return nullptr; };
+
      protected:
        /**********************************************************************/
        /**
@@ -468,6 +482,11 @@ namespace gaEngineSDK {
        * @brief Member to save the screen height.
        */
        uint32 m_height = 0;
+
+       /**
+       * @brief Member to save the bones.
+       */
+       SPtr<ConstantBuffer> m_bonesBuffer = nullptr;
   };
 
   /***************************************************************************/

@@ -2,10 +2,12 @@
 
 #include "gaPrerequisitesCore.h"
 #include "gaModule.h"
-#include "gaActor.h"
 #include "gaSceneNode.h"
 
 namespace gaEngineSDK {
+
+  class Actor;
+
   class GA_CORE_EXPORT SceneGraph : public Module<SceneGraph>
   {
     public:
@@ -14,7 +16,8 @@ namespace gaEngineSDK {
       * Constructor and destructor.
       */
       /***********************************************************************/
-      SceneGraph() = default;
+      
+      SceneGraph();
       
       ~SceneGraph() = default;
 
@@ -23,24 +26,12 @@ namespace gaEngineSDK {
       * Methods.
       */
       /***********************************************************************/
-      
-      /*
-      * @brief
-      */
-      void
-      init(String nameRoot);
 
       /*
-      * @brief
+      * @brief .
       */
       void
-      update(const float& deltaTime);
-
-      /*
-      * @brief
-      */
-      SPtr<GameObject>
-      createNewGameObj();
+      createNewActor(WeakSPtr<Actor> actor, WeakSPtr<SceneNode> parent);
 
     private:
       /***********************************************************************/
@@ -50,23 +41,8 @@ namespace gaEngineSDK {
       /***********************************************************************/
 
       /*
-      * @brief sceneNode?
+      * @brief .
       */
-      SPtr<Actor> m_root = nullptr;
-
-      /*
-      * @brief
-      */
-      SPtr<SceneNode> m_rootNode = nullptr;
-
-      /*
-      * @brief
-      */
-      SPtr<Actor> m_selectedActor = nullptr;
-
-      /*
-      * @brief
-      */
-      Vector<SPtr<Actor>> m_vActors;
+      SPtr<SceneNode> m_root = nullptr;
   };
 }

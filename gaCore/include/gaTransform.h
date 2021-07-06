@@ -1,6 +1,7 @@
 #pragma once
 
 #include <gaVector3.h>
+#include <gaMatrix4x4.h>
 
 #include "gaPrerequisitesCore.h"
 #include "gaComponent.h"
@@ -24,9 +25,11 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
 
+      /*
+      * @brief .
+      */
       void
       update(const float& deltatime) override;
-
 
     private:
       /***********************************************************************/
@@ -50,7 +53,6 @@ namespace gaEngineSDK {
       */
       Vector3 m_scale = { 0.0f, 0.0f, 0.0f };
 
-
-      friend class GameObject;
+      friend class Actor;
   };
 }

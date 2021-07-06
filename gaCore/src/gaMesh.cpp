@@ -26,27 +26,29 @@ namespace gaEngineSDK {
   }
 
   void
-  Mesh::animated(ResourceManager& resource, const float& animationTime, SPtr<AnimationData> animation) {
-    if (nullptr != animation) {
-      boneTransform(resource, animationTime, animation);
+  Mesh::animated(const float& animationTime, SPtr<AnimationData> animation,  
+                 WeakSPtr<ResourceManager> resource) {
+    if ((nullptr != animation) && (nullptr != resource.lock().get())) {
+      boneTransform(animationTime, animation, resource);
     }
   }
 
   void 
-  Mesh::boneTransform(ResourceManager& resource, const float& deltaTime, SPtr<AnimationData> animation) {
+  Mesh::boneTransform(const float& deltaTime, SPtr<AnimationData> animation, 
+                      WeakSPtr<ResourceManager> resource) {
     Matrix4x4 identityMatrix;
 
     float timInTicks = deltaTime * animation->m_ticksPerSecond;
     float timeAnimation = fmod(timInTicks, (float)animation->m_animDuration);
 
-    readNodeHierarchy(resource, timeAnimation, resource.getModel()->m_modelNodes,
-                      identityMatrix, animation);
+    readNodeHierarchy(timeAnimation, resource.lock().get()->getModel()->m_modelNodes,
+                      identityMatrix, animation, resource);
   }
 
   void 
-  Mesh::readNodeHierarchy(ResourceManager& resource,
-                          const float& animationTime, WeakSPtr<ModelNodes> node, 
-                          const Matrix4x4& parentTransform, SPtr<AnimationData> animation) {
+  Mesh::readNodeHierarchy(const float& animationTime, WeakSPtr<ModelNodes> node, 
+                          const Matrix4x4& parentTransform, SPtr<AnimationData> animation, 
+                          WeakSPtr<ResourceManager> resource) {
     ModelNodes* animNode = node.lock().get();
     String nodeName(animNode->m_name);
 
@@ -81,14 +83,16 @@ namespace gaEngineSDK {
     if (m_skeletalMesh->bonesMap.find(nodeName) != m_skeletalMesh->bonesMap.end()) {
       uint32 bonesIndex = m_skeletalMesh->bonesMap[nodeName];
       
-      m_cbBonesTransform->bonesTransform[bonesIndex] = resource.getModel()->m_globalInverseTransform *
-                                                       globalTransform * 
-                                                       m_skeletalMesh->vBones[bonesIndex].offSet;
+      m_cbBonesTrans->bonesTransform[bonesIndex] = 
+                                   resource.lock().get()->getModel()->m_globalInverseTransform *
+                                   globalTransform * 
+                                   m_skeletalMesh->vBones[bonesIndex].offSet;
     }
 
     uint32 tempNumChildrens = animNode->m_numChildrens;
     for (uint32 i = 0; i < tempNumChildrens; ++i) {
-      readNodeHierarchy(resource, animationTime, animNode->m_vChildrenNodes[i], globalTransform, animation);
+      readNodeHierarchy(animationTime, animNode->m_vChildrenNodes[i], globalTransform, 
+                        animation, resource);
     }
   }
 

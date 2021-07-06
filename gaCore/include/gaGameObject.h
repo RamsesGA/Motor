@@ -3,8 +3,10 @@
 #include "gaPrerequisitesCore.h"
 #include "gaComponent.h"
 
-namespace gaEngineSDK
-{
+namespace gaEngineSDK {
+  class Actor;
+  class SceneNode;
+
   class GA_CORE_EXPORT GameObject 
   {
     public:
@@ -24,22 +26,22 @@ namespace gaEngineSDK
       /***********************************************************************/
 
       /*
-      * @brief
+      * @brief .
       */
       virtual void
-      update(const float& deltaTime);
+      update(const float& deltaTime) { };
 
       /*
-      * @brief
+      * @brief .
       */
       virtual void
-      draw();
+      render() { };
 
       /*
-      * @brief
+      * @brief .
       */
-      void
-      removeComponent(TYPE_COMPONENTS::E typeComponent);
+      virtual void
+      removeComponent(TYPE_COMPONENTS::E typeComponent) { };
 
       /***********************************************************************/
       /**
@@ -48,37 +50,22 @@ namespace gaEngineSDK
       /***********************************************************************/
 
       /*
-      * @brief
+      * @brief .
       */
-      uint32
-      getID();
+      virtual bool
+      getIsSelected() { return false; };
 
       /*
-      * @brief
+      * @brief .
       */
-      uint32
-      getLayer();
+      virtual String 
+      getActorName() { return "Default"; };
 
       /*
-      * @brief
+      * @brief .
       */
-      SPtr<GameObject>
-      getParent();
-
-      /*
-      * @brief
-      */
-      Vector<SPtr<GameObject>>
-      getChildrens();
-
-      /*
-      * @brief
-      */
-      bool
-      getIsSelected();
-
-      SPtr<Component>
-      getComponent(TYPE_COMPONENTS::E typeComponent);
+      virtual SPtr<Component>
+      getComponent(TYPE_COMPONENTS::E typeComponent) { return nullptr; };
 
       /***********************************************************************/
       /**
@@ -87,77 +74,22 @@ namespace gaEngineSDK
       /***********************************************************************/
 
       /*
-      * @brief
+      * @brief .
       */
-      void
-      setID(uint32 id);
+      virtual void
+      setIsSelected(bool isSelect) { };
 
       /*
-      * @brief
+      * @brief .
       */
-      void
-      setLayer(uint32 layer = 0);
+      virtual void
+      setActorName(String name) { };
 
       /*
-      * @brief
+      * @brief .
       */
-      void
-      setParent(WeakSPtr<GameObject> parent);
-      
-      /*
-      * @brief
-      */
-      void
-      setChildrens(Vector<SPtr<GameObject>> children);
-
-      /*
-      * @brief
-      */
-      void
-      setIsSelected(bool isSelect);
-
-      /*
-      * @brief
-      */
-      SPtr<Component>
-      setComponent(TYPE_COMPONENTS::E typeComponent, SPtr<Component> component = nullptr);
-      
-
-    protected:
-      /***********************************************************************/
-      /**
-      * Members.
-      */
-      /***********************************************************************/
-
-      /*
-      * @brief
-      */
-      bool m_isSelected = false;
-
-      /*
-      * @brief
-      */
-      uint32 m_id = 0;
-
-      /*
-      * @brief
-      */
-      uint32 m_layer = 0;
-
-      /*
-      * @brief
-      */
-      SPtr<GameObject> m_parent = nullptr;
-
-      /*
-      * @brief
-      */
-      Vector<SPtr<GameObject>> m_vChildrens;
-
-      /*
-      * @brief
-      */
-      Map<TYPE_COMPONENTS::E, SPtr<Component>> m_mapComponents;
+      virtual SPtr<Component>
+      setComponent(TYPE_COMPONENTS::E typeComponent, 
+                   SPtr<Component> component = nullptr) { return nullptr; };
   };
 }

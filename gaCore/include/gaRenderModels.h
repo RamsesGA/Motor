@@ -36,7 +36,13 @@ namespace gaEngineSDK {
       * @brief .
       */
       void
-      drawModel(WeakSPtr<ResourceManager> resource, WeakSPtr<ConstantBuffer> cbBone);
+      drawModel();
+
+      /***********************************************************************/
+      /**
+      * Sets.
+      */
+      /***********************************************************************/
 
       /*
       * @brief .
@@ -69,11 +75,11 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      Vector<ConstBuffBonesTransform> m_meshBones;
+      SPtr<ResourceManager> m_pResource = nullptr;
 
       /*
       * @brief .
       */
-      SPtr<ResourceManager> m_pResourceMang = nullptr;
+      Vector<ConstBuffBonesTransform> m_meshBones;
   };
 }

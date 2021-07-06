@@ -9,7 +9,6 @@ namespace gaEngineSDK
       kUnknown = 0,
       kModel,
       kTexture,
-      kNumResourcesTypes
       //TODO: AÑADIR MAS TIPOS DE RECURSOS
     };
   }

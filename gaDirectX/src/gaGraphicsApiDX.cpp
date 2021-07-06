@@ -250,7 +250,7 @@ namespace gaEngineSDK {
                                             &backBuffer->m_pRenderTargetView,
                                             depthStencil->m_pDepthStencilView);
     m_pDepthStencil = depthStencil;
-    
+
     return true;
   }
   
@@ -1080,6 +1080,11 @@ namespace gaEngineSDK {
     }
   }
 
+  void
+  GraphicsApiDX::setConstBufferBones(WeakSPtr<ConstantBuffer> cbBones) {
+    m_bonesBuffer = cbBones.lock();
+  }
+
   /***************************************************************************/
   /**
   * Gets.
@@ -1094,5 +1099,14 @@ namespace gaEngineSDK {
   Textures*
   GraphicsApiDX::getDefaultDepthStencil() {
     return m_pDepthStencil;
+  }
+
+  SPtr<ConstantBuffer> 
+  GraphicsApiDX::getConstBufferBones() {
+    if (nullptr != m_bonesBuffer) {
+      return m_bonesBuffer;
+    }
+
+    return nullptr;
   }
 }

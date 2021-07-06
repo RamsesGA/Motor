@@ -7,7 +7,6 @@
 #include "gaSamplerState.h"
 
 namespace gaEngineSDK {
-  class ResourceManager;
   class VertexBuffer;
   class GraphicsApi;
   class IndexBuffer;
@@ -63,15 +62,17 @@ namespace gaEngineSDK {
       setUpMesh();
 
       void 
-      animated(ResourceManager& resource, const float& animationTime, SPtr<AnimationData> animation);
+      animated(const float& animationTime, SPtr<AnimationData> animation, 
+               WeakSPtr<ResourceManager> resource);
 
       void 
-      boneTransform(ResourceManager& resource, const float& deltaTime, SPtr<AnimationData> animation);
+      boneTransform(const float& deltaTime, SPtr<AnimationData> animation, 
+                    WeakSPtr<ResourceManager> resource);
 
       void
-      readNodeHierarchy(ResourceManager& resource, 
-                        const float& animationTime, WeakSPtr<ModelNodes> node,
-                        const Matrix4x4& parentTransform, SPtr<AnimationData> animation);
+      readNodeHierarchy(const float& animationTime, WeakSPtr<ModelNodes> node,
+                        const Matrix4x4& parentTransform, SPtr<AnimationData> animation, 
+                        WeakSPtr<ResourceManager> resource);
 
       const AnimationNode*
       findNodeAnim(AnimationData* animation, const String& nodeName);
@@ -235,7 +236,7 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      ConstBuffBonesTransform* m_cbBonesTransform = nullptr;
+      ConstBuffBonesTransform* m_cbBonesTrans = nullptr;
 
       /*
       * @brief Member to store the texture information.

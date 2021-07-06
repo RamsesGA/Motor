@@ -1,7 +1,8 @@
 #include "gaGraphicsApi.h"
 
 namespace gaEngineSDK {
-  GraphicsApi& g_graphicApi() {
+  GraphicsApi& 
+  g_graphicApi() {
     return GraphicsApi::instance();
   }
 }

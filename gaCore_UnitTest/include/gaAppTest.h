@@ -118,8 +118,8 @@ class AppTest : public BaseApp
     /*
     * @brief .
     */
-    SPtr<ResourceManager> m_resourceManager = nullptr;
-  
+    SPtr<ResourceManager> m_resourceInfo = nullptr;
+
     /*
     * @brief Variables with the information of the
     *        render target and depth stencil, both of the texture class.

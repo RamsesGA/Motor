@@ -13,7 +13,7 @@ namespace gaEngineSDK {
     };
   };
 
-  class GameObject;
+  class Actor;
 
   class GA_CORE_EXPORT Component
   {
@@ -38,7 +38,7 @@ namespace gaEngineSDK {
       * @brief .
       */
       virtual void
-      update(const float& deltatime);
+      update(const float& deltatime) { };
 
       /***********************************************************************/
       /**
@@ -62,7 +62,7 @@ namespace gaEngineSDK {
       * @brief .
       */
       void
-      setGameObject(GameObject* newObj);
+      setActor(Actor* newObj);
 
     protected:
       /***********************************************************************/
@@ -79,6 +79,6 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      GameObject* m_newObject = nullptr;
+      Actor* m_newActorObj = nullptr;
   };
 }

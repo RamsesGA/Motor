@@ -197,6 +197,9 @@ namespace gaEngineSDK {
       void 
       setShaders(WeakSPtr<Shaders> shaders) override;
 
+      void
+      setConstBufferBones(WeakSPtr<ConstantBuffer> cbBones) override;
+
       /***********************************************************************/
       /**
       * Gets.
@@ -208,6 +211,9 @@ namespace gaEngineSDK {
 
       Textures*
       getDefaultDepthStencil() override;
+
+      SPtr<ConstantBuffer>
+      getConstBufferBones() override;
 
     private:
       /***********************************************************************/

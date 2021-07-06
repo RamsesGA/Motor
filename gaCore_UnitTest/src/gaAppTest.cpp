@@ -78,7 +78,7 @@ AppTest::onUpdate(float deltaTime) {
   myGraphicsApi->updateConstantBuffer(&meshData, m_pBufferCamera);
   myGraphicsApi->updateConstantBuffer(&cb, m_pBufferWorld);
 
-  m_renderModel->update(*m_resourceManager, deltaTime);
+  m_renderModel->update(*m_resourceInfo, deltaTime);
 }
 
 void
@@ -121,8 +121,11 @@ AppTest::onRender() {
   //VS CB
   myGraphicsApi->setYourVSConstantBuffers(m_tempBufferBones, 2);
 
+  //Guardamos el cb de los huesos
+  myGraphicsApi->setConstBufferBones(m_tempBufferBones);
+
   //Render model
-  m_renderModel->drawModel(m_resourceManager, m_tempBufferBones);
+  m_renderModel->drawModel();
   
   // Present our back buffer to our front buffer
   g_graphicApi().swapChainPresent();
@@ -142,7 +145,7 @@ AppTest::onCreate() {
 
   m_renderModel = new RenderModels();
   m_mesh.reset(new Mesh());
-  m_resourceManager.reset(new ResourceManager());
+  m_resourceInfo.reset(new ResourceManager());
 
   //Creamos el vertex shader y pixel shader.
   //DX_animation
@@ -179,12 +182,12 @@ AppTest::onCreate() {
   */
   /***************************************************************************/
 
-  //m_resourceManager->initLoadModel("data/models/2B/2B.obj");
-  //m_resourceManager->initLoadModel("data/models/pod/POD.obj");
-  m_resourceManager->initLoadModel("data/models/vela/Vela2.fbx");
-  //m_resourceManager->initLoadModel("data/models/spartan/Spartan.fbx");
-  //m_resourceManager->initLoadModel("data/models/ugandan/Knuckles.fbx");
-  //m_resourceManager->initLoadModel("data/models/grimoires/grimoires.fbx");
+  //m_resourceInfo->initLoadModel("data/models/2B/2B.obj");
+  //m_resourceInfo->initLoadModel("data/models/pod/POD.obj");
+  //m_resourceInfo->initLoadModel("data/models/vela/Vela2.fbx");
+  //m_resourceInfo->initLoadModel("data/models/spartan/Spartan.fbx");
+  m_resourceInfo->initLoadModel("data/models/ugandan/Knuckles.fbx");
+  //m_resourceInfo->initLoadModel("data/models/grimoires/grimoires.fbx");
 
   /***************************************************************************/
   /*
@@ -194,11 +197,11 @@ AppTest::onCreate() {
 
   //Esto solo es para guardar los huesos y las animaciones
   //En caso de que no, evitamos un error
-  if (!m_resourceManager->getMeshes().empty()) {
-    m_renderModel->setMeshBones(*m_resourceManager);
+  if (!m_resourceInfo->getMeshes().empty()) {
+    m_renderModel->setMeshBones(*m_resourceInfo);
 
-    if (!m_resourceManager->getModel()->getAnimData().empty()) {
-      m_renderModel->m_currentAnimation = m_resourceManager->getModel()->getAnimData()[0];
+    if (!m_resourceInfo->getModel()->getAnimData().empty()) {
+      m_renderModel->m_currentAnimation = m_resourceInfo->getModel()->getAnimData()[0];
     }
   }
 }

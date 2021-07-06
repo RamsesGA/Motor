@@ -13,6 +13,8 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
       SceneNode() = default;
+
+      SceneNode(WeakSPtr<Actor> actor, WeakSPtr<SceneNode> parent);
     
       ~SceneNode() = default;
     
@@ -21,12 +23,66 @@ namespace gaEngineSDK {
       * Methods.
       */
       /***********************************************************************/
-    
+
       /*
-      * @brief
+      * @brief .
       */
       void
-      onInit(String nodeName, WeakSPtr<SceneNode> nodeParent);
+      detectSelectedNode();
+
+      /*
+      * @brief .
+      */
+      void
+      createNewActorNode(WeakSPtr<Actor> actor, WeakSPtr<SceneNode> parent1);
+
+      /***********************************************************************/
+      /**
+      * Sets.
+      */
+      /***********************************************************************/
+
+      /*
+      * @brief .
+      */
+      void
+      setActorNode(WeakSPtr<Actor> actor);
+
+      /*
+      * @brief .
+      */
+      void
+      setParentNode(WeakSPtr<SceneNode> parent);
+
+      /*
+      * @brief .
+      */
+      void
+      setChildNode(WeakSPtr<SceneNode> child);
+
+      /***********************************************************************/
+      /**
+      * Gets.
+      */
+      /***********************************************************************/
+
+      /*
+      * @brief .
+      */
+      SPtr<Actor>
+      getActorNode();
+
+      /*
+      * @brief .
+      */
+      WeakSPtr<SceneNode>
+      getParentNode();
+
+      /*
+      * @brief .
+      */
+      Vector<SPtr<SceneNode>>
+      getChildNodes();
     
     private:
       /***********************************************************************/
@@ -35,12 +91,25 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
 
-      String m_nodeName;
-    
-      WeakSPtr<SceneNode> m_pNodeParent;
+      /*
+      * @brief .
+      */
+      SPtr<Actor> m_pActor = nullptr;
 
-      Vector<WeakSPtr<SceneNode>> m_pNodesChild;
+      /*
+      * @brief .
+      */
+      SPtr<SceneNode> m_pSelectedNode = nullptr;
 
-      WeakSPtr<Actor> m_pActor;
+      /*
+      * @brief .
+      */
+      SPtr<SceneNode> m_pParentNode;
+
+      /*
+      * @brief .
+      */
+      Vector<SPtr<SceneNode>> m_pChildNodes;
+
   };
 }

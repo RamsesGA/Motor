@@ -904,6 +904,10 @@ namespace gaEngineSDK {
     glUseProgram(shader->m_rendererID);
   }
 
+  void 
+  GraphicsApiOGL::setConstBufferBones(WeakSPtr<ConstantBuffer> cbBones) {
+  }
+
   /***************************************************************************/
   /**
   * Gets.
@@ -915,4 +919,9 @@ namespace gaEngineSDK {
 
   Textures*
   GraphicsApiOGL::getDefaultDepthStencil() { return nullptr; }
+
+  SPtr<ConstantBuffer> 
+  GraphicsApiOGL::getConstBufferBones() {
+    return SPtr<ConstantBuffer>();
+  }
 }

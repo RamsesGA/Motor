@@ -25,7 +25,7 @@
     <Filter Include="Archivos de origen\Resource">
       <UniqueIdentifier>{3ad69f90-fbb5-42b3-8fcf-a407e954f496}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Archivos de origen\Actor/Componente">
+    <Filter Include="Archivos de origen\GO/Actor/Componente">
       <UniqueIdentifier>{4dbbbc4b-1606-4cd2-b2d4-2277318acf39}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -101,13 +101,13 @@
       <Filter>Archivos de origen\GraphicApi</Filter>
     </ClInclude>
     <ClInclude Include="include\gaGameObject.h">
-      <Filter>Archivos de origen\Actor/Componente</Filter>
+      <Filter>Archivos de origen\GO/Actor/Componente</Filter>
     </ClInclude>
     <ClInclude Include="include\gaComponent.h">
-      <Filter>Archivos de origen\Actor/Componente</Filter>
+      <Filter>Archivos de origen\GO/Actor/Componente</Filter>
     </ClInclude>
     <ClInclude Include="include\gaActor.h">
-      <Filter>Archivos de origen\Actor/Componente</Filter>
+      <Filter>Archivos de origen\GO/Actor/Componente</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -148,13 +148,13 @@
       <Filter>Archivos de origen\Models</Filter>
     </ClCompile>
     <ClCompile Include="src\gaGameObject.cpp">
-      <Filter>Archivos de origen\Actor/Componente</Filter>
+      <Filter>Archivos de origen\GO/Actor/Componente</Filter>
     </ClCompile>
     <ClCompile Include="src\gaComponent.cpp">
-      <Filter>Archivos de origen\Actor/Componente</Filter>
+      <Filter>Archivos de origen\GO/Actor/Componente</Filter>
     </ClCompile>
     <ClCompile Include="src\gaActor.cpp">
-      <Filter>Archivos de origen\Actor/Componente</Filter>
+      <Filter>Archivos de origen\GO/Actor/Componente</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

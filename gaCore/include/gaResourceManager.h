@@ -28,6 +28,11 @@ namespace gaEngineSDK {
       * Methods.
       */
       /***********************************************************************/
+
+      void
+      setObject(ResourceManager* resM) {
+        ResourceManager::_instance() = resM;
+      }
     
       /*
       * @brief Function to initialize class members and start with assimp.
@@ -187,6 +192,12 @@ namespace gaEngineSDK {
       */
       Vector<SPtr<Model>> m_vModels;
   };
+
+  /***************************************************************************/
+  /**
+  * Export.
+  */
+  /***************************************************************************/
 
   GA_CORE_EXPORT ResourceManager&
   g_resourceManager();
