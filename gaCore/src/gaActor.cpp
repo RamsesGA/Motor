@@ -5,7 +5,11 @@
 #include "gaSceneNode.h"
 
 namespace gaEngineSDK {
-  void 
+  Actor::Actor(String actorName) {
+    m_actorName = actorName;
+  }
+
+  void
   Actor::update(const float& deltaTime) {
     for (auto component : m_mapComponents) {
       component.second.get()->update(deltaTime);

@@ -38,6 +38,12 @@ namespace gaEngineSDK {
       void
       drawModel();
 
+      /*
+      * @brief .
+      */
+      void
+      changeModel(uint32 numMesh);
+
       /***********************************************************************/
       /**
       * Sets.
@@ -48,12 +54,17 @@ namespace gaEngineSDK {
       * @brief .
       */
       void
-      setMeshBones(ResourceManager& resource);
+      setModel(WeakSPtr<Model> model);
 
       /*
       * @brief .
       */
       SPtr<AnimationData> m_currentAnimation = nullptr;
+
+      /*
+      * @brief .
+      */
+      Vector<ConstBuffBonesTransform> m_meshBones;
 
     private:
       /***********************************************************************/
@@ -70,16 +81,23 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
+      uint32 m_animationNumber = 0;
+
+      /*
+      * @brief .
+      */
       float m_timeOfAnimation = 0.0f;
+
+      /*
+      * @brief .
+      */
+      SPtr<Model> m_model = nullptr;
 
       /*
       * @brief .
       */
       SPtr<ResourceManager> m_pResource = nullptr;
 
-      /*
-      * @brief .
-      */
-      Vector<ConstBuffBonesTransform> m_meshBones;
+      
   };
 }

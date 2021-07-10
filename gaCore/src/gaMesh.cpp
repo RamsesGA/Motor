@@ -6,7 +6,7 @@
 namespace gaEngineSDK {
   void 
   Mesh::init(Vector<Vertex> pVertices, Vector<uint32> pIndices, 
-             Vector<Texture> textures) {
+             Vector<Textures*> textures) {
     m_vVertices = pVertices;
     m_vIndices = pIndices;
     m_textures = textures;

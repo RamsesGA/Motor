@@ -5,12 +5,17 @@
 #include <SFML/Window.hpp>
 
 #include "gaPrerequisitesCore.h"
+#include "gaGraphicsApi.h"
 
+using sf::Event;
 using sf::Window;
 using sf::VideoMode;
 using sf::WindowHandle;
 
 namespace gaEngineSDK {
+
+  class SceneGraph;
+  class ResourceManager;
 
   class GA_CORE_EXPORT BaseApp
   {
@@ -38,6 +43,15 @@ namespace gaEngineSDK {
       int32
       run(String windowTitle, int32 sizeX = 1440, int32 sizeY = 900);
 
+      /*
+      * @brief Load the DLL and initialize the graphic api.
+      */
+      int32
+      initSys();
+
+      void
+      handleWindowEvents(Event& windowEvent);
+
     protected:
       /*
       * @param Create the information for the window.
@@ -56,13 +70,6 @@ namespace gaEngineSDK {
       * On Methods (virtual).
       */
       /***********************************************************************/
-
-      /*
-      * @brief Load the DLL and initialize the graphic api.
-      * @return Returns an integer to confirm its initialization.
-      */
-      virtual int32
-      onInit() { return 0; };
 
       /*
       * @brief Initialize the camera and all its default values.

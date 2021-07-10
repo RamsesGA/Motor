@@ -7,22 +7,25 @@ namespace gaEngineSDK {
     m_root.reset(new SceneNode());
 
     SPtr<Actor> newActor;
-    newActor.reset(new Actor());
-    newActor->setIsSelected(false);
-    newActor->setActorName("Root actor");
+    newActor.reset(new Actor("Root actor"));
     newActor->setComponent(TYPE_COMPONENTS::kTransform);
 
     m_root->setActorNode(newActor);
-    m_root->setParentNode(SPtr<SceneNode>(nullptr));
-    m_root->setChildNode(SPtr<SceneNode>(nullptr));
   }
 
-  void
+  SPtr<SceneNode>
   SceneGraph::createNewActor(WeakSPtr<Actor> actor, WeakSPtr<SceneNode> parent) {
-    if ((nullptr != actor.lock().get()) && (nullptr != parent.lock().get()) && 
-        (nullptr != m_root)) {
-      m_root->createNewActorNode(actor, parent);
+    if (nullptr == parent.lock().get()) {
+      m_root->createNewActorNode(actor, m_root);
+      return m_root;
     }
 
+    m_root->createNewActorNode(actor, parent);
+    return m_root;
+  }
+
+  SceneGraph& 
+  g_sceneGraph() {
+    return SceneGraph::instance();
   }
 }

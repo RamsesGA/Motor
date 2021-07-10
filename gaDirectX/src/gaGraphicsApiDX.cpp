@@ -926,7 +926,7 @@ namespace gaEngineSDK {
   }
   
   void 
-  GraphicsApiDX::setSamplerState(WeakSPtr<SamplerState> sampler, WeakSPtr<Textures> texture, 
+  GraphicsApiDX::setSamplerState(WeakSPtr<SamplerState> sampler, Vector<Textures*>& texture,
                                  uint32 startSlot, uint32 numSamplers) {
     if (nullptr != sampler.lock().get()) {
       SPtr<SamplerState> tempSampler = sampler.lock();
@@ -938,7 +938,7 @@ namespace gaEngineSDK {
 
   void 
   GraphicsApiDX::setSamplerVertexShader(WeakSPtr<SamplerState> sampler,
-                                        WeakSPtr<Textures> texture, 
+                                        Vector<Textures*>& texture, 
                                         uint32 startSlot, uint32 numSamplers) {
     if (nullptr != sampler.lock().get()) {
       SamplerStateDX* samplerDX = reinterpret_cast<SamplerStateDX*>(sampler.lock().get());
@@ -949,7 +949,7 @@ namespace gaEngineSDK {
 
   void
   GraphicsApiDX::setSamplerPixelShader(WeakSPtr<SamplerState> sampler, 
-                                       WeakSPtr<Textures> texture, 
+                                       Vector<Textures*>& texture, 
                                        uint32 startSlot, uint32 numSamplers) {
     if (nullptr != sampler.lock().get()) {
       SamplerStateDX* samplerDX = reinterpret_cast<SamplerStateDX*>(sampler.lock().get());
@@ -959,12 +959,16 @@ namespace gaEngineSDK {
   }
   
   void
-  GraphicsApiDX::setShaderResourceView(WeakSPtr<Textures> shaderResourceView,
-                                       const uint32 startSlot, const uint32 numViews) {
-    TexturesDX* shaderResource = reinterpret_cast<TexturesDX*>(shaderResourceView.lock().get());
-  
-    m_pImmediateContext->PSSetShaderResources(startSlot, numViews,
-                                              &shaderResource->m_pShaderResourceView);
+  GraphicsApiDX::setShaderResourceView(const Vector<Textures*>& texture, 
+                                       const uint32 startSlot,
+                                       const uint32 numViews) {
+    uint32 tempSize = texture.size();
+    for (uint32 i = 0; i < tempSize; ++i) {
+      TexturesDX* shaderResource = reinterpret_cast<TexturesDX*>(texture[i]);
+
+      m_pImmediateContext->PSSetShaderResources(startSlot, tempSize,
+                                                &shaderResource->m_pShaderResourceView);
+    }
   }
   
   void

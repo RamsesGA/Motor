@@ -21,14 +21,14 @@ namespace gaEngineSDK {
     auto myGraphicApi = g_graphicApi().instancePtr();
     m_newModel.reset(new Model());
 
-    SPtr<SamplerState> tempSamp(myGraphicApi->createSamplerState());
-    //Create texture sampler for model's textures
-    m_newModel->setSampler(tempSamp);
-
     //Process assimp's root pNode recursively
     processNode(m_pAScene->mRootNode, m_pAScene);
 
     processAnimationInfo();
+
+    SPtr<SamplerState> tempSamp(myGraphicApi->createSamplerState());
+    //Create texture sampler for model's textures
+    m_newModel->setSampler(tempSamp);
   }
 
   void
@@ -55,7 +55,7 @@ namespace gaEngineSDK {
     //Data to fill
     Vector<uint32> indices;
     Vector<Vertex> vertices;
-    Vector<Texture> textures;
+    Vector<Textures*> textures;
     uint32 numVertex = pAMesh->mNumVertices;
     Vertex* structVertex = new Vertex[numVertex];
     m_newMesh = new Mesh();
@@ -124,7 +124,7 @@ namespace gaEngineSDK {
 
     aiMaterial* material = pAScene->mMaterials[pAMesh->mMaterialIndex];
 
-    Vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE);
+    Vector<Textures*> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE);
 
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
@@ -321,9 +321,9 @@ namespace gaEngineSDK {
     m_vModels.push_back(modelCreate);
   }
 
-  Vector<Texture> 
+  Vector<Textures*> 
   ResourceManager::loadMaterialTextures(aiMaterial* pAMat, aiTextureType Atype) {
-    Vector<Texture> textures;
+    Vector<Textures*> textures;
 
     uint32 tempTypeTexture = pAMat->GetTextureCount(Atype);
     for (uint32 i = 0; i < tempTypeTexture; ++i) {
@@ -340,7 +340,7 @@ namespace gaEngineSDK {
 
       uint32 tempTextureSize = m_textures.size();
       for (uint32 j = 0; j < tempTextureSize; ++j) {
-        if (std::strcmp(m_textures[j].path.data(), srcFile.data()) == 0) {
+        if (nullptr != m_textures[j]) {
           textures.push_back(m_textures[j]);
           skip = true;
           break;
@@ -349,11 +349,8 @@ namespace gaEngineSDK {
       if (!skip) {
         auto myGraphicApi = g_graphicApi().instancePtr();
 
-        Texture meshTexture;
-        meshTexture.texture.reset(myGraphicApi->loadTextureFromFile(srcFile));
-        meshTexture.path = srcFile;
-        textures.push_back(meshTexture);
-        m_textures.push_back(meshTexture);
+        m_textures.push_back(myGraphicApi->loadTextureFromFile(srcFile));
+        textures.push_back(myGraphicApi->loadTextureFromFile(srcFile));
       }
     }
 
@@ -469,5 +466,10 @@ namespace gaEngineSDK {
     }
     m_texturesDirectory += miniPaht + '/';
     miniPaht.clear();
+  }
+
+  ResourceManager& 
+  g_resourceManager() {
+    return ResourceManager::instance();
   }
 }

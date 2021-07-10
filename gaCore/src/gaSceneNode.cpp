@@ -18,15 +18,17 @@ namespace gaEngineSDK {
     }
   }
 
-  void
-  SceneNode::createNewActorNode(WeakSPtr<Actor> actor, WeakSPtr<SceneNode> parent) {
+  SPtr<SceneNode>
+    SceneNode::createNewActorNode(WeakSPtr<Actor> actor, WeakSPtr<SceneNode> parent) {
     SPtr<SceneNode> newNode;
     newNode.reset(new SceneNode(actor, parent));
 
     m_pActor->setActorName("Actor##");
     m_pActor->setComponent(TYPE_COMPONENTS::kTransform);
-    
+
     m_pChildNodes.push_back(newNode);
+
+    return newNode;
   }
 
   /***************************************************************************/

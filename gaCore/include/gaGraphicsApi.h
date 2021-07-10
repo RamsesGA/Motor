@@ -306,7 +306,7 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void 
-      setSamplerState(WeakSPtr<SamplerState> sampler, WeakSPtr<Textures> texture, 
+      setSamplerState(WeakSPtr<SamplerState> sampler, Vector<Textures*>& texture,
                       uint32 startSlot, uint32 numSamplers = 1) { };
        
       /**
@@ -317,7 +317,7 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void
-      setSamplerVertexShader(WeakSPtr<SamplerState> sampler, WeakSPtr<Textures> texture, 
+      setSamplerVertexShader(WeakSPtr<SamplerState> sampler, Vector<Textures*>& texture,
                              uint32 startSlot, uint32 numSamplers = 1) { };
 
       /**
@@ -328,7 +328,7 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void
-      setSamplerPixelShader(WeakSPtr<SamplerState> sampler, WeakSPtr<Textures> texture, 
+      setSamplerPixelShader(WeakSPtr<SamplerState> sampler, Vector<Textures*>& texture,
                             uint32 startSlot, uint32 numSamplers = 1) { };
       
       /**
@@ -338,7 +338,7 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void 
-      setShaderResourceView(WeakSPtr<Textures> shaderResourceView, const uint32 startSlot,
+      setShaderResourceView(const Vector<Textures*>& texture, const uint32 startSlot,
                             const uint32 numViews) { };
       
       /**

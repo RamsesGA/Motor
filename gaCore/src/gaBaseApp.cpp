@@ -1,5 +1,6 @@
 #include "gaBaseApp.h"
-#include "gaGraphicsApi.h"
+#include "gaSceneGraph.h"
+#include "gaResourceManager.h"
 
 namespace gaEngineSDK {
 
@@ -10,37 +11,28 @@ namespace gaEngineSDK {
 
     createWindow(windowTitle);
     
-    onInit();
+    initSys();
 
     onCreate();
     
+    bool shoudClose = false;
     sf::Clock deltaTime;
     float trueDeltaTime = 0.0f;
 
     while (m_sfmlWindow.isOpen()) {
-      sf::Event event;
+      Event event;
 
       while (m_sfmlWindow.pollEvent(event)) {
-        if (event.type == sf::Event::Closed) {
+        if (Event::Closed == event.type) {
           m_sfmlWindow.close();
+          shoudClose = true;
           break;
         }
-        if (event.type == sf::Event::KeyPressed) {
-          onKeyboardDown(event);
-        }
-        if (event.type == sf::Event::MouseButtonPressed) {
-          if (sf::Mouse::Left == event.key.code) {
-            onLeftMouseBtnDown();
-          }
-        }
-        if (event.type == sf::Event::MouseButtonReleased) {
-          if (sf::Mouse::Left == event.key.code) {
-            onLeftMouseBtnUp();
-          }
-        }
-        if (event.type == sf::Event::MouseMoved) {
-          onMouseMove();
-        }
+
+        handleWindowEvents(event);
+      }
+      if (shoudClose) {
+        break;
       }
 
       trueDeltaTime = deltaTime.getElapsedTime().asSeconds();
@@ -54,6 +46,67 @@ namespace gaEngineSDK {
     onDestroySystem();
     
     return 0;
+  }
+
+  int32
+  gaEngineSDK::BaseApp::initSys() {
+    HINSTANCE hInstance = LoadLibraryExA("gaDirectX_d.dll", nullptr,
+                                         LOAD_WITH_ALTERED_SEARCH_PATH);
+    //HINSTANCE hInstance = LoadLibraryExA("gaOpenGL_d.dll", nullptr,
+    //                                     LOAD_WITH_ALTERED_SEARCH_PATH);
+
+    //In case of error
+    if (!(hInstance)) {
+      return -1;
+    }
+
+    using fnProt = GraphicsApi * (*)();
+
+    fnProt graphicsApiFunc = reinterpret_cast<fnProt>
+                                              (GetProcAddress(hInstance, "createGraphicApi"));
+
+    //In case of error
+    if (!(graphicsApiFunc)) {
+      return -1;
+    }
+
+    GraphicsApi::startUp();
+    GraphicsApi* graphicApi = graphicsApiFunc();
+    g_graphicApi().setObject(graphicApi);
+
+    //Inicialización de módulos
+    ResourceManager::startUp();
+    SceneGraph::startUp();
+
+    return 0;
+  }
+
+  void 
+  BaseApp::handleWindowEvents(Event& windowEvent) {
+    switch (windowEvent.type) {
+      case Event::KeyPressed:
+        onKeyboardDown(windowEvent);
+        break;
+
+      case Event::MouseButtonPressed:
+        if (sf::Mouse::Left == windowEvent.key.code) {
+          onLeftMouseBtnDown();
+        }
+        break;
+
+      case Event::MouseButtonReleased:
+        if (sf::Mouse::Left == windowEvent.key.code) {
+          onLeftMouseBtnUp();
+        }
+        break;
+
+      case Event::MouseMoved:
+        onMouseMove();
+        break;
+
+      default:
+        break;
+    }
   }
 
   void 

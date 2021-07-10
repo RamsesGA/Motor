@@ -75,7 +75,7 @@ namespace gaEngineSDK {
       * @param Assimp variable for the texture type.
       * @param Variable with API information.
       */
-      Vector<Texture>
+      Vector<Textures*>
       loadMaterialTextures(aiMaterial* pAMat, aiTextureType Atype);
 
       /*
@@ -155,7 +155,7 @@ namespace gaEngineSDK {
       /*
       * @brief Member to store a string of textures.
       */
-      Vector<Texture> m_textures;
+      Vector<Textures*> m_textures;
 
       /*
       * @brief Member to store the full name of the folder.

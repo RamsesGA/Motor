@@ -7,9 +7,6 @@
     <Filter Include="Archivos de origen\GraphicApi">
       <UniqueIdentifier>{973d1330-d3b1-48b1-aeb4-0c09dba6acda}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Archivos de origen\Window">
-      <UniqueIdentifier>{7e6d3ae8-bcfc-4676-acee-a075eccabb73}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Archivos de origen\Camara">
       <UniqueIdentifier>{6875d821-3a32-4a6b-83f6-ec801ffe7368}</UniqueIdentifier>
     </Filter>
@@ -27,6 +24,9 @@
     </Filter>
     <Filter Include="Archivos de origen\GO/Actor/Componente">
       <UniqueIdentifier>{4dbbbc4b-1606-4cd2-b2d4-2277318acf39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\BaseApp">
+      <UniqueIdentifier>{7e6d3ae8-bcfc-4676-acee-a075eccabb73}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -56,7 +56,7 @@
     </ClInclude>
     <ClInclude Include="include\gaPrerequisitesCore.h" />
     <ClInclude Include="include\gaBaseApp.h">
-      <Filter>Archivos de origen\Window</Filter>
+      <Filter>Archivos de origen\BaseApp</Filter>
     </ClInclude>
     <ClInclude Include="include\gaCamera.h">
       <Filter>Archivos de origen\Camara</Filter>
@@ -112,7 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gaBaseApp.cpp">
-      <Filter>Archivos de origen\Window</Filter>
+      <Filter>Archivos de origen\BaseApp</Filter>
     </ClCompile>
     <ClCompile Include="src\gaCamera.cpp">
       <Filter>Archivos de origen\Camara</Filter>

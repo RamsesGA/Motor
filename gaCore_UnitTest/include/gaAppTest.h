@@ -2,13 +2,12 @@
 
 #include <exception>
 
+#include <gaMesh.h>
 #include <gaCamera.h>
 #include <gaBaseApp.h>
 #include <gaVector4.h>
 #include <gaMatrix4x4.h>
 #include <gaStructures.h>
-#include <gaGraphicsApi.h>
-#include <gaMesh.h>
 
 namespace gaEngineSDK {
   class Models;
@@ -35,12 +34,6 @@ class AppTest : public BaseApp
     * Inheritance.
     */
     /*************************************************************************/
-
-    /*
-    * @brief .
-    */
-    int32
-    onInit()override;
 
     void
     onInitCamera();
@@ -92,6 +85,15 @@ class AppTest : public BaseApp
     */
     void
     onMouseMove()override;
+
+    /*************************************************************************/
+    /*
+    * Methods.
+    */
+    /*************************************************************************/
+
+    void
+    createActor();
 
   public:
     /*************************************************************************/

@@ -12,7 +12,7 @@ namespace gaEngineSDK {
       * Constructor and destructor.
       */
       /***********************************************************************/
-      Actor() = default;
+      Actor(String actorName);
 
       ~Actor() = default;
 
@@ -104,7 +104,7 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      String m_actorName = "Default actor name";
+      String m_actorName;
 
       /*
       * @brief .

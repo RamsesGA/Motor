@@ -142,20 +142,20 @@ namespace gaEngineSDK {
       	                const uint32 startSlot, const uint32 numBuffers) override;
 
       void 
-      setSamplerState(WeakSPtr<SamplerState> sampler, WeakSPtr<Textures> texture, 
+      setSamplerState(WeakSPtr<SamplerState> sampler, Vector<Textures*>& texture,
                       uint32 startSlot, uint32 numSamplers = 1) override;
 
       void
-      setSamplerVertexShader(WeakSPtr<SamplerState> sampler, WeakSPtr<Textures> texture, 
+      setSamplerVertexShader(WeakSPtr<SamplerState> sampler, Vector<Textures*>& texture,
                              uint32 startSlot, uint32 numSamplers = 1) override;
 
       void
-      setSamplerPixelShader(WeakSPtr<SamplerState> sampler, WeakSPtr<Textures> texture, 
+      setSamplerPixelShader(WeakSPtr<SamplerState> sampler, Vector<Textures*>& texture,
                             uint32 startSlot, uint32 numSamplers = 1) override;
 
       void 
-      setShaderResourceView(WeakSPtr<Textures> shaderResourceView, const uint32 startSlot,
-      	                    const uint32 numViews) override;
+      setShaderResourceView(const Vector<Textures*>& texture, const uint32 startSlot,
+                            const uint32 numViews) override;
 
       void 
       setRenderTarget(WeakSPtr<Textures> renderTarget, 

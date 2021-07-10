@@ -45,6 +45,14 @@ namespace gaEngineSDK {
         myGraphicApi->updateConstantBuffer(&m_meshBones[meshNum], 
                                            myGraphicApi->getConstBufferBones());
 
+        if (0 != m_pResource->getMeshes()[meshNum]->m_textures.size()) {
+
+          //TODO: necesito corregir el sampler :C
+
+          myGraphicApi->setShaderResourceView(
+            m_pResource->getMeshes()[meshNum]->m_textures, meshNum, 1);
+        }
+
         myGraphicApi->setVertexBuffer(mesh->m_pVertexBuffer);
         myGraphicApi->setIndexBuffer(mesh->m_pIndexBuffer);
 
@@ -54,9 +62,20 @@ namespace gaEngineSDK {
     }
   }
 
-  void 
-  RenderModels::setMeshBones(ResourceManager& resource) {
+  void
+  RenderModels::changeModel(uint32 numMesh) {
     m_meshBones.clear();
-    m_meshBones.resize(resource.getMeshes().size());
+    m_meshBones.resize(numMesh);
+  }
+
+  void
+  RenderModels::setModel(WeakSPtr<Model> model) {
+    m_model = model.lock();
+
+    changeModel((uint32)m_model->getMeshesInfo().size());
+
+    m_currentAnimation = nullptr;
+    m_animationNumber = 0;
+    m_timeOfAnimation = 0.0f;
   }
 }

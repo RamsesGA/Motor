@@ -49,11 +49,11 @@ struct Vertex {
 	uint32 boneIds[4] = { 0, 0, 0, 0 };
 };
 
-struct Texture {
-	String type;
-	String path;
-	SPtr<Textures> texture;
-};
+//struct Texture {
+//	String type;
+//	String path;
+//	SPtr<Textures> texture;
+//};
 
 struct ConstBuffBonesTransform {
 	Matrix4x4 bonesTransform[MaxBones];

@@ -736,49 +736,56 @@ namespace gaEngineSDK {
   }
   
   void 
-  GraphicsApiOGL::setSamplerState(WeakSPtr<SamplerState> sampler, WeakSPtr<Textures> texture, 
+  GraphicsApiOGL::setSamplerState(WeakSPtr<SamplerState> sampler, Vector<Textures*>& texture,
                                   uint32 startSlot, uint32 numSamplers) {
-    if ((nullptr != sampler.lock().get()) && (nullptr != texture.lock().get())) {
-      //auto& sampler = reinterpret_cast<SamplerStateOGL&>(samplerState);
-      //auto& tex = reinterpret_cast<TexturesOGL&>(texture);
-      //
-      //glBindSampler(tex.m_texture, sampler.m_samplerState);
-      //
-      //uint32 detectError = glGetError();
-      //
-      //if (detectError != 0) {
-      //  exit(1);
-      //}
+    if ((nullptr != sampler.lock().get()) && (nullptr != texture.data())) {
+      uint32 tempSize = texture.size();
+      for (uint32 i = 0; i < tempSize; ++i) {
+        //auto& sampler = reinterpret_cast<SamplerStateOGL&>(samplerState);
+        //auto& tex = reinterpret_cast<TexturesOGL&>(texture);
+        //
+        //glBindSampler(tex.m_texture, sampler.m_samplerState);
+        //
+        //uint32 detectError = glGetError();
+        //
+        //if (detectError != 0) {
+        //  exit(1);
+        //}
+      }
     }
   }
 
   void 
   GraphicsApiOGL::setSamplerVertexShader(WeakSPtr<SamplerState> sampler, 
-                                         WeakSPtr<Textures> texture, 
+                                         Vector<Textures*>& texture, 
                                          uint32 startSlot, uint32 numSamplers) {
   }
 
   void
   GraphicsApiOGL::setSamplerPixelShader(WeakSPtr<SamplerState> sampler, 
-                                        WeakSPtr<Textures> texture, 
+                                        Vector<Textures*>& texture, 
                                         uint32 startSlot, uint32 numSamplers) {
   }
 
   
   void
-  GraphicsApiOGL::setShaderResourceView(WeakSPtr<Textures> shaderResourceView,
-                                        const uint32 startSlot, const uint32 numViews) {
-    TexturesOGL* resourceView = reinterpret_cast<TexturesOGL*>(shaderResourceView.lock().get());
+  GraphicsApiOGL::setShaderResourceView(const Vector<Textures*>& texture, 
+                                        const uint32 startSlot,
+                                        const uint32 numViews) {
+    uint32 tempSize = texture.size();
+    for (uint32 i = 0; i < tempSize; ++i) {
+      TexturesOGL* resourceView = reinterpret_cast<TexturesOGL*>(texture[i]);
 
-    glActiveTexture(GL_TEXTURE0 + startSlot);
+      glActiveTexture(GL_TEXTURE0 + startSlot);
 
-    glBindTexture(GL_TEXTURE_2D, resourceView->m_texture);
+      glBindTexture(GL_TEXTURE_2D, resourceView->m_texture);
 
-    uint32 detectError = glGetError();
+      uint32 detectError = glGetError();
 
-    if (detectError != 0) {
-      delete resourceView;
-      exit(1);
+      if (detectError != 0) {
+        delete resourceView;
+        exit(1);
+      }
     }
   }
   

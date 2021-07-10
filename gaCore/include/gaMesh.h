@@ -52,7 +52,7 @@ namespace gaEngineSDK {
       */
       void 
       init(Vector<Vertex> pVertices, Vector<uint32> pIndices,
-           Vector<Texture> textures);
+           Vector<Textures*> textures);
 
       /*
       * @brief Function to save information for m_vertexBuffer and m_indexBuffer.
@@ -241,7 +241,7 @@ namespace gaEngineSDK {
       /*
       * @brief Member to store the texture information.
       */
-      Vector<Texture> m_textures;
+      Vector<Textures*> m_textures;
 
     private:
 

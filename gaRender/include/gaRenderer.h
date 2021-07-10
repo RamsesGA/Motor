@@ -1,14 +1,14 @@
 #pragma once
 
-#include "gaPrerequisitesCore.h"
-#include "gaModule.h"
-#include "gaSceneNode.h"
+#include <gaModule.h>
+#include <gaSceneGraph.h>
+#include <gaGraphicsApi.h>
+#include <gaResourceManager.h>
+
+#include "gaPrerequisitesRender.h"
 
 namespace gaEngineSDK {
-
-  class Actor;
-
-  class GA_CORE_EXPORT SceneGraph : public Module<SceneGraph>
+  class GA_RENDER_EXPORT Renderer : public Module<Renderer>
   {
     public:
       /***********************************************************************/
@@ -17,9 +17,10 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
       
-      SceneGraph();
-      
-      ~SceneGraph() = default;
+      Renderer() = default;
+
+      virtual
+      ~Renderer() = default;
 
       /***********************************************************************/
       /**
@@ -30,28 +31,38 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      SPtr<SceneNode>
-      createNewActor(WeakSPtr<Actor> actor, WeakSPtr<SceneNode> parent);
-
-    private:
-      /***********************************************************************/
-      /**
-      * Members.
-      */
-      /***********************************************************************/
+      void
+      setObject(Renderer* api) {
+        Renderer::_instance() = api;
+      }
 
       /*
       * @brief .
       */
-      SPtr<SceneNode> m_root = nullptr;
+      virtual void
+      init(void* wndHandle) { };
+
+      /*
+      * @brief .
+      */
+      virtual void
+      update(const float& deltaTime) { };
+
+      /*
+      * @brief .
+      */
+      virtual void
+      render() { };
+
+
   };
 
   /***************************************************************************/
   /**
-  * Export.
+  * Methods.
   */
   /***************************************************************************/
 
-  GA_CORE_EXPORT SceneGraph&
-  g_sceneGraph();
+  GA_RENDER_EXPORT Renderer&
+  g_renderer();
 }

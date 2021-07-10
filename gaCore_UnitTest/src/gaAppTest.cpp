@@ -3,40 +3,9 @@
 #include <gaModels.h>
 #include <gaResourceManager.h>
 #include <gaRenderModels.h>
+#include <gaSceneGraph.h>
 
 #include "gaAppTest.h"
-
-int32
-AppTest::onInit() {
-  HINSTANCE hInstance = LoadLibraryExA("gaDirectX_d.dll", nullptr,
-                                       LOAD_WITH_ALTERED_SEARCH_PATH);
-  //HINSTANCE hInstance = LoadLibraryExA("gaOpenGL_d.dll", nullptr,
-  //                                     LOAD_WITH_ALTERED_SEARCH_PATH);
-
-  //In case of error
-  if (!(hInstance)) {
-    return -1;
-  }
-
-  using fnProt = GraphicsApi * (*)();
-
-  fnProt graphicsApiFunc = reinterpret_cast<fnProt>
-                           (GetProcAddress(hInstance, "createGraphicApi"));
-
-  //In case of error
-  if (!(graphicsApiFunc)) {
-    return -1;
-  }
-
-  GraphicsApi::startUp();
-  GraphicsApi* graphicApi = graphicsApiFunc();
-  g_graphicApi().setObject(graphicApi);
-
-  //Mandamos la ventana a la API
-  g_graphicApi().initDevice(m_sfmlWindow.getSystemHandle());
-
-  return 0;
-}
 
 void
 AppTest::onInitCamera() {
@@ -135,6 +104,13 @@ void
 AppTest::onCreate() {
   auto myGraphicsApi = g_graphicApi().instancePtr();
 
+  m_renderModel = new RenderModels();
+  m_mesh.reset(new Mesh());
+  m_resourceInfo.reset(new ResourceManager());
+
+  //Mandamos la ventana a la API
+  myGraphicsApi->initDevice(m_sfmlWindow.getSystemHandle());
+
   onInitCamera();
 
   //Creamos el render target view
@@ -143,13 +119,7 @@ AppTest::onCreate() {
   //Creamos el depth stencil view
   m_pDepthStencil.reset(myGraphicsApi->getDefaultDepthStencil());
 
-  m_renderModel = new RenderModels();
-  m_mesh.reset(new Mesh());
-  m_resourceInfo.reset(new ResourceManager());
-
   //Creamos el vertex shader y pixel shader.
-  //DX_animation
-  //DX_color
   m_pBothShaders.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_animation.fx",
                                                            "VS",
                                                            L"data/shaders/DX_animation.fx",
@@ -186,8 +156,10 @@ AppTest::onCreate() {
   //m_resourceInfo->initLoadModel("data/models/pod/POD.obj");
   //m_resourceInfo->initLoadModel("data/models/vela/Vela2.fbx");
   //m_resourceInfo->initLoadModel("data/models/spartan/Spartan.fbx");
-  m_resourceInfo->initLoadModel("data/models/ugandan/Knuckles.fbx");
+  //m_resourceInfo->initLoadModel("data/models/ugandan/Knuckles.fbx");
   //m_resourceInfo->initLoadModel("data/models/grimoires/grimoires.fbx");
+
+  //createActor();
 
   /***************************************************************************/
   /*
@@ -197,12 +169,10 @@ AppTest::onCreate() {
 
   //Esto solo es para guardar los huesos y las animaciones
   //En caso de que no, evitamos un error
-  if (!m_resourceInfo->getMeshes().empty()) {
-    m_renderModel->setMeshBones(*m_resourceInfo);
+  m_renderModel->m_meshBones.resize(m_resourceInfo->getMeshes().size());
 
-    if (!m_resourceInfo->getModel()->getAnimData().empty()) {
-      m_renderModel->m_currentAnimation = m_resourceInfo->getModel()->getAnimData()[0];
-    }
+  if (!m_resourceInfo->getModel()->getAnimData().empty()) {
+    m_renderModel->m_currentAnimation = m_resourceInfo->getModel()->getAnimData()[0];
   }
 }
 
@@ -261,4 +231,18 @@ AppTest::onMouseMove() {
 
     myGraphicsApi->updateConstantBuffer(&cb, m_pBufferCamera);
   }
+}
+
+void 
+AppTest::createActor() {
+  /*SPtr<Actor> actor(new Actor("Actor##"));
+
+  actor->setComponent(TYPE_COMPONENTS::kRenderModel);
+  SPtr<SceneNode> node = SceneGraph::instance().createNewActor
+                                                (actor, SPtr<SceneNode>(nullptr));
+
+  auto rModel = reinterpret_cast<RenderModels*>
+    (tempActor->getComponent(TYPE_COMPONENTS::kRenderModel).get());
+
+  rModel->setModel(g_resourceManager().getModel());*/
 }
