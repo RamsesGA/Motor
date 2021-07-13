@@ -22,6 +22,8 @@ namespace gaEngineSDK {
     while (m_sfmlWindow.isOpen()) {
       Event event;
 
+      trueDeltaTime = deltaTime.getElapsedTime().asSeconds();
+
       while (m_sfmlWindow.pollEvent(event)) {
         if (Event::Closed == event.type) {
           m_sfmlWindow.close();
@@ -29,14 +31,12 @@ namespace gaEngineSDK {
           break;
         }
 
-        handleWindowEvents(event);
+        handleWindowEvents(event, trueDeltaTime);
       }
       if (shoudClose) {
         break;
       }
 
-      trueDeltaTime = deltaTime.getElapsedTime().asSeconds();
-    
       deltaTime.restart();
     
       onUpdate(trueDeltaTime);
@@ -82,10 +82,10 @@ namespace gaEngineSDK {
   }
 
   void 
-  BaseApp::handleWindowEvents(Event& windowEvent) {
+  BaseApp::handleWindowEvents(Event& windowEvent, const float& deltaTime) {
     switch (windowEvent.type) {
       case Event::KeyPressed:
-        onKeyboardDown(windowEvent);
+        onKeyboardDown(windowEvent, deltaTime);
         break;
 
       case Event::MouseButtonPressed:

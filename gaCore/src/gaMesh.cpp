@@ -378,6 +378,16 @@ namespace gaEngineSDK {
   */
   /***************************************************************************/
 
+  Vector<Vertex> 
+  Mesh::getVecVertex() {
+    return m_vVertices;
+  }
+
+  Vector<uint32> 
+  Mesh::getVecIndex() {
+    return m_vIndices;
+  }
+
   uint32
   Mesh::getVertices() {
     return m_numVertices;

@@ -4,8 +4,6 @@
 #include "gaComponent.h"
 
 namespace gaEngineSDK {
-  class Actor;
-  class SceneNode;
 
   class GA_CORE_EXPORT GameObject 
   {
@@ -24,18 +22,6 @@ namespace gaEngineSDK {
       * Methods.
       */
       /***********************************************************************/
-
-      /*
-      * @brief .
-      */
-      virtual void
-      update(const float& deltaTime) { };
-
-      /*
-      * @brief .
-      */
-      virtual void
-      render() { };
 
       /*
       * @brief .
@@ -88,8 +74,7 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      virtual SPtr<Component>
-      setComponent(TYPE_COMPONENTS::E typeComponent, 
-                   SPtr<Component> component = nullptr) { return nullptr; };
+      virtual void
+      setComponent(TYPE_COMPONENTS::E typeComponent, WeakSPtr<Component> compoInfo) { };
   };
 }

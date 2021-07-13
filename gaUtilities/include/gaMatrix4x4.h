@@ -3,6 +3,7 @@
 #include "gaPrerequisitesUtilities.h"
 #include "gaVector3.h"
 #include "gaVector4.h"
+#include "gaRadians.h"
 
 namespace gaEngineSDK {
 
@@ -70,19 +71,31 @@ namespace gaEngineSDK {
       * @brief Calculates x-axis rotation.
       */
       void
-      RotationX(float speedRotation);
+      rotationX(float speedRotation);
+
+      /*
+      * @brief Calculates x-axis rotation.
+      */
+      Matrix4x4&
+      rotationX(const Radians& angleRadian);
 
       /*
       * @brief Calculates y-axis rotation.
       */
       void
-      RotationY(float speedRotation);
+      rotationY(float speedRotation);
+
+      /*
+      * @brief Calculates x-axis rotation.
+      */
+      Matrix4x4&
+      rotationY(const Radians& angleRadian);
 
       /*
       * @brief Calculates z-axis rotation.
       */
       void
-      RotationZ(float speedRotation);
+      rotationZ(float speedRotation);
 
       /*
       * @brief Calculates the axis with three vector.

@@ -128,7 +128,7 @@ namespace gaEngineSDK {
   }
 
   void 
-  Matrix4x4::RotationX(float speedRotation) {
+  Matrix4x4::rotationX(float speedRotation) {
     m_mat4x4[0][0] = 1.0f;
     m_mat4x4[1][0] = 0.0f;
     m_mat4x4[2][0] = 0.0f;
@@ -150,8 +150,22 @@ namespace gaEngineSDK {
     m_mat4x4[3][3] = 1.0f;
   }
 
+  Matrix4x4&
+  Matrix4x4::rotationX(const Radians& angleRadian) {
+    Matrix4x4 rotX =
+    { 
+     1.0f, 0.0f, 0.0f, 0.0f,
+     0.0f, cosf(angleRadian.valueRadians()),-sinf(angleRadian.valueRadians()), 0,
+     0.0f, sinf(angleRadian.valueRadians()), cosf(angleRadian.valueRadians()), 0,
+     0.0f, 0.0f, 0.0f, 1.0f 
+    };
+
+    *this = rotX * (*this);
+    return *this;
+  }
+
   void
-  Matrix4x4::RotationY(float speedRotation) {
+  Matrix4x4::rotationY(float speedRotation) {
     m_mat4x4[0][0] = cosf(speedRotation);
     m_mat4x4[1][0] = 0.0f;
     m_mat4x4[2][0] = -sinf(speedRotation);
@@ -173,8 +187,22 @@ namespace gaEngineSDK {
     m_mat4x4[3][3] = 1.0f;
   }
 
+  Matrix4x4&
+  Matrix4x4::rotationY(const Radians& angleRadian) {
+    Matrix4x4 rotY =
+    { 
+     Math::cos(angleRadian.valueRadians()), 0, Math::sin(angleRadian.valueRadians()), 0,
+     0.0f, 1.0f, 0.0f, 0.0f,
+     -Math::sin(angleRadian.valueRadians()), 0, Math::cos(angleRadian.valueRadians()), 0,
+     0.0f, 0.0f, 0.0f, 1.0f
+    };
+
+    *this = rotY * (*this);
+    return *this;
+  }
+
   void
-  Matrix4x4::RotationZ(float speedRotation) {
+  Matrix4x4::rotationZ(float speedRotation) {
     m_mat4x4[0][0] = cosf(speedRotation);
     m_mat4x4[1][0] = sinf(speedRotation);
     m_mat4x4[2][0] = 0.0f;

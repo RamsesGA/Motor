@@ -50,7 +50,7 @@ namespace gaEngineSDK {
       initSys();
 
       void
-      handleWindowEvents(Event& windowEvent);
+      handleWindowEvents(Event& windowEvent, const float& deltaTime);
 
     protected:
       /*
@@ -76,58 +76,58 @@ namespace gaEngineSDK {
       * @param isOGL, Bool to indicate if you are using OGL (this will be removed).
       */
       virtual void
-      onInitCamera(bool  = false) {};
+      onInitCamera() { };
 
       /*
       * @brief Update the constant buffer of the api.
       * @param deltaTime, float for delta time.
       */
       virtual void
-      onUpdate(float ) {};
+      onUpdate(float deltaTime) { };
 
       /*
       * @brief Save new data, update other and clean old data.
       */
       virtual void
-      onRender() {};
+      onRender() { };
 
       /*
       * @brief Create the data for the api and
       *        confirm that everything exists without problem.
       */
       virtual void
-      onCreate() {};
+      onCreate() { };
 
       /*
       * @brief Delete variables to end the program.
       */
       virtual void
-      onDestroySystem() {};
+      onDestroySystem() { };
 
       /*
       * @brief Detect keyboard input.
       * @param param, SFML event to know the input pressed.
       */
       virtual void
-      onKeyboardDown(sf::Event ) {};
+      onKeyboardDown(sf::Event param, const float& deltaTime) { };
 
       /*
       * @brief Indicates if the left mouse button is pressed.
       */
       virtual void
-      onLeftMouseBtnDown() {};
+      onLeftMouseBtnDown() { };
 
       /*
       * @brief Indicates whether the left mouse button was lifted.
       */
       virtual void
-      onLeftMouseBtnUp() {};
+      onLeftMouseBtnUp() { };
 
       /*
       * @brief Detects if the mouse is moving on the screen.
       */
       virtual void
-      onMouseMove() {};
+      onMouseMove() { };
 
     protected:
       /***********************************************************************/

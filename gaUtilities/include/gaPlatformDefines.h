@@ -88,7 +88,7 @@
 #endif
 
 /**
-* Finds the current plataform
+* Finds the current platform
 */
 #if defined(__WIN32__)  || defined(_WIN32)  //If it´s a Windows platform
 #define GA_PLATFORM GA_PLATFORM_WIN32
@@ -204,7 +204,7 @@
   #if defined(_DEBUG) || defined(DEBUG)
     #define GA_DEBUG_MODE 1  //Specifies that we are on a DEBUG build
   #else
-    #define GA_DEBUG_MODE 0  //We aren´t on a DEBUG build
+    #define GA_DEBUG_MODE 0  //We are not on a DEBUG build
   #endif
   #if GA_COMPILER == GA_COMPILER_INTEL
     #define GA_THREADLOCAL __thread  //Set the local thread for the Intel compiler
@@ -220,4 +220,8 @@
 #else
   #define GA_DEBUG_ONLY(x)
   #define GA_ASSERT(x)
+#endif
+
+#ifndef GA_UNREFERENCED_PARAMETER
+  # define GA_UNREFERENCED_PARAMETER(P) (void)P
 #endif

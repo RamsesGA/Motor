@@ -1,13 +1,9 @@
 #include "gaComponent.h"
+#include "gaResourceManager.h"
 
 namespace gaEngineSDK {
-  TYPE_COMPONENTS::E 
-  Component::getTypeComponents() const {
-    return m_typeComponents;
-  }
-
-  void
-  Component::setActor(Actor* newObj) {
-    m_newActorObj = newObj;
+  Component::Component(WeakSPtr<ResourceManager> modelInfo) {
+    m_modelInfo = modelInfo.lock();
+    m_typeComponent = TYPE_COMPONENTS::kRenderModel;
   }
 }

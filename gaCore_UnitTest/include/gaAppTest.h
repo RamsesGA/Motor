@@ -42,49 +42,49 @@ class AppTest : public BaseApp
     * @brief .
     */
     void
-    onUpdate(float deltaTime)override;
+    onUpdate(float deltaTime) override;
 
     /*
     * @brief .
     */
     void
-    onRender()override;
+    onRender() override;
 
     /*
     * @brief .
     */
     void
-    onCreate()override;
+    onCreate() override;
 
     /*
     * @brief .
     */
     void
-    onDestroySystem()override;
+    onDestroySystem() override;
 
     /*
     * @brief .
     */
     void
-    onKeyboardDown(sf::Event param)override;
+    onKeyboardDown(sf::Event param, const float& deltaTime) override;
 
     /*
     * @brief .
     */
     void
-    onLeftMouseBtnDown()override;
+    onLeftMouseBtnDown() override;
 
     /*
     * @brief .
     */
     void
-    onLeftMouseBtnUp()override;
+    onLeftMouseBtnUp() override;
 
     /*
     * @brief .
     */
     void
-    onMouseMove()override;
+    onMouseMove() override;
 
     /*************************************************************************/
     /*
@@ -92,8 +92,29 @@ class AppTest : public BaseApp
     */
     /*************************************************************************/
 
+    /*
+    * @brief .
+    */
+    void
+    spartan();
+
+    /*
+    * @brief .
+    */
+    void
+    twoB();
+
+    /*
+    * @brief .
+    */
     void
     createActor();
+
+    /*
+    * @brief .
+    */
+    void
+    setAnimations();
 
   public:
     /*************************************************************************/

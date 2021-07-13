@@ -48,15 +48,14 @@ namespace gaEngineSDK {
         if (0 != m_pResource->getMeshes()[meshNum]->m_textures.size()) {
 
           //TODO: necesito corregir el sampler :C
-
-          myGraphicApi->setShaderResourceView(
-            m_pResource->getMeshes()[meshNum]->m_textures, meshNum, 1);
+          myGraphicApi->setShaderResourceView(m_pResource->getMeshes()[meshNum]->m_textures, 
+                                              meshNum, 1);
         }
 
         myGraphicApi->setVertexBuffer(mesh->m_pVertexBuffer);
         myGraphicApi->setIndexBuffer(mesh->m_pIndexBuffer);
 
-        myGraphicApi->drawIndex(mesh->getNumIndices(), 0, 0);
+        myGraphicApi->drawIndex(mesh->getNumIndices());
         ++meshNum;
       }
     }

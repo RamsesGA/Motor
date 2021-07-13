@@ -53,7 +53,7 @@ namespace gaEngineSDK {
       * @param SFML event for input detection.
       */
       void 
-      inputDetection(sf::Event param);
+      inputDetection(sf::Event param, const float& deltaTime);
 
       /**
       * @brief Function to be able to apply a PITCH rotation.
@@ -81,7 +81,7 @@ namespace gaEngineSDK {
       * @param SFML event for input detection.
       */
       void 
-      move(sf::Event param);
+      move(sf::Event param, const float& deltaTime);
       
       /**
       * @brief Function to be able to apply a rotation of the view.

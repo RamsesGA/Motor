@@ -9,7 +9,7 @@
 
 void
 AppTest::onInitCamera() {
-  //Inicializamos la matriz de identidad
+  //We initialize the identity matrix.
   m_world.identity();
 
   m_mainCamera.setLookAt(Vector3(0.0f, 1.0f, 0.0f));
@@ -36,14 +36,14 @@ AppTest::onUpdate(float deltaTime) {
   cb.mWorld = m_world;
   cb.vMeshColor = m_vMeshColor;
 
-  //Clear the back buffer
+  //Clear the back buffer.
   Vector4 rgba = { (87.0f / 255.0f), (35.0f / 255.0f), (100.0f / 255.0f), (255.0f) };
   myGraphicsApi->clearYourRenderTargetView(m_pRenderTargetView, rgba);
 
-  // Clear the depth buffer to 1.0 (max depth)
+  // Clear the depth buffer to 1.0 (max depth).
   myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
 
-  //Update CB
+  //Update CB.
   myGraphicsApi->updateConstantBuffer(&meshData, m_pBufferCamera);
   myGraphicsApi->updateConstantBuffer(&cb, m_pBufferWorld);
 
@@ -60,22 +60,22 @@ AppTest::onRender() {
   */
   /***************************************************************************/
 
-  //Guardamos los render targets
+  //We save the render targets.
   myGraphicsApi->setRenderTarget(m_pRenderTargetView, m_pDepthStencil);
 
-  //Guardamos un viewport
+  //We save a viewport.
   myGraphicsApi->setViewports(m_width, m_height);
 
-  //Guardamos el input layout
+  //We save the input layout.
   myGraphicsApi->setInputLayout(m_pVertexLayout);
 
-  //Guardamos el vertex buffer
+  //We save the vertex buffer.
   myGraphicsApi->setVertexBuffer(m_mesh->m_pVertexBuffer);
 
-  //Guardamos el index buffer
+  //We save the index buffer.
   myGraphicsApi->setIndexBuffer(m_mesh->m_pIndexBuffer);
 
-  //Guardamos la topología
+  //We save the topology.
   myGraphicsApi->setPrimitiveTopology();
 
   myGraphicsApi->setShaders(m_pBothShaders);
@@ -90,7 +90,7 @@ AppTest::onRender() {
   //VS CB
   myGraphicsApi->setYourVSConstantBuffers(m_tempBufferBones, 2);
 
-  //Guardamos el cb de los huesos
+  //We keep the cb of the bones.
   myGraphicsApi->setConstBufferBones(m_tempBufferBones);
 
   //Render model
@@ -108,38 +108,38 @@ AppTest::onCreate() {
   m_mesh.reset(new Mesh());
   m_resourceInfo.reset(new ResourceManager());
 
-  //Mandamos la ventana a la API
+  //We send the window to the API.
   myGraphicsApi->initDevice(m_sfmlWindow.getSystemHandle());
 
   onInitCamera();
 
-  //Creamos el render target view
+  //We create the render target view.
   m_pRenderTargetView.reset(myGraphicsApi->getDefaultBackBuffer());
 
-  //Creamos el depth stencil view
+  //We create the depth stencil view.
   m_pDepthStencil.reset(myGraphicsApi->getDefaultDepthStencil());
 
-  //Creamos el vertex shader y pixel shader.
+  //We create the vertex shader and pixel shader.
   m_pBothShaders.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_animation.fx",
                                                            "VS",
                                                            L"data/shaders/DX_animation.fx",
                                                            "PS"));
-  //Creamos el vertex shader y pixel shader.
+  //We create the vertex shader and pixel shader.
   //m_pBothShaders = myGraphicsApi->createShadersProgram(L"data/shaders/OGL_VSAnim.fx",
   //                                                     "main",
   //                                                     L"data/shaders/OGL_PSAnim.fx",
   //                                                     "main");
 
-  //Creamos el input layout 
+  //We create the input layout.
   m_pVertexLayout.reset(myGraphicsApi->createInputLayout(m_pBothShaders));
 
-  //Creamos el vertex buffer
+  //We create the vertex buffer.
   m_mesh->m_pVertexBuffer.reset(myGraphicsApi->createVertexBuffer(nullptr, sizeof(Matrices)));
 
-  //Creamos el index buffer 
+  //We create the index buffer.
   m_mesh->m_pIndexBuffer.reset(myGraphicsApi->createIndexBuffer(nullptr, sizeof(ViewCB)));
 
-  //Creamos los constant buffers para el shader
+  //We create the constant buffers for the shader.
   m_pBufferCamera.reset(myGraphicsApi->createConstantBuffer(sizeof(ConstantBuffer1)));
   m_pBufferWorld.reset(myGraphicsApi->createConstantBuffer(sizeof(ConstantBuffer2)));
   m_pConstBufferBones = myGraphicsApi->createConstantBuffer(sizeof(ConstBuffBonesTransform));
@@ -152,14 +152,12 @@ AppTest::onCreate() {
   */
   /***************************************************************************/
 
-  //m_resourceInfo->initLoadModel("data/models/2B/2B.obj");
+  //twoB();
+  //spartan();
   //m_resourceInfo->initLoadModel("data/models/pod/POD.obj");
   //m_resourceInfo->initLoadModel("data/models/vela/Vela2.fbx");
-  //m_resourceInfo->initLoadModel("data/models/spartan/Spartan.fbx");
   //m_resourceInfo->initLoadModel("data/models/ugandan/Knuckles.fbx");
-  //m_resourceInfo->initLoadModel("data/models/grimoires/grimoires.fbx");
-
-  //createActor();
+  m_resourceInfo->initLoadModel("data/models/grimoires/grimoires.fbx");
 
   /***************************************************************************/
   /*
@@ -167,13 +165,15 @@ AppTest::onCreate() {
   */
   /***************************************************************************/
 
-  //Esto solo es para guardar los huesos y las animaciones
-  //En caso de que no, evitamos un error
-  m_renderModel->m_meshBones.resize(m_resourceInfo->getMeshes().size());
+  setAnimations();
 
-  if (!m_resourceInfo->getModel()->getAnimData().empty()) {
-    m_renderModel->m_currentAnimation = m_resourceInfo->getModel()->getAnimData()[0];
-  }
+  /***************************************************************************/
+  /*
+  * Set Node.
+  */
+  /***************************************************************************/
+  
+  createActor();
 }
 
 void
@@ -189,10 +189,10 @@ AppTest::onDestroySystem() {
 }
 
 void
-AppTest::onKeyboardDown(sf::Event param) {
+AppTest::onKeyboardDown(sf::Event param, const float& deltaTime) {
   auto myGraphicsApi = g_graphicApi().instancePtr();
 
-  m_mainCamera.inputDetection(param);
+  m_mainCamera.inputDetection(param, deltaTime);
 
   ConstantBuffer1 cb;
   cb.mView = myGraphicsApi->matrixPolicy(m_mainCamera.getView());
@@ -218,11 +218,8 @@ AppTest::onMouseMove() {
   if (m_mainCamera.getClickPressed()) {
     auto myGraphicsApi = g_graphicApi().instancePtr();
 
-    m_mainCamera.setOriginalMousePos
-    (
-      m_mainCamera.getOriginalMousePos().x,
-      m_mainCamera.getOriginalMousePos().y
-    );
+    m_mainCamera.setOriginalMousePos(m_mainCamera.getOriginalMousePos().x,
+                                     m_mainCamera.getOriginalMousePos().y);
 
     m_mainCamera.mouseRotation();
 
@@ -233,16 +230,124 @@ AppTest::onMouseMove() {
   }
 }
 
-void 
+void
+AppTest::spartan() {
+  /*
+  m_resourceInfo->loadTexture("data/textures/spartan/lambert1_Colour-Opacity.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/lambert1_Nrm.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/lambert1_Roughness.png");
+  */
+
+  m_resourceInfo->loadTexture("data/textures/spartan/ODST_Shoulder_Mat_BaseColor.png");
+
+  /*
+  m_resourceInfo->loadTexture("data/textures/spartan/ODST_Shoulder_Mat_AO.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/ODST_Shoulder_Mat_Metallic.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/ODST_Shoulder_Mat_Normal.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/ODST_Shoulder_Mat_Roughness.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/ODST_Shoulder_Mat_Specular.png");
+  */
+
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Arms_Mat_BaseColor.png");
+
+  /*
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Arms_Mat_AO.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Arms_Mat_Metallic.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Arms_Mat_Normal.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Arms_Mat_Roughness.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Arms_Mat_Specular.png");
+  */
+
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Chest_Mat_BaseColor.png");
+
+  /*
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Chest_Mat_AO.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Chest_Mat_Metallic.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Chest_Mat_Normal.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Chest_Mat_Roughness.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Chest_Mat_Specular.png");
+  */
+
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Ears_Mat_BaseColor.png");
+
+  /*
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Ears_Mat_AO.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Ears_Mat_Metallic.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Ears_Mat_Normal.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Ears_Mat_Roughness.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Ears_Mat_Specular.png");
+  */
+
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Helmet_Mat_BaseColor.png");
+
+  /*
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Helmet_Mat_AO.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Helmet_Mat_Metallic.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Helmet_Mat_Normal.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Helmet_Mat_Roughness.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Helmet_Mat_Specular.png");
+  */
+
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Legs_Mat_BaseColor.png");
+
+  /*
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Legs_Mat_AO.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Legs_Mat_Metallic.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Legs_Mat_Normal.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Legs_Mat_Roughness.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Legs_Mat_Specular.png");
+  */
+
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Undersuit_Mat_BaseColor.png");
+
+  /*
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Undersuit_Mat_AO.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Undersuit_Mat_Metallic.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Undersuit_Mat_Normal.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Undersuit_Mat_Roughness.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Undersuit_Mat_Specular.png");
+  */
+
+  m_resourceInfo->initLoadModel("data/models/spartan/Spartan.fbx");
+}
+
+void
+AppTest::twoB() {
+
+  m_resourceInfo->loadTexture("data/textures/2B/2B_Diffuse.png");
+
+  /*
+  m_resourceInfo->loadTexture("data/textures/2B/2B_Alpha.png");
+  m_resourceInfo->loadTexture("data/textures/2B/2B_HairAlpha.png");
+  m_resourceInfo->loadTexture("data/textures/2B/2B_HairD.png");
+  m_resourceInfo->loadTexture("data/textures/2B/2B_HairN.png");
+  m_resourceInfo->loadTexture("data/textures/2B/2B_HairS.png");
+  m_resourceInfo->loadTexture("data/textures/2B/2B_Normalfix2.png");
+  m_resourceInfo->loadTexture("data/textures/2B/2B_Specular.png");
+  */
+
+  m_resourceInfo->initLoadModel("data/models/2B/2B.obj");
+}
+
+void
 AppTest::createActor() {
-  /*SPtr<Actor> actor(new Actor("Actor##"));
+  auto mySceneGraph = SceneGraph::instancePtr();
 
-  actor->setComponent(TYPE_COMPONENTS::kRenderModel);
-  SPtr<SceneNode> node = SceneGraph::instance().createNewActor
-                                                (actor, SPtr<SceneNode>(nullptr));
+  SPtr<Component> tempCompo(new Component(m_resourceInfo));
 
-  auto rModel = reinterpret_cast<RenderModels*>
-    (tempActor->getComponent(TYPE_COMPONENTS::kRenderModel).get());
+  SPtr<Actor> actor(new Actor("Grimoires"));
+  actor->setComponent(TYPE_COMPONENTS::kRenderModel, tempCompo);
 
-  rModel->setModel(g_resourceManager().getModel());*/
+  mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+}
+
+void 
+AppTest::setAnimations() {
+  //This is just to save the bones and animations.
+  //If not, we avoid a mistake. 
+  m_renderModel->m_meshBones.resize(m_resourceInfo->getMeshes().size());
+
+  if (!m_resourceInfo->getModel()->getAnimData().empty()) {
+    m_renderModel->m_currentAnimation = m_resourceInfo->getModel()->getAnimData()[0];
+  }
 }

@@ -7,13 +7,15 @@ namespace gaEngineSDK {
   namespace TYPE_COMPONENTS {
     enum E {
       kRenderModel = 0,
-      kTransform,
       kCamera,
       kTexture,
+      kUndefined
     };
   };
 
-  class Actor;
+  class Camera;
+  class Textures;
+  class ResourceManager;
 
   class GA_CORE_EXPORT Component
   {
@@ -25,44 +27,16 @@ namespace gaEngineSDK {
       /***********************************************************************/
 
       Component() = default;
+
+      Component(WeakSPtr<ResourceManager> modelInfo);
       
       ~Component() = default;
-
-      /***********************************************************************/
-      /**
-      * Methods.
-      */
-      /***********************************************************************/
-
-      /*
-      * @brief .
-      */
-      virtual void
-      update(const float& deltatime) { };
-
-      /***********************************************************************/
-      /**
-      * Gets.
-      */
-      /***********************************************************************/
-
-      /*
-      * @brief .
-      */
-      TYPE_COMPONENTS::E
-      getTypeComponents() const;
 
       /***********************************************************************/
       /**
       * Sets.
       */
       /***********************************************************************/
-
-      /*
-      * @brief .
-      */
-      void
-      setActor(Actor* newObj);
 
     protected:
       /***********************************************************************/
@@ -71,14 +45,11 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
 
-      /*
-      * @brief .
-      */
-      TYPE_COMPONENTS::E m_typeComponents;
+      TYPE_COMPONENTS::E m_typeComponent = TYPE_COMPONENTS::kUndefined;
 
       /*
       * @brief .
       */
-      Actor* m_newActorObj = nullptr;
+      SPtr<ResourceManager> m_modelInfo = nullptr;
   };
 }

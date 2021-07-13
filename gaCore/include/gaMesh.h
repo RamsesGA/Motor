@@ -183,6 +183,12 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
 
+      Vector<Vertex>
+      getVecVertex();
+
+      Vector<uint32>
+      getVecIndex();
+
       uint32
       getVertices();
 

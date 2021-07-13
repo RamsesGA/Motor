@@ -90,6 +90,12 @@ namespace gaEngineSDK {
       String
       deleteSlashs(String file);
 
+      /*
+      * @brief .
+      */
+      void
+      loadTexture(String path);
+
       /***********************************************************************/
       /**
       * Gets.
@@ -133,6 +139,18 @@ namespace gaEngineSDK {
       SPtr<Model>
       getModel();
 
+      /*
+      * @brief .
+      */
+      String
+      getModelDirectory();
+
+      /*
+      * @brief .
+      */
+      Vector<Textures*>
+      getVecTextures();
+
     protected:
       /*
       * @brief .
@@ -170,7 +188,7 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      const aiScene* m_pAScene;
+      const aiScene* m_pAScene = nullptr;
 
       /*
       * @brief .
@@ -180,7 +198,7 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      SPtr<Model> m_newModel;
+      SPtr<Model> m_newModel = nullptr;
 
       /*
       * @brief Member to store a string of Meshes.

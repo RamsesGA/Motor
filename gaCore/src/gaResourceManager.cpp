@@ -128,7 +128,12 @@ namespace gaEngineSDK {
 
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-    m_newMesh->init(vertices, indices, textures);
+    if ((0 == textures.size()) && (m_textures.size() > 0) ) {
+      m_newMesh->init(vertices, indices, m_textures);
+    }
+    else {
+      m_newMesh->init(vertices, indices, textures);
+    }
 
     auto myGraphicApi = g_graphicApi().instancePtr();
 
@@ -398,6 +403,13 @@ namespace gaEngineSDK {
     return tempStr;
   }
 
+  void
+  ResourceManager::loadTexture(String path) {
+    auto myGraphicApi = g_graphicApi().instancePtr();
+
+    m_textures.push_back(myGraphicApi->loadTextureFromFile(path));
+  }
+
   String 
   ResourceManager::getTexturePath(String file) {
     size_t realPos = 0;
@@ -447,12 +459,22 @@ namespace gaEngineSDK {
     return m_newModel;
   }
 
+  String
+  ResourceManager::getModelDirectory() {
+    return m_modelDirectory;
+  }
+
+  Vector<Textures*>
+  ResourceManager::getVecTextures() {
+    return m_textures;
+  }
+
   void
   ResourceManager::createDirectories(String const& path) {
     //Retrieve the directory path of the _file
     m_modelDirectory = path.substr(0, path.find_last_of('/'));
 
-    //Esto es para obtener el path de las texturas.
+    //This is to get the path of the textures.
     String miniPaht;
 
     uint32 tempModelDirecSize = m_modelDirectory.size();

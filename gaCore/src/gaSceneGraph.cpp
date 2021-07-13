@@ -8,20 +8,28 @@ namespace gaEngineSDK {
 
     SPtr<Actor> newActor;
     newActor.reset(new Actor("Root actor"));
-    newActor->setComponent(TYPE_COMPONENTS::kTransform);
 
     m_root->setActorNode(newActor);
   }
 
-  SPtr<SceneNode>
+  void
+  SceneGraph::update(const float& deltaTime) {
+    
+  }
+
+  void 
+  SceneGraph::render() {
+
+  }
+
+  void
   SceneGraph::createNewActor(WeakSPtr<Actor> actor, WeakSPtr<SceneNode> parent) {
     if (nullptr == parent.lock().get()) {
       m_root->createNewActorNode(actor, m_root);
-      return m_root;
+      return;
     }
 
     m_root->createNewActorNode(actor, parent);
-    return m_root;
   }
 
   SceneGraph& 

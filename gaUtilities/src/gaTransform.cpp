@@ -2,23 +2,45 @@
 
 namespace gaEngineSDK {
   Transform::Transform() {
-    m_typeComponents = TYPE_COMPONENTS::kTransform;
-
-    m_rotation.x = 0.0f;
-    m_rotation.y = 0.0f;
-    m_rotation.z = 0.0f;
-    m_rotation.w = 1.0f;
-
+    m_rotation.x = 0.0f; m_rotation.y = 0.0f; m_rotation.z = 0.0f; m_rotation.w = 1.0f;
     m_position = (0.0f, 0.0f, 0.0f);
-    m_scale = (0.0f, 0.0f, 0.0f);
+    m_scale = (1.0f, 1.0f, 1.0f);
   }
 
-  Transform::Transform(const Quaternions& inRotation, const Vector3& inTranslation,
-                       const Vector3& inScale3D) {
-    m_rotation = (inRotation);
-    m_position = (inTranslation);
-    m_scale = (inScale3D);
+  Transform::Transform(const Quaternions& rotation, const Vector3& position,
+                       const Vector3& scale) {
+    m_rotation = (rotation);
+    m_position = (position);
+    m_scale =    (scale);
   }
+
+  void 
+  Transform::editRotation(float x, float y, float z) {
+    m_rotation.x = x;
+    m_rotation.y = y;
+    m_rotation.z = z;
+  }
+
+  void 
+  Transform::editPosition(float x, float y, float z) {
+    m_position.x = x;
+    m_position.y = y;
+    m_position.z = z;
+  }
+
+  void 
+  Transform::editScale(float x, float y, float z) {
+    m_scale.x = x;
+    m_scale.y = y;
+    m_scale.z = z;
+  }
+
+
+  /***************************************************************************/
+  /**
+  * Overload operators.
+  */
+  /***************************************************************************/
 
   Transform& Transform::operator=(const Transform& other) {
     this->m_rotation = other.m_rotation;
@@ -76,7 +98,8 @@ namespace gaEngineSDK {
   void 
   Transform::operator*=(const Quaternions& other) { }
 
-  /*bool 
+  /*
+  bool 
   Transform::operator==(const Transform& other) const {
     return (m_rotation == other.m_rotation) && (m_position == other.m_position) &&
            (m_scale == other.m_scale);

@@ -45,8 +45,8 @@ namespace gaEngineSDK {
       initDevice(sf::WindowHandle hWnd) override;
 
       void 
-      drawIndex(uint32 indexCount, uint32 startIndexLocation, 
-                uint32 baseVertexLocation) override;
+      drawIndex(uint32 indexCount, uint32 startIndexLocation = 0, 
+                uint32 baseVertexLocation = 0) override;
 
       void 
       swapChainPresent(uint32 syncInterval = 0, uint32 flags = 0) override;

@@ -30,7 +30,19 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      SPtr<SceneNode>
+      void
+      update(const float& deltaTime);
+
+      /*
+      * @brief .
+      */
+      void
+      render();
+
+      /*
+      * @brief .
+      */
+      void
       createNewActor(WeakSPtr<Actor> actor, WeakSPtr<SceneNode> parent);
 
     private:

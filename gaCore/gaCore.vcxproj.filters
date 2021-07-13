@@ -16,9 +16,6 @@
     <Filter Include="Archivos de origen\SceneGraph">
       <UniqueIdentifier>{bf415c7d-1ffc-43d0-acbb-6621eb306de8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Archivos de origen\Transform">
-      <UniqueIdentifier>{1639ff69-95ae-4585-9362-65f9ea5c49f8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Archivos de origen\Resource">
       <UniqueIdentifier>{3ad69f90-fbb5-42b3-8fcf-a407e954f496}</UniqueIdentifier>
     </Filter>
@@ -79,9 +76,6 @@
     <ClInclude Include="include\gaRenderModels.h">
       <Filter>Archivos de origen\Models</Filter>
     </ClInclude>
-    <ClInclude Include="include\gaTransform.h">
-      <Filter>Archivos de origen\Transform</Filter>
-    </ClInclude>
     <ClInclude Include="include\gaSceneNode.h">
       <Filter>Archivos de origen\SceneGraph</Filter>
     </ClInclude>
@@ -131,9 +125,6 @@
     </ClCompile>
     <ClCompile Include="src\gaRenderModels.cpp">
       <Filter>Archivos de origen\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="src\gaTransform.cpp">
-      <Filter>Archivos de origen\Transform</Filter>
     </ClCompile>
     <ClCompile Include="src\gaSceneNode.cpp">
       <Filter>Archivos de origen\SceneGraph</Filter>

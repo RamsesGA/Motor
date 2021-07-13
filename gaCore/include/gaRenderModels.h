@@ -7,8 +7,7 @@
 #include "gaComponent.h"
 
 namespace gaEngineSDK {
-
-  class GA_CORE_EXPORT RenderModels : public Component
+  class GA_CORE_EXPORT RenderModels final : public Component
   {
     public:
       /***********************************************************************/

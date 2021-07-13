@@ -1,4 +1,5 @@
 #include "gaCamera.h"
+#include "gaRadians.h"
 
 namespace gaEngineSDK {
   
@@ -21,7 +22,7 @@ namespace gaEngineSDK {
   }
   
   void
-  Camera::inputDetection(sf::Event param) {
+  Camera::inputDetection(sf::Event param, const float& deltaTime) {
 	  if ((sf::Keyboard::Up == param.key.code)  || 
         (sf::Keyboard::Down == param.key.code)) {
 	  	pitchX(param);
@@ -35,7 +36,7 @@ namespace gaEngineSDK {
 	  	yawY(param);
 	  }
 	  else {
-	  	move(param);
+	  	move(param, deltaTime);
 	  }
   }
   
@@ -46,10 +47,10 @@ namespace gaEngineSDK {
     float speedrot = 1.35f;
 
     if (sf::Keyboard::Up == param.key.code) {
-      rotation.RotationX(speedrot);
+      rotation.rotationX(speedrot);
     }
     else if (sf::Keyboard::Down == param.key.code) {
-      rotation.RotationX(-speedrot);
+      rotation.rotationX(-speedrot);
     }
 
     m_view = m_view * rotation;
@@ -64,10 +65,10 @@ namespace gaEngineSDK {
     float speedrot = 1.35f;
 
     if (sf::Keyboard::Right == param.key.code) {
-      rotation.RotationZ(-speedrot);
+      rotation.rotationZ(-speedrot);
     }
     else if (sf::Keyboard::Left == param.key.code) {
-      rotation.RotationZ(speedrot);
+      rotation.rotationZ(speedrot);
     }
 
     m_view = m_view * rotation;
@@ -82,10 +83,10 @@ namespace gaEngineSDK {
     float speedrot = 1.35f;
 
     if (sf::Keyboard::Z == param.key.code) {
-      rotation.RotationY(speedrot);
+      rotation.rotationY(speedrot);
     }
     else if (sf::Keyboard::C == param.key.code) {
-      rotation.RotationY(-speedrot);
+      rotation.rotationY(-speedrot);
     }
 
     m_view = m_view * rotation;
@@ -93,11 +94,9 @@ namespace gaEngineSDK {
     updateViewMatrix();
   }
   
-  //Se va a mover 15 frames por segundo, necesito pasarle el Delta time
-  //y que esta se vuelva su velocidad: ej: 10 * deltaTime
   void 
-  Camera::move(sf::Event param) {
-    float speedMove = 10.0f;
+  Camera::move(sf::Event param, const float& deltaTime) {
+    float speedMove = 1550.0f * deltaTime;
 
   	if (sf::Keyboard::W == param.key.code) {
   		m_cameraDesc.camEye += m_front * speedMove;
@@ -138,10 +137,7 @@ namespace gaEngineSDK {
     float speedAngule = 0.5f;
 
     Matrix4x4 Yaw;
-    Yaw.identity();
-
     Matrix4x4 Pitch;
-    Pitch.identity();
 
     POINT Temp;
     GetCursorPos(&Temp);
@@ -152,42 +148,39 @@ namespace gaEngineSDK {
     if (firstPos.x < m_originalMousePos.x) {
       m_cameraDesc.camLookAt -= m_right * speedRot;
       m_cameraDesc.camUp = m_up;
-
       createView();
     }
 
     if (firstPos.x > m_originalMousePos.x) {
       m_cameraDesc.camLookAt += m_right * speedRot;
       m_cameraDesc.camUp = m_up;
-
       createView();
     }
 
-    if ((secondPos.y < m_originalMousePos.y) && 
-        (m_angule < m_maxAngule)) {
+    if ((secondPos.y < m_originalMousePos.y) && (m_angule < m_maxAngule)) {
       m_angule += speedAngule;
 
       if (m_angule > m_maxAngule) {
         m_angule = m_maxAngule;
       }
       else {
-        Pitch.RotationX(speedAngule * Math::PI / 180);
+        Pitch.rotationX(speedAngule * Math::PI / 180);
       }
     }
 
-    if ((secondPos.y > m_originalMousePos.y) && 
-        (m_angule > -m_maxAngule)) {
+    if ((secondPos.y > m_originalMousePos.y) && (m_angule > -m_maxAngule)) {
       m_angule -= speedAngule;
 
       if (m_angule < -m_maxAngule) {
         m_angule = -m_maxAngule;
       }
       else {
-        Pitch.RotationX(-speedAngule * Math::PI / 180);
+        Pitch.rotationX(-speedAngule * Math::PI / 180);
       }
     }
 
     SetCursorPos((int32)m_originalMousePos.x, (int32)m_originalMousePos.y);
+    
     m_view = m_view * Yaw;
 
     updateViewMatrix();
@@ -217,7 +210,6 @@ namespace gaEngineSDK {
     m_axis.calculateAxis(m_right, m_up, m_front);
 
     m_position.calculatePosition(m_cameraDesc.camEye);
-    //m_position = m_position * m_axis;
 
     m_view = m_axis * m_position;
   }

@@ -1,14 +1,12 @@
 #pragma once
 
-#include <gaVector3.h>
-#include <gaMatrix4x4.h>
-#include <gaQuaternions.h>
-
-#include "gaPrerequisitesCore.h"
-#include "gaComponent.h"
+#include "gaPrerequisitesUtilities.h"
+#include "gaVector3.h"
+#include "gaMatrix4x4.h"
+#include "gaQuaternions.h"
 
 namespace gaEngineSDK {
-  class GA_CORE_EXPORT Transform final : public Component
+  class GA_UTILITY_EXPORT Transform
   {
     public:
       /*************************************************************************/
@@ -18,14 +16,39 @@ namespace gaEngineSDK {
       /*************************************************************************/
       Transform();
 
-      Transform(const Quaternions& inRotation, const Vector3& inTranslation,
-                const Vector3& inScale3D);
+      Transform(const Quaternions& rotation, const Vector3& position, const Vector3& scale);
     
       ~Transform() = default;
-    
+
       /***********************************************************************/
       /**
       * Methods.
+      */
+      /***********************************************************************/
+
+      /*
+      * @brief .
+      */
+      void
+      editRotation(float x, float y, float z);
+
+      /*
+      * @brief .
+      */
+      void
+      editPosition(float x, float y, float z);
+
+      /*
+      * @brief .
+      */
+      void
+      editScale(float x, float y, float z);
+
+
+    
+      /***********************************************************************/
+      /**
+      * Overload operators.
       */
       /***********************************************************************/
 
@@ -56,12 +79,13 @@ namespace gaEngineSDK {
       void
       operator*=(const Quaternions& other);
 
-      /*bool
+      /*
+      bool
       operator==(const Transform& other) const;
 
       bool
-      operator!=(const Transform& other) const;*/
-
+      operator!=(const Transform& other) const;
+      */
 
     private:
       /***********************************************************************/
@@ -84,6 +108,7 @@ namespace gaEngineSDK {
       * @brief .
       */
       Vector3 m_scale;
+
 
       friend class Actor;
   };

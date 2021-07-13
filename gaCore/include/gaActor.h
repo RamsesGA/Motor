@@ -1,10 +1,13 @@
 #pragma once
 
+#include <gaTransform.h>
+
 #include "gaPrerequisitesCore.h"
 #include "gaGameObject.h"
+#include "gaComponent.h"
 
 namespace gaEngineSDK {
-  class Actor final : public GameObject
+  class GA_CORE_EXPORT Actor final : public GameObject
   {
     public:
       /***********************************************************************/
@@ -12,6 +15,7 @@ namespace gaEngineSDK {
       * Constructor and destructor.
       */
       /***********************************************************************/
+      
       Actor(String actorName);
 
       ~Actor() = default;
@@ -21,18 +25,6 @@ namespace gaEngineSDK {
       * Methods.
       */
       /***********************************************************************/
-
-      /*
-      * @brief .
-      */
-      void
-      update(const float& deltaTime) override;
-
-      /*
-      * @brief .
-      */
-      void
-      render() override;
 
       /*
       * @brief .
@@ -85,9 +77,8 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      SPtr<Component>
-      setComponent(TYPE_COMPONENTS::E typeComponent, 
-                   SPtr<Component> component = nullptr) override;
+      void
+      setComponent(TYPE_COMPONENTS::E typeComponent, WeakSPtr<Component> compoInfo) override;
 
       protected:
       /***********************************************************************/
@@ -109,6 +100,17 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      Map<TYPE_COMPONENTS::E, SPtr<Component>> m_mapComponents;
+      SPtr<Transform> m_actorTransform;
+
+      /*
+      * @brief .
+      */
+      SPtr<Component> m_component;
+
+      /*
+      * @brief .
+      */
+      Vector<TYPE_COMPONENTS::E> m_vComponents;
+      
   };
 }
