@@ -7,6 +7,8 @@
 namespace gaEngineSDK {
 
   class Actor;
+  class ResourceManager;
+  class Model;
 
   class GA_CORE_EXPORT SceneGraph : public Module<SceneGraph>
   {
@@ -56,6 +58,11 @@ namespace gaEngineSDK {
       * @brief .
       */
       SPtr<SceneNode> m_root = nullptr;
+
+      /*
+      * @brief .
+      */
+      SPtr<Model> m_accessModel = nullptr;
   };
 
   /***************************************************************************/

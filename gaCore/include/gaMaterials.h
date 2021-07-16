@@ -1,31 +1,40 @@
 #pragma once
 
 #include "gaPrerequisitesCore.h"
+#include "gaComponent.h"
+#include "gaTextures.h"
 
 namespace gaEngineSDK {
-  class GA_CORE_EXPORT Component
+
+  class GA_CORE_EXPORT Materials : public Component
   {
     public:
       /***********************************************************************/
-      /**
+      /*
       * Constructor and destructor.
       */
       /***********************************************************************/
+      Materials() = default;
+      
+      ~Materials() = default;
 
-      Component() = default;
+      void
+      update(const float& deltaTime)override;
 
-      ~Component() = default;
+      void
+      render()override;
 
+    private:
       /***********************************************************************/
-      /**
-      * Methods.
+      /*
+      * Members.
       */
       /***********************************************************************/
 
-      virtual void
-      update(const float& deltaTime) { };
+      String m_materialName = "Default_M";
 
-      virtual void
-      render() { };
+      SPtr<Textures> m_textureInfo = nullptr;
+
+      Vector<SPtr<Materials>> m_vMaterials;
   };
 }

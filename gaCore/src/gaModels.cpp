@@ -27,11 +27,6 @@ namespace gaEngineSDK {
     return m_sampler;
   }
 
-  SPtr<AnimationData>
-  Model::getCurrentAnim() {
-    return m_currentAnimation;
-  }
-
   SPtr<ResourceManager>
   Model::getResourceMgrInfo() {
     return m_resourceManager;
@@ -40,11 +35,6 @@ namespace gaEngineSDK {
   Vector<SPtr<Mesh>>
   Model::getMeshesInfo() {
     return m_vMeshes;
-  }
-
-  Vector<SPtr<AnimationData>>
-  Model::getAnimData() {
-    return m_vAnimationData;
   }
 
   /***************************************************************************/
@@ -69,21 +59,11 @@ namespace gaEngineSDK {
   }
 
   void 
-  Model::setCurrentAnim(WeakSPtr<AnimationData> currentAnim) {
-    m_currentAnimation.reset(currentAnim.lock().get());
-  }
-
-  void 
   Model::setResourceMgrInfo(WeakSPtr<ResourceManager> resourceMgr) {
     m_resourceManager.reset(resourceMgr.lock().get());
   }
 
   void Model::setMeshesInfo(SPtr<Mesh> meshInfo) {
     m_vMeshes.push_back(meshInfo);
-  }
-
-  void
-  Model::setAnimData(SPtr<AnimationData> animData) {
-    m_vAnimationData.push_back(animData);
   }
 }

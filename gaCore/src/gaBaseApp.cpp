@@ -1,6 +1,5 @@
 #include "gaBaseApp.h"
 #include "gaSceneGraph.h"
-#include "gaResourceManager.h"
 
 namespace gaEngineSDK {
 
@@ -74,8 +73,7 @@ namespace gaEngineSDK {
     GraphicsApi* graphicApi = graphicsApiFunc();
     g_graphicApi().setObject(graphicApi);
 
-    //Inicialización de módulos
-    ResourceManager::startUp();
+    //Module initialization
     SceneGraph::startUp();
 
     return 0;

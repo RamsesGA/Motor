@@ -36,6 +36,18 @@ namespace gaEngineSDK {
       SPtr<SceneNode>
       createNewActorNode(WeakSPtr<Actor> actor, WeakSPtr<SceneNode> parent);
 
+      /*
+      * @brief .
+      */
+      void
+      update(const float& deltaTime);
+
+      /*
+      * @brief .
+      */
+      void
+      render();
+
       /***********************************************************************/
       /**
       * Sets.

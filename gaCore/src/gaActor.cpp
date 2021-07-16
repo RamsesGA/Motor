@@ -1,5 +1,4 @@
 #include "gaActor.h"
-#include "gaRenderModels.h"
 #include "gaCamera.h"
 #include "gaTransform.h"
 #include "gaSceneNode.h"
@@ -7,10 +6,25 @@
 namespace gaEngineSDK {
   Actor::Actor(String actorName) {
     m_actorName = actorName;
+    m_actorTransform.reset(new Transform());
   }
 
   void 
-  Actor::removeComponent(TYPE_COMPONENTS::E typeComponent) {}
+  Actor::removeComponent() {}
+
+  void 
+  Actor::actorUpdate(const float& deltaTime) {
+    for (auto accessComponent : m_vComponents) {
+      accessComponent->update(deltaTime);
+    }
+  }
+
+  void
+  Actor::actorRender() {
+    for (auto accessComponent : m_vComponents) {
+      accessComponent->render();
+    }
+  }
 
   /***************************************************************************/
   /**
@@ -26,11 +40,6 @@ namespace gaEngineSDK {
   String
   Actor::getActorName() {
     return m_actorName;
-  }
-
-  SPtr<Component> 
-  Actor::getComponent(TYPE_COMPONENTS::E typeComponent) {
-    return SPtr<Component>();
   }
 
   /***************************************************************************/
@@ -50,9 +59,7 @@ namespace gaEngineSDK {
   }
 
   void
-  Actor::setComponent(TYPE_COMPONENTS::E typeComponent, WeakSPtr<Component> compoInfo) {
-    m_vComponents.push_back(typeComponent);
-    m_component = compoInfo.lock();
+  Actor::setComponent(WeakSPtr<Component> compoInfo) {
+    m_vComponents.push_back(compoInfo.lock());
   }
-
 }

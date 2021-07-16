@@ -63,16 +63,15 @@ namespace gaEngineSDK {
 
       void 
       animated(const float& animationTime, SPtr<AnimationData> animation, 
-               WeakSPtr<ResourceManager> resource);
+               WeakSPtr<ModelNodes> structModelNode);
 
       void 
       boneTransform(const float& deltaTime, SPtr<AnimationData> animation, 
-                    WeakSPtr<ResourceManager> resource);
+                    WeakSPtr<ModelNodes> structModelNode);
 
       void
-      readNodeHierarchy(const float& animationTime, WeakSPtr<ModelNodes> node,
-                        const Matrix4x4& parentTransform, SPtr<AnimationData> animation, 
-                        WeakSPtr<ResourceManager> resource);
+      readNodeHierarchy(const float& animationTime, WeakSPtr<ModelNodes> structModelNode,
+                        const Matrix4x4& parentTransform, SPtr<AnimationData> animation);
 
       const AnimationNode*
       findNodeAnim(AnimationData* animation, const String& nodeName);

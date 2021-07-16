@@ -28,6 +28,32 @@ namespace gaEngineSDK {
     return newNode;
   }
 
+  void 
+  SceneNode::update(const float& deltaTime) {
+    m_pActor->actorUpdate(deltaTime);
+
+    if (m_pChildNodes.empty()) {
+      return;
+    }
+
+    for (auto accessNode : m_pChildNodes) {
+      accessNode->update(deltaTime);
+    }
+  }
+
+  void 
+  SceneNode::render() {
+    m_pActor->actorRender();
+
+    if (m_pChildNodes.empty()) {
+      return;
+    }
+
+    for (auto accessNode : m_pChildNodes) {
+      accessNode->render();
+    }
+  }
+
   /***************************************************************************/
   /**
   * Sets.

@@ -9,9 +9,24 @@
 #include "gaPrerequisitesCore.h"
 #include "gaModels.h"
 #include "gaResource.h"
+#include "gaComponent.h"
 
 namespace gaEngineSDK {
-  class GA_CORE_EXPORT ResourceManager : public Module <ResourceManager>
+
+  namespace TYPE_TEXTURES {
+    enum E {
+      kDiffuse = 0,
+      kAlbedo,
+      kMetallic,
+      kNormal,
+      kRoughness,
+      kSpecular,
+      kAO,
+      kEmissive
+    };
+  }
+
+  class GA_CORE_EXPORT ResourceManager : public Component
   {
     public:
       /***********************************************************************/
@@ -20,27 +35,39 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
       ResourceManager() = default;
-    
+
+      /*
+      * @brief Function to initialize class members and start with assimp.
+      * @param Variable string with the address of the file.
+      * @param Variable with API information.
+      */
+      ResourceManager(String const& path);
+
       ~ResourceManager() = default;
+
+      /***********************************************************************/
+      /**
+      * Inheritance methods.
+      */
+      /***********************************************************************/
+
+      /*
+      * @brief .
+      */
+      void
+      update(const float& deltaTime)override;
+
+      /*
+      * @brief .
+      */
+      void
+      render()override;
     
       /***********************************************************************/
       /**
       * Methods.
       */
       /***********************************************************************/
-
-      void
-      setObject(ResourceManager* resM) {
-        ResourceManager::_instance() = resM;
-      }
-    
-      /*
-      * @brief Function to initialize class members and start with assimp.
-      * @param Variable string with the address of the file.
-      * @param Variable with API information.
-      */
-      void
-      initLoadModel(String const& path);
 
       /*
       * @brief Function to process node information.
@@ -49,7 +76,7 @@ namespace gaEngineSDK {
       * @param Variable with API information.
       */
       void
-      processNode(aiNode* pANode, const aiScene* pAScene);
+      processNode(aiNode* pANode);
 
       /*
       * @brief Function to process the information of the meshes.
@@ -58,14 +85,23 @@ namespace gaEngineSDK {
       * @param Variable with API information.
       */
       SPtr<Mesh>
-      processMesh(aiMesh* pAMesh, const aiScene* pAScene);
+      processMesh(aiMesh* pAMesh);
 
+      /*
+      * @brief .
+      */
       void
       processBonesInfo(aiMesh* pAMesh, Vertex* structureVertex, uint32 numVertexes);
 
+      /*
+      * @brief .
+      */
       void
       processIndexInfo(uint32 numIndices);
 
+      /*
+      * @brief .
+      */
       void
       processAnimationInfo();
 
@@ -94,7 +130,7 @@ namespace gaEngineSDK {
       * @brief .
       */
       void
-      loadTexture(String path);
+      loadTexture(String path, TYPE_TEXTURES::E typeTexture);
 
       /***********************************************************************/
       /**
@@ -151,6 +187,11 @@ namespace gaEngineSDK {
       Vector<Textures*>
       getVecTextures();
 
+      /*
+      * @brief .
+      */
+      Vector<ConstBuffBonesTransform> m_meshBones;
+
     protected:
       /*
       * @brief .
@@ -165,6 +206,16 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
       
+      /*
+      * @brief .
+      */
+      bool m_playAnimation = true;
+
+      /*
+      * @brief .
+      */
+      float m_timeOfAnimation = 0.0f;
+
       /*
       * @brief .
       */
@@ -209,14 +260,10 @@ namespace gaEngineSDK {
       * @brief .
       */
       Vector<SPtr<Model>> m_vModels;
+
+      /*
+      * @brief .
+      */
+      Vector<SPtr<AnimationData>> m_vAnimationData;
   };
-
-  /***************************************************************************/
-  /**
-  * Export.
-  */
-  /***************************************************************************/
-
-  GA_CORE_EXPORT ResourceManager&
-  g_resourceManager();
 }

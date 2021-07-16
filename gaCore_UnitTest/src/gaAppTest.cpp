@@ -2,7 +2,6 @@
 #include <iostream>
 #include <gaModels.h>
 #include <gaResourceManager.h>
-#include <gaRenderModels.h>
 #include <gaSceneGraph.h>
 
 #include "gaAppTest.h"
@@ -27,6 +26,7 @@ AppTest::onInitCamera() {
 void
 AppTest::onUpdate(float deltaTime) {
   auto myGraphicsApi = g_graphicApi().instancePtr();
+  auto mySceneGraph = SceneGraph::instancePtr();
 
   ConstantBuffer1 meshData;
   meshData.mProjection = myGraphicsApi->matrixPolicy(m_mainCamera.getProjection());
@@ -47,12 +47,14 @@ AppTest::onUpdate(float deltaTime) {
   myGraphicsApi->updateConstantBuffer(&meshData, m_pBufferCamera);
   myGraphicsApi->updateConstantBuffer(&cb, m_pBufferWorld);
 
-  m_renderModel->update(*m_resourceInfo, deltaTime);
+  //Update the nodes info.
+  mySceneGraph->update(deltaTime);
 }
 
 void
 AppTest::onRender() {
   auto myGraphicsApi = g_graphicApi().instancePtr();
+  auto mySceneGraph = SceneGraph::instancePtr();
 
   /***************************************************************************/
   /*
@@ -94,19 +96,17 @@ AppTest::onRender() {
   myGraphicsApi->setConstBufferBones(m_tempBufferBones);
 
   //Render model
-  m_renderModel->drawModel();
+  mySceneGraph->render();
   
   // Present our back buffer to our front buffer
-  g_graphicApi().swapChainPresent();
+  myGraphicsApi->swapChainPresent();
 }
 
 void
 AppTest::onCreate() {
   auto myGraphicsApi = g_graphicApi().instancePtr();
 
-  m_renderModel = new RenderModels();
   m_mesh.reset(new Mesh());
-  m_resourceInfo.reset(new ResourceManager());
 
   //We send the window to the API.
   myGraphicsApi->initDevice(m_sfmlWindow.getSystemHandle());
@@ -149,31 +149,17 @@ AppTest::onCreate() {
   /***************************************************************************/
   /*
   * Loading models.
+  * Set Node
   */
   /***************************************************************************/
 
-  //twoB();
-  //spartan();
-  //m_resourceInfo->initLoadModel("data/models/pod/POD.obj");
-  //m_resourceInfo->initLoadModel("data/models/vela/Vela2.fbx");
-  //m_resourceInfo->initLoadModel("data/models/ugandan/Knuckles.fbx");
-  m_resourceInfo->initLoadModel("data/models/grimoires/grimoires.fbx");
-
-  /***************************************************************************/
-  /*
-  * Check animations.
-  */
-  /***************************************************************************/
-
-  setAnimations();
-
-  /***************************************************************************/
-  /*
-  * Set Node.
-  */
-  /***************************************************************************/
-  
-  createActor();
+  //createNodePod();
+  //createNodeVela();
+  //createNodeTwoB();
+  //createNodeSpartan();
+  //createNodeUgandan();
+  createNodeGrimoires();
+  createNodeRamlethalSwords();
 }
 
 void
@@ -230,93 +216,48 @@ AppTest::onMouseMove() {
   }
 }
 
+/*****************************************************************************/
+/*
+* Nodes.
+*/
+/*****************************************************************************/
+
 void
-AppTest::spartan() {
-  /*
-  m_resourceInfo->loadTexture("data/textures/spartan/lambert1_Colour-Opacity.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/lambert1_Nrm.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/lambert1_Roughness.png");
-  */
+AppTest::createNodePod() {
+  auto mySceneGraph = SceneGraph::instancePtr();
 
-  m_resourceInfo->loadTexture("data/textures/spartan/ODST_Shoulder_Mat_BaseColor.png");
+  //Creating the component
+  SPtr<Component> newComponent(new ResourceManager("data/models/pod/POD.obj"));
 
-  /*
-  m_resourceInfo->loadTexture("data/textures/spartan/ODST_Shoulder_Mat_AO.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/ODST_Shoulder_Mat_Metallic.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/ODST_Shoulder_Mat_Normal.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/ODST_Shoulder_Mat_Roughness.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/ODST_Shoulder_Mat_Specular.png");
-  */
+  //Creating actor
+  SPtr<Actor> actor(new Actor("Pod"));
+  actor->setIsSelected(true);
+  actor->setComponent(newComponent);
 
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Arms_Mat_BaseColor.png");
-
-  /*
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Arms_Mat_AO.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Arms_Mat_Metallic.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Arms_Mat_Normal.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Arms_Mat_Roughness.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Arms_Mat_Specular.png");
-  */
-
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Chest_Mat_BaseColor.png");
-
-  /*
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Chest_Mat_AO.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Chest_Mat_Metallic.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Chest_Mat_Normal.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Chest_Mat_Roughness.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Chest_Mat_Specular.png");
-  */
-
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Ears_Mat_BaseColor.png");
-
-  /*
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Ears_Mat_AO.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Ears_Mat_Metallic.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Ears_Mat_Normal.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Ears_Mat_Roughness.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Ears_Mat_Specular.png");
-  */
-
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Helmet_Mat_BaseColor.png");
-
-  /*
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Helmet_Mat_AO.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Helmet_Mat_Metallic.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Helmet_Mat_Normal.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Helmet_Mat_Roughness.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Helmet_Mat_Specular.png");
-  */
-
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Legs_Mat_BaseColor.png");
-
-  /*
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Legs_Mat_AO.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Legs_Mat_Metallic.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Legs_Mat_Normal.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Legs_Mat_Roughness.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Legs_Mat_Specular.png");
-  */
-
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Undersuit_Mat_BaseColor.png");
-
-  /*
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Undersuit_Mat_AO.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Undersuit_Mat_Metallic.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Undersuit_Mat_Normal.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Undersuit_Mat_Roughness.png");
-  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Undersuit_Mat_Specular.png");
-  */
-
-  m_resourceInfo->initLoadModel("data/models/spartan/Spartan.fbx");
+  //Adding the actor to node root
+  mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
 }
 
 void
-AppTest::twoB() {
+AppTest::createNodeVela() {
+  auto mySceneGraph = SceneGraph::instancePtr();
 
-  m_resourceInfo->loadTexture("data/textures/2B/2B_Diffuse.png");
+  //Creating the component
+  SPtr<Component> newComponent(new ResourceManager("data/models/vela/Vela2.fbx"));
 
+  //Creating actor
+  SPtr<Actor> actor(new Actor("Vela"));
+  actor->setIsSelected(true);
+  actor->setComponent(newComponent);
+
+  //Adding the actor to node root
+  mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+}
+
+void
+AppTest::createNodeTwoB() {
   /*
+  m_resourceInfo->loadTexture("data/textures/2B/2B_Diffuse.png");
   m_resourceInfo->loadTexture("data/textures/2B/2B_Alpha.png");
   m_resourceInfo->loadTexture("data/textures/2B/2B_HairAlpha.png");
   m_resourceInfo->loadTexture("data/textures/2B/2B_HairD.png");
@@ -326,28 +267,141 @@ AppTest::twoB() {
   m_resourceInfo->loadTexture("data/textures/2B/2B_Specular.png");
   */
 
-  m_resourceInfo->initLoadModel("data/models/2B/2B.obj");
+  auto mySceneGraph = SceneGraph::instancePtr();
+
+  //Creating the component
+  SPtr<Component> newComponent(new ResourceManager("data/models/2B/2B.obj"));
+
+  //Creating actor
+  SPtr<Actor> actor(new Actor("2B"));
+  actor->setIsSelected(true);
+  actor->setComponent(newComponent);
+
+  //Adding the actor to node root
+  mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
 }
 
 void
-AppTest::createActor() {
+AppTest::createNodeSpartan() {
+  /*
+  m_resourceInfo->loadTexture("data/textures/spartan/lambert1_Colour-Opacity.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/lambert1_Nrm.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/lambert1_Roughness.png");
+
+  m_resourceInfo->loadTexture("data/textures/spartan/ODST_Shoulder_Mat_BaseColor.png");
+
+  m_resourceInfo->loadTexture("data/textures/spartan/ODST_Shoulder_Mat_AO.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/ODST_Shoulder_Mat_Metallic.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/ODST_Shoulder_Mat_Normal.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/ODST_Shoulder_Mat_Roughness.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/ODST_Shoulder_Mat_Specular.png");
+
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Arms_Mat_BaseColor.png");
+
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Arms_Mat_AO.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Arms_Mat_Metallic.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Arms_Mat_Normal.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Arms_Mat_Roughness.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Arms_Mat_Specular.png");
+
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Chest_Mat_BaseColor.png");
+
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Chest_Mat_AO.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Chest_Mat_Metallic.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Chest_Mat_Normal.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Chest_Mat_Roughness.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Chest_Mat_Specular.png");
+
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Ears_Mat_BaseColor.png");
+
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Ears_Mat_AO.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Ears_Mat_Metallic.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Ears_Mat_Normal.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Ears_Mat_Roughness.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Ears_Mat_Specular.png");
+
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Helmet_Mat_BaseColor.png");
+
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Helmet_Mat_AO.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Helmet_Mat_Metallic.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Helmet_Mat_Normal.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Helmet_Mat_Roughness.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Helmet_Mat_Specular.png");
+
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Legs_Mat_BaseColor.png");
+
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Legs_Mat_AO.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Legs_Mat_Metallic.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Legs_Mat_Normal.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Legs_Mat_Roughness.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Legs_Mat_Specular.png");
+
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Undersuit_Mat_BaseColor.png");
+
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Undersuit_Mat_AO.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Undersuit_Mat_Metallic.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Undersuit_Mat_Normal.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Undersuit_Mat_Roughness.png");
+  m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Undersuit_Mat_Specular.png");
+  */
   auto mySceneGraph = SceneGraph::instancePtr();
 
-  SPtr<Component> tempCompo(new Component(m_resourceInfo));
+  //Creating the component
+  SPtr<Component> newComponent(new ResourceManager("data/models/spartan/Spartan.fbx"));
 
-  SPtr<Actor> actor(new Actor("Grimoires"));
-  actor->setComponent(TYPE_COMPONENTS::kRenderModel, tempCompo);
+  //Creating actor
+  SPtr<Actor> actor(new Actor("Spartan"));
+  actor->setIsSelected(true);
+  actor->setComponent(newComponent);
 
+  //Adding the actor to node root
+  mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+}
+
+void
+AppTest::createNodeUgandan() {
+  auto mySceneGraph = SceneGraph::instancePtr();
+
+  //Creating the component
+  SPtr<Component> newComponent(new ResourceManager("data/models/ugandan/Knuckles.fbx"));
+
+  //Creating actor
+  SPtr<Actor> actor(new Actor("Ugandan"));
+  actor->setIsSelected(true);
+  actor->setComponent(newComponent);
+
+  //Adding the actor to node root
   mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
 }
 
 void 
-AppTest::setAnimations() {
-  //This is just to save the bones and animations.
-  //If not, we avoid a mistake. 
-  m_renderModel->m_meshBones.resize(m_resourceInfo->getMeshes().size());
+AppTest::createNodeGrimoires() {
+  auto mySceneGraph = SceneGraph::instancePtr();
 
-  if (!m_resourceInfo->getModel()->getAnimData().empty()) {
-    m_renderModel->m_currentAnimation = m_resourceInfo->getModel()->getAnimData()[0];
-  }
+  //Creating the component
+  SPtr<Component> newComponent(new ResourceManager("data/models/grimoires/grimoires.fbx"));
+
+  //Creating actor
+  SPtr<Actor> actor(new Actor("Grimoires"));
+  actor->setIsSelected(true);
+  actor->setComponent(newComponent);
+
+  //Adding the actor to node root
+  mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+}
+
+void 
+AppTest::createNodeRamlethalSwords() {
+  auto mySceneGraph = SceneGraph::instancePtr();
+
+  //Creating the component
+  SPtr<Component> newComponent(new ResourceManager("data/models/ramlethal/Ramlethal Sword.fbx"));
+
+  //Creating actor
+  SPtr<Actor> actor(new Actor("Sword"));
+  actor->setIsSelected(true);
+  actor->setComponent(newComponent);
+
+  //Adding the actor to node root
+  mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
 }

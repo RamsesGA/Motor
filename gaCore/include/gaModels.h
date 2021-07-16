@@ -19,11 +19,21 @@ namespace gaEngineSDK {
   };
 
   struct RotationKey {
-    Quaternions m_value;
     float m_time;
+    Quaternions m_value;
   };
 
   struct ModelNodes {
+    /*
+    * @brief Member to save the quantity of children nodes.
+    */
+    uint32 m_numChildrens;
+
+    /*
+    * @brief Member to save the quantity of meshes.
+    */
+    uint32 m_numMeshes;
+
     /*
     * @brief Member to define the name.
     */
@@ -40,24 +50,29 @@ namespace gaEngineSDK {
     SPtr<ModelNodes> m_parentNode = nullptr;
 
     /*
-    * @brief Member to define all the childrens.
+    * @brief Member to define all the children.
     */
     Vector<SPtr<ModelNodes>> m_vChildrenNodes;
-
-    /*
-    * @brief Member to save the quantity of children nodes.
-    */
-    uint32 m_numChildrens;
-
-    /*
-    * @brief Member to save the quantity of meshes.
-    */
-    uint32 m_numMeshes;
   };
 
   struct AnimationNode {
     /*
-    * @brief Mmember to know what.
+    * @brief .
+    */
+    uint32 m_numScalingKeys;
+
+    /*
+    * @brief .
+    */
+    uint32 m_numRotationKeys;
+
+    /*
+    * @brief .
+    */
+    uint32 m_numPositionKeys;
+    
+    /*
+    * @brief Member to know what.
     */
     String m_nodeName;
 
@@ -69,34 +84,19 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    uint32 m_numScalingKeys;
-
-    /*
-    * @brief .
-    */
     Vector<RotationKey> m_vRotationKeys;
 
     /*
     * @brief .
     */
-    uint32 m_numRotationKeys;
-
-    /*
-    * @brief .
-    */
     Vector<Key> m_vPositionKeys;
-
-    /*
-    * @brief .
-    */
-    uint32 m_numPositionKeys;
   };
 
   struct AnimationData {
     /*
     * @brief .
     */
-    String m_animationName = "Default Animation";
+    uint32 m_numChannels;
 
     /*
     * @brief .
@@ -111,7 +111,7 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    uint32 m_numChannels;
+    String m_animationName = "Default Animation";
 
     /*
     * @brief .
@@ -161,12 +161,6 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      SPtr<AnimationData>
-      getCurrentAnim();
-
-      /*
-      * @brief .
-      */
       SPtr<ResourceManager>
       getResourceMgrInfo();
 
@@ -175,12 +169,6 @@ namespace gaEngineSDK {
       */
       Vector<SPtr<Mesh>>
       getMeshesInfo();
-
-      /*
-      * @brief .
-      */
-      Vector<SPtr<AnimationData>>
-      getAnimData();
 
       /***********************************************************************/
       /*
@@ -210,12 +198,6 @@ namespace gaEngineSDK {
       * @brief .
       */
       void
-      setCurrentAnim(WeakSPtr<AnimationData> currentAnim);
-
-      /*
-      * @brief .
-      */
-      void
       setResourceMgrInfo(WeakSPtr<ResourceManager> resourceMgr);
 
       /*
@@ -223,12 +205,6 @@ namespace gaEngineSDK {
       */
       void
       setMeshesInfo(SPtr<Mesh> meshInfo);
-
-      /*
-      * @brief .
-      */
-      void
-      setAnimData(SPtr<AnimationData> animData);
 
       /*
       * @brief .
@@ -252,6 +228,8 @@ namespace gaEngineSDK {
       */
       uint32 m_numAnimations = 0;
 
+      
+
       /*
       * @brief .
       */
@@ -265,21 +243,11 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      SPtr<AnimationData> m_currentAnimation = nullptr;
-
-      /*
-      * @brief .
-      */
       SPtr<ResourceManager> m_resourceManager = nullptr;
 
       /*
       * @brief .
       */
       Vector<SPtr<Mesh>> m_vMeshes;
-
-      /*
-      * @brief .
-      */
-      Vector<SPtr<AnimationData>> m_vAnimationData;
   };  
 }

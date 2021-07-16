@@ -27,7 +27,13 @@ namespace gaEngineSDK {
       * @brief .
       */
       virtual void
-      removeComponent(TYPE_COMPONENTS::E typeComponent) { };
+      removeComponent() { };
+
+      /*
+      * @brief .
+      */
+      virtual void
+      actorRender() { };
 
       /***********************************************************************/
       /**
@@ -51,7 +57,7 @@ namespace gaEngineSDK {
       * @brief .
       */
       virtual SPtr<Component>
-      getComponent(TYPE_COMPONENTS::E typeComponent) { return nullptr; };
+      getComponent() { return nullptr; };
 
       /***********************************************************************/
       /**
@@ -75,6 +81,6 @@ namespace gaEngineSDK {
       * @brief .
       */
       virtual void
-      setComponent(TYPE_COMPONENTS::E typeComponent, WeakSPtr<Component> compoInfo) { };
+      setComponent(WeakSPtr<Component> compoInfo) { };
   };
 }

@@ -30,7 +30,19 @@ namespace gaEngineSDK {
       * @brief .
       */
       void
-      removeComponent(TYPE_COMPONENTS::E typeComponent) override;
+      removeComponent() override;
+
+      /*
+      * @brief .
+      */
+      void
+      actorUpdate(const float& deltaTime);
+
+      /*
+      * @brief .
+      */
+      void
+      actorRender() override;
 
       /***********************************************************************/
       /**
@@ -49,12 +61,6 @@ namespace gaEngineSDK {
       */
       String 
       getActorName() override;
-
-      /*
-      * @brief .
-      */
-      SPtr<Component>
-      getComponent(TYPE_COMPONENTS::E typeComponent) override;
 
       /***********************************************************************/
       /**
@@ -78,7 +84,7 @@ namespace gaEngineSDK {
       * @brief .
       */
       void
-      setComponent(TYPE_COMPONENTS::E typeComponent, WeakSPtr<Component> compoInfo) override;
+      setComponent(WeakSPtr<Component> compoInfo) override;
 
       protected:
       /***********************************************************************/
@@ -105,12 +111,6 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      SPtr<Component> m_component;
-
-      /*
-      * @brief .
-      */
-      Vector<TYPE_COMPONENTS::E> m_vComponents;
-      
+      Vector<SPtr<Component>> m_vComponents;
   };
 }

@@ -10,12 +10,8 @@
 #include <gaStructures.h>
 
 namespace gaEngineSDK {
-  class Models;
   class ResourceManager;
-  class RenderModels;
 }
-
-using std::exception;
 
 class AppTest : public BaseApp 
 {
@@ -96,25 +92,43 @@ class AppTest : public BaseApp
     * @brief .
     */
     void
-    spartan();
+    createNodePod();
 
     /*
     * @brief .
     */
     void
-    twoB();
+    createNodeVela();
 
     /*
     * @brief .
     */
     void
-    createActor();
+    createNodeTwoB();
 
     /*
     * @brief .
     */
     void
-    setAnimations();
+    createNodeSpartan();
+
+    /*
+    * @brief .
+    */
+    void
+    createNodeUgandan();
+
+    /*
+    * @brief .
+    */
+    void
+    createNodeGrimoires();
+
+    /*
+    * @brief .
+    */
+    void
+    createNodeRamlethalSwords();
 
   public:
     /*************************************************************************/
@@ -171,11 +185,6 @@ class AppTest : public BaseApp
     * @brief .
     */
     SPtr<Mesh> m_mesh;
-
-    /*
-    * @brief .
-    */
-    RenderModels* m_renderModel = nullptr;
 
     /*
     * @brief .

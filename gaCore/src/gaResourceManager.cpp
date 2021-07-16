@@ -3,55 +3,114 @@
 #include "gaMesh.h"
 
 namespace gaEngineSDK {
-  void 
-  ResourceManager::initLoadModel(String const& path) {
+
+  ResourceManager::ResourceManager(String const& path) {
     //Read _file via assimp
-    m_pAScene = m_aImporter.ReadFile(path,
-                                     aiProcessPreset_TargetRealtime_MaxQuality |
-                                     aiProcess_ConvertToLeftHanded |
-                                     aiProcess_Triangulate);
+    m_pAScene = m_aImporter.ReadFile(path, aiProcessPreset_TargetRealtime_MaxQuality |
+                                     aiProcess_ConvertToLeftHanded | aiProcess_Triangulate);
     //Check for errors
     if (!m_pAScene || m_pAScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !m_pAScene->mRootNode) {
       return;
     }
 
-    //Creamos el directorio del modelo y de su textura
+    //We create the directory of the model and its texture
     createDirectories(path);
 
     auto myGraphicApi = g_graphicApi().instancePtr();
     m_newModel.reset(new Model());
 
     //Process assimp's root pNode recursively
-    processNode(m_pAScene->mRootNode, m_pAScene);
+    processNode(m_pAScene->mRootNode);
 
     processAnimationInfo();
 
     SPtr<SamplerState> tempSamp(myGraphicApi->createSamplerState());
+
     //Create texture sampler for model's textures
     m_newModel->setSampler(tempSamp);
+
+    m_meshBones.resize(m_vMeshes.size());
   }
 
+  /***************************************************************************/
+  /**
+  * Inheritance methods.
+  */
+  /***************************************************************************/
+
   void
-  ResourceManager::processNode(aiNode* pANode, const aiScene* pAScene) {
+  ResourceManager::update(const float& deltaTime) {
+    if (0 != m_vAnimationData.size()) {
+      SPtr<AnimationData> currentAnimation = m_vAnimationData[0];
+
+      if (m_playAnimation) {
+        m_timeOfAnimation += deltaTime;
+      }
+      if (m_timeOfAnimation >= currentAnimation->m_animDuration) {
+        m_timeOfAnimation = 0.0f;
+      }
+
+      uint32 meshNum = 0;
+
+      for (auto mesh : m_vMeshes) {
+        mesh->m_cbBonesTrans = &m_meshBones[meshNum];
+        mesh->animated(m_timeOfAnimation, currentAnimation, m_newModel->m_modelNodes);
+        ++meshNum;
+      }
+    }
+  }
+
+  void 
+  ResourceManager::render() {
+    auto myGraphicApi = g_graphicApi().instancePtr();
+
+    uint32 meshNum = 0;
+
+    for (auto mesh : m_vMeshes) {
+      myGraphicApi->updateConstantBuffer(&m_meshBones[meshNum], 
+                                         myGraphicApi->getConstBufferBones());
+
+      if (0 != m_vMeshes[meshNum]->m_textures.size()) {
+
+        //TODO: I need to correct the sampler
+        myGraphicApi->setShaderResourceView(m_vMeshes[meshNum]->m_textures, meshNum, 1);
+      }
+
+      myGraphicApi->setVertexBuffer(mesh->m_pVertexBuffer);
+      myGraphicApi->setIndexBuffer(mesh->m_pIndexBuffer);
+
+      myGraphicApi->drawIndex(mesh->getNumIndices());
+      ++meshNum;
+    }
+  }
+
+  /***************************************************************************/
+  /**
+  * Methods.
+  */
+  /***************************************************************************/
+
+  void
+  ResourceManager::processNode(aiNode* pANode) {
     //Process each _mesh located at the current pNode
     uint32 tempNumMeshes = pANode->mNumMeshes;
     for (uint32 i = 0; i < tempNumMeshes; ++i) {
       /*
-      * The pNode object only contains indices to index the actual objects in the pAScene.
-      * The pAScene contains all the data, pNode is just to keep stuff organized.
+      * The pNode object only contains indices to index the actual objects in the m_pAScene.
+      * The m_pAScene contains all the data, pNode is just to keep stuff organized.
       */
-      aiMesh* _mesh = pAScene->mMeshes[pANode->mMeshes[i]];
-      m_vMeshes.push_back(processMesh(_mesh, pAScene));
+      aiMesh* _mesh = m_pAScene->mMeshes[pANode->mMeshes[i]];
+      m_vMeshes.push_back(processMesh(_mesh));
     }
 
     uint32 tempNumChildren = pANode->mNumChildren;
     for (uint32 i = 0; i < tempNumChildren; ++i) {
-      processNode(pANode->mChildren[i], pAScene);
+      processNode(pANode->mChildren[i]);
     }
   }
 
   SPtr<Mesh>
-  ResourceManager::processMesh(aiMesh* pAMesh, const aiScene* pAScene) {
+  ResourceManager::processMesh(aiMesh* pAMesh) {
     //Data to fill
     Vector<uint32> indices;
     Vector<Vertex> vertices;
@@ -122,18 +181,13 @@ namespace gaEngineSDK {
 
     //processIndexInfo((uint32)indices.size());
 
-    aiMaterial* material = pAScene->mMaterials[pAMesh->mMaterialIndex];
+    aiMaterial* material = m_pAScene->mMaterials[pAMesh->mMaterialIndex];
 
     Vector<Textures*> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE);
 
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-    if ((0 == textures.size()) && (m_textures.size() > 0) ) {
-      m_newMesh->init(vertices, indices, m_textures);
-    }
-    else {
-      m_newMesh->init(vertices, indices, textures);
-    }
+    m_newMesh->init(vertices, indices, textures);
 
     auto myGraphicApi = g_graphicApi().instancePtr();
 
@@ -166,7 +220,7 @@ namespace gaEngineSDK {
 
         skeletal->bonesMap[boneName] = boneIndex;
 
-        //Checar si funciona el memcopy
+        //Check if memcpy works
         std::memcpy(&skeletal->vBones[boneIndex].offSet, &pAMesh->mBones[i]->mOffsetMatrix,
                     sizeof(Matrix4x4));
 
@@ -313,8 +367,9 @@ namespace gaEngineSDK {
 
         newAnimation->m_vChannels[j] = newAnimNode;
       }
+
       SPtr<AnimationData> anim(newAnimation);
-      m_newModel->setAnimData(anim);
+      m_vAnimationData.push_back(anim);
     }
 
     if (0 < m_pAScene->mNumAnimations) {
@@ -404,10 +459,30 @@ namespace gaEngineSDK {
   }
 
   void
-  ResourceManager::loadTexture(String path) {
+  ResourceManager::loadTexture(String path, TYPE_TEXTURES::E typeTexture) {
     auto myGraphicApi = g_graphicApi().instancePtr();
 
-    m_textures.push_back(myGraphicApi->loadTextureFromFile(path));
+    switch (typeTexture)
+    {
+      case gaEngineSDK::TYPE_TEXTURES::kDiffuse:
+        break;
+      case gaEngineSDK::TYPE_TEXTURES::kAlbedo:
+        break;
+      case gaEngineSDK::TYPE_TEXTURES::kMetallic:
+        break;
+      case gaEngineSDK::TYPE_TEXTURES::kNormal:
+        break;
+      case gaEngineSDK::TYPE_TEXTURES::kRoughness:
+        break;
+      case gaEngineSDK::TYPE_TEXTURES::kSpecular:
+        break;
+      case gaEngineSDK::TYPE_TEXTURES::kAO:
+        break;
+      case gaEngineSDK::TYPE_TEXTURES::kEmissive:
+        break;
+      default:
+        break;
+    }
   }
 
   String 
@@ -488,10 +563,5 @@ namespace gaEngineSDK {
     }
     m_texturesDirectory += miniPaht + '/';
     miniPaht.clear();
-  }
-
-  ResourceManager& 
-  g_resourceManager() {
-    return ResourceManager::instance();
   }
 }

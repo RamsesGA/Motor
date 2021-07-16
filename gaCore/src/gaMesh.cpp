@@ -26,30 +26,26 @@ namespace gaEngineSDK {
   }
 
   void
-  Mesh::animated(const float& animationTime, SPtr<AnimationData> animation,  
-                 WeakSPtr<ResourceManager> resource) {
-    if ((nullptr != animation) && (nullptr != resource.lock().get())) {
-      boneTransform(animationTime, animation, resource);
-    }
+  Mesh::animated(const float& animationTime, SPtr<AnimationData> animation, 
+                 WeakSPtr<ModelNodes> structModelNode) {
+      boneTransform(animationTime, animation, structModelNode);
   }
 
   void 
-  Mesh::boneTransform(const float& deltaTime, SPtr<AnimationData> animation, 
-                      WeakSPtr<ResourceManager> resource) {
+  Mesh::boneTransform(const float& deltaTime, SPtr<AnimationData> animation,
+                      WeakSPtr<ModelNodes> structModelNode) {
     Matrix4x4 identityMatrix;
 
     float timInTicks = deltaTime * animation->m_ticksPerSecond;
     float timeAnimation = fmod(timInTicks, (float)animation->m_animDuration);
 
-    readNodeHierarchy(timeAnimation, resource.lock().get()->getModel()->m_modelNodes,
-                      identityMatrix, animation, resource);
+    readNodeHierarchy(timeAnimation, structModelNode, identityMatrix, animation);
   }
 
   void 
-  Mesh::readNodeHierarchy(const float& animationTime, WeakSPtr<ModelNodes> node, 
-                          const Matrix4x4& parentTransform, SPtr<AnimationData> animation, 
-                          WeakSPtr<ResourceManager> resource) {
-    ModelNodes* animNode = node.lock().get();
+  Mesh::readNodeHierarchy(const float& animationTime, WeakSPtr<ModelNodes> structModelNode,
+                          const Matrix4x4& parentTransform, SPtr<AnimationData> animation) {
+    ModelNodes* animNode = structModelNode.lock().get();
     String nodeName(animNode->m_name);
 
     Matrix4x4 nodeTransform;
@@ -82,17 +78,16 @@ namespace gaEngineSDK {
     //True if nodeName exist in bone_mapping	
     if (m_skeletalMesh->bonesMap.find(nodeName) != m_skeletalMesh->bonesMap.end()) {
       uint32 bonesIndex = m_skeletalMesh->bonesMap[nodeName];
-      
-      m_cbBonesTrans->bonesTransform[bonesIndex] = 
-                                   resource.lock().get()->getModel()->m_globalInverseTransform *
-                                   globalTransform * 
-                                   m_skeletalMesh->vBones[bonesIndex].offSet;
+      Matrix4x4 globalInverseTransform;
+
+      m_cbBonesTrans->bonesTransform[bonesIndex] = globalInverseTransform * globalTransform * 
+                                                   m_skeletalMesh->vBones[bonesIndex].offSet;
     }
 
     uint32 tempNumChildrens = animNode->m_numChildrens;
     for (uint32 i = 0; i < tempNumChildrens; ++i) {
       readNodeHierarchy(animationTime, animNode->m_vChildrenNodes[i], globalTransform, 
-                        animation, resource);
+                        animation);
     }
   }
 

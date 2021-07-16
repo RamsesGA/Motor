@@ -1,6 +1,7 @@
 #include "gaSceneGraph.h"
 #include "gaTransform.h"
 #include "gaActor.h"
+#include "gaModels.h"
 
 namespace gaEngineSDK {
   SceneGraph::SceneGraph() { 
@@ -14,12 +15,12 @@ namespace gaEngineSDK {
 
   void
   SceneGraph::update(const float& deltaTime) {
-    
+    m_root->update(deltaTime);
   }
 
   void 
   SceneGraph::render() {
-
+    m_root->render();
   }
 
   void
