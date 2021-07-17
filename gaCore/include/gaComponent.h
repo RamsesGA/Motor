@@ -22,9 +22,16 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
 
+      /*
+      * @brief Component information update.
+      * @param deltaTime, time elapsed since the last frame.
+      */
       virtual void
       update(const float& deltaTime) { };
 
+      /*
+      * @brief Component information rendering.
+      */
       virtual void
       render() { };
   };

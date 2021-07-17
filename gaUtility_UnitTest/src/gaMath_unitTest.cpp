@@ -77,12 +77,28 @@ TEST(gaUtilities, Power_Functions) {
   EXPECT_NEAR(Math::hypo(1.0f, 5.0f), 5.099019f, Math::SMALL_NUMBER);
 }
 
-TEST(gaUtilities, Degrees_Test) {
-  Degrees testDegree(150.50f);
-  EXPECT_FLOAT_EQ(testDegree.degreesToRadians(testDegree.m_degree), 2.6267205f);
-}
+TEST(gaUtilities, Radians_Degrees_Test) {
+  Radians r = Radians(1);
+  Degrees d = Degrees(180);
 
-TEST(gaUtilities, Radians_Test) {
-  Radians testRadians(150.50f);
-  EXPECT_FLOAT_EQ(testRadians.radiansToDegrees(testRadians.m_radian), 8623.0148f);
+  EXPECT_FLOAT_EQ(r.valueDegrees(), 57.295776f);
+  EXPECT_FLOAT_EQ(r.valueRadians(), 1.f);
+  EXPECT_FLOAT_EQ(d.valueRadians(), Math::PI);
+
+  GTEST_ASSERT_EQ(r == d, false);
+  GTEST_ASSERT_EQ(r != d, true);
+  GTEST_ASSERT_EQ(r < d, true);
+  GTEST_ASSERT_EQ(r > d, false);
+
+  r = d;
+
+  GTEST_ASSERT_EQ(r == d, true);
+  GTEST_ASSERT_EQ(r != d, false);
+  GTEST_ASSERT_EQ(r < d, false);
+  GTEST_ASSERT_EQ(r > d, false);
+
+  r = 2.f;
+  d = 2.f;
+
+  EXPECT_FLOAT_EQ(r.valueRadians(), 2.f);
 }

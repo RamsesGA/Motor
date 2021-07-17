@@ -153,4 +153,8 @@ namespace gaEngineSDK {
   * @brief
   */
   using StrStream = std::stringstream;
+
+  /**
+  * @brief
+  */
 }

@@ -112,9 +112,7 @@ namespace gaEngineSDK {
     m_windowSize.x = m_width;
     m_windowSize.y = m_height;
 
-    m_windowTitle = windowTitle;
-
-    m_sfmlWindow.create(sf::VideoMode(m_windowSize.x, m_windowSize.y), m_windowTitle);
+    m_sfmlWindow.create(sf::VideoMode(m_windowSize.x, m_windowSize.y), windowTitle);
   }
 
   void 

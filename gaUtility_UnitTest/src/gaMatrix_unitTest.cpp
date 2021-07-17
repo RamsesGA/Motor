@@ -187,23 +187,23 @@ TEST(gaUtilities, Matrix_4x4_Tests) {
   2- 3.0f, 7.0f,  11.0f, 15.0f,
   3- 4.0f, 8.0f,  12.0f, 16.0f
   */
-  right = testMat4.matrixData3(0);
-  EXPECT_FLOAT_EQ(right.m_x, 1.0f);
-  EXPECT_FLOAT_EQ(right.m_y, 5.0f);
-  EXPECT_FLOAT_EQ(right.m_z, 9.0f);
+  right = testMat4.getColumnMatrixInfo(0);
+  EXPECT_FLOAT_EQ(right.x, 1.0f);
+  EXPECT_FLOAT_EQ(right.y, 5.0f);
+  EXPECT_FLOAT_EQ(right.z, 9.0f);
 
-  right = testMat4.matrixData3(1);
-  EXPECT_FLOAT_EQ(right.m_x, 2.0f);
-  EXPECT_FLOAT_EQ(right.m_y, 6.0f);
-  EXPECT_FLOAT_EQ(right.m_z, 10.0f);
+  right = testMat4.getColumnMatrixInfo(1);
+  EXPECT_FLOAT_EQ(right.x, 2.0f);
+  EXPECT_FLOAT_EQ(right.y, 6.0f);
+  EXPECT_FLOAT_EQ(right.z, 10.0f);
 
-  right = testMat4.matrixData3(2);
-  EXPECT_FLOAT_EQ(right.m_x, 3.0f);
-  EXPECT_FLOAT_EQ(right.m_y, 7.0f);
-  EXPECT_FLOAT_EQ(right.m_z, 11.0f);
+  right = testMat4.getColumnMatrixInfo(2);
+  EXPECT_FLOAT_EQ(right.x, 3.0f);
+  EXPECT_FLOAT_EQ(right.y, 7.0f);
+  EXPECT_FLOAT_EQ(right.z, 11.0f);
 
   Matrix4x4 b;
-  EXPECT_FLOAT_EQ(b.matrixData3(0).m_x, 0.0f);
-  EXPECT_FLOAT_EQ(b.matrixData3(1).m_y, 0.0f);
-  EXPECT_FLOAT_EQ(b.matrixData3(2).m_z, 0.0f);
+  EXPECT_FLOAT_EQ(b.getColumnMatrixInfo(0).x, 0.0f);
+  EXPECT_FLOAT_EQ(b.getColumnMatrixInfo(1).y, 0.0f);
+  EXPECT_FLOAT_EQ(b.getColumnMatrixInfo(2).z, 0.0f);
 }

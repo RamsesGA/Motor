@@ -1,13 +1,12 @@
 #pragma once
 
-#include <exception>
-
 #include <gaMesh.h>
 #include <gaCamera.h>
 #include <gaBaseApp.h>
 #include <gaVector4.h>
 #include <gaMatrix4x4.h>
 #include <gaStructures.h>
+#include <gaPrerequisitesCore.h>
 
 namespace gaEngineSDK {
   class ResourceManager;
@@ -179,15 +178,10 @@ class AppTest : public BaseApp
     */
     SPtr<ConstantBuffer> m_pBufferCamera = nullptr;
     SPtr<ConstantBuffer> m_pBufferWorld = nullptr;
-    ConstantBuffer* m_pConstBufferBones = nullptr;
+    SPtr<ConstantBuffer> m_pCBufferBones = nullptr;
 
     /*
     * @brief .
     */
     SPtr<Mesh> m_mesh;
-
-    /*
-    * @brief .
-    */
-    SPtr<ConstantBuffer> m_tempBufferBones;
 };

@@ -26,21 +26,16 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
 
-      /*
-      * @brief .
-      */
       void
       removeComponent() override;
 
       /*
-      * @brief .
+      * @brief Actor information update.
+      * @param deltaTime, time elapsed since the last frame.
       */
       void
       actorUpdate(const float& deltaTime);
 
-      /*
-      * @brief .
-      */
       void
       actorRender() override;
 
@@ -50,15 +45,9 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
 
-      /*
-      * @brief .
-      */
       bool
       getIsSelected() override;
 
-      /*
-      * @brief .
-      */
       String 
       getActorName() override;
 
@@ -68,21 +57,12 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
 
-      /*
-      * @brief .
-      */
       void
       setIsSelected(bool isSelect) override;
 
-      /*
-      * @brief .
-      */
       void
       setActorName(String name) override;
 
-      /*
-      * @brief .
-      */
       void
       setComponent(WeakSPtr<Component> compoInfo) override;
 
@@ -94,22 +74,22 @@ namespace gaEngineSDK {
       /***********************************************************************/
 
       /*
-      * @brief .
+      * @brief Bool to indicate if the actor is selected.
       */
       bool m_isSelected = false;
 
       /*
-      * @brief .
+      * @brief String with the actor's name.
       */
       String m_actorName;
 
       /*
-      * @brief .
+      * @brief Transformation component.
       */
       SPtr<Transform> m_actorTransform;
 
       /*
-      * @brief .
+      * @brief Vector of pointers to received component.
       */
       Vector<SPtr<Component>> m_vComponents;
   };

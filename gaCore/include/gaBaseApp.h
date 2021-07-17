@@ -39,28 +39,41 @@ namespace gaEngineSDK {
       /*
       * @brief Run is the function that starts the 
       *        entire creation and initialization process.
+      * @param windowTitle, assigning a name.
+      * @param sizeX, screen size x.
+      * @param sizeY, screen size y.
+      * @return Return 0 or 1 to confirm the function.
       */
       int32
       run(String windowTitle, int32 sizeX = 1440, int32 sizeY = 900);
 
       /*
       * @brief Load the DLL and initialize the graphic api.
+      * @return Return 0 or 1 to confirm the function.
       */
       int32
       initSys();
 
+      /*
+      * @brief Keyboard or mouse detection.
+      * @param windowEvent, input detected on screen.
+      * @param deltaTime, time elapsed since the last frame.
+      */
       void
       handleWindowEvents(Event& windowEvent, const float& deltaTime);
 
     protected:
       /*
-      * @param Create the information for the window.
+      * @brief Create the information for the window.
+      * @param windowTitle, assigning a name..
       */
       void
       createWindow(String windowTitle);
 
       /*
-      * @param Command to call the onResize function.
+      * @brief Command to call the onResize function.
+      * @param width, screen size x.
+      * @param height, screen size y.
       */
       void
       resize(int32 width, int32 height);
@@ -73,14 +86,13 @@ namespace gaEngineSDK {
 
       /*
       * @brief Initialize the camera and all its default values.
-      * @param isOGL, Bool to indicate if you are using OGL (this will be removed).
       */
       virtual void
       onInitCamera() { };
 
       /*
       * @brief Update the constant buffer of the api.
-      * @param deltaTime, float for delta time.
+      * @param deltaTime, time elapsed since the last frame.
       */
       virtual void
       onUpdate(float deltaTime) { };
@@ -92,8 +104,7 @@ namespace gaEngineSDK {
       onRender() { };
 
       /*
-      * @brief Create the data for the api and
-      *        confirm that everything exists without problem.
+      * @brief Create the data for the api and confirm that everything exists without problem.
       */
       virtual void
       onCreate() { };
@@ -107,6 +118,7 @@ namespace gaEngineSDK {
       /*
       * @brief Detect keyboard input.
       * @param param, SFML event to know the input pressed.
+      * @param deltaTime, time elapsed since the last frame.
       */
       virtual void
       onKeyboardDown(sf::Event param, const float& deltaTime) { };
@@ -147,11 +159,6 @@ namespace gaEngineSDK {
       */    
       Vector2I m_windowSize;
       Vector2I m_windowPosition;
-
-      /*
-      * @param String with the name of the window.
-      */
-      String m_windowTitle;
 
       /*
       * @param SFML member with window information.

@@ -4,7 +4,7 @@
 namespace gaEngineSDK {
   
   void
-  Camera::init() {
+  Camera::startCamera() {
 	  createView();
 	  createProjectionMatrix();
 	  updateViewMatrix();

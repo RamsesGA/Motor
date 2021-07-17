@@ -24,13 +24,13 @@ namespace gaEngineSDK {
       /***********************************************************************/
 
       /*
-      * @brief .
+      * @brief Removing the component from an actor.
       */
       virtual void
       removeComponent() { };
 
       /*
-      * @brief .
+      * @brief Actor information update.
       */
       virtual void
       actorRender() { };
@@ -42,13 +42,15 @@ namespace gaEngineSDK {
       /***********************************************************************/
 
       /*
-      * @brief .
+      * @brief Notify if the actor is selected.
+      * @return Bool member to indicate true or false.
       */
       virtual bool
       getIsSelected() { return false; };
 
       /*
-      * @brief .
+      * @brief Get the name of the current actor.
+      * @return String with the member's information.
       */
       virtual String 
       getActorName() { return "Default"; };
@@ -66,19 +68,22 @@ namespace gaEngineSDK {
       /***********************************************************************/
 
       /*
-      * @brief .
+      * @brief Save the corresponding information in the member.
+      * @param isSelect, bool to indicate true or false.
       */
       virtual void
       setIsSelected(bool isSelect) { };
 
       /*
-      * @brief .
+      * @brief Save the corresponding information in the member.
+      * @param name of the actor.
       */
       virtual void
       setActorName(String name) { };
 
       /*
-      * @brief .
+      * @brief Save the corresponding information in the member.
+      * @param compoInfo, pointer with the information of a component.
       */
       virtual void
       setComponent(WeakSPtr<Component> compoInfo) { };

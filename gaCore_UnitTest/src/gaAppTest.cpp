@@ -1,8 +1,7 @@
 #include <Windows.h>
-#include <iostream>
 #include <gaModels.h>
-#include <gaResourceManager.h>
 #include <gaSceneGraph.h>
+#include <gaResourceManager.h>
 
 #include "gaAppTest.h"
 
@@ -20,7 +19,7 @@ AppTest::onInitCamera() {
   m_mainCamera.setWidth(m_width);
   m_mainCamera.setHeight(m_height);
 
-  m_mainCamera.init();
+  m_mainCamera.startCamera();
 }
 
 void
@@ -90,10 +89,10 @@ AppTest::onRender() {
   myGraphicsApi->setYourPSConstantBuffers(m_pBufferWorld, 1);
 
   //VS CB
-  myGraphicsApi->setYourVSConstantBuffers(m_tempBufferBones, 2);
+  myGraphicsApi->setYourVSConstantBuffers(m_pCBufferBones, 2);
 
   //We keep the cb of the bones.
-  myGraphicsApi->setConstBufferBones(m_tempBufferBones);
+  myGraphicsApi->setConstBufferBones(m_pCBufferBones);
 
   //Render model
   mySceneGraph->render();
@@ -142,9 +141,7 @@ AppTest::onCreate() {
   //We create the constant buffers for the shader.
   m_pBufferCamera.reset(myGraphicsApi->createConstantBuffer(sizeof(ConstantBuffer1)));
   m_pBufferWorld.reset(myGraphicsApi->createConstantBuffer(sizeof(ConstantBuffer2)));
-  m_pConstBufferBones = myGraphicsApi->createConstantBuffer(sizeof(ConstBuffBonesTransform));
-
-  m_tempBufferBones.reset(m_pConstBufferBones);
+  m_pCBufferBones.reset(myGraphicsApi->createConstantBuffer(sizeof(ConstBuffBonesTransform)));
 
   /***************************************************************************/
   /*

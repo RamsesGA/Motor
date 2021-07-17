@@ -37,10 +37,9 @@ namespace gaEngineSDK {
 
       /**
       * @brief Function to initialize class members.
-      * @param Variable to obtain the information of the camera description.
       */
       void 
-      init();
+      startCamera();
       
       /**
       * @brief Function to update our view matrix.
@@ -50,35 +49,37 @@ namespace gaEngineSDK {
 
       /**
       * @brief Function to detect an input.
-      * @param SFML event for input detection.
+      * @param param, SFML event for input detection.
+      * @param deltaTime, time elapsed since the last frame.
       */
       void 
       inputDetection(sf::Event param, const float& deltaTime);
 
       /**
       * @brief Function to be able to apply a PITCH rotation.
-      * @param SFML event for input detection.
+      * @param param, SFML event for input detection.
       */
       void 
       pitchX(sf::Event param);
 
       /**
       * @brief Function to be able to apply a ROLL rotation.
-      * @param SFML event for input detection.
+      * @param param, SFML event for input detection.
       */
       void 
       rollZ(sf::Event param);
       
       /**
       * @brief Function to be able to apply a YAW rotation.
-      * @param SFML event for input detection.
+      * @param param, SFML event for input detection.
       */
       void 
       yawY(sf::Event param);
 
       /**
       * @brief Function to be able to apply a movement to the camera.
-      * @param SFML event for input detection.
+      * @param param, SFML event for input detection.
+      * @param deltaTime, time elapsed since the last frame.
       */
       void 
       move(sf::Event param, const float& deltaTime);
@@ -115,61 +116,71 @@ namespace gaEngineSDK {
 
       /**
       * @brief Function to save the X, Y value of our mouse.
+      * @param x, mouse position on this coordinate.
+      * @param y, mouse position on this coordinate.
       */
       void 
       setOriginalMousePos(float x, float y);
 
       /**
       * @brief Function to save the bool value on a click or not.
-      * @param Bool to know if you are pressing or not on the screen.
+      * @param isClicked, Bool to know if you are pressing or not on the screen.
       */
       void 
       setClickPressed(bool isClicked);
 
       /**
-      * @brief .
+      * @brief Save the values for the corresponding member.
+      * @param lookAt, vector 3 to save position to member.
       */
       void
       setLookAt(Vector3 lookAt);
 
       /**
-      * @brief .
+      * @brief Save the values for the corresponding member.
+      * @param eye, vector 3 to save position to member.
       */
       void
       setEye(Vector3 eye);
 
       /**
-      * @brief .
+      * @brief Save the values for the corresponding member.
+      * @param up, vector 3 to save position to member.
       */
       void
       setUp(Vector3 up);
 
       /**
-      * @brief .
+      * @brief Save the values for the corresponding member.
+      * @param farCam, floating with distant vision (has a default value)
       */
       void
       setFar(float farCam = 30000.0f);
 
       /**
-      * @brief .
+      * @brief Save the values for the corresponding member.
+      * @param nearCam, floating with near vision (has a default value).
       */
       void
       setNear(float nearCam = 0.01f);
 
       /**
-      * @brief .
+      * @brief Save the values for the corresponding member.
+      * @param fieldOfView, extent of the observable game world that is seen on the display.
       */
       void
       setFoV(float fieldOfView = Math::FOV);
       
       /**
-      * @brief .
+      * @brief Save the values for the corresponding member.
+      * @param height, camera position in y.
       */
       void
       setHeight(float height);
 
       /**
-      * @brief .
+      * @brief Save the values for the corresponding member.
+      * @param width, camera position in x.
       */
       void
       setWidth(float width);
@@ -182,24 +193,28 @@ namespace gaEngineSDK {
 
       /**
       * @brief Function to get the view matrix.
+      * @return Matrix4x4 with the required information.
       */
       Matrix4x4 
       getView();
       
       /**
       * @brief Function to obtain the projection matrix.
+      * @return Matrix4x4 with the required information.
       */
       Matrix4x4 
       getProjection();
       
       /**
       * @brief Function to get the original position of the mouse.
+      * @return Pointer position (x, y).
       */
       Vector2 
       getOriginalMousePos();
      
       /**
       * @brief Function to obtain the boolean of detection of a click.
+      * @return Bool to indicate if a click is true or false.
       */
       bool 
       getClickPressed();
