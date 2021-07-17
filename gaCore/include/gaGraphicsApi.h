@@ -81,7 +81,7 @@ namespace gaEngineSDK {
       * @return true or false.
       */
       virtual bool 
-        initDevice(sf::WindowHandle hWnd) { GA_UNREFERENCED_PARAMETER(hWnd);  return false; };
+      initDevice(sf::WindowHandle hWnd) { GA_UNREFERENCED_PARAMETER(hWnd);  return false; };
       
       /**
       * @brief Function to send to draw the indices of a declared object.
