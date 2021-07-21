@@ -1,15 +1,19 @@
 #include "gaResourceManager.h"
 #include "gaGraphicsApi.h"
-#include "gaMesh.h"
 
 namespace gaEngineSDK {
+  const aiScene* g_pAScene = nullptr;
 
-  ResourceManager::ResourceManager(String const& path) {
+  ResourceManager::ResourceManager(const String& path) {
+    Assimp::Importer aImporter;
+
     //Read _file via assimp
-    m_pAScene = m_aImporter.ReadFile(path, aiProcessPreset_TargetRealtime_MaxQuality |
-                                     aiProcess_ConvertToLeftHanded | aiProcess_Triangulate);
+    g_pAScene = aImporter.ReadFile(path, aiProcessPreset_TargetRealtime_MaxQuality |
+                                   aiProcess_ConvertToLeftHanded | aiProcess_Triangulate);
+
     //Check for errors
-    if (!m_pAScene || m_pAScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !m_pAScene->mRootNode) {
+    if (!g_pAScene || g_pAScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || 
+        !g_pAScene->mRootNode) {
       return;
     }
 
@@ -17,17 +21,17 @@ namespace gaEngineSDK {
     createDirectories(path);
 
     auto myGraphicApi = g_graphicApi().instancePtr();
-    m_newModel.reset(new Model());
+    m_pAnimation.reset(new Animations());
 
     //Process assimp's root pNode recursively
-    processNode(m_pAScene->mRootNode);
+    processNode(g_pAScene->mRootNode);
 
     processAnimationInfo();
 
-    SPtr<SamplerState> tempSamp(myGraphicApi->createSamplerState());
+    //SPtr<SamplerState> tempSamp(myGraphicApi->createSamplerState());
 
     //Create texture sampler for model's textures
-    m_newModel->setSampler(tempSamp);
+    //m_pAnimation->setSampler(tempSamp);
 
     m_meshBones.resize(m_vMeshes.size());
   }
@@ -54,7 +58,7 @@ namespace gaEngineSDK {
 
       for (auto mesh : m_vMeshes) {
         mesh->m_cbBonesTrans = &m_meshBones[meshNum];
-        mesh->animated(m_timeOfAnimation, currentAnimation, m_newModel->m_modelNodes);
+        mesh->animated(m_timeOfAnimation, currentAnimation, m_pAnimation->m_pStrModelNodes);
         ++meshNum;
       }
     }
@@ -94,12 +98,13 @@ namespace gaEngineSDK {
   ResourceManager::processNode(aiNode* pANode) {
     //Process each _mesh located at the current pNode
     uint32 tempNumMeshes = pANode->mNumMeshes;
+
     for (uint32 i = 0; i < tempNumMeshes; ++i) {
       /*
-      * The pNode object only contains indices to index the actual objects in the m_pAScene.
-      * The m_pAScene contains all the data, pNode is just to keep stuff organized.
+      * The pNode object only contains indices to index the actual objects in the g_pAScene.
+      * The g_pAScene contains all the data, pNode is just to keep stuff organized.
       */
-      aiMesh* _mesh = m_pAScene->mMeshes[pANode->mMeshes[i]];
+      aiMesh* _mesh = g_pAScene->mMeshes[pANode->mMeshes[i]];
       m_vMeshes.push_back(processMesh(_mesh));
     }
 
@@ -113,10 +118,11 @@ namespace gaEngineSDK {
   ResourceManager::processMesh(aiMesh* pAMesh) {
     //Data to fill
     Vector<uint32> indices;
-    Vector<Vertex> vertices;
     Vector<Textures*> textures;
-    uint32 numVertex = pAMesh->mNumVertices;
-    Vertex* structVertex = new Vertex[numVertex];
+    Vector<Vertex> vVertices;
+
+    vVertices.resize(pAMesh->mNumVertices);
+
     m_newMesh = new Mesh();
 
     if (!pAMesh->HasFaces()) {
@@ -130,8 +136,8 @@ namespace gaEngineSDK {
 
       //retrieve all indices of the face and store them in the indices vector
       uint32 tempNumIndices = face.mNumIndices;
-      for (uint32 i = 0; i < tempNumIndices; ++i) {
-        indices.push_back(face.mIndices[i]);
+      for (uint32 j = 0; j < tempNumIndices; ++j) {
+        indices.push_back(face.mIndices[j]);
       }
     }
 
@@ -139,55 +145,54 @@ namespace gaEngineSDK {
     uint32 tempNumVertices = pAMesh->mNumVertices;
     for (uint32 i = 0; i < tempNumVertices; ++i) {
       //Positions
-      structVertex[i].position.x = pAMesh->mVertices[i].x;
-      structVertex[i].position.y = pAMesh->mVertices[i].y;
-      structVertex[i].position.z = pAMesh->mVertices[i].z;
+      vVertices[i].position.x = pAMesh->mVertices[i].x;
+      vVertices[i].position.y = pAMesh->mVertices[i].y;
+      vVertices[i].position.z = pAMesh->mVertices[i].z;
 
-      //Texcoords
-      //Check if _mesh contains texcoords
+      //Tex coords
+      //Check if _mesh contains tex coords
       if (pAMesh->mTextureCoords[0]) {
-        structVertex[i].texCoords.x = pAMesh->mTextureCoords[0][i].x;
-        structVertex[i].texCoords.y = pAMesh->mTextureCoords[0][i].y;
+        vVertices[i].texCoords.x = pAMesh->mTextureCoords[0][i].x;
+        vVertices[i].texCoords.y = pAMesh->mTextureCoords[0][i].y;
       }
       else {
-        structVertex[i].texCoords = Vector2(0.0f, 0.0f);
+        vVertices[i].texCoords = Vector2(0.0f, 0.0f);
       }
 
       if (0 != pAMesh->mNormals) {
         //Normals
-        structVertex[i].normal.x = pAMesh->mNormals[i].x;
-        structVertex[i].normal.y = pAMesh->mNormals[i].y;
-        structVertex[i].normal.z = pAMesh->mNormals[i].z;
+        vVertices[i].normal.x = pAMesh->mNormals[i].x;
+        vVertices[i].normal.y = pAMesh->mNormals[i].y;
+        vVertices[i].normal.z = pAMesh->mNormals[i].z;
       }
 
       if (0 != pAMesh->mTangents) {
         //Tangents
-        structVertex[i].tangent.x = pAMesh->mTangents[i].x;
-        structVertex[i].tangent.y = pAMesh->mTangents[i].y;
-        structVertex[i].tangent.z = pAMesh->mTangents[i].z;
+        vVertices[i].tangent.x = pAMesh->mTangents[i].x;
+        vVertices[i].tangent.y = pAMesh->mTangents[i].y;
+        vVertices[i].tangent.z = pAMesh->mTangents[i].z;
       }
 
       if (0 != pAMesh->mBitangents) {
-        //Bitangents
-        structVertex[i].tangent.x = pAMesh->mBitangents[i].x;
-        structVertex[i].tangent.y = pAMesh->mBitangents[i].y;
-        structVertex[i].tangent.z = pAMesh->mBitangents[i].z;
+        //Bi tangents
+        vVertices[i].tangent.x = pAMesh->mBitangents[i].x;
+        vVertices[i].tangent.y = pAMesh->mBitangents[i].y;
+        vVertices[i].tangent.z = pAMesh->mBitangents[i].z;
       }
-
-      vertices.push_back(structVertex[i]);
     }
 
-    processBonesInfo(pAMesh, vertices.data(), numVertex);
+    processBonesInfo(pAMesh, vVertices.data(), pAMesh->mNumVertices);
 
-    //processIndexInfo((uint32)indices.size());
 
-    aiMaterial* material = m_pAScene->mMaterials[pAMesh->mMaterialIndex];
+
+
+    aiMaterial* material = g_pAScene->mMaterials[pAMesh->mMaterialIndex];
 
     Vector<Textures*> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE);
 
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-    m_newMesh->init(vertices, indices, textures);
+    m_newMesh->init(vVertices, indices, textures);
 
     auto myGraphicApi = g_graphicApi().instancePtr();
 
@@ -196,8 +201,7 @@ namespace gaEngineSDK {
   }
 
   void 
-  ResourceManager::processBonesInfo(aiMesh* pAMesh, Vertex* structureVertex, 
-                                    uint32 numVertexes) {
+  ResourceManager::processBonesInfo(aiMesh* pAMesh, Vertex* vertexInfo, uint32 numVertexes) {
     SkeletalMesh* skeletal = new SkeletalMesh;
     
     if (0 < pAMesh->mNumBones) {
@@ -221,18 +225,18 @@ namespace gaEngineSDK {
         skeletal->bonesMap[boneName] = boneIndex;
 
         //Check if memcpy works
-        std::memcpy(&skeletal->vBones[boneIndex].offSet, &pAMesh->mBones[i]->mOffsetMatrix,
+        std::memcpy(&skeletal->vBones[boneIndex].offSet, &bone->mOffsetMatrix,
                     sizeof(Matrix4x4));
 
-        uint32 tempNumWeights = pAMesh->mBones[i]->mNumWeights;
+        uint32 tempNumWeights = bone->mNumWeights;
         for (uint32 j = 0; j < tempNumWeights; ++j) {
-          uint32 verID = pAMesh->mBones[i]->mWeights[j].mVertexId;
-          float weight = pAMesh->mBones[i]->mWeights[j].mWeight;
+          uint32 verID = bone->mWeights[j].mVertexId;
+          float weight = bone->mWeights[j].mWeight;
 
           for (uint32 k = 0; k < 4; ++k) {
-            if (0 == structureVertex[verID].boneWeights[k]) {
-              structureVertex[verID].boneIds[k] = boneIndex;
-              structureVertex[verID].boneWeights[k] = weight;
+            if (0 == vertexInfo[verID].boneWeights[k]) {
+              vertexInfo[verID].boneIds[k] = boneIndex;
+              vertexInfo[verID].boneWeights[k] = weight;
               break;
             }
           }
@@ -242,12 +246,12 @@ namespace gaEngineSDK {
     else {
       for (uint32 i = 0; i < numVertexes; ++i) {
         for (uint32 j = 0; j < 4; ++j) {
-          structureVertex[i].boneWeights[j] = 1;
+          vertexInfo[i].boneWeights[j] = 1;
         }
       }
     }
 
-    SPtr<Vertex> SPtrVertexData(structureVertex);
+    SPtr<Vertex> SPtrVertexData(vertexInfo);
 
     m_newMesh->m_skeletalMesh.reset(skeletal);
     m_newMesh->setVertexData(SPtrVertexData);
@@ -263,38 +267,36 @@ namespace gaEngineSDK {
 
   void 
   ResourceManager::processAnimationInfo() {
-    std::memcpy(&m_newModel->m_globalInverseTransform, &m_pAScene->mRootNode->mTransformation, sizeof(Matrix4x4));
-
-    m_newModel->m_globalInverseTransform.transpose();
-
-    m_newModel->m_globalInverseTransform.invert(m_newModel->m_globalInverseTransform);
+    //std::memcpy(&m_pAnimation->m_globalInverseTransform, &g_pAScene->mRootNode->mTransformation, sizeof(Matrix4x4));
+    //m_pAnimation->m_globalInverseTransform.transpose();
+    //m_pAnimation->m_globalInverseTransform.invert(m_pAnimation->m_globalInverseTransform);
 
     ModelNodes* rootNode = new ModelNodes();
 
-    m_newModel->m_modelNodes.reset(rootNode);
+    m_pAnimation->m_pStrModelNodes.reset(rootNode);
 
-    loadModelNodes(m_newModel->m_modelNodes, m_pAScene->mRootNode);
+    loadModelNodes(m_pAnimation->m_pStrModelNodes, g_pAScene->mRootNode);
 
-    m_newModel->setAnimList("None");
+    m_pAnimation->setAnimName("FirstAnimation");
 
-    uint32 tempNumAnims = m_pAScene->mNumAnimations;
+    uint32 tempNumAnims = g_pAScene->mNumAnimations;
     for (uint32 i = 0; i < tempNumAnims; ++i) {
       AnimationData* newAnimation = new AnimationData;
 
-      newAnimation->m_animationName = m_pAScene->mAnimations[i]->mName.C_Str();
-      m_newModel->setAnimList(newAnimation->m_animationName);
+      newAnimation->m_animationName = g_pAScene->mAnimations[i]->mName.C_Str();
+      m_pAnimation->setAnimName(newAnimation->m_animationName);
 
-      if (m_pAScene->mAnimations[i]->mTicksPerSecond != 0.0) {
-        newAnimation->m_ticksPerSecond = (float)m_pAScene->mAnimations[i]->mTicksPerSecond;
+      if (g_pAScene->mAnimations[i]->mTicksPerSecond != 0.0) {
+        newAnimation->m_ticksPerSecond = (float)g_pAScene->mAnimations[i]->mTicksPerSecond;
       }
       else {
         newAnimation->m_ticksPerSecond = 25.0f;
       }
 
-      newAnimation->m_animDuration = (float)m_pAScene->mAnimations[i]->mDuration;
+      newAnimation->m_animDuration = (float)g_pAScene->mAnimations[i]->mDuration;
       
       uint32 numCH;
-      numCH = newAnimation->m_numChannels = m_pAScene->mAnimations[i]->mNumChannels;
+      numCH = newAnimation->m_numChannels = g_pAScene->mAnimations[i]->mNumChannels;
       
       newAnimation->m_vChannels.resize(numCH);
 
@@ -302,67 +304,67 @@ namespace gaEngineSDK {
         SPtr<AnimationNode> newAnimNode(new AnimationNode);
 
         newAnimNode->m_nodeName = 
-                     m_pAScene->mAnimations[i]->mChannels[j]->mNodeName.C_Str();
+                     g_pAScene->mAnimations[i]->mChannels[j]->mNodeName.C_Str();
 
         newAnimNode->m_numPositionKeys = 
-                     m_pAScene->mAnimations[i]->mChannels[j]->mNumPositionKeys;
+                     g_pAScene->mAnimations[i]->mChannels[j]->mNumPositionKeys;
 
         newAnimNode->m_vPositionKeys.resize(newAnimNode->m_numPositionKeys);
 
         uint32 tempNumPosKeys = newAnimNode->m_numPositionKeys;
         for (uint32 key = 0; key < tempNumPosKeys; ++key) {
           newAnimNode->m_vPositionKeys[key].m_time = 
-                       m_pAScene->mAnimations[i]->mChannels[j]->mPositionKeys[key].mTime;
+                       g_pAScene->mAnimations[i]->mChannels[j]->mPositionKeys[key].mTime;
 
           newAnimNode->m_vPositionKeys[key].m_value.x =
-                       m_pAScene->mAnimations[i]->mChannels[j]->mPositionKeys[key].mValue.x;
+                       g_pAScene->mAnimations[i]->mChannels[j]->mPositionKeys[key].mValue.x;
 
           newAnimNode->m_vPositionKeys[key].m_value.y =
-                       m_pAScene->mAnimations[i]->mChannels[j]->mPositionKeys[key].mValue.y;
+                       g_pAScene->mAnimations[i]->mChannels[j]->mPositionKeys[key].mValue.y;
 
           newAnimNode->m_vPositionKeys[key].m_value.z =
-                       m_pAScene->mAnimations[i]->mChannels[j]->mPositionKeys[key].mValue.z;
+                       g_pAScene->mAnimations[i]->mChannels[j]->mPositionKeys[key].mValue.z;
         }
 
         newAnimNode->m_numRotationKeys = 
-                     m_pAScene->mAnimations[i]->mChannels[j]->mNumRotationKeys;
+                     g_pAScene->mAnimations[i]->mChannels[j]->mNumRotationKeys;
 
         newAnimNode->m_vRotationKeys.resize(newAnimNode->m_numRotationKeys);
 
         uint32 tempNumRotKeys = newAnimNode->m_numRotationKeys;
         for (uint32 key = 0; key < tempNumRotKeys; ++key) {
           newAnimNode->m_vRotationKeys[key].m_time =
-                       m_pAScene->mAnimations[i]->mChannels[j]->mRotationKeys[key].mTime;
+                       g_pAScene->mAnimations[i]->mChannels[j]->mRotationKeys[key].mTime;
 
           newAnimNode->m_vRotationKeys[key].m_value.x =
-                       m_pAScene->mAnimations[i]->mChannels[j]->mRotationKeys[key].mValue.x;
+                       g_pAScene->mAnimations[i]->mChannels[j]->mRotationKeys[key].mValue.x;
 
           newAnimNode->m_vRotationKeys[key].m_value.y =
-                       m_pAScene->mAnimations[i]->mChannels[j]->mRotationKeys[key].mValue.y;
+                       g_pAScene->mAnimations[i]->mChannels[j]->mRotationKeys[key].mValue.y;
 
           newAnimNode->m_vRotationKeys[key].m_value.z =
-                       m_pAScene->mAnimations[i]->mChannels[j]->mRotationKeys[key].mValue.z;
+                       g_pAScene->mAnimations[i]->mChannels[j]->mRotationKeys[key].mValue.z;
 
           newAnimNode->m_vRotationKeys[key].m_value.w =
-                       m_pAScene->mAnimations[i]->mChannels[j]->mRotationKeys[key].mValue.w;
+                       g_pAScene->mAnimations[i]->mChannels[j]->mRotationKeys[key].mValue.w;
         }
 
-        newAnimNode->m_numScalingKeys = m_pAScene->mAnimations[i]->mChannels[j]->mNumScalingKeys;
+        newAnimNode->m_numScalingKeys = g_pAScene->mAnimations[i]->mChannels[j]->mNumScalingKeys;
         newAnimNode->m_scalingKeys.resize(newAnimNode->m_numScalingKeys);
 
         uint32 tempNumScalKeys = newAnimNode->m_numScalingKeys;
         for (uint32 key = 0; key < tempNumScalKeys; ++key) {
           newAnimNode->m_scalingKeys[key].m_time =
-                       m_pAScene->mAnimations[i]->mChannels[j]->mScalingKeys[key].mTime;
+                       g_pAScene->mAnimations[i]->mChannels[j]->mScalingKeys[key].mTime;
 
           newAnimNode->m_scalingKeys[key].m_value.x =
-                       m_pAScene->mAnimations[i]->mChannels[j]->mScalingKeys[key].mValue.x;
+                       g_pAScene->mAnimations[i]->mChannels[j]->mScalingKeys[key].mValue.x;
 
           newAnimNode->m_scalingKeys[key].m_value.y =
-                       m_pAScene->mAnimations[i]->mChannels[j]->mScalingKeys[key].mValue.y;
+                       g_pAScene->mAnimations[i]->mChannels[j]->mScalingKeys[key].mValue.y;
 
           newAnimNode->m_scalingKeys[key].m_value.z =
-                       m_pAScene->mAnimations[i]->mChannels[j]->mScalingKeys[key].mValue.z;
+                       g_pAScene->mAnimations[i]->mChannels[j]->mScalingKeys[key].mValue.z;
         }
 
         newAnimation->m_vChannels[j] = newAnimNode;
@@ -372,13 +374,9 @@ namespace gaEngineSDK {
       m_vAnimationData.push_back(anim);
     }
 
-    if (0 < m_pAScene->mNumAnimations) {
-      m_newModel->setNumAnims((uint32)m_pAScene->mNumAnimations);
+    if (0 < g_pAScene->mNumAnimations) {
+      m_pAnimation->setNumAnims((uint32)g_pAScene->mNumAnimations);
     }
-
-    SPtr<Model> modelCreate(m_newModel);
-
-    m_vModels.push_back(modelCreate);
   }
 
   Vector<Textures*> 
@@ -398,10 +396,10 @@ namespace gaEngineSDK {
 
       bool skip = false;
 
-      uint32 tempTextureSize = m_textures.size();
+      uint32 tempTextureSize = m_vTextures.size();
       for (uint32 j = 0; j < tempTextureSize; ++j) {
-        if (nullptr != m_textures[j]) {
-          textures.push_back(m_textures[j]);
+        if (nullptr != m_vTextures[j]) {
+          textures.push_back(m_vTextures[j]);
           skip = true;
           break;
         }
@@ -409,7 +407,7 @@ namespace gaEngineSDK {
       if (!skip) {
         auto myGraphicApi = g_graphicApi().instancePtr();
 
-        m_textures.push_back(myGraphicApi->loadTextureFromFile(srcFile));
+        m_vTextures.push_back(myGraphicApi->loadTextureFromFile(srcFile));
         textures.push_back(myGraphicApi->loadTextureFromFile(srcFile));
       }
     }
@@ -514,24 +512,9 @@ namespace gaEngineSDK {
     return m_vMeshes;
   }
 
-  SPtr<SamplerState>
-  ResourceManager::getSamplerInfo() {
-    return m_newModel->getSampler();
-  }
-
-  Vector<SPtr<Model>>
-  ResourceManager::getVecModels() {
-    return m_vModels;
-  }
-
   Mesh* 
   ResourceManager::getMesh() {
     return m_newMesh;
-  }
-
-  SPtr<Model> 
-  ResourceManager::getModel() {
-    return m_newModel;
   }
 
   String
@@ -541,7 +524,7 @@ namespace gaEngineSDK {
 
   Vector<Textures*>
   ResourceManager::getVecTextures() {
-    return m_textures;
+    return m_vTextures;
   }
 
   void

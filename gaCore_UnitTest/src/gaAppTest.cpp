@@ -155,7 +155,7 @@ AppTest::onCreate() {
   //createNodeTwoB();
   //createNodeSpartan();
   //createNodeUgandan();
-  createNodeGrimoires();
+  //createNodeGrimoires();
   createNodeRamlethalSwords();
 }
 

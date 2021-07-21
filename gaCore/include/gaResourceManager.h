@@ -1,15 +1,13 @@
 #pragma once
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-#include <assimp/cimport.h>
 #include <gaModule.h>
 
 #include "gaPrerequisitesCore.h"
-#include "gaModels.h"
 #include "gaResource.h"
 #include "gaComponent.h"
+#include "gaAnimations.h"
+#include "gaMesh.h"
+
 
 namespace gaEngineSDK {
 
@@ -28,242 +26,209 @@ namespace gaEngineSDK {
 
   class GA_CORE_EXPORT ResourceManager : public Component
   {
-    public:
-      /***********************************************************************/
-      /**
-      * Constructor and destructor.
-      */
-      /***********************************************************************/
-      ResourceManager() = default;
+   public:
+     /***********************************************************************/
+     /**
+     * Constructor and destructor.
+     */
+     /***********************************************************************/
+     ResourceManager() = default;
 
-      /*
-      * @brief Function to initialize class members and start with assimp.
-      * @param Variable string with the address of the file.
-      * @param Variable with API information.
-      */
-      ResourceManager(String const& path);
+     /*
+     * @brief Function to initialize class members and start with assimp.
+     * @param Variable string with the address of the file.
+     * @param Variable with API information.
+     */
+     ResourceManager(const String& path);
 
-      ~ResourceManager() = default;
+     ~ResourceManager() = default;
 
-      /***********************************************************************/
-      /**
-      * Inheritance methods.
-      */
-      /***********************************************************************/
+     /***********************************************************************/
+     /**
+     * Inheritance methods.
+     */
+     /***********************************************************************/
 
-      /*
-      * @brief .
-      */
-      void
-      update(const float& deltaTime)override;
+     /*
+     * @brief .
+     */
+     void
+     update(const float& deltaTime)override;
 
-      /*
-      * @brief .
-      */
-      void
-      render()override;
-    
-      /***********************************************************************/
-      /**
-      * Methods.
-      */
-      /***********************************************************************/
+     /*
+     * @brief .
+     */
+     void
+     render()override;
+   
+     /***********************************************************************/
+     /**
+     * Methods.
+     */
+     /***********************************************************************/
 
-      /*
-      * @brief Function to process node information.
-      * @param Assimp variable with node information
-      * @param Assimp variable with scene information.
-      * @param Variable with API information.
-      */
-      void
-      processNode(aiNode* pANode);
+     /*
+     * @brief Function to process node information.
+     * @param Assimp variable with node information
+     * @param Assimp variable with scene information.
+     * @param Variable with API information.
+     */
+     void
+     processNode(aiNode* pANode);
 
-      /*
-      * @brief Function to process the information of the meshes.
-      * @param Assimp variable with the mesh information.
-      * @param Assimp variable with scene information.
-      * @param Variable with API information.
-      */
-      SPtr<Mesh>
-      processMesh(aiMesh* pAMesh);
+     /*
+     * @brief Function to process the information of the meshes.
+     * @param Assimp variable with the mesh information.
+     * @param Assimp variable with scene information.
+     * @param Variable with API information.
+     */
+     SPtr<Mesh>
+     processMesh(aiMesh* pAMesh);
 
-      /*
-      * @brief .
-      */
-      void
-      processBonesInfo(aiMesh* pAMesh, Vertex* structureVertex, uint32 numVertexes);
+     /*
+     * @brief .
+     */
+     void
+     processBonesInfo(aiMesh* pAMesh, Vertex* vertexInfo, uint32 numVertexes);
 
-      /*
-      * @brief .
-      */
-      void
-      processIndexInfo(uint32 numIndices);
+     /*
+     * @brief .
+     */
+     void
+     processIndexInfo(uint32 numIndices);
 
-      /*
-      * @brief .
-      */
-      void
-      processAnimationInfo();
+     /*
+     * @brief .
+     */
+     void
+     processAnimationInfo();
 
-      /*
-      * @brief Function for loading the model texture.
-      * @param Assimp variable for the material.
-      * @param Assimp variable for the texture type.
-      * @param Variable with API information.
-      */
-      Vector<Textures*>
-      loadMaterialTextures(aiMaterial* pAMat, aiTextureType Atype);
+     /*
+     * @brief Function for loading the model texture.
+     * @param Assimp variable for the material.
+     * @param Assimp variable for the texture type.
+     * @param Variable with API information.
+     */
+     Vector<Textures*>
+     loadMaterialTextures(aiMaterial* pAMat, aiTextureType Atype);
 
-      /*
-      * @brief .
-      */
-      void
-      loadModelNodes(WeakSPtr<ModelNodes> myNode, const aiNode* ainode);
+     /*
+     * @brief .
+     */
+     void
+     loadModelNodes(WeakSPtr<ModelNodes> myNode, const aiNode* ainode);
 
-      /*
-      * @brief .
-      */
-      String
-      deleteSlashs(String file);
+     /*
+     * @brief .
+     */
+     String
+     deleteSlashs(String file);
 
-      /*
-      * @brief .
-      */
-      void
-      loadTexture(String path, TYPE_TEXTURES::E typeTexture);
+     /*
+     * @brief .
+     */
+     void
+     loadTexture(String path, TYPE_TEXTURES::E typeTexture);
 
-      /***********************************************************************/
-      /**
-      * Gets.
-      */
-      /***********************************************************************/
+     /***********************************************************************/
+     /**
+     * Gets.
+     */
+     /***********************************************************************/
 
-      /*
-      * @brief Function to get the direction of the texture.
-      * @param String with the file name.
-      */
-      String 
-      getTexturePath(String file);
+     /*
+     * @brief Function to get the direction of the texture.
+     * @param String with the file name.
+     */
+     String 
+     getTexturePath(String file);
 
-      /*
-      * @brief .
-      */
-      Vector<SPtr<Mesh>>
-      getMeshes();
+     /*
+     * @brief .
+     */
+     Vector<SPtr<Mesh>>
+     getMeshes();
+     
+     /*
+     * @brief .
+     */
+     Mesh*
+     getMesh();
 
-      /*
-      * @brief .
-      */
-      SPtr<SamplerState>
-      getSamplerInfo();
+     /*
+     * @brief .
+     */
+     String
+     getModelDirectory();
 
-      /*
-      * @brief .
-      */
-      Vector<SPtr<Model>>
-      getVecModels();
-      
-      /*
-      * @brief .
-      */
-      Mesh*
-      getMesh();
+     /*
+     * @brief .
+     */
+     Vector<Textures*>
+     getVecTextures();
 
-      /*
-      * @brief .
-      */
-      SPtr<Model>
-      getModel();
+     /*
+     * @brief .
+     */
+     Vector<ConstBuffBonesTransform> m_meshBones;
 
-      /*
-      * @brief .
-      */
-      String
-      getModelDirectory();
+   protected:
+     /*
+     * @brief .
+     */
+     void
+     createDirectories(String const& path);
 
-      /*
-      * @brief .
-      */
-      Vector<Textures*>
-      getVecTextures();
+   private:
+     /***********************************************************************/
+     /**
+     * Members.
+     */
+     /***********************************************************************/
+     
+     /*
+     * @brief .
+     */
+     bool m_playAnimation = true;
 
-      /*
-      * @brief .
-      */
-      Vector<ConstBuffBonesTransform> m_meshBones;
+     /*
+     * @brief .
+     */
+     float m_timeOfAnimation = 0.0f;
 
-    protected:
-      /*
-      * @brief .
-      */
-      void
-      createDirectories(String const& path);
+     /*
+     * @brief Member to store the full name of the folder.
+     */
+     String m_modelDirectory;
 
-    private:
-      /***********************************************************************/
-      /**
-      * Members.
-      */
-      /***********************************************************************/
-      
-      /*
-      * @brief .
-      */
-      bool m_playAnimation = true;
+     /*
+     * @brief Member to store the full name of the folder.
+     */
+     String m_texturesDirectory;
 
-      /*
-      * @brief .
-      */
-      float m_timeOfAnimation = 0.0f;
+     /*
+     * @brief Member to store a string of textures.
+     */
+     Vector<Textures*> m_vTextures;
 
-      /*
-      * @brief .
-      */
-      Assimp::Importer m_aImporter;
+     /*
+     * @brief .
+     */
+     Mesh* m_newMesh = nullptr;
 
-      /*
-      * @brief Member to store a string of textures.
-      */
-      Vector<Textures*> m_textures;
+     /*
+     * @brief .
+     */
+     SPtr<Animations> m_pAnimation;
 
-      /*
-      * @brief Member to store the full name of the folder.
-      */
-      String m_modelDirectory;
+     /*
+     * @brief Member to store a string of Meshes.
+     */
+     Vector<SPtr<Mesh>> m_vMeshes;
 
-      /*
-      * @brief Member to store the full name of the folder.
-      */
-      String m_texturesDirectory;
-
-      /*
-      * @brief .
-      */
-      const aiScene* m_pAScene = nullptr;
-
-      /*
-      * @brief .
-      */
-      Mesh* m_newMesh = nullptr;
-
-      /*
-      * @brief .
-      */
-      SPtr<Model> m_newModel = nullptr;
-
-      /*
-      * @brief Member to store a string of Meshes.
-      */
-      Vector<SPtr<Mesh>> m_vMeshes;
-
-      /*
-      * @brief .
-      */
-      Vector<SPtr<Model>> m_vModels;
-
-      /*
-      * @brief .
-      */
-      Vector<SPtr<AnimationData>> m_vAnimationData;
+     /*
+     * @brief .
+     */
+     Vector<SPtr<AnimationData>> m_vAnimationData;
   };
 }

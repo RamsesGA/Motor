@@ -17,7 +17,7 @@ using namespace gaEngineSDK;
 */
 /*****************************************************************************/
 
-const int32 MaxBones = 200;
+const int32 maxBones = 200;
 
 struct ConstantBuffer1 {
 	Matrix4x4 mView;
@@ -44,19 +44,12 @@ struct Vertex {
 	Vector4 normal = { 0.0f, 0.0f, 0.0f, 0.0f };
 	Vector4 tangent = { 0.0f, 0.0f, 0.0f, 0.0f };
 	Vector2 texCoords = { 0.0f, 0.0f };
-	//Vector4 color = { 255.0f, 255.0f, 255.0f, 255.0f };
 	float boneWeights[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 	uint32 boneIds[4] = { 0, 0, 0, 0 };
 };
 
-//struct Texture {
-//	String type;
-//	String path;
-//	SPtr<Textures> texture;
-//};
-
 struct ConstBuffBonesTransform {
-	Matrix4x4 bonesTransform[MaxBones];
+	Matrix4x4 bonesTransform[maxBones];
 };
 
 namespace FILTER {
