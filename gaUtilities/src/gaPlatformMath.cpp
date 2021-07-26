@@ -53,7 +53,7 @@ namespace gaEngineSDK {
   }
 
   float 
-  PlatformMath::taylorSin(const float& x) {
+  PlatformMath::fastSin(const float& x) {
     static uint32 fac3 = 6;
     static uint32 fac5 = 120;
     static uint32 fac7 = 5040;
@@ -70,7 +70,7 @@ namespace gaEngineSDK {
   }
 
   float 
-  PlatformMath::taylorCos(const float& x) {
+  PlatformMath::fastCos(const float& x) {
     float sum = 1;
     static uint32 fac2 = 2;
     static uint32 fac4 = 24;
@@ -88,6 +88,11 @@ namespace gaEngineSDK {
     return sum;
   }
 
+  template<typename T>
+  static T PlatformMath::abs(T val) {
+    return ::abs(val);
+  }
+
   float 
   PlatformMath::abs(float val) {
     return ::fabsf(val);
@@ -98,34 +103,49 @@ namespace gaEngineSDK {
     return 1.0f / std::sqrtf(val);
   }
 
+  template<typename T>
+  static T PlatformMath::cos(T x) {
+    return std::cos(x);
+  }
+
   float
-  PlatformMath::cos(float data) {
-    return std::cos(data);
+  PlatformMath::cos(float x) {
+    return std::cos(x);
+  }
+
+  template<typename T>
+  static T PlatformMath::sin(T x) {
+    return std::sin(x);
   }
 
   float 
-  PlatformMath::sin(float data) {
-    return std::sin(data);
+  PlatformMath::sin(float x) {
+    return std::sin(x);
+  }
+
+  template<typename T>
+  static T PlatformMath::tan(T x) {
+    return std::tan(x);
   }
 
   float 
-  PlatformMath::tan(float data) {
-    return std::tan(data);
+  PlatformMath::tan(float x) {
+    return std::tan(x);
   }
 
   float 
-  PlatformMath::arcCos(float data) {
-    return std::acos(data);
+  PlatformMath::arcCos(float x) {
+    return std::acos(x);
   }
 
   float 
-  PlatformMath::arcSin(float data) {
-    return std::asin(data);
+  PlatformMath::arcSin(float x) {
+    return std::asin(x);
   }
 
   float 
-  PlatformMath::arcTan(float data) {
-    return std::atan(data);
+  PlatformMath::arcTan(float x) {
+    return std::atan(x);
   }
 
   float 
@@ -140,33 +160,33 @@ namespace gaEngineSDK {
   /*************************************************************************/
 
   float 
-  PlatformMath::cosHB(float data) {
-    return std::cosh(data);
+  PlatformMath::cosHB(float x) {
+    return std::cosh(x);
   }
 
   float 
-  PlatformMath::sinHB(float data) {
-    return std::sinh(data);
+  PlatformMath::sinHB(float x) {
+    return std::sinh(x);
   }
 
   float 
-  PlatformMath::tanHB(float data) {
-    return std::tanh(data);
+  PlatformMath::tanHB(float x) {
+    return std::tanh(x);
   }
 
   float 
-  PlatformMath::arcCosHB(float data) {
-    return std::acosh(data);
+  PlatformMath::arcCosHB(float x) {
+    return std::acosh(x);
   }
 
   float 
-  PlatformMath::arcSinHB(float data) {
-    return std::asinh(data);
+  PlatformMath::arcSinHB(float x) {
+    return std::asinh(x);
   }
 
   float 
-  PlatformMath::arcTanHB(float data) {
-    return std::atanh(data);
+  PlatformMath::arcTanHB(float x) {
+    return std::atanh(x);
   }
 
 
@@ -177,13 +197,13 @@ namespace gaEngineSDK {
   /*************************************************************************/
 
   float 
-  PlatformMath::exp(float data) {
-    return std::exp(data);
+  PlatformMath::exp(float x) {
+    return std::exp(x);
   }
 
   float 
-  PlatformMath::log(float data) {
-    return std::log(data);
+  PlatformMath::log(float x) {
+    return std::log(x);
   }
 
   /*************************************************************************/
@@ -198,8 +218,8 @@ namespace gaEngineSDK {
   }
 
   float 
-  PlatformMath::sqrtf(float data) {
-    return std::sqrtf(data);
+  PlatformMath::sqrtf(float x) {
+    return std::sqrtf(x);
   }
 
   float

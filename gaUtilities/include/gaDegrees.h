@@ -30,6 +30,9 @@ namespace gaEngineSDK {
       float
       valueRadians() const;
 
+      float
+      valueDegrees() const;
+
       void
       unwindDegrees();
 
@@ -144,6 +147,6 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
 
-      float m_degree;
+      float m_degree = 0.0f;
   };
 }

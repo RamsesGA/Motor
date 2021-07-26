@@ -1,21 +1,17 @@
 #pragma once
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-#include <assimp/cimport.h>
 #include <gaQuaternions.h>
 
 #include "gaPrerequisitesCore.h"
 
 namespace gaEngineSDK {
   struct Key {
-    float m_time;
+    float m_time = 0.0f;
     Vector4 m_value;
   };
 
   struct RotationKey {
-    float m_time;
+    float m_time = 0.0f;
     Quaternions m_value;
   };
 
@@ -23,12 +19,12 @@ namespace gaEngineSDK {
     /*
     * @brief Member to save the quantity of children nodes.
     */
-    uint32 m_numChildrens;
+    uint32 m_numChildrens = 0;
 
     /*
     * @brief Member to save the quantity of meshes.
     */
-    uint32 m_numMeshes;
+    uint32 m_numMeshes = 0;
 
     /*
     * @brief Member to define the name.
@@ -55,17 +51,17 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    uint32 m_numScalingKeys;
+    uint32 m_numScalingKeys = 0;
 
     /*
     * @brief .
     */
-    uint32 m_numRotationKeys;
+    uint32 m_numRotationKeys = 0;
 
     /*
     * @brief .
     */
-    uint32 m_numPositionKeys;
+    uint32 m_numPositionKeys = 0;
 
     /*
     * @brief Member to know what.
@@ -92,17 +88,17 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    uint32 m_numChannels;
+    uint32 m_numChannels = 0;
 
     /*
     * @brief .
     */
-    float m_animDuration;
+    float m_animDuration = 0.0f;
 
     /*
     * @brief .
     */
-    float m_ticksPerSecond;
+    float m_ticksPerSecond = 0.0f;
 
     /*
     * @brief .

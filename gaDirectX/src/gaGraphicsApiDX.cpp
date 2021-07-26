@@ -266,7 +266,7 @@ namespace gaEngineSDK {
     m_pSwapChain->Present(syncInterval, flags);
   }
   
-  Textures* 
+  Textures*
   GraphicsApiDX::loadTextureFromFile(String srcFile) {
     int32 width;
     int32 height;
@@ -959,9 +959,8 @@ namespace gaEngineSDK {
   }
   
   void
-  GraphicsApiDX::setShaderResourceView(const Vector<Textures*>& texture, 
-                                       const uint32 startSlot,
-                                       const uint32 numViews) {
+  GraphicsApiDX::setShaderResourceView(const Vector<Textures*>& texture,
+                                       const uint32 startSlot, const uint32 numViews) {
     uint32 tempSize = texture.size();
     for (uint32 i = 0; i < tempSize; ++i) {
       TexturesDX* shaderResource = reinterpret_cast<TexturesDX*>(texture[i]);

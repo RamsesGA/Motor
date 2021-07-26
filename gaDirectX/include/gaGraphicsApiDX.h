@@ -54,7 +54,7 @@ namespace gaEngineSDK {
       void 
       swapChainPresent(uint32 syncInterval = 0, uint32 flags = 0) override;
 
-      Textures* 
+      Textures*
       loadTextureFromFile(String srcFile) override;
 
       void 

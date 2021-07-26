@@ -216,7 +216,7 @@ namespace gaEngineSDK {
       * @brief You can access to a specific position.
       */
       float&
-      operator()(const int32 & row, const int32 & column);
+      operator()(const uint32 & row, const uint32 & column);
       
       /***********************************************************************/
       /**
@@ -243,16 +243,15 @@ namespace gaEngineSDK {
       getDeterminant(float tempMatrix[4][4], float n = 4);
 
       void 
-      getCofactor(float tempMatrix[4][4], float tempMatrix2[4][4], int p, int q, int n);
+      getCofactor(float tempMatrix[4][4], float tempMatrix2[4][4], uint32 p, uint32 q, 
+                  uint32 n);
 
       /***********************************************************************/
       /**
       * Members.
       */
       /***********************************************************************/
-      union {
-        float m_mat4x4[4][4];
-      };
-      
+
+      float m_mat4x4[4][4];
   };
 }

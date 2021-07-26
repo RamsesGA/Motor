@@ -106,12 +106,12 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      SPtr<Actor> m_pActor = nullptr;
+      SPtr<Actor> m_pActor;
 
       /*
       * @brief .
       */
-      SPtr<SceneNode> m_pSelectedNode = nullptr;
+      SPtr<SceneNode> m_pSelectedNode;
 
       /*
       * @brief .

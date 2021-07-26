@@ -6,12 +6,24 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gaUtilities", "gaUtilities\gaUtilities.vcxproj", "{0E1FB950-EF3A-4F42-905F-3553040AD8B5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gaCore", "gaCore\gaCore.vcxproj", "{231901D2-5FE0-43DD-8C38-C54D0F6F02EE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0E1FB950-EF3A-4F42-905F-3553040AD8B5} = {0E1FB950-EF3A-4F42-905F-3553040AD8B5}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gaUtility_UnitTest", "gaUtility_UnitTest\gaUtility_UnitTest.vcxproj", "{C9CE1F0C-12BC-4577-BBE9-9F001C22A730}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0E1FB950-EF3A-4F42-905F-3553040AD8B5} = {0E1FB950-EF3A-4F42-905F-3553040AD8B5}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gaDirectX", "gaDirectX\gaDirectX.vcxproj", "{E3F1A319-FE01-400A-B9A5-B63946FE58A7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{231901D2-5FE0-43DD-8C38-C54D0F6F02EE} = {231901D2-5FE0-43DD-8C38-C54D0F6F02EE}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gaOpenGL", "gaOpenGL\gaOpenGL.vcxproj", "{02A6E875-B672-4EC8-94D7-E944E0163000}"
+	ProjectSection(ProjectDependencies) = postProject
+		{231901D2-5FE0-43DD-8C38-C54D0F6F02EE} = {231901D2-5FE0-43DD-8C38-C54D0F6F02EE}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gaCore_UnitTest", "gaCore_UnitTest\gaCore_UnitTest.vcxproj", "{69DFB93E-B4E7-400A-A539-F457A6B3B30F}"
 EndProject

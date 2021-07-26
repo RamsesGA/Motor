@@ -13,7 +13,7 @@ namespace gaEngineSDK
     };
   }
 
-  class Resource
+  class GA_CORE_EXPORT Resource
   {
     public:
       /***********************************************************************/

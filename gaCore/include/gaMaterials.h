@@ -24,17 +24,82 @@ namespace gaEngineSDK {
       void
       render()override;
 
-    private:
       /***********************************************************************/
       /*
       * Members.
       */
       /***********************************************************************/
 
-      String m_materialName = "Default_M";
+      uint32 m_numMaterials = 0;
 
-      SPtr<Textures> m_textureInfo = nullptr;
+      /*
+      * @brief
+      */
+      bool m_hasDiffuse = false;
 
-      Vector<SPtr<Materials>> m_vMaterials;
+      /*
+      * @brief
+      */
+      bool m_hasAlbedo = false;
+
+      /*
+      * @brief
+      */
+      bool m_hasNormal = false;
+
+      /*
+      * @brief
+      */
+      bool m_hasSpecular = false;
+
+      /*
+      * @brief
+      */
+      bool m_hasMetalness = false;
+
+      /*
+      * @brief
+      */
+      bool m_hasRoughness = false;
+
+      /*
+      * @brief
+      */
+      bool m_hasEmissive = false;
+
+      /*
+      * @brief
+      */
+      bool m_hasAO = false;
+
+      /*
+      * @brief Member to save the info of this type of texture.
+      */
+      Textures m_diffuse;
+
+      /*
+      * @brief Member to save the info of this type of texture.
+      */
+      Textures m_albedo;
+
+      /*
+      * @brief Member to save the info of this type of texture.
+      */
+      Textures m_normals;
+
+      /*
+      * @brief Member to save the info of this type of texture.
+      */
+      Textures m_specular;
+
+      /*
+      * @brief Member to save the info of this type of texture.
+      */
+      Textures m_metalness;
+
+      /*
+      * @brief Member to save the info of this type of texture.
+      */
+      Textures m_roughness;
   };
 }

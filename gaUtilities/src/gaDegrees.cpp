@@ -13,6 +13,11 @@ namespace gaEngineSDK {
     return m_degree * Math::DEG2RAD;
   }
 
+  float
+  Degrees::valueDegrees() const {
+    return m_degree;
+  }
+
   void
   Degrees::unwindDegrees() {
     m_degree = Math::unwindDegrees(m_degree);

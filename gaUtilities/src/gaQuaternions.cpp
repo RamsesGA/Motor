@@ -2,20 +2,21 @@
 #include "gaDegrees.h"
 
 namespace gaEngineSDK {
-  Quaternions::Quaternions(const float& X, const float& Y, const float& Z) {
+  Quaternions::Quaternions(const float& X, const float& Y, const float& Z, const float& W) {
     x = X;
     y = Y;
     z = Z;
-    w = 0.0f;
+    w = W;
   }
 
-  Quaternions::Quaternions(const Radians& X, const Radians& Y, const Radians& Z) {
-    float fSinPitch = Math::taylorSin(X.valueRadians() * 0.5f);
-    float fCosPitch = Math::taylorCos(X.valueRadians() * 0.5f);
-    float fSinYaw = Math::taylorSin(Y.valueRadians() * 0.5f);
-    float fCosYaw = Math::taylorCos(Y.valueRadians() * 0.5f);
-    float fSinRoll = Math::taylorSin(Z.valueRadians() * 0.5f);
-    float fCosRoll = Math::taylorCos(Z.valueRadians() * 0.5f);
+  Quaternions::Quaternions(const Radians& X, const Radians& Y, const Radians& Z, 
+                           const Radians& W) {
+    float fSinPitch = Math::fastSin(X.valueRadians() * 0.5f);
+    float fCosPitch = Math::fastCos(X.valueRadians() * 0.5f);
+    float fSinYaw = Math::fastSin(Y.valueRadians() * 0.5f);
+    float fCosYaw = Math::fastCos(Y.valueRadians() * 0.5f);
+    float fSinRoll = Math::fastSin(Z.valueRadians() * 0.5f);
+    float fCosRoll = Math::fastCos(Z.valueRadians() * 0.5f);
     float fCosPitchCosYaw(fCosPitch * fCosYaw);
     float fSinPitchSinYaw(fSinPitch * fSinYaw);
     
@@ -25,13 +26,14 @@ namespace gaEngineSDK {
     w = fCosRoll * fCosPitchCosYaw + fSinRoll * fSinPitchSinYaw;
   }
 
-  Quaternions::Quaternions(const Degrees& X, const Degrees& Y, const Degrees& Z) {
-    float fSinPitch = Math::taylorSin(X.valueRadians() * 0.5f);
-    float fCosPitch = Math::taylorCos(X.valueRadians() * 0.5f);
-    float fSinYaw = Math::taylorSin(Y.valueRadians() * 0.5f);
-    float fCosYaw = Math::taylorCos(Y.valueRadians() * 0.5f);
-    float fSinRoll = Math::taylorSin(Z.valueRadians() * 0.5f);
-    float fCosRoll = Math::taylorCos(Z.valueRadians() * 0.5f);
+  Quaternions::Quaternions(const Degrees& X, const Degrees& Y, const Degrees& Z, 
+                           const Degrees& W) {
+    float fSinPitch = Math::fastSin(X.valueRadians() * 0.5f);
+    float fCosPitch = Math::fastCos(X.valueRadians() * 0.5f);
+    float fSinYaw = Math::fastSin(Y.valueRadians() * 0.5f);
+    float fCosYaw = Math::fastCos(Y.valueRadians() * 0.5f);
+    float fSinRoll = Math::fastSin(Z.valueRadians() * 0.5f);
+    float fCosRoll = Math::fastCos(Z.valueRadians() * 0.5f);
     
     float fCosPitchCosYaw(fCosPitch * fCosYaw);
     float fSinPitchSinYaw(fSinPitch * fSinYaw);
@@ -286,7 +288,7 @@ namespace gaEngineSDK {
     
   Quaternions&
   Quaternions::rotate(Degrees X, Degrees Y, Degrees Z) {
-    Quaternions q2(X, Y, Z), q = *this, qinv = q;
+    Quaternions q2(X, Y, Z, 0.0f), q = *this, qinv = q;
     qinv.conjugate();
     
     *this = q * q2 * qinv;

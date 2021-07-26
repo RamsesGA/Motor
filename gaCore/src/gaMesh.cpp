@@ -5,17 +5,12 @@
 
 namespace gaEngineSDK {
   void 
-  Mesh::init(Vector<Vertex> pVertices, Vector<uint32> pIndices, 
-             Vector<Textures*> textures) {
+  Mesh::setUpMesh(Vector<Vertex> pVertices, Vector<uint32> pIndices, 
+                  Vector<Textures*> textures) {
     m_vVertices = pVertices;
     m_vIndices = pIndices;
-    m_textures = textures;
+    m_vTextures = textures;
 
-    setUpMesh();
-  }
-
-  void 
-  Mesh::setUpMesh() {
     auto myGraphicApi = g_graphicApi().instancePtr();
 
     m_pVertexBuffer.reset(myGraphicApi->createVertexBuffer(m_vVertices.data(),
@@ -307,18 +302,13 @@ namespace gaEngineSDK {
   }
 
   void
-  Mesh::setVertexBuffer(VertexBuffer* vertexBuffer) {
-    m_vertexBuffer.reset(vertexBuffer);
+  Mesh::setVertexBuffer(WeakSPtr<VertexBuffer> vertexBuffer) {
+    m_vertexBuffer = vertexBuffer.lock();
   }
 
   void 
-  Mesh::setIndex(WeakSPtr<uint32> index) {
-    m_index = index.lock();
-  }
-
-  void 
-  Mesh::setIndexBuffer(IndexBuffer* indexBuffer) {
-    m_indexBuffer.reset(indexBuffer);
+  Mesh::setIndexBuffer(WeakSPtr<IndexBuffer> indexBuffer) {
+    m_indexBuffer = indexBuffer.lock();
   }
 
   void 
@@ -329,42 +319,6 @@ namespace gaEngineSDK {
   void 
   Mesh::setVerticesNum(uint32 verticesNum) {
     m_numVertices = verticesNum;
-  }
-
-  void
-  Mesh::setDiffuseTexture(WeakSPtr<Textures> diffuse) {
-    m_hasDiffuse = true;
-    m_diffuse = diffuse.lock();
-  }
-
-  void 
-  Mesh::setAlbedoTexture(WeakSPtr<Textures> albedo) {
-    m_hasAlbedo = true;
-    m_albedo = albedo.lock();
-  }
-
-  void 
-  Mesh::setNormalsTexture(WeakSPtr<Textures> normals) {
-    m_hasNormal = true;
-    m_normals = normals.lock();
-  }
-
-  void
-  Mesh::setSpecularTexture(WeakSPtr<Textures> specular) {
-    m_hasSpecular = true;
-    m_specular = specular.lock();
-  }
-
-  void 
-  Mesh::setMetalnessTexture(WeakSPtr<Textures> metal) {
-    m_hasMetalness = true;
-    m_metalness = metal.lock();
-  }
-
-  void 
-  Mesh::setRoughnessTexture(WeakSPtr<Textures> roughness) {
-    m_hasRoughness = true;
-    m_roughness = roughness.lock();
   }
 
   /***************************************************************************/
@@ -392,35 +346,5 @@ namespace gaEngineSDK {
   Mesh::getNumIndices() {
     m_numIndices = m_vIndices.size();
     return m_numIndices;
-  }
-
-  SPtr<Textures> 
-  Mesh::getDiffuse() {
-    return m_diffuse;
-  }
-
-  SPtr<Textures> 
-  Mesh::getAlbedo() {
-    return m_albedo;
-  }
-
-  SPtr<Textures> 
-  Mesh::getNormals() {
-    return m_normals;
-  }
-
-  SPtr<Textures> 
-  Mesh::getSpecular() {
-    return m_specular;
-  }
-
-  SPtr<Textures> 
-  Mesh::getMetalness() {
-    return m_metalness;
-  }
-
-  SPtr<Textures> 
-  Mesh::getRoughness() {
-    return m_roughness;
   }
 }

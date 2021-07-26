@@ -45,21 +45,14 @@ namespace gaEngineSDK {
       * Methods.
       */
       /***********************************************************************/
-      
-      /*
-      * @brief Function to initialize class members.
-      * @param Variable with API information.
-      */
-      void 
-      init(Vector<Vertex> pVertices, Vector<uint32> pIndices,
-           Vector<Textures*> textures);
 
       /*
       * @brief Function to save information for m_vertexBuffer and m_indexBuffer.
       * @param Variable with API information.
       */
       void 
-      setUpMesh();
+      setUpMesh(Vector<Vertex> pVertices, Vector<uint32> pIndices, 
+                Vector<Textures*> textures);
 
       void 
       animated(const float& animationTime, SPtr<AnimationData> animation, 
@@ -113,19 +106,13 @@ namespace gaEngineSDK {
       * @brief .
       */
       void
-      setVertexBuffer(VertexBuffer* vertexBuffer);
+      setVertexBuffer(WeakSPtr<VertexBuffer> vertexBuffer);
 
       /*
       * @brief .
       */
       void
-      setIndex(WeakSPtr<uint32> index);
-
-      /*
-      * @brief .
-      */
-      void
-      setIndexBuffer(IndexBuffer* indexBuffer);
+      setIndexBuffer(WeakSPtr<IndexBuffer> indexBuffer);
 
       /*
       * @brief .
@@ -138,43 +125,6 @@ namespace gaEngineSDK {
       */
       void
       setVerticesNum(uint32 verticesNum);
-
-      /*
-      * @brief .
-      */
-      void
-      setDiffuseTexture(WeakSPtr<Textures> diffuse);
-
-      /*
-      * @brief .
-      */
-      void
-      setAlbedoTexture(WeakSPtr<Textures> albedo);
-
-      /*
-      * @brief .
-      */
-      void
-      setNormalsTexture(WeakSPtr<Textures> normals);
-
-      /*
-      * @brief .
-      */
-      void
-      setSpecularTexture(WeakSPtr<Textures> specular);
-
-      /*
-      * @brief .
-      */
-      void
-      setMetalnessTexture(WeakSPtr<Textures> metal);
-
-      /*
-      * @brief .
-      */
-      void
-      setRoughnessTexture(WeakSPtr<Textures> roughness);
-
 
       /***********************************************************************/
       /*
@@ -194,44 +144,11 @@ namespace gaEngineSDK {
       uint32
       getNumIndices();
 
-      SPtr<Textures> 
-      getDiffuse();
-
-      SPtr<Textures> 
-      getAlbedo();
-
-      SPtr<Textures> 
-      getNormals();
-
-      SPtr<Textures> 
-      getSpecular();
-
-      SPtr<Textures> 
-      getMetalness();
-
-      SPtr<Textures> 
-      getRoughness();
-
       /***********************************************************************/
       /*
       * Members.
       */
       /***********************************************************************/
-
-      /*
-      * @brief Member to store vertex information.
-      */
-      SPtr<VertexBuffer> m_pVertexBuffer = nullptr;
-
-      /*
-      * @brief Member to store the index information.
-      */
-      SPtr<IndexBuffer> m_pIndexBuffer = nullptr;
-
-      /*
-      * @brief .
-      */
-      SPtr<SkeletalMesh> m_skeletalMesh = nullptr;
 
       /*
       * @brief .
@@ -241,44 +158,29 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      ConstBuffBonesTransform* m_cbBonesTrans = nullptr;
+      ConstBuffBonesTransform* m_cbBonesTrans;
 
       /*
       * @brief Member to store the texture information.
       */
-      Vector<Textures*> m_textures;
+      Vector<Textures*> m_vTextures;
+
+      /*
+      * @brief Member to store vertex information.
+      */
+      SPtr<VertexBuffer> m_pVertexBuffer;
+
+      /*
+      * @brief Member to store the index information.
+      */
+      SPtr<IndexBuffer> m_pIndexBuffer;
+
+      /*
+      * @brief .
+      */
+      SPtr<SkeletalMesh> m_skeletalMesh;
 
     private:
-
-      /*
-      * @brief
-      */
-      bool m_hasDiffuse = false;
-
-      /*
-      * @brief
-      */
-      bool m_hasAlbedo = false;
-
-      /*
-      * @brief
-      */
-      bool m_hasNormal = false;
-
-      /*
-      * @brief
-      */
-      bool m_hasSpecular = false;
-
-      /*
-      * @brief
-      */
-      bool m_hasMetalness = false;
-
-      /*
-      * @brief
-      */
-      bool m_hasRoughness = false;
 
       /*
       * @brief .
@@ -311,53 +213,18 @@ namespace gaEngineSDK {
       Vector<uint32> m_vIndices;
 
       /*
-      * @brief Member to save the info of this type of texture.
+      * @brief .
       */
-      SPtr<Textures> m_diffuse = nullptr;
-
-      /*
-      * @brief Member to save the info of this type of texture.
-      */
-      SPtr<Textures> m_albedo = nullptr;
-
-      /*
-      * @brief Member to save the info of this type of texture.
-      */
-      SPtr<Textures> m_normals = nullptr;
-
-      /*
-      * @brief Member to save the info of this type of texture.
-      */
-      SPtr<Textures> m_specular = nullptr;
-
-      /*
-      * @brief Member to save the info of this type of texture.
-      */
-      SPtr<Textures> m_metalness = nullptr;
-
-      /*
-      * @brief Member to save the info of this type of texture.
-      */
-      SPtr<Textures> m_roughness = nullptr;
+      SPtr<Vertex> m_vertexData;
 
       /*
       * @brief .
       */
-      SPtr<Vertex> m_vertexData = nullptr;
+      SPtr<VertexBuffer> m_vertexBuffer;
 
       /*
       * @brief .
       */
-      SPtr<VertexBuffer> m_vertexBuffer = nullptr;
-
-      /*
-      * @brief .
-      */
-      SPtr<IndexBuffer> m_indexBuffer = nullptr;
-
-      /*
-      * @brief .
-      */
-      SPtr<uint32> m_index = nullptr;
+      SPtr<IndexBuffer> m_indexBuffer;
   };
 }

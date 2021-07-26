@@ -57,12 +57,12 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      SPtr<SceneNode> m_root = nullptr;
+      SPtr<SceneNode> m_root;
 
       /*
       * @brief .
       */
-      SPtr<Model> m_accessModel = nullptr;
+      SPtr<Model> m_accessModel;
   };
 
   /***************************************************************************/

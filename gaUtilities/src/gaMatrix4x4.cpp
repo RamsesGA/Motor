@@ -336,8 +336,8 @@ namespace gaEngineSDK {
     adjoint(tempParamMatrix, adj);
 
     // Find Inverse using formula "inverse(A) = adj(A)/det(A)"
-    for (int32 i = 0; i < 4; ++i) {
-      for (int32 j = 0; j < 4; ++j) {
+    for (uint32 i = 0; i < 4; ++i) {
+      for (uint32 j = 0; j < 4; ++j) {
         inverseMatrix[i][j] = adj[i][j] / float(det);
       }
     }
@@ -367,17 +367,12 @@ namespace gaEngineSDK {
 
   void 
   Matrix4x4::adjoint(float tempMatrix[4][4], float adj[4][4]) {
-    if (4 == 1) {
-      adj[0][0] = 1;
-      return;
-    }
-
     // temp is used to store cofactors of A[][]
-    int sign = 1;
+    int32 sign = 1;
     float temp[4][4];
 
-    for (int i = 0; i < 4; ++i) {
-      for (int j = 0; j < 4; ++j) {
+    for (uint32 i = 0; i < 4; ++i) {
+      for (uint32 j = 0; j < 4; ++j) {
         // Get cofactor of A[i][j]
         getCofactor(tempMatrix, temp, i, j, 4);
 
@@ -399,7 +394,7 @@ namespace gaEngineSDK {
   /*************************************************************************/
 
   float&
-  Matrix4x4::operator()(const int32& row, const int32& column) {
+  Matrix4x4::operator()(const uint32& row, const uint32& column) {
     return this->m_mat4x4[row][column];
   }
 
@@ -407,8 +402,8 @@ namespace gaEngineSDK {
   Matrix4x4::operator+(Matrix4x4& matrix)const {
     Matrix4x4 add;
 
-    for (int32 i = 0; i < 4; ++i) {
-      for (int32 j = 0; j < 4; ++j) {
+    for (uint32 i = 0; i < 4; ++i) {
+      for (uint32 j = 0; j < 4; ++j) {
         add(i, j) = this->m_mat4x4[i][j] + matrix(i, j);
       }
     }
@@ -424,8 +419,8 @@ namespace gaEngineSDK {
   Matrix4x4::operator-(Matrix4x4& matrix)const {
     Matrix4x4 subs;
 
-    for (int32 i = 0; i < 4; ++i) {
-      for (int32 j = 0; j < 4; ++j) {
+    for (uint32 i = 0; i < 4; ++i) {
+      for (uint32 j = 0; j < 4; ++j) {
         subs(i, j) = this->m_mat4x4[i][j] - matrix(i, j);
       }
     }
@@ -443,11 +438,11 @@ namespace gaEngineSDK {
 
     float temp = 0.0f;
 
-    for (int32 i = 0; i < 4; ++i) {
-      for (int32 j = 0; j < matrix.getColumns(); ++j) {
+    for (uint32 i = 0; i < 4; ++i) {
+      for (uint32 j = 0; j < 4; ++j) {
         temp = 0.0f;
 
-        for (int32 k = 0; k < 4; ++k) {
+        for (uint32 k = 0; k < 4; ++k) {
           temp += m_mat4x4[i][k] * matrix(k, j);
         }
 
@@ -462,8 +457,8 @@ namespace gaEngineSDK {
   Matrix4x4::operator+(float data)const {
     Matrix4x4 result;
 
-    for (int32 i = 0; i < 4; ++i) {
-      for (int32 j = 0; j < 4; ++j) {
+    for (uint32 i = 0; i < 4; ++i) {
+      for (uint32 j = 0; j < 4; ++j) {
         result(i, j) = this->m_mat4x4[i][j] + data;
       }
     }
@@ -475,8 +470,8 @@ namespace gaEngineSDK {
   Matrix4x4::operator-(float data)const {
     Matrix4x4 result;
 
-    for (int32 i = 0; i < 4; ++i) {
-      for (int32 j = 0; j < 4; ++j) {
+    for (uint32 i = 0; i < 4; ++i) {
+      for (uint32 j = 0; j < 4; ++j) {
         result(i, j) = this->m_mat4x4[i][j] - data;
       }
     }
@@ -488,8 +483,8 @@ namespace gaEngineSDK {
   Matrix4x4::operator*(float data)const {
     Matrix4x4 result;
 
-    for (int32 i = 0; i < 4; ++i) {
-      for (int32 j = 0; j < 4; ++j) {
+    for (uint32 i = 0; i < 4; ++i) {
+      for (uint32 j = 0; j < 4; ++j) {
         result(i, j) = this->m_mat4x4[i][j] * data;
       }
     }
@@ -512,8 +507,8 @@ namespace gaEngineSDK {
   Matrix4x4::operator/(float data)const {
     Matrix4x4 result;
 
-    for (int32 i = 0; i < 4; ++i) {
-      for (int32 j = 0; j < 4; ++j) {
+    for (uint32 i = 0; i < 4; ++i) {
+      for (uint32 j = 0; j < 4; ++j) {
         result(i, j) = this->m_mat4x4[i][j] / data;
       }
     }
@@ -540,7 +535,7 @@ namespace gaEngineSDK {
   float
   Matrix4x4::getDeterminant(float tempMatrix[4][4], float n) {
     // Initialize result
-    float D = 0;
+    float D = 0.0f;
 
     //  Base case : if matrix contains single element
     if (n == 1) {
@@ -554,10 +549,10 @@ namespace gaEngineSDK {
     float sign = 1.0f;
 
      // Iterate for each element of first row
-    for (int32 f = 0; f < n; ++f) {
+    for (uint32 f = 0; f < n; ++f) {
       // Getting Cofactor of A[0][f]
       getCofactor(tempMatrix, temp, 0, f, n);
-      D += sign * tempMatrix[0][f] * getDeterminant(temp, n - 1);
+      D += sign * tempMatrix[0][f] * getDeterminant(temp, n - 1.0f);
 
       // terms are to be added with alternate sign
       sign = -sign;
@@ -568,12 +563,12 @@ namespace gaEngineSDK {
 
   void
   gaEngineSDK::Matrix4x4::getCofactor(float tempMatrix[4][4], 
-                                      float tempMatrix2[4][4], int p, int q, int n) {
-    int i = 0, j = 0;
+                                      float tempMatrix2[4][4], uint32 p, uint32 q, uint32 n) {
+    uint32 i = 0, j = 0;
 
     // Looping for each element of the matrix
-    for (int row = 0; row < n; ++row) {
-      for (int col = 0; col < n; ++col) {
+    for (uint32 row = 0; row < n; ++row) {
+      for (uint32 col = 0; col < n; ++col) {
         //  Copying into temporary matrix only those element
         //  which are not in given row and column
         if (row != p && col != q) {

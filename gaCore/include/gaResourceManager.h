@@ -7,7 +7,7 @@
 #include "gaComponent.h"
 #include "gaAnimations.h"
 #include "gaMesh.h"
-
+#include "gaMaterials.h"
 
 namespace gaEngineSDK {
 
@@ -23,6 +23,8 @@ namespace gaEngineSDK {
       kEmissive
     };
   }
+
+  class Materials;
 
   class GA_CORE_EXPORT ResourceManager : public Component
   {
@@ -63,7 +65,7 @@ namespace gaEngineSDK {
    
      /***********************************************************************/
      /**
-     * Methods.
+     * Process methods.
      */
      /***********************************************************************/
 
@@ -82,14 +84,14 @@ namespace gaEngineSDK {
      * @param Assimp variable with scene information.
      * @param Variable with API information.
      */
-     SPtr<Mesh>
+     Mesh
      processMesh(aiMesh* pAMesh);
 
      /*
      * @brief .
      */
-     void
-     processBonesInfo(aiMesh* pAMesh, Vertex* vertexInfo, uint32 numVertexes);
+     Mesh
+     processBonesInfo(aiMesh* pAMesh, Vertex* vertexInfo, uint32 numVertexes, Mesh paramMesh);
 
      /*
      * @brief .
@@ -103,13 +105,19 @@ namespace gaEngineSDK {
      void
      processAnimationInfo();
 
+     /************************************************************************/
+     /**
+     * Methods.
+     */
+     /************************************************************************/
+
      /*
      * @brief Function for loading the model texture.
      * @param Assimp variable for the material.
      * @param Assimp variable for the texture type.
      * @param Variable with API information.
      */
-     Vector<Textures*>
+     void
      loadMaterialTextures(aiMaterial* pAMat, aiTextureType Atype);
 
      /*
@@ -128,13 +136,19 @@ namespace gaEngineSDK {
      * @brief .
      */
      void
-     loadTexture(String path, TYPE_TEXTURES::E typeTexture);
+     searchingTextures(aiMesh * pAMesh);
 
-     /***********************************************************************/
+     /*
+     * @brief .
+     */
+     SPtr<Resource>
+     loadingTextureFromFile(const RESOURCE_TYPES::E& type);
+
+     /************************************************************************/
      /**
      * Gets.
      */
-     /***********************************************************************/
+     /************************************************************************/
 
      /*
      * @brief Function to get the direction of the texture.
@@ -142,18 +156,6 @@ namespace gaEngineSDK {
      */
      String 
      getTexturePath(String file);
-
-     /*
-     * @brief .
-     */
-     Vector<SPtr<Mesh>>
-     getMeshes();
-     
-     /*
-     * @brief .
-     */
-     Mesh*
-     getMesh();
 
      /*
      * @brief .
@@ -207,24 +209,24 @@ namespace gaEngineSDK {
      String m_texturesDirectory;
 
      /*
+     * @brief .
+     */
+     Animations m_animInfo;
+
+     /*
      * @brief Member to store a string of textures.
      */
      Vector<Textures*> m_vTextures;
 
      /*
-     * @brief .
-     */
-     Mesh* m_newMesh = nullptr;
-
-     /*
-     * @brief .
-     */
-     SPtr<Animations> m_pAnimation;
-
-     /*
      * @brief Member to store a string of Meshes.
      */
-     Vector<SPtr<Mesh>> m_vMeshes;
+     Vector<Mesh> m_vMeshes;
+
+     /*
+     * @brief Member to store a .
+     */
+     Vector<Materials> m_vMaterials;
 
      /*
      * @brief .

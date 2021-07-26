@@ -86,6 +86,7 @@ namespace gaEngineSDK {
     return *this;
   }
 
+  /*
   Transform 
   Transform::operator*(const Transform& other) const  { return Transform(); }
 
@@ -98,7 +99,6 @@ namespace gaEngineSDK {
   void 
   Transform::operator*=(const Quaternions& other) { }
 
-  /*
   bool 
   Transform::operator==(const Transform& other) const {
     return (m_rotation == other.m_rotation) && (m_position == other.m_position) &&

@@ -76,7 +76,7 @@ namespace gaEngineSDK {
       /*
       * @brief Member to store a string of samplers.
       */
-      SPtr<SamplerState> m_sampler = nullptr;
+      SPtr<SamplerState> m_sampler;
 
       /*
       * @brief .

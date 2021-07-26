@@ -1,3 +1,8 @@
+#include <assimp/scene.h>
+#include <assimp/cimport.h>
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
+
 #include "gaResourceManager.h"
 #include "gaGraphicsApi.h"
 
@@ -21,17 +26,11 @@ namespace gaEngineSDK {
     createDirectories(path);
 
     auto myGraphicApi = g_graphicApi().instancePtr();
-    m_pAnimation.reset(new Animations());
 
     //Process assimp's root pNode recursively
     processNode(g_pAScene->mRootNode);
 
     processAnimationInfo();
-
-    //SPtr<SamplerState> tempSamp(myGraphicApi->createSamplerState());
-
-    //Create texture sampler for model's textures
-    //m_pAnimation->setSampler(tempSamp);
 
     m_meshBones.resize(m_vMeshes.size());
   }
@@ -44,7 +43,7 @@ namespace gaEngineSDK {
 
   void
   ResourceManager::update(const float& deltaTime) {
-    if (0 != m_vAnimationData.size()) {
+    if (!(m_vAnimationData.empty())) {
       SPtr<AnimationData> currentAnimation = m_vAnimationData[0];
 
       if (m_playAnimation) {
@@ -56,9 +55,9 @@ namespace gaEngineSDK {
 
       uint32 meshNum = 0;
 
-      for (auto mesh : m_vMeshes) {
-        mesh->m_cbBonesTrans = &m_meshBones[meshNum];
-        mesh->animated(m_timeOfAnimation, currentAnimation, m_pAnimation->m_pStrModelNodes);
+      for (auto& mesh : m_vMeshes) {
+        mesh.m_cbBonesTrans = &m_meshBones[meshNum];
+        mesh.animated(m_timeOfAnimation, currentAnimation, m_animInfo.m_pStrModelNodes);
         ++meshNum;
       }
     }
@@ -70,27 +69,27 @@ namespace gaEngineSDK {
 
     uint32 meshNum = 0;
 
-    for (auto mesh : m_vMeshes) {
+    for (auto& mesh : m_vMeshes) {
       myGraphicApi->updateConstantBuffer(&m_meshBones[meshNum], 
                                          myGraphicApi->getConstBufferBones());
 
-      if (0 != m_vMeshes[meshNum]->m_textures.size()) {
+      if (!(m_vMeshes[meshNum].m_vTextures.empty())) {
 
         //TODO: I need to correct the sampler
-        myGraphicApi->setShaderResourceView(m_vMeshes[meshNum]->m_textures, meshNum, 1);
+        myGraphicApi->setShaderResourceView(m_vMeshes[meshNum].m_vTextures, meshNum, 1);
       }
 
-      myGraphicApi->setVertexBuffer(mesh->m_pVertexBuffer);
-      myGraphicApi->setIndexBuffer(mesh->m_pIndexBuffer);
+      myGraphicApi->setVertexBuffer(mesh.m_pVertexBuffer);
+      myGraphicApi->setIndexBuffer(mesh.m_pIndexBuffer);
 
-      myGraphicApi->drawIndex(mesh->getNumIndices());
+      myGraphicApi->drawIndex(mesh.getNumIndices());
       ++meshNum;
     }
   }
 
   /***************************************************************************/
   /**
-  * Methods.
+  * Process methods.
   */
   /***************************************************************************/
 
@@ -114,19 +113,18 @@ namespace gaEngineSDK {
     }
   }
 
-  SPtr<Mesh>
+  Mesh
   ResourceManager::processMesh(aiMesh* pAMesh) {
     //Data to fill
     Vector<uint32> indices;
-    Vector<Textures*> textures;
     Vector<Vertex> vVertices;
+
+    Mesh newMesh;
 
     vVertices.resize(pAMesh->mNumVertices);
 
-    m_newMesh = new Mesh();
-
     if (!pAMesh->HasFaces()) {
-      return nullptr;
+      return newMesh;
     }
 
     //Go through each of the _mesh's faces and retrieve the corresponding indices.
@@ -181,27 +179,23 @@ namespace gaEngineSDK {
       }
     }
 
-    processBonesInfo(pAMesh, vVertices.data(), pAMesh->mNumVertices);
+    newMesh = processBonesInfo(pAMesh, vVertices.data(), pAMesh->mNumVertices, newMesh);
 
-
+    //searchingTextures(pAMesh);
 
 
     aiMaterial* material = g_pAScene->mMaterials[pAMesh->mMaterialIndex];
 
-    Vector<Textures*> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE);
+    loadMaterialTextures(material, aiTextureType_DIFFUSE);
 
-    textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+    newMesh.setUpMesh(vVertices, indices, m_vTextures);
 
-    m_newMesh->init(vVertices, indices, textures);
-
-    auto myGraphicApi = g_graphicApi().instancePtr();
-
-    SPtr<Mesh> tempMesh(m_newMesh);
-    return tempMesh;
+    return newMesh;
   }
 
-  void 
-  ResourceManager::processBonesInfo(aiMesh* pAMesh, Vertex* vertexInfo, uint32 numVertexes) {
+  Mesh
+  ResourceManager::processBonesInfo(aiMesh* pAMesh, Vertex* vertexInfo, uint32 numVertexes, 
+                                    Mesh paramMesh) {
     SkeletalMesh* skeletal = new SkeletalMesh;
     
     if (0 < pAMesh->mNumBones) {
@@ -253,11 +247,13 @@ namespace gaEngineSDK {
 
     SPtr<Vertex> SPtrVertexData(vertexInfo);
 
-    m_newMesh->m_skeletalMesh.reset(skeletal);
-    m_newMesh->setVertexData(SPtrVertexData);
+    paramMesh.m_skeletalMesh.reset(skeletal);
+    paramMesh.setVertexData(SPtrVertexData);
 
-    m_newMesh->m_bonesTransforms.clear();
-    m_newMesh->m_bonesTransforms.resize(skeletal->numBones);
+    paramMesh.m_bonesTransforms.clear();
+    paramMesh.m_bonesTransforms.resize(skeletal->numBones);
+
+    return paramMesh;
   }
 
   void 
@@ -267,24 +263,25 @@ namespace gaEngineSDK {
 
   void 
   ResourceManager::processAnimationInfo() {
-    //std::memcpy(&m_pAnimation->m_globalInverseTransform, &g_pAScene->mRootNode->mTransformation, sizeof(Matrix4x4));
-    //m_pAnimation->m_globalInverseTransform.transpose();
-    //m_pAnimation->m_globalInverseTransform.invert(m_pAnimation->m_globalInverseTransform);
+    /*std::memcpy(&m_pAnimation->m_globalInverseTransform, 
+                  &g_pAScene->mRootNode->mTransformation, sizeof(Matrix4x4));
+    m_pAnimation->m_globalInverseTransform.transpose();
+    m_pAnimation->m_globalInverseTransform.invert(m_pAnimation->m_globalInverseTransform);*/
 
     ModelNodes* rootNode = new ModelNodes();
 
-    m_pAnimation->m_pStrModelNodes.reset(rootNode);
+    m_animInfo.m_pStrModelNodes.reset(rootNode);
 
-    loadModelNodes(m_pAnimation->m_pStrModelNodes, g_pAScene->mRootNode);
+    loadModelNodes(m_animInfo.m_pStrModelNodes, g_pAScene->mRootNode);
 
-    m_pAnimation->setAnimName("FirstAnimation");
+    m_animInfo.setAnimName("FirstAnimation");
 
     uint32 tempNumAnims = g_pAScene->mNumAnimations;
     for (uint32 i = 0; i < tempNumAnims; ++i) {
       AnimationData* newAnimation = new AnimationData;
 
       newAnimation->m_animationName = g_pAScene->mAnimations[i]->mName.C_Str();
-      m_pAnimation->setAnimName(newAnimation->m_animationName);
+      m_animInfo.setAnimName(newAnimation->m_animationName);
 
       if (g_pAScene->mAnimations[i]->mTicksPerSecond != 0.0) {
         newAnimation->m_ticksPerSecond = (float)g_pAScene->mAnimations[i]->mTicksPerSecond;
@@ -375,21 +372,27 @@ namespace gaEngineSDK {
     }
 
     if (0 < g_pAScene->mNumAnimations) {
-      m_pAnimation->setNumAnims((uint32)g_pAScene->mNumAnimations);
+      m_animInfo.setNumAnims((uint32)g_pAScene->mNumAnimations);
     }
   }
 
-  Vector<Textures*> 
+  /***************************************************************************/
+  /**
+  * Methods.
+  */
+  /***************************************************************************/
+
+  void
   ResourceManager::loadMaterialTextures(aiMaterial* pAMat, aiTextureType Atype) {
     Vector<Textures*> textures;
 
     uint32 tempTypeTexture = pAMat->GetTextureCount(Atype);
     for (uint32 i = 0; i < tempTypeTexture; ++i) {
-      aiString aistr;
+      aiString aiStr;
 
-      pAMat->GetTexture(Atype, i, &aistr);
+      pAMat->GetTexture(Atype, i, &aiStr);
 
-      String srcFile = String(aistr.C_Str());
+      String srcFile = String(aiStr.C_Str());
       srcFile = m_texturesDirectory + getTexturePath(srcFile);
 
       srcFile = deleteSlashs(srcFile);
@@ -407,12 +410,11 @@ namespace gaEngineSDK {
       if (!skip) {
         auto myGraphicApi = g_graphicApi().instancePtr();
 
-        m_vTextures.push_back(myGraphicApi->loadTextureFromFile(srcFile));
         textures.push_back(myGraphicApi->loadTextureFromFile(srcFile));
       }
     }
 
-    return textures;
+    m_vTextures = textures;
   }
 
   void 
@@ -457,31 +459,44 @@ namespace gaEngineSDK {
   }
 
   void
-  ResourceManager::loadTexture(String path, TYPE_TEXTURES::E typeTexture) {
+  ResourceManager::searchingTextures(aiMesh* pAMesh) {
     auto myGraphicApi = g_graphicApi().instancePtr();
+    Materials definingMaterials;
 
-    switch (typeTexture)
-    {
-      case gaEngineSDK::TYPE_TEXTURES::kDiffuse:
-        break;
-      case gaEngineSDK::TYPE_TEXTURES::kAlbedo:
-        break;
-      case gaEngineSDK::TYPE_TEXTURES::kMetallic:
-        break;
-      case gaEngineSDK::TYPE_TEXTURES::kNormal:
-        break;
-      case gaEngineSDK::TYPE_TEXTURES::kRoughness:
-        break;
-      case gaEngineSDK::TYPE_TEXTURES::kSpecular:
-        break;
-      case gaEngineSDK::TYPE_TEXTURES::kAO:
-        break;
-      case gaEngineSDK::TYPE_TEXTURES::kEmissive:
-        break;
-      default:
-        break;
+    aiMaterial* material = g_pAScene->mMaterials[pAMesh->mMaterialIndex];
+
+    if (1 == material->GetTextureCount(aiTextureType_DIFFUSE)) {
+      aiString aiStr;
+
+      if (AI_SUCCESS == material->GetTexture(aiTextureType_DIFFUSE, 0, &aiStr)) {
+        String srcFile = String(aiStr.C_Str());
+        srcFile = m_texturesDirectory + getTexturePath(srcFile);
+        srcFile = deleteSlashs(srcFile);
+
+        SPtr<Resource> albedoResource = loadingTextureFromFile(RESOURCE_TYPES::kTexture);
+
+        /*if (nullptr == albedoResource) {
+          definingMaterials->m_albedo(g_ResourceMan().DEFAULT_TEXTURE_ERROR);
+        }
+        else {
+          SPtr<Textures> albedoTexture(albedoResource, reinterpret_cast<Textures*>(albedoResource.get()));
+          tempMesh->setAlbedoTexture(albedoTexture);
+        }*/
+      }
     }
   }
+
+  SPtr<Resource>
+  ResourceManager::loadingTextureFromFile(const RESOURCE_TYPES::E& type) {
+    SPtr<Resource> caca;
+    return caca;
+  }
+
+  /***************************************************************************/
+  /**
+  * Gets.
+  */
+  /***************************************************************************/
 
   String 
   ResourceManager::getTexturePath(String file) {
@@ -507,16 +522,6 @@ namespace gaEngineSDK {
     return file.substr(realPos, file.length() - realPos);
   }
 
-  Vector<SPtr<Mesh>>
-  ResourceManager::getMeshes() {
-    return m_vMeshes;
-  }
-
-  Mesh* 
-  ResourceManager::getMesh() {
-    return m_newMesh;
-  }
-
   String
   ResourceManager::getModelDirectory() {
     return m_modelDirectory;
@@ -526,6 +531,13 @@ namespace gaEngineSDK {
   ResourceManager::getVecTextures() {
     return m_vTextures;
   }
+
+
+  /***************************************************************************/
+  /**
+  * Protected.
+  */
+  /***************************************************************************/
 
   void
   ResourceManager::createDirectories(String const& path) {

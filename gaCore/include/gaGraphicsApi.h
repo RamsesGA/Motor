@@ -110,7 +110,7 @@ namespace gaEngineSDK {
       * @param String with the address of the file.
       * @return Textures pointer.
       */
-      virtual Textures* 
+      virtual Textures*
       loadTextureFromFile(String srcFile) { GA_UNREFERENCED_PARAMETER(srcFile); 
                                             return nullptr; };
       

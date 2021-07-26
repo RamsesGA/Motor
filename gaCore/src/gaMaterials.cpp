@@ -1,8 +1,6 @@
 #include "gaMaterials.h"
 
 namespace gaEngineSDK {
-
-
   void
   Materials::update(const float& deltaTime) {
 
@@ -12,5 +10,4 @@ namespace gaEngineSDK {
   Materials::render() {
 
   }
-
 }

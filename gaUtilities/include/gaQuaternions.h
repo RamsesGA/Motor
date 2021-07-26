@@ -17,11 +17,11 @@ namespace gaEngineSDK {
       /***********************************************************************/
       Quaternions() = default;
 
-      Quaternions(const float& X, const float& Y, const float& Z);
+      Quaternions(const float& X, const float& Y, const float& Z, const float& W);
 
-      Quaternions(const Radians& X, const Radians& Y, const Radians& Z);
+      Quaternions(const Radians& X, const Radians& Y, const Radians& Z, const Radians& W);
 
-      Quaternions(const Degrees& X, const Degrees& Y, const Degrees& Z);
+      Quaternions(const Degrees& X, const Degrees& Y, const Degrees& Z, const Degrees& W);
 
       Quaternions(Vector3 vec3, const float& w);
 

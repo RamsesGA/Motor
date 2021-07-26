@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gaPrerequisitesUtilities.h"
+#include "gaRadians.h"
 
 namespace gaEngineSDK {
 
@@ -23,16 +24,19 @@ namespace gaEngineSDK {
       unwindRadians(float A);
 
       static float
-      taylorSin(const float& x);
+      fastSin(const float& x);
 
       static float
-      taylorCos(const float& x);
+      fastCos(const float& x);
 
-      static 
-      float abs(float val);
+      template<typename T>
+      static T abs(T val);
 
-      static 
-      float invSqrt(float val);
+      static float 
+      abs(float val);
+
+      static float 
+      invSqrt(float val);
     
       /***********************************************************************/
       /**
@@ -41,38 +45,47 @@ namespace gaEngineSDK {
       /***********************************************************************/
     
       /**
-      * @brief Returns the cosine of an angle of x radians.
+      * @brief Returns the cosine of an angle of x.
       */
+      template<typename T>
+      static T cos(T x);
+
       static float
-      cos(float data);
+      cos(float x);
     
       /**
-      * @brief Returns the sine of an angle of x radians.
+      * @brief Returns the sine of an angle of x.
       */
+      template<typename T>
+      static T sin(T x);
+
       static float
-      sin(float data);
+      sin(float x);
     
       /**
-      * @brief Returns the tangent of an angle of x radians.
+      * @brief Returns the tangent of an angle of x.
       */
+      template<typename T>
+      static T tan(T x);
+
       static float
-      tan(float data);
+      tan(float x);
     
       /**
       * @brief Returns the principal value of the arc cosine of x,
-      *        expressed in radians. In trigonometrics,
+      *        expressed in radians. In trigonometric,
       *        arc cosine is the inverse operation of cosine.
       */
       static float
-      arcCos(float data);
+      arcCos(float x);
     
       /**
       * @brief Returns the principal value of the arc sine of x,
-      *        expressed in radians. In trigonometrics,
+      *        expressed in radians. In trigonometric,
       *        arc sine is the inverse operation of sine.
       */
       static float
-      arcSin(float data);
+      arcSin(float x);
     
       /**
       * @brief Returns the principal value of the arc tangent of x,
@@ -80,7 +93,7 @@ namespace gaEngineSDK {
       *        arc tangent is the inverse operation of tangent.
       */
       static float
-      arcTan(float data);
+      arcTan(float x);
 
       static
       float arcTan(float val, float val2);
@@ -95,19 +108,19 @@ namespace gaEngineSDK {
       * @brief Returns the hyperbolic cosine of x.
       */
       static float
-      cosHB(float data);
+      cosHB(float x);
     
       /**
       * @brief Returns the hyperbolic sine of x.
       */
       static float
-      sinHB(float data);
+      sinHB(float x);
     
       /**
       * @brief Returns the hyperbolic tangent of x.
       */
       static float
-      tanHB(float data);
+      tanHB(float x);
     
       /**
       * @brief Returns the nonnegative area hyperbolic cosine of x.
@@ -115,7 +128,7 @@ namespace gaEngineSDK {
       *        of the hyperbolic cosine.
       */
       static float
-      arcCosHB(float data);
+      arcCosHB(float x);
     
       /**
       * @brief Returns the area hyperbolic sine of x.
@@ -123,7 +136,7 @@ namespace gaEngineSDK {
       *        of the hyperbolic sine.
       */
       static float
-      arcSinHB(float data);
+      arcSinHB(float x);
     
       /**
       * @brief Returns the area hyperbolic tangent of x.
@@ -131,7 +144,7 @@ namespace gaEngineSDK {
       *        of the hyperbolic tangent.
       */
       static float
-      arcTanHB(float data);
+      arcTanHB(float x);
     
       /***********************************************************************/
       /**
@@ -144,13 +157,13 @@ namespace gaEngineSDK {
       *        which is e raised to the power x: ex.
       */
       static float
-      exp(float data);
+      exp(float x);
     
       /**
       * @brief Returns the natural logarithm of x.
       */
       static float
-      log(float data);
+      log(float x);
     
       /***********************************************************************/
       /**
@@ -168,7 +181,7 @@ namespace gaEngineSDK {
       * @brief Returns the square root of x in floats.
       */
       static float
-      sqrtf(float data);
+      sqrtf(float x);
     
       /**
       * @brief Returns the natural logarithm of x.

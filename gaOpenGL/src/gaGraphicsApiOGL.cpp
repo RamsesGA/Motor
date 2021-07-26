@@ -174,7 +174,7 @@ namespace gaEngineSDK {
     SwapBuffers(m_HandleToDC);
   }
   
-  Textures* 
+  Textures*
   GraphicsApiOGL::loadTextureFromFile(String srcFile) {
     int32 width;
     int32 height;
