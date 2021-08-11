@@ -1,12 +1,10 @@
 #pragma once
 
 #include "gaPrerequisitesCore.h"
-#include "gaComponent.h"
 #include "gaTextures.h"
 
 namespace gaEngineSDK {
-
-  class GA_CORE_EXPORT Materials : public Component
+  class GA_CORE_EXPORT Materials : public Resource
   {
     public:
       /***********************************************************************/
@@ -19,10 +17,16 @@ namespace gaEngineSDK {
       ~Materials() = default;
 
       void
-      update(const float& deltaTime)override;
+      setTexture(String typeTexture, String file, String textureName);
+
+      /***********************************************************************/
+      /*
+      * Inheritance.
+      */
+      /***********************************************************************/
 
       void
-      render()override;
+      loadFromFile(const String& file) override;
 
       /***********************************************************************/
       /*
@@ -30,76 +34,19 @@ namespace gaEngineSDK {
       */
       /***********************************************************************/
 
-      uint32 m_numMaterials = 0;
+      /*
+      * @brief .
+      */
+      String m_matName;
 
       /*
-      * @brief
+      * @brief .
       */
-      bool m_hasDiffuse = false;
+      String m_typeTexture;
 
       /*
-      * @brief
+      * @brief .
       */
-      bool m_hasAlbedo = false;
-
-      /*
-      * @brief
-      */
-      bool m_hasNormal = false;
-
-      /*
-      * @brief
-      */
-      bool m_hasSpecular = false;
-
-      /*
-      * @brief
-      */
-      bool m_hasMetalness = false;
-
-      /*
-      * @brief
-      */
-      bool m_hasRoughness = false;
-
-      /*
-      * @brief
-      */
-      bool m_hasEmissive = false;
-
-      /*
-      * @brief
-      */
-      bool m_hasAO = false;
-
-      /*
-      * @brief Member to save the info of this type of texture.
-      */
-      Textures m_diffuse;
-
-      /*
-      * @brief Member to save the info of this type of texture.
-      */
-      Textures m_albedo;
-
-      /*
-      * @brief Member to save the info of this type of texture.
-      */
-      Textures m_normals;
-
-      /*
-      * @brief Member to save the info of this type of texture.
-      */
-      Textures m_specular;
-
-      /*
-      * @brief Member to save the info of this type of texture.
-      */
-      Textures m_metalness;
-
-      /*
-      * @brief Member to save the info of this type of texture.
-      */
-      Textures m_roughness;
+      Vector<Textures*> m_vTextures;
   };
 }

@@ -116,7 +116,7 @@ namespace gaEngineSDK {
       createTexture(const uint32 width, const uint32 height, const uint32 bindFlags,
                     TEXTURE_FORMAT::E textureFormat, const String fileName) override;
 
-      SamplerState* 
+      SPtr<SamplerState>
       createSamplerState() override;
 
       InputLayout* 
@@ -145,16 +145,16 @@ namespace gaEngineSDK {
       	                const uint32 startSlot, const uint32 numBuffers) override;
 
       void 
-      setSamplerState(WeakSPtr<SamplerState> sampler, Vector<Textures*>& texture,
-                      uint32 startSlot, uint32 numSamplers = 1) override;
+      setSamplerState(WeakSPtr<SamplerState> sampler, uint32 startSlot, 
+                      uint32 numSamplers = 1) override;
 
       void
-      setSamplerVertexShader(WeakSPtr<SamplerState> sampler, Vector<Textures*>& texture,
-                             uint32 startSlot, uint32 numSamplers = 1) override;
+      setSamplerVertexShader(WeakSPtr<SamplerState> sampler, uint32 startSlot, 
+                             uint32 numSamplers = 1) override;
 
       void
-      setSamplerPixelShader(WeakSPtr<SamplerState> sampler, Vector<Textures*>& texture,
-                            uint32 startSlot, uint32 numSamplers = 1) override;
+      setSamplerPixelShader(WeakSPtr<SamplerState> sampler, uint32 startSlot, 
+                            uint32 numSamplers = 1) override;
 
       void 
       setShaderResourceView(const Vector<Textures*>& texture, const uint32 startSlot,
@@ -240,7 +240,7 @@ namespace gaEngineSDK {
       /*
       * @brief Member to represent a device context that generates render commands.
       */
-      ID3D11DeviceContext* m_pImmediateContext = nullptr;
+      ID3D11DeviceContext* m_pDeviceContext = nullptr;
 
       /*
       * @brief Member to store and access a texture resource during in-depth template testing.

@@ -45,9 +45,6 @@
     <ClInclude Include="include\gaShaders.h">
       <Filter>Archivos de origen\GraphicApi</Filter>
     </ClInclude>
-    <ClInclude Include="include\gaTextures.h">
-      <Filter>Archivos de origen\GraphicApi</Filter>
-    </ClInclude>
     <ClInclude Include="include\gaVertexBuffer.h">
       <Filter>Archivos de origen\GraphicApi</Filter>
     </ClInclude>
@@ -103,6 +100,12 @@
     <ClInclude Include="include\gaMaterials.h">
       <Filter>Archivos de origen\Models</Filter>
     </ClInclude>
+    <ClInclude Include="include\gaTextures.h">
+      <Filter>Archivos de origen\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaStaticMesh.h">
+      <Filter>Archivos de origen\Models</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gaBaseApp.cpp">
@@ -142,6 +145,9 @@
       <Filter>Archivos de origen\GO/Actor/Componente</Filter>
     </ClCompile>
     <ClCompile Include="src\gaMaterials.cpp">
+      <Filter>Archivos de origen\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaStaticMesh.cpp">
       <Filter>Archivos de origen\Models</Filter>
     </ClCompile>
   </ItemGroup>

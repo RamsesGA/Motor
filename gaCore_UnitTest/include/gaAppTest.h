@@ -6,6 +6,7 @@
 #include <gaVector4.h>
 #include <gaMatrix4x4.h>
 #include <gaStructures.h>
+#include <gaSamplerState.h>
 #include <gaPrerequisitesCore.h>
 
 namespace gaEngineSDK {
@@ -154,14 +155,14 @@ class AppTest : public BaseApp
     /*
     * @brief .
     */
-    SPtr<ResourceManager> m_resourceInfo = nullptr;
+    SPtr<ResourceManager> m_resourceInfo;
 
     /*
     * @brief Variables with the information of the
     *        render target and depth stencil, both of the texture class.
     */
-    SPtr<Textures> m_pRenderTargetView = nullptr;
-    SPtr<Textures> m_pDepthStencil = nullptr;
+    SPtr<Textures> m_pRenderTargetView;
+    SPtr<Textures> m_pDepthStencil;
   
     /*
     * @brief Variable that stores the vertex layout data.
@@ -171,17 +172,19 @@ class AppTest : public BaseApp
     /*
     * @brief Variable that saves the data of the shaders to be read.
     */
-    SPtr<Shaders> m_pBothShaders = nullptr;
+    SPtr<Shaders> m_pBothShaders;
   
     /*
     * @brief Variable that stores the CB data.
     */
-    SPtr<ConstantBuffer> m_pBufferCamera = nullptr;
-    SPtr<ConstantBuffer> m_pBufferWorld = nullptr;
-    SPtr<ConstantBuffer> m_pCBufferBones = nullptr;
+    SPtr<ConstantBuffer> m_pBufferCamera;
+    SPtr<ConstantBuffer> m_pBufferWorld;
+    SPtr<ConstantBuffer> m_pCBufferBones;
 
     /*
     * @brief .
     */
     SPtr<Mesh> m_mesh;
+
+    SPtr<SamplerState> m_pSampler;
 };

@@ -1,86 +1,72 @@
 #pragma once
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-#include <assimp/cimport.h>
-#include <gaQuaternions.h>
-
 #include "gaPrerequisitesCore.h"
-#include "gaSamplerState.h"
+#include "gaResource.h"
+#include "gaAnimations.h"
+#include "gaMesh.h"
+#include "gaMaterials.h"
 
 namespace gaEngineSDK {
 
-  class Mesh;
+  class StaticMesh;
 
   class GA_CORE_EXPORT Model : public Resource
   {
-    public:
-      /***********************************************************************/
-      /*
-      * Constructor and destructor.
-      */
-      /***********************************************************************/
-      Model() = default;
+  public:
+    /**************************************************************************/
+    /*
+    * Constructor and destructor.
+    */
+    /**************************************************************************/
+    Model() = default;
+    
+    ~Model() = default;
+    
+    /**************************************************************************/
+    /*
+    * Inheritance.
+    */
+    /**************************************************************************/
+    
+    /*
+    * @brief Function to initialize class members and start with assimp.
+    * @param Variable string with the address of the file.
+    */
+    void
+    loadFromFile(const String& file) override;
 
-      ~Model() = default;
+    /*
+    * @brief NO.
+    */
+    SPtr<StaticMesh> m_pStaticMeshInfo;
 
-      /***********************************************************************/
-      /*
-      * Gets.
-      */
-      /***********************************************************************/
+  protected:
+    /*
+    * @brief .
+    */
+    void
+    createDirectories(const String& file);
 
-      /*
-      * @brief .
-      */
-      SPtr<SamplerState>
-      getSampler();
+  private:
+    /**************************************************************************/
+    /*
+    * Members.
+    */
+    /**************************************************************************/
 
-      /*
-      * @brief .
-      */
-      Vector<SPtr<Mesh>>
-      getMeshesInfo();
+    /*
+    * @brief Member to store the full name of the folder.
+    */
+    String m_modelDirectory;
 
-      /***********************************************************************/
-      /*
-      * Sets.
-      */
-      /***********************************************************************/
-
-      /*
-      * @brief .
-      */
-      void
-      setSampler(WeakSPtr<SamplerState> sampler);
-
-      /*
-      * @brief .
-      */
-      void
-      setMeshesInfo(SPtr<Mesh> meshInfo);
-
-      /*
-      * @brief .
-      */
-      //Matrix4x4 m_globalInverseTransform;
-
-    private:
-      /***********************************************************************/
-      /*
-      * Members.
-      */
-      /***********************************************************************/
-
-      /*
-      * @brief Member to store a string of samplers.
-      */
-      SPtr<SamplerState> m_sampler;
-
-      /*
-      * @brief .
-      */
-      Vector<SPtr<Mesh>> m_vMeshes;
-  };  
+    /*
+    * @brief Member to store a .
+    */
+    Vector<Materials> m_vMaterials;
+    
+    /*
+    * @brief .
+    */
+    Map<String, SPtr<Materials>> m_mMaterials;
+  };
 }

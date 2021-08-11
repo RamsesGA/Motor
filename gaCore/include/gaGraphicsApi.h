@@ -92,7 +92,8 @@ namespace gaEngineSDK {
       virtual void 
       drawIndex(uint32 indexCount, uint32 startIndexLocation = 0, 
                 uint32 baseVertexLocation = 0) {
-        GA_UNREFERENCED_PARAMETER(indexCount); GA_UNREFERENCED_PARAMETER(startIndexLocation);
+        GA_UNREFERENCED_PARAMETER(indexCount); 
+        GA_UNREFERENCED_PARAMETER(startIndexLocation);
         GA_UNREFERENCED_PARAMETER(baseVertexLocation); };
       
       /**
@@ -196,7 +197,8 @@ namespace gaEngineSDK {
       virtual SPtr<VertexShader>
       loadVertexShaderFromFile(const char* vertexFilePath, const char* vertexMainFuntion,
                                const char* shaderVersion) { 
-        GA_UNREFERENCED_PARAMETER(vertexFilePath); GA_UNREFERENCED_PARAMETER(vertexMainFuntion);
+        GA_UNREFERENCED_PARAMETER(vertexFilePath); 
+        GA_UNREFERENCED_PARAMETER(vertexMainFuntion);
         GA_UNREFERENCED_PARAMETER(shaderVersion); return nullptr; };
 
       /**
@@ -207,7 +209,8 @@ namespace gaEngineSDK {
       virtual SPtr<PixelShader>
       loadPixelShaderFromFile(const char* pixelFilePath, const char* pixelMainFuntion,
                               const char* shaderVersion) {
-        GA_UNREFERENCED_PARAMETER(pixelFilePath); GA_UNREFERENCED_PARAMETER(pixelMainFuntion);
+        GA_UNREFERENCED_PARAMETER(pixelFilePath); 
+        GA_UNREFERENCED_PARAMETER(pixelMainFuntion);
         GA_UNREFERENCED_PARAMETER(shaderVersion); return nullptr;
       };
       
@@ -255,15 +258,17 @@ namespace gaEngineSDK {
       virtual Textures* 
       createTexture(const uint32 width, const uint32 height, const uint32 bindFlags,
                     TEXTURE_FORMAT::E textureFormat, const String fileName) {
-        GA_UNREFERENCED_PARAMETER(width); GA_UNREFERENCED_PARAMETER(height);
-        GA_UNREFERENCED_PARAMETER(bindFlags); GA_UNREFERENCED_PARAMETER(textureFormat);
+        GA_UNREFERENCED_PARAMETER(width); 
+        GA_UNREFERENCED_PARAMETER(height);
+        GA_UNREFERENCED_PARAMETER(bindFlags); 
+        GA_UNREFERENCED_PARAMETER(textureFormat);
         GA_UNREFERENCED_PARAMETER(fileName); return nullptr;};
       
       /**
       * @brief Function to generate the sampler state.
       * @return SamplerState
       */
-      virtual SamplerState* 
+      virtual SPtr<SamplerState> 
       createSamplerState() { return nullptr; };
       
       /**
@@ -326,8 +331,10 @@ namespace gaEngineSDK {
       virtual void 
       setConstantBuffer(bool isVertex, WeakSPtr<ConstantBuffer> constantBuffer,
                         const uint32 startSlot, const uint32 numBuffers) {
-        GA_UNREFERENCED_PARAMETER(isVertex); GA_UNREFERENCED_PARAMETER(constantBuffer);
-        GA_UNREFERENCED_PARAMETER(startSlot); GA_UNREFERENCED_PARAMETER(numBuffers); };
+        GA_UNREFERENCED_PARAMETER(isVertex);
+        GA_UNREFERENCED_PARAMETER(constantBuffer);
+        GA_UNREFERENCED_PARAMETER(startSlot); 
+        GA_UNREFERENCED_PARAMETER(numBuffers); };
       
       /**
       * @brief Function to save the information of the sampler state.
@@ -337,10 +344,11 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void 
-      setSamplerState(WeakSPtr<SamplerState> sampler, Vector<Textures*>& texture,
-                      uint32 startSlot, uint32 numSamplers = 1) { 
-        GA_UNREFERENCED_PARAMETER(sampler); GA_UNREFERENCED_PARAMETER(texture);
-        GA_UNREFERENCED_PARAMETER(startSlot); GA_UNREFERENCED_PARAMETER(numSamplers); };
+      setSamplerState(WeakSPtr<SamplerState> sampler, uint32 startSlot, 
+                      uint32 numSamplers = 1) { 
+        GA_UNREFERENCED_PARAMETER(sampler); 
+        GA_UNREFERENCED_PARAMETER(startSlot); 
+        GA_UNREFERENCED_PARAMETER(numSamplers); };
        
       /**
       * @brief Function to save the information of the vertex sampler state.
@@ -350,10 +358,11 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void
-      setSamplerVertexShader(WeakSPtr<SamplerState> sampler, Vector<Textures*>& texture,
-                             uint32 startSlot, uint32 numSamplers = 1) { 
-        GA_UNREFERENCED_PARAMETER(sampler); GA_UNREFERENCED_PARAMETER(texture);
-        GA_UNREFERENCED_PARAMETER(startSlot); GA_UNREFERENCED_PARAMETER(numSamplers); };
+      setSamplerVertexShader(WeakSPtr<SamplerState> sampler, uint32 startSlot,
+                             uint32 numSamplers = 1) { 
+        GA_UNREFERENCED_PARAMETER(sampler); 
+        GA_UNREFERENCED_PARAMETER(startSlot); 
+        GA_UNREFERENCED_PARAMETER(numSamplers); };
 
       /**
       * @brief Function to save the information of the vertex sampler state.
@@ -363,10 +372,11 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void
-      setSamplerPixelShader(WeakSPtr<SamplerState> sampler, Vector<Textures*>& texture,
-                            uint32 startSlot, uint32 numSamplers = 1) {
-        GA_UNREFERENCED_PARAMETER(sampler); GA_UNREFERENCED_PARAMETER(texture);
-        GA_UNREFERENCED_PARAMETER(startSlot); GA_UNREFERENCED_PARAMETER(numSamplers);
+      setSamplerPixelShader(WeakSPtr<SamplerState> sampler, uint32 startSlot, 
+                            uint32 numSamplers = 1) {
+        GA_UNREFERENCED_PARAMETER(sampler); 
+        GA_UNREFERENCED_PARAMETER(startSlot); 
+        GA_UNREFERENCED_PARAMETER(numSamplers);
       };
       
       /**
@@ -378,7 +388,8 @@ namespace gaEngineSDK {
       virtual void 
       setShaderResourceView(const Vector<Textures*>& texture, const uint32 startSlot,
                             const uint32 numViews) {
-        GA_UNREFERENCED_PARAMETER(texture); GA_UNREFERENCED_PARAMETER(startSlot);
+        GA_UNREFERENCED_PARAMETER(texture); 
+        GA_UNREFERENCED_PARAMETER(startSlot);
         GA_UNREFERENCED_PARAMETER(numViews); };
       
       /**
@@ -415,7 +426,8 @@ namespace gaEngineSDK {
       */
       virtual void 
       setViewports(const uint32 width, const uint32 heigth, const uint32 numViewports = 1) {
-        GA_UNREFERENCED_PARAMETER(width); GA_UNREFERENCED_PARAMETER(heigth);
+        GA_UNREFERENCED_PARAMETER(width); 
+        GA_UNREFERENCED_PARAMETER(heigth);
         GA_UNREFERENCED_PARAMETER(numViewports); };
       
       /**
@@ -442,7 +454,8 @@ namespace gaEngineSDK {
       virtual void 
       setYourVSConstantBuffers(WeakSPtr<ConstantBuffer> constantBuffer, const uint32 startSlot,
                                const uint32 numBuffers = 1) {
-        GA_UNREFERENCED_PARAMETER(constantBuffer); GA_UNREFERENCED_PARAMETER(startSlot);
+        GA_UNREFERENCED_PARAMETER(constantBuffer);
+        GA_UNREFERENCED_PARAMETER(startSlot);
         GA_UNREFERENCED_PARAMETER(numBuffers); };
       
       /**
@@ -461,7 +474,8 @@ namespace gaEngineSDK {
       virtual void 
       setYourPSConstantBuffers(WeakSPtr<ConstantBuffer> constantBuffer, const uint32 startSlot,
                                const uint32 numBuffers = 1) { 
-        GA_UNREFERENCED_PARAMETER(constantBuffer); GA_UNREFERENCED_PARAMETER(startSlot);
+        GA_UNREFERENCED_PARAMETER(constantBuffer); 
+        GA_UNREFERENCED_PARAMETER(startSlot);
         GA_UNREFERENCED_PARAMETER(numBuffers); };
       
       /**
@@ -473,7 +487,8 @@ namespace gaEngineSDK {
       virtual void 
       setYourPSSampler(WeakSPtr<SamplerState> sampler, const uint32 startSlot,
                        const uint32 numSamplers) {
-        GA_UNREFERENCED_PARAMETER(sampler); GA_UNREFERENCED_PARAMETER(startSlot);
+        GA_UNREFERENCED_PARAMETER(sampler);
+        GA_UNREFERENCED_PARAMETER(startSlot);
         GA_UNREFERENCED_PARAMETER(numSamplers); };
       
       /**

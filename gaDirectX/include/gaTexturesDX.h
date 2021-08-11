@@ -14,7 +14,7 @@ namespace gaEngineSDK {
 	  	/***********************************************************************/
 			TexturesDX() = default;
 
-			~TexturesDX() { onRelease(); };
+			~TexturesDX() = default;
 
 			/***********************************************************************/
 			/**
@@ -26,17 +26,11 @@ namespace gaEngineSDK {
 			* @brief Return the shader resource view.
 			*/
 			void*
-		  getTexture() override {
-				return m_pShaderResourceView;
-			};
-
-			void
-		  onRelease() {
-				SAFE_RELEASE(m_pTexture);
-				SAFE_RELEASE(m_pShaderResourceView);
-				SAFE_RELEASE(m_pDepthStencilView);
-				SAFE_RELEASE(m_pRenderTargetView);
-				SAFE_RELEASE(m_pDepthStencilState);
+		  getTexture(uint32 index = 0) override {
+        if ((index >= m_vShaderResourceView.size()) || (0 > index)) {
+          return m_vShaderResourceView[0];
+        }
+        return m_vShaderResourceView[index];
 			};
 
 	  protected:
@@ -48,7 +42,12 @@ namespace gaEngineSDK {
 			/**
 			* @brief DX member to save the resource view shader.
 			*/
-			ID3D11ShaderResourceView* m_pShaderResourceView = nullptr;
+			//ID3D11ShaderResourceView* m_pShaderResourceView = nullptr;
+
+			/**
+			* @brief DX vector member to save the resource view shader.
+			*/
+			Vector<ID3D11ShaderResourceView*> m_vShaderResourceView;
 			
 			/**
 			* @brief DX member to save the depth stencil view.
@@ -59,6 +58,8 @@ namespace gaEngineSDK {
 			* @brief DX member to save the render target view.
 			*/
 			ID3D11RenderTargetView* m_pRenderTargetView = nullptr;
+
+			Vector<ID3D11RenderTargetView*> m_vRenderTargetView;
 			
 			/**
 			* @brief DX member to save the depth stencil state.

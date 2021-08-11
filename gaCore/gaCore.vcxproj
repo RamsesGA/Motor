@@ -190,6 +190,7 @@
     <ClInclude Include="include\gaSceneGraph.h" />
     <ClInclude Include="include\gaSceneNode.h" />
     <ClInclude Include="include\gaShaders.h" />
+    <ClInclude Include="include\gaStaticMesh.h" />
     <ClInclude Include="include\gaStructures.h" />
     <ClInclude Include="include\gaTextures.h" />
     <ClInclude Include="include\gaVertexBuffer.h" />
@@ -210,6 +211,7 @@
     <ClCompile Include="src\gaResourceManager.cpp" />
     <ClCompile Include="src\gaSceneGraph.cpp" />
     <ClCompile Include="src\gaSceneNode.cpp" />
+    <ClCompile Include="src\gaStaticMesh.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

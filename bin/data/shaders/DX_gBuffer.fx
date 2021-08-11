@@ -45,7 +45,9 @@ struct VS_INPUT
 struct PS_INPUT
 {
   float4 position  : SV_POSITION;
+  float3 posView   : TEXCOORD0;
   float2 texCoords : TEXCOORD0;
+  float3x3 TBN     : TEXCOORD2;
 };
 
 //----------------------------------------------------------------------------

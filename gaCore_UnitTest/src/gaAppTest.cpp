@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include <gaModels.h>
 #include <gaSceneGraph.h>
+#include <gaStaticMesh.h>
 #include <gaResourceManager.h>
 
 #include "gaAppTest.h"
@@ -120,9 +121,9 @@ AppTest::onCreate() {
 
   //We create the vertex shader and pixel shader.
   m_pBothShaders.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_animation.fx",
-                                                           "VS",
-                                                           L"data/shaders/DX_animation.fx",
-                                                           "PS"));
+    "VS",
+    L"data/shaders/DX_animation.fx",
+    "PS"));
   //We create the vertex shader and pixel shader.
   //m_pBothShaders = myGraphicsApi->createShadersProgram(L"data/shaders/OGL_VSAnim.fx",
   //                                                     "main",
@@ -151,12 +152,15 @@ AppTest::onCreate() {
   /***************************************************************************/
 
   //createNodePod();
-  //createNodeVela();
+  createNodeVela();
   //createNodeTwoB();
   //createNodeSpartan();
   //createNodeUgandan();
-  createNodeGrimoires();
+  //createNodeGrimoires();
   //createNodeRamlethalSwords();
+
+  m_pSampler = myGraphicsApi->createSamplerState();
+  myGraphicsApi->setSamplerState(m_pSampler, 0);
 }
 
 void
@@ -223,8 +227,14 @@ void
 AppTest::createNodePod() {
   auto mySceneGraph = SceneGraph::instancePtr();
 
+  SPtr<Model> myModel = std::make_shared<Model>();
+  myModel->loadFromFile("data/models/pod/POD.obj");
+
+  SPtr<StaticMesh> myStaticMesh = std::make_shared<StaticMesh>();
+  myStaticMesh = myModel->m_pStaticMeshInfo;
+
   //Creating the component
-  SPtr<Component> newComponent(new ResourceManager("data/models/pod/POD.obj"));
+  SPtr<Component> newComponent(myStaticMesh);
 
   //Creating actor
   SPtr<Actor> actor(new Actor("Pod"));
@@ -238,9 +248,15 @@ AppTest::createNodePod() {
 void
 AppTest::createNodeVela() {
   auto mySceneGraph = SceneGraph::instancePtr();
+  auto myRSRCMG = ResourceManager::instancePtr();
+
+  SPtr<Model> myModel = myRSRCMG->load<Model>("data/models/vela/Vela2.fbx");
+
+  SPtr<StaticMesh> myStaticMesh = std::make_shared<StaticMesh>();
+  myStaticMesh = myModel->m_pStaticMeshInfo;
 
   //Creating the component
-  SPtr<Component> newComponent(new ResourceManager("data/models/vela/Vela2.fbx"));
+  SPtr<Component> newComponent(myStaticMesh);
 
   //Creating actor
   SPtr<Actor> actor(new Actor("Vela"));
@@ -266,8 +282,14 @@ AppTest::createNodeTwoB() {
 
   auto mySceneGraph = SceneGraph::instancePtr();
 
+  SPtr<Model> myModel = std::make_shared<Model>();
+  myModel->loadFromFile("data/models/2B/2B.obj");
+
+  SPtr<StaticMesh> myStaticMesh = std::make_shared<StaticMesh>();
+  myStaticMesh = myModel->m_pStaticMeshInfo;
+
   //Creating the component
-  SPtr<Component> newComponent(new ResourceManager("data/models/2B/2B.obj"));
+  SPtr<Component> newComponent(myStaticMesh);
 
   //Creating actor
   SPtr<Actor> actor(new Actor("2B"));
@@ -342,9 +364,15 @@ AppTest::createNodeSpartan() {
   m_resourceInfo->loadTexture("data/textures/spartan/Spartan_Undersuit_Mat_Specular.png");
   */
   auto mySceneGraph = SceneGraph::instancePtr();
+  auto myRSRCMG = ResourceManager::instancePtr();
+
+  SPtr<Model> myModel = myRSRCMG->load<Model>("data/models/spartan/Spartan.fbx");
+
+  SPtr<StaticMesh> myStaticMesh = std::make_shared<StaticMesh>();
+  myStaticMesh = myModel->m_pStaticMeshInfo;
 
   //Creating the component
-  SPtr<Component> newComponent(new ResourceManager("data/models/spartan/Spartan.fbx"));
+  SPtr<Component> newComponent(myStaticMesh);
 
   //Creating actor
   SPtr<Actor> actor(new Actor("Spartan"));
@@ -358,9 +386,15 @@ AppTest::createNodeSpartan() {
 void
 AppTest::createNodeUgandan() {
   auto mySceneGraph = SceneGraph::instancePtr();
+  auto myRSRCMG = ResourceManager::instancePtr();
+
+  SPtr<Model> myModel = myRSRCMG->load<Model>("data/models/ugandan/Knuckles.fbx");
+
+  SPtr<StaticMesh> myStaticMesh = std::make_shared<StaticMesh>();
+  myStaticMesh = myModel->m_pStaticMeshInfo;
 
   //Creating the component
-  SPtr<Component> newComponent(new ResourceManager("data/models/ugandan/Knuckles.fbx"));
+  SPtr<Component> newComponent(myStaticMesh);
 
   //Creating actor
   SPtr<Actor> actor(new Actor("Ugandan"));
@@ -374,9 +408,15 @@ AppTest::createNodeUgandan() {
 void 
 AppTest::createNodeGrimoires() {
   auto mySceneGraph = SceneGraph::instancePtr();
+  auto myRSRCMG = ResourceManager::instancePtr();
+
+  SPtr<Model> myModel = myRSRCMG->load<Model>("data/models/grimoires/grimoires.fbx");
+
+  SPtr<StaticMesh> myStaticMesh = std::make_shared<StaticMesh>();
+  myStaticMesh = myModel->m_pStaticMeshInfo;
 
   //Creating the component
-  SPtr<Component> newComponent(new ResourceManager("data/models/grimoires/grimoires.fbx"));
+  SPtr<Component> newComponent(myStaticMesh);
 
   //Creating actor
   SPtr<Actor> actor(new Actor("Grimoires"));
@@ -390,9 +430,15 @@ AppTest::createNodeGrimoires() {
 void 
 AppTest::createNodeRamlethalSwords() {
   auto mySceneGraph = SceneGraph::instancePtr();
+  auto myRSRCMG = ResourceManager::instancePtr();
+
+  SPtr<Model> myModel = myRSRCMG->load<Model>("data/models/ramlethal/Ramlethal Sword.fbx");
+
+  SPtr<StaticMesh> myStaticMesh = std::make_shared<StaticMesh>();
+  myStaticMesh = myModel->m_pStaticMeshInfo;
 
   //Creating the component
-  SPtr<Component> newComponent(new ResourceManager("data/models/ramlethal/Ramlethal Sword.fbx"));
+  SPtr<Component> newComponent(myStaticMesh);
 
   //Creating actor
   SPtr<Actor> actor(new Actor("Sword"));

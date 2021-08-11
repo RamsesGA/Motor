@@ -155,6 +155,21 @@ namespace gaEngineSDK {
   using StrStream = std::stringstream;
 
   /**
-  * @brief
+  template <class T, class... Types>
+  using Make_Shared = std::make_shared<Types>();
   */
+  
+  class StringID 
+  {
+  public:
+    StringID() = default;
+
+    StringID(String data) : m_data(data) { }
+    
+    ~StringID() = default;
+
+    uint32 m_id = 0;
+
+    String m_data;
+  };
 }

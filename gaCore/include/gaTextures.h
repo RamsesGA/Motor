@@ -1,5 +1,6 @@
 #pragma once
 
+#include "gaPrerequisitesCore.h"
 #include "gaResource.h"
 
 namespace gaEngineSDK {
@@ -136,13 +137,20 @@ namespace gaEngineSDK {
 
       ~Textures() = default;
 
+      virtual void*
+      getTexture(uint32 index = 0) { return nullptr; };
+
       /***********************************************************************/
-      /**
-      * Methods.
+      /*
+      * Inheritance.
       */
       /***********************************************************************/
 
-      virtual void*
-      getTexture() { return nullptr; };
+      void
+      loadFromFile(const String& file) override {
+
+      }
+
+      String m_textureName;
 	};
 }

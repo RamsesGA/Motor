@@ -551,7 +551,7 @@ namespace gaEngineSDK {
     return tex;
   }
   
-  SamplerState* 
+  SPtr<SamplerState>
   GraphicsApiOGL::createSamplerState() {
     auto* samplerState = new SamplerStateOGL();
 
@@ -568,7 +568,7 @@ namespace gaEngineSDK {
       exit(1);
     }
 
-    return samplerState;
+    return SPtr<SamplerState>(samplerState);
   }
   
   InputLayout* 
@@ -736,11 +736,11 @@ namespace gaEngineSDK {
   }
   
   void 
-  GraphicsApiOGL::setSamplerState(WeakSPtr<SamplerState> sampler, Vector<Textures*>& texture,
-                                  uint32 startSlot, uint32 numSamplers) {
-    if ((nullptr != sampler.lock().get()) && (nullptr != texture.data())) {
-      uint32 tempSize = texture.size();
-      for (uint32 i = 0; i < tempSize; ++i) {
+  GraphicsApiOGL::setSamplerState(WeakSPtr<SamplerState> sampler, uint32 startSlot, 
+                                  uint32 numSamplers) {
+    if (nullptr != sampler.lock().get()) {
+      //uint32 tempSize = texture.size();
+      //for (uint32 i = 0; i < tempSize; ++i) {
         //auto& sampler = reinterpret_cast<SamplerStateOGL&>(samplerState);
         //auto& tex = reinterpret_cast<TexturesOGL&>(texture);
         //
@@ -751,20 +751,18 @@ namespace gaEngineSDK {
         //if (detectError != 0) {
         //  exit(1);
         //}
-      }
+      //}
     }
   }
 
   void 
-  GraphicsApiOGL::setSamplerVertexShader(WeakSPtr<SamplerState> sampler, 
-                                         Vector<Textures*>& texture, 
-                                         uint32 startSlot, uint32 numSamplers) {
+  GraphicsApiOGL::setSamplerVertexShader(WeakSPtr<SamplerState> sampler, uint32 startSlot, 
+                                         uint32 numSamplers) {
   }
 
   void
-  GraphicsApiOGL::setSamplerPixelShader(WeakSPtr<SamplerState> sampler, 
-                                        Vector<Textures*>& texture, 
-                                        uint32 startSlot, uint32 numSamplers) {
+  GraphicsApiOGL::setSamplerPixelShader(WeakSPtr<SamplerState> sampler, uint32 startSlot, 
+                                        uint32 numSamplers) {
   }
 
   

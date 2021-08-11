@@ -1,5 +1,6 @@
 #include "gaBaseApp.h"
 #include "gaSceneGraph.h"
+#include "gaResourceManager.h"
 
 namespace gaEngineSDK {
 
@@ -75,6 +76,7 @@ namespace gaEngineSDK {
 
     //Module initialization
     SceneGraph::startUp();
+    ResourceManager::startUp();
 
     return 0;
   }
