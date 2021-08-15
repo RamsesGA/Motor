@@ -143,11 +143,6 @@ class AppTest : public BaseApp
     Camera m_mainCamera;
 
     /*
-    * @brief Material color.
-    */
-    Vector4 m_vMeshColor = (0.7f, 0.7f, 0.7f, 1.0f);
-  
-    /*
     * @brief 4x4 matrix of the world.
     */
     Matrix4x4 m_world;
@@ -180,6 +175,9 @@ class AppTest : public BaseApp
     SPtr<ConstantBuffer> m_pBufferCamera;
     SPtr<ConstantBuffer> m_pBufferWorld;
     SPtr<ConstantBuffer> m_pCBufferBones;
+    SPtr<ConstantBuffer> m_pCBSSAO;
+    SPtr<ConstantBuffer> m_pCBViewPortDimension;
+    SPtr<ConstantBuffer> m_pCBLightning;
 
     /*
     * @brief .

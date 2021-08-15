@@ -23,20 +23,16 @@ cbuffer linkToBuffer1 : register(b0)
 cbuffer linkToBuffer2 : register(b1)
 {
   matrix mWorld;
-  float4 vMeshColor;
-}
-
-cbuffer linkToBufferBones : register(b2)
-{
-  matrix bonesTransform[200];
+  float4 objectPosition;
 }
 
 //----------------------------------------------------------------------------
 struct VS_INPUT
 {
   float4 position    : POSITION0;
-  float4 normal      : NORMAL0;
-  float4 tangent     : TANGENT0;
+  float3 normal      : NORMAL0;
+  float3 tangent     : TANGENT0;
+  float3 biTangent   : BINORMAL0;
   float2 texCoords   : TEXCOORD0;
   float4 boneWeights : BLENDWEIGHT0;
   uint4  boneIds      : BLENDINDICES0;
@@ -46,52 +42,63 @@ struct PS_INPUT
 {
   float4 position  : SV_POSITION;
   float3 posView   : TEXCOORD0;
-  float2 texCoords : TEXCOORD0;
+  float2 texCoords : TEXCOORD1;
   float3x3 TBN     : TEXCOORD2;
+};
+
+struct PS_OUTPUT 
+{
+  float4 diffColor     : COLOR0;
+  float4 normal        : COLOR1;
+  float4 position      : COLOR2;
+  float4 emissiveColor : COLOR3;
 };
 
 //----------------------------------------------------------------------------
 // Vertex Shader
 //----------------------------------------------------------------------------
-PS_INPUT VS(VS_INPUT input)
+PS_INPUT vs_gBuffer(VS_INPUT input)
 {
   PS_INPUT output = (PS_INPUT)0;
-  float3x3 TBN;
 
-  matrix boneTrans = bonesTransform[input.boneIds[0]] * input.boneWeights[0];
+  matrix newMatWorld;
+  newMatWorld[0] = float4(1, 0, 0, 0);
+  newMatWorld[1] = float4(0, 1, 0, 0);
+  newMatWorld[2] = float4(0, 0, 1, 0);
+  newMatWorld[3] = objectPosition;
 
-  boneTrans += bonesTransform[input.boneIds[1]] * input.boneWeights[1];
-  boneTrans += bonesTransform[input.boneIds[2]] * input.boneWeights[2];
-  boneTrans += bonesTransform[input.boneIds[3]] * input.boneWeights[3];
-  
-  float4 position = mul(input.position, boneTrans);
+  matrix matWV = mul(newMatWorld, mView);
 
-  output.position = mul(position, mWorld);
-  output.position = mul(output.position, mView);
+  output.position = mul(input.position, matWV);
+  output.posView = output.position.xyz;
+
   output.position = mul(output.position, mProjection);
 
-  matrix boneWV = mul(mul(boneTrans, mWorld), mView);
-
-  //tangent
-  TBN[0] = normalize(mul(input.tangent, boneWV)).xyz;
-
-  //binormal
-  TBN[1] = normalize(cross(TBN[2], TBN[0]));
-  
-  //normal
-  TBN[2] = normalize(mul(input.normal, boneWV)).xyz;
-  
   output.texCoords = input.texCoords;
 
-  return output;
+  output.TBN[0] = normalize(mul(float4(input.tangent, 0.0f), matWV));
+  output.TBN[1] = normalize(mul(float4(input.biTangent, 0.0f), matWV));
+  output.TBN[2] = normalize(mul(float4(input.normal, 0.0f), matWV));
+
+  return(output);
 }
 
 //----------------------------------------------------------------------------
 // Pixel Shader
 //----------------------------------------------------------------------------
-float4 PS(PS_INPUT input) : SV_Target
+PS_OUTPUT ps_gBuffer(PS_INPUT input) : SV_Target
 {
-    float4 color;
-    color = baseColor.Sample(simpleSampler, input.texCoords);
-    return color;
+  PS_OUTPUT output = (PS_OUTPUT)0;
+
+  output.position          = float4(input.posView, 1.0f);
+
+  output.normal.xyz        = 2.0f * normal.Sample(simpleSampler, input.texCoords) - 1.0f;
+  output.normal.xyz        = normalize(mul(output.normal.xyz, input.TBN));
+
+  output.normal.w          = roughness.Sample(simpleSampler, input.texCoords).x;
+  output.diffColor.xyz     = baseColor.Sample(simpleSampler, input.texCoords).xyz;
+  output.diffColor.w       = metallic.Sample(simpleSampler, input.texCoords).x;
+  output.emissiveColor.xyz = emissive.Sample(simpleSampler, input.texCoords).xyz;
+
+  return (output);
 }

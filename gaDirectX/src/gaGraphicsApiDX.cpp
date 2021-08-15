@@ -185,7 +185,7 @@ namespace gaEngineSDK {
     hr = m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
                                  (LPVOID*)&backBuffer->m_pTexture);
     
-    //Checamos que todo salga bien, si no mandamos un error
+    //We check that everything goes well, if we do not send an error.
     if (FAILED(hr)) {
       delete backBuffer;
       return false;
@@ -204,7 +204,7 @@ namespace gaEngineSDK {
     
     auto* depthStencil = new TexturesDX();
     
-    //Textura del depth y hago el depth
+    //Texture of the depth and I do the depth.
     D3D11_TEXTURE2D_DESC textureDesc;
     ZeroMemory(&textureDesc, sizeof(textureDesc));
     textureDesc.Width = m_width;
@@ -219,7 +219,7 @@ namespace gaEngineSDK {
     textureDesc.CPUAccessFlags = 0;
     textureDesc.MiscFlags = 0;
     
-    //Creamos la textura
+    //We create the texture.
     hr = m_pd3dDevice->CreateTexture2D(&textureDesc,
                                        nullptr, &depthStencil->m_pTexture);
     
@@ -235,20 +235,18 @@ namespace gaEngineSDK {
     depthStencilDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
     depthStencilDesc.Texture2D.MipSlice = 0;
     
-    hr = m_pd3dDevice->CreateDepthStencilView(depthStencil->m_pTexture,
-                                              &depthStencilDesc,
+    hr = m_pd3dDevice->CreateDepthStencilView(depthStencil->m_pTexture, &depthStencilDesc,
                                               &depthStencil->m_pDepthStencilView);
     
-    //Checamos que todo salga bien, si no mandamos un error
+    //We check that everything goes well, if we do not send an error.
     if (FAILED(hr)) {
       delete backBuffer;
       delete depthStencil;
       return false;
     }
     
-    m_pDeviceContext->OMSetRenderTargets(1,
-                                            &backBuffer->m_pRenderTargetView,
-                                            depthStencil->m_pDepthStencilView);
+    m_pDeviceContext->OMSetRenderTargets(1, &backBuffer->m_pRenderTargetView, 
+                                         depthStencil->m_pDepthStencilView);
     m_pDepthStencil = depthStencil;
 
     return true;
@@ -272,8 +270,8 @@ namespace gaEngineSDK {
     int32 height;
     int32 components;
 
-    unsigned char* data = stbi_load(srcFile.c_str(),
-                                    &width, &height, &components, 4);
+    unsigned char* data = stbi_load(srcFile.c_str(), &width, &height, &components, 4);
+
     if (!data) {
       return nullptr;
     }
@@ -392,8 +390,7 @@ namespace gaEngineSDK {
   Shaders* 
   GraphicsApiDX::createShadersProgram(const WString& nameVS, const String& entryPointVS, 
                                       const WString& namePS, const String& entryPointPS) {
-    //Generamos una variable auto
-    //para adaptar el tipo de dato que ocupamos
+    //We generate an auto variable to adapt the type of data we occupy.
     ShadersDX* shaders = new ShadersDX();
   
     if (!(AnalyzeVertexShaderDX(nameVS))) {
@@ -405,50 +402,48 @@ namespace gaEngineSDK {
       return nullptr;
     }
   
-    //Asignamos datos a las variables
+    //Assign data to variables.
     shaders->m_pPSBlob = nullptr;
     HRESULT hr = S_OK;
   
-    //Compilamos el shader recibido
+    //We compile the received shader.
     hr = CompileShaderFromFile(namePS, entryPointPS.c_str(), "ps_4_0", &shaders->m_pPSBlob);
   
-    //Checamos que todo salga bien, si no mandamos un error
+    //We check that everything goes well, if we do not send an error.
     if (FAILED(hr)) {
       delete shaders;
       return nullptr;
     }
   
-    //Creamos el pixel shader con la función de DX
+    //We create the pixel shader with the DX function.
     hr = m_pd3dDevice->CreatePixelShader(shaders->m_pPSBlob->GetBufferPointer(),
                                          shaders->m_pPSBlob->GetBufferSize(),
                                          nullptr, &shaders->m_pPixelShader);
     shaders->m_pPSBlob->Release();
   
-    //Finalmente regresamos el dato en caso
-    //de no obtener un error
+    //Finally we return the data in case of not getting an error.
     if (FAILED(hr)) {
       delete shaders;
       return nullptr;
     }
   
-    //Asignamos datos a las variables
+    //Assign data to variables.
     shaders->m_pVSBlob = NULL;
   
-    //Compilamos el shader recibido
+    //We compile the received shader.
     hr = CompileShaderFromFile(nameVS, entryPointVS.c_str(), "vs_4_0", &shaders->m_pVSBlob);
   
-    //Checamos que todo salga bien, si no mandamos un error
+    //We check that everything goes well, if we do not send an error.
     if (FAILED(hr)) {
       delete shaders;
       return nullptr;
     }
   
-    //Creamos el vertex shader con la función de DX
+    //We create the vertex shader with the DX function.
     hr = m_pd3dDevice->CreateVertexShader(shaders->m_pVSBlob->GetBufferPointer(),
                                           shaders->m_pVSBlob->GetBufferSize(),
                                           nullptr, &shaders->m_pVertexShader);
-    //Finalmente regresamos el dato en caso
-    //de no obtener un error
+    //Finally we return the data in case of not getting an error.
     if (FAILED(hr)) {
       shaders->m_pVSBlob->Release();
       delete shaders;
@@ -581,21 +576,19 @@ namespace gaEngineSDK {
   
   ConstantBuffer* 
   GraphicsApiDX::createConstantBuffer(const uint32 bufferSize) {
-    //Generamos una variable auto
-    //para adaptar el tipo de dato que ocupamos
+    //We generate an auto variable to adapt the type of data that we occupy.
     ConstantBufferDX* constantBuffer = new ConstantBufferDX();
   
-    //Asignamos datos a la variable
+    //Assign data to the variable.
     HRESULT hr = S_OK;
   
-    //Rellenamos el descriptor de buffer
+    //We fill the buffer descriptor.
     CD3D11_BUFFER_DESC bd(bufferSize, D3D11_BIND_CONSTANT_BUFFER);
   
-    //Creamos el buffer
+    //We create the buffer.
     hr = m_pd3dDevice->CreateBuffer(&bd, nullptr, &constantBuffer->m_pConstantBuffer);
   
-    //Finalmente regresamos el dato en caso
-    //de no obtener un error
+    //Finally we return the data in case of not getting an error.
     if (FAILED(hr)) {
       delete constantBuffer;
       return nullptr;

@@ -34,7 +34,7 @@ AppTest::onUpdate(float deltaTime) {
 
   ConstantBuffer2 cb;
   cb.mWorld = m_world;
-  cb.vMeshColor = m_vMeshColor;
+  cb.objectPosition = { 0.0f, 0.0f, 0.0f };
 
   //Clear the back buffer.
   Vector4 rgba = { (87.0f / 255.0f), (35.0f / 255.0f), (100.0f / 255.0f), (255.0f) };
@@ -120,10 +120,15 @@ AppTest::onCreate() {
   m_pDepthStencil.reset(myGraphicsApi->getDefaultDepthStencil());
 
   //We create the vertex shader and pixel shader.
-  m_pBothShaders.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_animation.fx",
-    "VS",
-    L"data/shaders/DX_animation.fx",
-    "PS"));
+  /*m_pBothShaders.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_animation.fx",
+                                                            "VS",
+                                                           L"data/shaders/DX_animation.fx",
+                                                            "PS"));*/
+  m_pBothShaders.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_gBuffer.fx",
+                                                           "vs_gBuffer",
+                                                           L"data/shaders/DX_gBuffer.fx",
+                                                           "ps_gBuffer"));
+
   //We create the vertex shader and pixel shader.
   //m_pBothShaders = myGraphicsApi->createShadersProgram(L"data/shaders/OGL_VSAnim.fx",
   //                                                     "main",
@@ -152,11 +157,11 @@ AppTest::onCreate() {
   /***************************************************************************/
 
   //createNodePod();
-  createNodeVela();
+  //createNodeVela();
   //createNodeTwoB();
   //createNodeSpartan();
   //createNodeUgandan();
-  //createNodeGrimoires();
+  createNodeGrimoires();
   //createNodeRamlethalSwords();
 
   m_pSampler = myGraphicsApi->createSamplerState();

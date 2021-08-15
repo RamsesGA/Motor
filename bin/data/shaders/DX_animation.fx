@@ -23,7 +23,7 @@ cbuffer linkToBuffer1 : register(b0)
 cbuffer linkToBuffer2 : register(b1)
 {
   matrix mWorld;
-  float4 vMeshColor;
+  float4 objectPosition;
 }
 
 cbuffer linkToBufferBones : register(b2)

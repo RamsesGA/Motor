@@ -19,6 +19,11 @@ using namespace gaEngineSDK;
 
 const int32 maxBones = 200;
 
+
+/*
+* C O N S T A N T
+* B U F F E R S
+*/
 struct ConstantBuffer1 {
 	Matrix4x4 mView;
 	Matrix4x4 mProjection;
@@ -26,32 +31,65 @@ struct ConstantBuffer1 {
 
 struct ConstantBuffer2 {
 	Matrix4x4 mWorld;
-	Vector4 vMeshColor;
+	Vector4 objectPosition;
 };
 
+struct cbSSAO {
+  Vector2 mViewportDimensions;
+
+  float mSample_radius;
+  float mIntensity;
+  float mScale;
+  float mBias;
+};
+
+struct cbViewportDimension {
+  Vector2 viewportDimensions;
+};
+
+struct cbLightning {
+  float emissiveIntensity;
+  float lightIntensity0;
+  Vector3 lightPos0;
+  Vector4 vViewPosition;
+};
+
+
+//----------------------------------------------------------------------------
 struct Matrices {
 	Matrix4x4 World;
 	Matrix4x4 Projection;
 	Vector4   Color;
 };
 
+/*
+* Structs for shaders
+*/
+
 struct ViewCB {
 	Matrix4x4 View;
 };
 
 struct Vertex {
-	Vector4 position = { 0.0f, 0.0f, 0.0f, 1.0f };
-	Vector4 normal = { 0.0f, 0.0f, 0.0f, 0.0f };
-	Vector4 tangent = { 0.0f, 0.0f, 0.0f, 0.0f };
-	Vector2 texCoords = { 0.0f, 0.0f };
-	float boneWeights[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-	uint32 boneIds[4] = { 0, 0, 0, 0 };
+  Vector4 position = { 0.0f, 0.0f, 0.0f, 1.0f };
+  Vector3 normal = { 0.0f, 0.0f, 0.0f };
+  Vector3 tangent = { 0.0f, 0.0f, 0.0f };
+	Vector3 biTangent = { 0.0f, 0.0f, 0.0f };
+  Vector2 texCoords = { 0.0f, 0.0f };
+  float boneWeights[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+  uint32 boneIds[4] = { 0, 0, 0, 0 };
 };
 
 struct ConstBuffBonesTransform {
 	Matrix4x4 bonesTransform[maxBones];
 };
 
+struct ssoaInput {
+	Vector2 texCoord;
+};
+
+
+//----------------------------------------------------------------------------
 namespace FILTER {
 	enum E {
 		kFilterMinMagMipPoint                        = 0,
