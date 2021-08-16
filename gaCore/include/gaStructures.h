@@ -36,6 +36,7 @@ struct ConstantBuffer2 {
 
 struct cbSSAO {
   Vector2 mViewportDimensions;
+	Vector2 mNothing;
 
   float mSample_radius;
   float mIntensity;
@@ -45,6 +46,7 @@ struct cbSSAO {
 
 struct cbViewportDimension {
   Vector2 viewportDimensions;
+	Vector2 mNothing;
 };
 
 struct cbLightning {

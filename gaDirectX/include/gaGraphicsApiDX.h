@@ -14,6 +14,7 @@
 #include <gaPixelShader.h>
 #include <gaVertexBuffer.h>
 #include <gaIndexBuffer.h>
+#include <gaRenderTarget.h>
 #include <SFML/Window.hpp>
 
 #include "gaPrerequisitesCore.h"
@@ -83,6 +84,9 @@ namespace gaEngineSDK {
       clearYourRenderTargetView(WeakSPtr<Textures> renderTarget, Vector4 rgba) override;
 
       void 
+      clearYourRenderTarget(WeakSPtr<RenderTarget> renderTarget, Vector4 rgba) override;
+
+      void 
       clearYourDepthStencilView(WeakSPtr<Textures> depthStencil) override;
 
       /***********************************************************************/
@@ -122,6 +126,11 @@ namespace gaEngineSDK {
       InputLayout* 
       createInputLayout(WeakSPtr<Shaders> vertexShader) override;
 
+      SPtr<RenderTarget>
+      createRenderTarget(uint32 width, uint32 height, uint32 mipLevels = 1,
+                         uint32 numRenderTargets = 1, float scale = 1.0f, 
+                         bool depth = false) override;
+
       /***********************************************************************/
       /**
       * Set methods.
@@ -160,8 +169,18 @@ namespace gaEngineSDK {
       setShaderResourceView(const Vector<Textures*>& texture, const uint32 startSlot,
                             const uint32 numViews) override;
 
+      void
+      setShaderResourceView(void* renderTexture, 
+                            const uint32 startSlot, 
+                            const uint32 numViews = 1) override;
+
       void 
-      setRenderTarget(WeakSPtr<Textures> renderTarget, WeakSPtr<Textures> depthStencil) override;
+      setRenderTarget(WeakSPtr<Textures> renderTarget, 
+                      WeakSPtr<Textures> depthStencil) override;
+
+      void 
+      setRenderTarget(WeakSPtr<RenderTarget> renderTarget, 
+                      WeakSPtr<Textures> depthStencil) override;
 
       void 
       setDepthStencil(WeakSPtr<Textures> depthStencil, const uint32 stencilRef) override;
@@ -251,6 +270,11 @@ namespace gaEngineSDK {
       * @brief Member to store the default texture when creating the device.
       */
       Textures* m_pBackBuffer = nullptr;
+
+      /*
+      * @brief .
+      */
+      Vector<SPtr<RenderTarget>> m_vRenderTargets;
   };
 
   /***************************************************************************/

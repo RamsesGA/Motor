@@ -5,11 +5,12 @@
 
 #include "gaModels.h"
 #include "gaGraphicsApi.h"
-#include "gaStaticMesh.h"
 
 namespace gaEngineSDK {
 
   String g_texturesDirectory;
+
+  Animations g_animInfo;
 
   Vector<Mesh> g_vMeshes;
 
@@ -51,7 +52,7 @@ namespace gaEngineSDK {
   * @brief .
   */
   void
-  processAnimationInfo(const aiScene* pAScene, WeakSPtr<StaticMesh> pStaticMeshInfo);
+  processAnimationInfo(const aiScene* pAScene);
 
   /*
   * @brief .
@@ -84,7 +85,7 @@ namespace gaEngineSDK {
   /***************************************************************************/
 
   void
-  Model::loadFromFile(const String& file) {
+  Models::loadFromFile(const String& file) {
     Assimp::Importer aImporter;
     const aiScene* pAScene = nullptr;
 
@@ -103,16 +104,23 @@ namespace gaEngineSDK {
     //Process assimp's root pNode recursively
     processNode(pAScene->mRootNode, pAScene);
 
-    m_pStaticMeshInfo = std::make_shared<StaticMesh>();
+    processAnimationInfo(pAScene);
 
-    processAnimationInfo(pAScene, m_pStaticMeshInfo);
+    m_animInfo = g_animInfo;
+    m_vAnimationData = g_vAnimationData;
+    m_vMeshBones.resize(g_vMeshes.size());
+    m_vMeshes = g_vMeshes;
+    m_mMaterials = g_mMaterials;
+  }
 
-    //TODO: change
-    m_pStaticMeshInfo->m_animInfo;
-    m_pStaticMeshInfo->m_vAnimationData = g_vAnimationData;
-    m_pStaticMeshInfo->m_vMeshBones.resize(g_vMeshes.size());
-    m_pStaticMeshInfo->m_vMeshes = g_vMeshes;
-    m_pStaticMeshInfo->m_mMaterials = g_mMaterials;
+  void
+  Models::addNewMesh(Mesh newMesh) {
+    m_vMeshes.push_back(newMesh);
+  }
+
+  Mesh
+  Models::getMesh(uint32 index) {
+    return m_vMeshes.at(index);
   }
 
   /***************************************************************************/
@@ -282,23 +290,21 @@ namespace gaEngineSDK {
   }
 
   void
-  processAnimationInfo(const aiScene* pAScene, WeakSPtr<StaticMesh> pStaticMeshInfo) {
+  processAnimationInfo(const aiScene* pAScene) {
     ModelNodes* rootNode = new ModelNodes();
 
-    SPtr<StaticMesh> tempStaticMInfo(pStaticMeshInfo.lock());
+    g_animInfo.m_pStrModelNodes.reset(rootNode);
 
-    tempStaticMInfo->m_animInfo.m_pStrModelNodes.reset(rootNode);
+    loadModelNodes(g_animInfo.m_pStrModelNodes, pAScene->mRootNode);
 
-    loadModelNodes(tempStaticMInfo->m_animInfo.m_pStrModelNodes, pAScene->mRootNode);
-
-    tempStaticMInfo->m_animInfo.setAnimName("FirstAnimation");
+    g_animInfo.setAnimName("FirstAnimation");
 
     uint32 tempNumAnims = pAScene->mNumAnimations;
     for (uint32 i = 0; i < tempNumAnims; ++i) {
       SPtr<AnimationData> newAnimation = std::make_shared<AnimationData>();
 
       newAnimation->m_animationName = pAScene->mAnimations[i]->mName.C_Str();
-      tempStaticMInfo->m_animInfo.setAnimName(newAnimation->m_animationName);
+      g_animInfo.setAnimName(newAnimation->m_animationName);
 
       if (pAScene->mAnimations[i]->mTicksPerSecond != 0.0) {
         newAnimation->m_ticksPerSecond = (float)pAScene->mAnimations[i]->mTicksPerSecond;
@@ -388,7 +394,7 @@ namespace gaEngineSDK {
     }
 
     if (0 < pAScene->mNumAnimations) {
-      tempStaticMInfo->m_animInfo.setNumAnims((uint32)pAScene->mNumAnimations);
+      g_animInfo.setNumAnims((uint32)pAScene->mNumAnimations);
     }
   }
 
@@ -554,7 +560,7 @@ namespace gaEngineSDK {
   /***************************************************************************/
 
   void 
-  Model::createDirectories(const String& file) {
+  Models::createDirectories(const String& file) {
     //Retrieve the directory file of the _file
     m_modelDirectory = file.substr(0, file.find_last_of('/'));
 

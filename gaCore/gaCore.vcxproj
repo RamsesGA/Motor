@@ -184,6 +184,7 @@
     <ClInclude Include="include\gaModels.h" />
     <ClInclude Include="include\gaPixelShader.h" />
     <ClInclude Include="include\gaPrerequisitesCore.h" />
+    <ClInclude Include="include\gaRenderTarget.h" />
     <ClInclude Include="include\gaResource.h" />
     <ClInclude Include="include\gaResourceManager.h" />
     <ClInclude Include="include\gaSamplerState.h" />

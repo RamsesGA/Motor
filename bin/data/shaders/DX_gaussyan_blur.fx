@@ -11,6 +11,7 @@ SamplerState simpleSampler : register(s0);
 cbuffer linkToCBViewportDimension: register(b0)
 {
   float2 viewportDimensions;
+  float2 mNothing;
 }
 
 //----------------------------------------------------------------------------

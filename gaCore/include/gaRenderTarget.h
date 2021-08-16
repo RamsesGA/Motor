@@ -1,64 +1,62 @@
 #pragma once
 
 #include "gaPrerequisitesCore.h"
-#include "gaComponent.h"
-#include "gaAnimations.h"
 
 namespace gaEngineSDK {
-  class Materials;
-  class Models;
-  class Mesh;
-
-  class GA_CORE_EXPORT StaticMesh : public Component
+  class RenderTarget
   {
   public:
     /*************************************************************************/
-    /*
+    /**
     * Constructor and destructor.
     */
     /*************************************************************************/
-    StaticMesh() = default;
+    RenderTarget() = default;
 
-    ~StaticMesh() = default;
+    ~RenderTarget() = default;
 
     /*************************************************************************/
     /**
-    * Inheritance methods.
+    * Methods.
     */
     /*************************************************************************/
 
     /*
     * @brief .
     */
-    void
-    update(const float& deltaTime) override;
+    virtual void*
+    getRenderTexture(uint32 index = 0) { return nullptr; };
 
     /*
     * @brief .
     */
-    void
-    render() override;
+    uint32
+    getID() { 
+      return m_id;
+    };
 
+  private:
     /*************************************************************************/
-    /*
+    /**
     * Members.
     */
     /*************************************************************************/
 
     /*
-    * @brief SI.
-    */
-    SPtr<Models> m_pModel;
-
-  private: 
-    /*
     * @brief .
     */
-    bool m_playAnimation = true;
+    uint32 m_id = 0;
 
     /*
     * @brief .
     */
-    float m_timeOfAnimation = 0.0f;
+    uint32 m_mipLevel = 1;
+
+    /*
+    * @brief .
+    */
+    float m_scale = 0.0f;
+
+    friend class GraphicsApiDX;
   };
 }

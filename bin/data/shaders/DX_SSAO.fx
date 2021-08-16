@@ -12,6 +12,7 @@ SamplerState simpleSampler : register(s0);
 cbuffer linkTocbSSAO : register(b0)
 {
   float2 mViewportDimensions;
+  float2 mNothing;
 
   float mSample_radius;
   float mIntensity;

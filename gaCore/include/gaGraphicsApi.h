@@ -40,6 +40,7 @@ namespace gaEngineSDK {
   class IndexBuffer;
   class VertexShader;
   class PixelShader;
+  class RenderTarget;
   
   /**
   * @brief Parent class where we can add 
@@ -142,7 +143,8 @@ namespace gaEngineSDK {
       */
       virtual void 
       updateConstantBuffer(const void* srcData, WeakSPtr<ConstantBuffer> updateDataCB) { 
-        GA_UNREFERENCED_PARAMETER(srcData); GA_UNREFERENCED_PARAMETER(updateDataCB); };
+        GA_UNREFERENCED_PARAMETER(srcData); GA_UNREFERENCED_PARAMETER(updateDataCB);
+      };
       
       /***********************************************************************/
       /**
@@ -157,7 +159,13 @@ namespace gaEngineSDK {
       */
       virtual void 
       clearYourRenderTargetView(WeakSPtr<Textures> renderTarget, Vector4 rgba) { 
-        GA_UNREFERENCED_PARAMETER(renderTarget); GA_UNREFERENCED_PARAMETER(rgba); };
+        GA_UNREFERENCED_PARAMETER(renderTarget); GA_UNREFERENCED_PARAMETER(rgba); 
+      };
+
+      virtual void 
+      clearYourRenderTarget(WeakSPtr<RenderTarget> renderTarget, Vector4 rgba) { 
+        GA_UNREFERENCED_PARAMETER(renderTarget); GA_UNREFERENCED_PARAMETER(rgba); 
+      };
       
       /**
       * @brief Function to clean our depth stencil view.
@@ -222,7 +230,8 @@ namespace gaEngineSDK {
       */
       virtual VertexBuffer* 
       createVertexBuffer(const void* data, const uint32 size) { 
-        GA_UNREFERENCED_PARAMETER(data); GA_UNREFERENCED_PARAMETER(size); return nullptr; };
+        GA_UNREFERENCED_PARAMETER(data); GA_UNREFERENCED_PARAMETER(size); return nullptr; 
+      };
       
       /**
       * @brief Function to generate the index buffer.
@@ -232,7 +241,9 @@ namespace gaEngineSDK {
       */
       virtual IndexBuffer*
       createIndexBuffer(const void* data, const uint32 size) { 
-        GA_UNREFERENCED_PARAMETER(data); GA_UNREFERENCED_PARAMETER(size); return nullptr; };
+        GA_UNREFERENCED_PARAMETER(data); GA_UNREFERENCED_PARAMETER(size); 
+        return nullptr; 
+      };
       
       /**
       * @brief Function to generate constant buffers.
@@ -240,8 +251,10 @@ namespace gaEngineSDK {
       * @return ConstantBuffer pointer.
       */
       virtual ConstantBuffer* 
-      createConstantBuffer(const uint32 bufferSize) { GA_UNREFERENCED_PARAMETER(bufferSize);
-                                                      return nullptr; };
+      createConstantBuffer(const uint32 bufferSize) { 
+        GA_UNREFERENCED_PARAMETER(bufferSize);
+        return nullptr; 
+      };
       
       /**
       * @brief Function to generate the following: 
@@ -262,7 +275,8 @@ namespace gaEngineSDK {
         GA_UNREFERENCED_PARAMETER(height);
         GA_UNREFERENCED_PARAMETER(bindFlags); 
         GA_UNREFERENCED_PARAMETER(textureFormat);
-        GA_UNREFERENCED_PARAMETER(fileName); return nullptr;};
+        GA_UNREFERENCED_PARAMETER(fileName); return nullptr;
+      };
       
       /**
       * @brief Function to generate the sampler state.
@@ -278,7 +292,18 @@ namespace gaEngineSDK {
       */
       virtual InputLayout* 
       createInputLayout(WeakSPtr<Shaders> vertexShader) { 
-        GA_UNREFERENCED_PARAMETER(vertexShader); return nullptr; };
+        GA_UNREFERENCED_PARAMETER(vertexShader); return nullptr; 
+      };
+
+      virtual SPtr<RenderTarget>
+      createRenderTarget(uint32 width, uint32 height, uint32 mipLevels = 1,
+                         uint32 numRenderTargets = 1, float scale = 1.0f, 
+                         bool depth = false) {
+        GA_UNREFERENCED_PARAMETER(width);     GA_UNREFERENCED_PARAMETER(height);
+        GA_UNREFERENCED_PARAMETER(mipLevels); GA_UNREFERENCED_PARAMETER(numRenderTargets);
+        GA_UNREFERENCED_PARAMETER(scale);     GA_UNREFERENCED_PARAMETER(depth);
+        return nullptr;
+      };
       
       /***********************************************************************/
       /**
@@ -334,7 +359,8 @@ namespace gaEngineSDK {
         GA_UNREFERENCED_PARAMETER(isVertex);
         GA_UNREFERENCED_PARAMETER(constantBuffer);
         GA_UNREFERENCED_PARAMETER(startSlot); 
-        GA_UNREFERENCED_PARAMETER(numBuffers); };
+        GA_UNREFERENCED_PARAMETER(numBuffers);
+      };
       
       /**
       * @brief Function to save the information of the sampler state.
@@ -348,7 +374,8 @@ namespace gaEngineSDK {
                       uint32 numSamplers = 1) { 
         GA_UNREFERENCED_PARAMETER(sampler); 
         GA_UNREFERENCED_PARAMETER(startSlot); 
-        GA_UNREFERENCED_PARAMETER(numSamplers); };
+        GA_UNREFERENCED_PARAMETER(numSamplers); 
+      };
        
       /**
       * @brief Function to save the information of the vertex sampler state.
@@ -362,7 +389,8 @@ namespace gaEngineSDK {
                              uint32 numSamplers = 1) { 
         GA_UNREFERENCED_PARAMETER(sampler); 
         GA_UNREFERENCED_PARAMETER(startSlot); 
-        GA_UNREFERENCED_PARAMETER(numSamplers); };
+        GA_UNREFERENCED_PARAMETER(numSamplers);
+      };
 
       /**
       * @brief Function to save the information of the vertex sampler state.
@@ -386,11 +414,22 @@ namespace gaEngineSDK {
       * @param .
       */
       virtual void 
-      setShaderResourceView(const Vector<Textures*>& texture, const uint32 startSlot,
+      setShaderResourceView(const Vector<Textures*>& texture, 
+                            const uint32 startSlot,
                             const uint32 numViews) {
         GA_UNREFERENCED_PARAMETER(texture); 
         GA_UNREFERENCED_PARAMETER(startSlot);
-        GA_UNREFERENCED_PARAMETER(numViews); };
+        GA_UNREFERENCED_PARAMETER(numViews); 
+      };
+
+      virtual void 
+      setShaderResourceView(void* renderTexture, 
+                            const uint32 startSlot,
+                            const uint32 numViews = 1) {
+        GA_UNREFERENCED_PARAMETER(renderTexture);
+        GA_UNREFERENCED_PARAMETER(startSlot);
+        GA_UNREFERENCED_PARAMETER(numViews); 
+      };
       
       /**
       * @brief Function to save the information of the render target.
@@ -399,7 +438,18 @@ namespace gaEngineSDK {
       */
       virtual void 
       setRenderTarget(WeakSPtr<Textures> renderTarget, WeakSPtr<Textures> depthStencil) {
-        GA_UNREFERENCED_PARAMETER(renderTarget); GA_UNREFERENCED_PARAMETER(depthStencil); };
+        GA_UNREFERENCED_PARAMETER(renderTarget); GA_UNREFERENCED_PARAMETER(depthStencil); 
+      };
+
+      /**
+      * @brief Function to save the information of the render target.
+      * @param .
+      * @param .
+      */
+      virtual void
+      setRenderTarget(WeakSPtr<RenderTarget> renderTarget, WeakSPtr<Textures> depthStencil) {
+        GA_UNREFERENCED_PARAMETER(renderTarget); GA_UNREFERENCED_PARAMETER(depthStencil);
+      };
       
       /**
       * @brief Function to save the depth stencil information.
@@ -408,7 +458,8 @@ namespace gaEngineSDK {
       */
       virtual void 
       setDepthStencil(WeakSPtr<Textures> depthStencil, const uint32 stencilRef) { 
-        GA_UNREFERENCED_PARAMETER(depthStencil); GA_UNREFERENCED_PARAMETER(stencilRef); };
+        GA_UNREFERENCED_PARAMETER(depthStencil); GA_UNREFERENCED_PARAMETER(stencilRef); 
+      };
       
       /**
       * @brief Function to save the information of the input layout.
@@ -416,7 +467,8 @@ namespace gaEngineSDK {
       */
       virtual void 
       setInputLayout(WeakSPtr<InputLayout> vertexLayout) { 
-        GA_UNREFERENCED_PARAMETER(vertexLayout); };
+        GA_UNREFERENCED_PARAMETER(vertexLayout); 
+      };
       
       /**
       * @brief Function to save the viewport information.
@@ -428,7 +480,8 @@ namespace gaEngineSDK {
       setViewports(const uint32 width, const uint32 heigth, const uint32 numViewports = 1) {
         GA_UNREFERENCED_PARAMETER(width); 
         GA_UNREFERENCED_PARAMETER(heigth);
-        GA_UNREFERENCED_PARAMETER(numViewports); };
+        GA_UNREFERENCED_PARAMETER(numViewports); 
+      };
       
       /**
       * @brief Function to save the topology information.
@@ -436,7 +489,8 @@ namespace gaEngineSDK {
       */
       virtual void 
       setPrimitiveTopology(const uint32 topology = PRIMITIVE_TOPOLOGY::kTriangleList) { 
-        GA_UNREFERENCED_PARAMETER(topology); };
+        GA_UNREFERENCED_PARAMETER(topology); 
+      };
       
       /**
       * @brief Function to call VSSetShader.
@@ -456,7 +510,8 @@ namespace gaEngineSDK {
                                const uint32 numBuffers = 1) {
         GA_UNREFERENCED_PARAMETER(constantBuffer);
         GA_UNREFERENCED_PARAMETER(startSlot);
-        GA_UNREFERENCED_PARAMETER(numBuffers); };
+        GA_UNREFERENCED_PARAMETER(numBuffers); 
+      };
       
       /**
       * @brief Function to call PSSetShader.
@@ -476,7 +531,8 @@ namespace gaEngineSDK {
                                const uint32 numBuffers = 1) { 
         GA_UNREFERENCED_PARAMETER(constantBuffer); 
         GA_UNREFERENCED_PARAMETER(startSlot);
-        GA_UNREFERENCED_PARAMETER(numBuffers); };
+        GA_UNREFERENCED_PARAMETER(numBuffers); 
+      };
       
       /**
       * @brief Function to call PSSetSamplers.
@@ -489,7 +545,8 @@ namespace gaEngineSDK {
                        const uint32 numSamplers) {
         GA_UNREFERENCED_PARAMETER(sampler);
         GA_UNREFERENCED_PARAMETER(startSlot);
-        GA_UNREFERENCED_PARAMETER(numSamplers); };
+        GA_UNREFERENCED_PARAMETER(numSamplers); 
+      };
       
       /**
       * @brief Function to call program and link for OGL.
@@ -504,7 +561,8 @@ namespace gaEngineSDK {
       */
       virtual void
       setConstBufferBones(WeakSPtr<ConstantBuffer> cbBones) { 
-        GA_UNREFERENCED_PARAMETER(cbBones); };
+        GA_UNREFERENCED_PARAMETER(cbBones); 
+      };
       
       /***********************************************************************/
       /**

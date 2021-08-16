@@ -11,7 +11,7 @@ namespace gaEngineSDK {
   class GraphicsApi;
   class IndexBuffer;
   class Textures;
-  class Model;
+  class Models;
 
   struct ModelNodes;
   struct AnimationNode;
@@ -28,7 +28,7 @@ namespace gaEngineSDK {
     Vector<Bone> vBones;
   };
 
-  class Mesh
+  class GA_CORE_EXPORT Mesh
   {
     public:
       /***********************************************************************/
@@ -118,6 +118,12 @@ namespace gaEngineSDK {
       * @brief .
       */
       void
+      setIndex(WeakSPtr<uint32> index);
+
+      /*
+      * @brief .
+      */
+      void
       setIndexNum(uint32 indexNum);
 
       /*
@@ -143,6 +149,12 @@ namespace gaEngineSDK {
 
       uint32
       getNumIndices();
+
+      SPtr<VertexBuffer>
+      getVertexBuffer();
+
+      SPtr<IndexBuffer>
+      getIndexBuffer();
 
       /***********************************************************************/
       /*
@@ -220,11 +232,6 @@ namespace gaEngineSDK {
       /*
       * @brief .
       */
-      SPtr<VertexBuffer> m_vertexBuffer;
-
-      /*
-      * @brief .
-      */
-      SPtr<IndexBuffer> m_indexBuffer;
+      SPtr<uint32> m_pIndex;
   };
 }

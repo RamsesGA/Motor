@@ -303,12 +303,17 @@ namespace gaEngineSDK {
 
   void
   Mesh::setVertexBuffer(WeakSPtr<VertexBuffer> vertexBuffer) {
-    m_vertexBuffer = vertexBuffer.lock();
+    m_pVertexBuffer = vertexBuffer.lock();
   }
 
   void 
   Mesh::setIndexBuffer(WeakSPtr<IndexBuffer> indexBuffer) {
-    m_indexBuffer = indexBuffer.lock();
+    m_pIndexBuffer = indexBuffer.lock();
+  }
+
+  void 
+  Mesh::setIndex(WeakSPtr<uint32> index) {
+    m_pIndex = index.lock();
   }
 
   void 
@@ -346,5 +351,15 @@ namespace gaEngineSDK {
   Mesh::getNumIndices() {
     m_numIndices = m_vIndices.size();
     return m_numIndices;
+  }
+
+  SPtr<VertexBuffer> 
+  Mesh::getVertexBuffer() {
+    return m_pVertexBuffer;
+  }
+
+  SPtr<IndexBuffer>
+  Mesh::getIndexBuffer() {
+    return m_pIndexBuffer;
   }
 }

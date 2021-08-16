@@ -13,5 +13,7 @@ namespace gaEngineSDK {
 
 			virtual 
 			~IndexBuffer() = default;
+
+			uint32 m_index = 0;
 	};
 }

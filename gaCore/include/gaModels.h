@@ -10,7 +10,7 @@ namespace gaEngineSDK {
 
   class StaticMesh;
 
-  class GA_CORE_EXPORT Model : public Resource
+  class GA_CORE_EXPORT Models : public Resource
   {
   public:
     /**************************************************************************/
@@ -18,9 +18,9 @@ namespace gaEngineSDK {
     * Constructor and destructor.
     */
     /**************************************************************************/
-    Model() = default;
+    Models() = default;
     
-    ~Model() = default;
+    ~Models() = default;
     
     /**************************************************************************/
     /*
@@ -35,10 +35,11 @@ namespace gaEngineSDK {
     void
     loadFromFile(const String& file) override;
 
-    /*
-    * @brief NO.
-    */
-    SPtr<StaticMesh> m_pStaticMeshInfo;
+    void
+    addNewMesh(Mesh newMesh);
+
+    Mesh
+    getMesh(uint32 index);
 
   protected:
     /*
@@ -47,7 +48,6 @@ namespace gaEngineSDK {
     void
     createDirectories(const String& file);
 
-  private:
     /**************************************************************************/
     /*
     * Members.
@@ -60,13 +60,35 @@ namespace gaEngineSDK {
     String m_modelDirectory;
 
     /*
+    * @brief .
+    */
+    Animations m_animInfo;
+
+    /*
     * @brief Member to store a .
     */
     Vector<Materials> m_vMaterials;
+
+    /*
+    * @brief .
+    */
+    Vector<ConstBuffBonesTransform> m_vMeshBones;
+
+    /*
+    * @brief Member to store a string of Meshes.
+    */
+    Vector<Mesh> m_vMeshes;
+
+    /*
+    * @brief .
+    */
+    Vector<SPtr<AnimationData>> m_vAnimationData;
     
     /*
     * @brief .
     */
     Map<String, SPtr<Materials>> m_mMaterials;
+
+    friend class StaticMesh;
   };
 }

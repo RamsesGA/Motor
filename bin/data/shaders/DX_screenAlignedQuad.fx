@@ -19,8 +19,13 @@ cbuffer linkToBuffer2 : register(b1)
 //----------------------------------------------------------------------------
 struct VS_INPUT
 {
-  float4 position : POSITION0;
-  float2 texCoord : TEXCOORD0;
+  float4 position    : POSITION0;
+  float3 normal      : NORMAL0;
+  float3 tangent     : TANGENT0;
+  float3 biTangent   : BINORMAL0;
+  float2 texCoords   : TEXCOORD0;
+  float4 boneWeights : BLENDWEIGHT0;
+  uint4  boneIds      : BLENDINDICES0;
 };
 
 struct VS_OUTPUT

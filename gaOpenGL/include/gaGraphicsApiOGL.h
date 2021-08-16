@@ -119,6 +119,11 @@ namespace gaEngineSDK {
       InputLayout* 
       createInputLayout(WeakSPtr<Shaders> vertexShader) override;
 
+      SPtr<RenderTarget>
+      createRenderTarget(uint32 width, uint32 heigth, uint32 mipLevels = 1,
+                         uint32 numRenderTargets = 1, float scale = 1.0f, 
+                         bool depth = false) override;
+
       /***********************************************************************/
       /**
       * Set methods.

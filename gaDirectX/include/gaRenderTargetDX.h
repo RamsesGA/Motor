@@ -1,64 +1,56 @@
 #pragma once
 
-#include "gaPrerequisitesCore.h"
-#include "gaComponent.h"
-#include "gaAnimations.h"
+#include "gaRenderTarget.h"
+#include "gaTexturesDX.h"
 
 namespace gaEngineSDK {
-  class Materials;
-  class Models;
-  class Mesh;
-
-  class GA_CORE_EXPORT StaticMesh : public Component
+  class RenderTargetDX final : public RenderTarget
   {
   public:
     /*************************************************************************/
-    /*
+    /**
     * Constructor and destructor.
     */
     /*************************************************************************/
-    StaticMesh() = default;
+    RenderTargetDX() = default;
 
-    ~StaticMesh() = default;
+    ~RenderTargetDX() = default;
 
     /*************************************************************************/
     /**
-    * Inheritance methods.
+    * Methods.
     */
     /*************************************************************************/
 
     /*
     * @brief .
     */
-    void
-    update(const float& deltaTime) override;
+    void*
+    getRenderTexture(uint32 index = 0) override { 
+      if ((index >= m_renderTarget.m_vShaderResourceView.size()) || (0 > index)) {
+        return m_renderTarget.m_vShaderResourceView[0];
+      }
 
-    /*
-    * @brief .
-    */
-    void
-    render() override;
+      return m_renderTarget.m_vShaderResourceView[index];
+    };
 
+  protected:
     /*************************************************************************/
-    /*
+    /**
     * Members.
     */
     /*************************************************************************/
 
     /*
-    * @brief SI.
-    */
-    SPtr<Models> m_pModel;
-
-  private: 
-    /*
     * @brief .
     */
-    bool m_playAnimation = true;
+    TexturesDX m_renderTarget;
 
     /*
     * @brief .
     */
-    float m_timeOfAnimation = 0.0f;
+    ID3D11DepthStencilView* m_pDepthStencil = nullptr;
+
+    friend class GraphicsApiDX;
   };
 }

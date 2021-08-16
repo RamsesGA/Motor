@@ -40,11 +40,6 @@ namespace gaEngineSDK {
 			ID3D11Texture2D* m_pTexture = nullptr;
 
 			/**
-			* @brief DX member to save the resource view shader.
-			*/
-			//ID3D11ShaderResourceView* m_pShaderResourceView = nullptr;
-
-			/**
 			* @brief DX vector member to save the resource view shader.
 			*/
 			Vector<ID3D11ShaderResourceView*> m_vShaderResourceView;
@@ -57,8 +52,6 @@ namespace gaEngineSDK {
 			/**
 			* @brief DX member to save the render target view.
 			*/
-			ID3D11RenderTargetView* m_pRenderTargetView = nullptr;
-
 			Vector<ID3D11RenderTargetView*> m_vRenderTargetView;
 			
 			/**
@@ -67,5 +60,6 @@ namespace gaEngineSDK {
 			ID3D11DepthStencilState* m_pDepthStencilState = nullptr;
 
 			friend class GraphicsApiDX;
+			friend class RenderTargetDX;
 	};
 }

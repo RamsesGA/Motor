@@ -665,6 +665,12 @@ namespace gaEngineSDK {
 
     return inputLayout;
   }
+
+  SPtr<RenderTarget> 
+  GraphicsApiOGL::createRenderTarget(uint32 width, uint32 heigth, uint32 mipLevels, 
+                                     uint32 numRenderTargets, float scale, bool depth) {
+    return nullptr;
+  }
   
   /***************************************************************************/
   /**

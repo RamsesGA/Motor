@@ -7,10 +7,12 @@
 #include <gaMatrix4x4.h>
 #include <gaStructures.h>
 #include <gaSamplerState.h>
+#include <gaRenderTarget.h>
 #include <gaPrerequisitesCore.h>
 
 namespace gaEngineSDK {
   class ResourceManager;
+  class StaticMesh;
 }
 
 class AppTest : public BaseApp 
@@ -92,6 +94,36 @@ class AppTest : public BaseApp
     * @brief .
     */
     void
+    setRT_View();
+
+    /*
+    * @brief .
+    */
+    void
+    setRTGbuffer();
+
+    /*
+    * @brief .
+    */
+    void
+    setRT_SSAO();
+
+    /*
+    * @brief .
+    */
+    void
+    setBlurH();
+
+    /*
+    * @brief .
+    */
+    void
+    setBlurV();
+
+    /*
+    * @brief .
+    */
+    void
     createNodePod();
 
     /*
@@ -130,6 +162,18 @@ class AppTest : public BaseApp
     void
     createNodeRamlethalSwords();
 
+    /*
+    * @brief .
+    */
+    void
+    createSAQ();
+
+    /*
+    * @brief .
+    */
+    void
+    setSAQ();
+
   public:
     /*************************************************************************/
     /*
@@ -146,6 +190,21 @@ class AppTest : public BaseApp
     * @brief 4x4 matrix of the world.
     */
     Matrix4x4 m_world;
+
+    /*
+    * @brief .
+    */
+    Vector4 m_rgba = { (87.0f / 255.0f), (35.0f / 255.0f), (100.0f / 255.0f), (255.0f) };
+
+    /*
+    * @brief .
+    */
+    Vector<SPtr<StaticMesh>> m_vStaticMeshes;
+
+    /*
+    * @brief .
+    */
+    SPtr<Models> m_SAQ;
 
     /*
     * @brief .
@@ -167,7 +226,19 @@ class AppTest : public BaseApp
     /*
     * @brief Variable that saves the data of the shaders to be read.
     */
-    SPtr<Shaders> m_pBothShaders;
+    SPtr<Shaders> m_pGBufferShader;
+    SPtr<Shaders> m_pSSAO_Shader;
+    SPtr<Shaders> m_pBlurH_Shader;
+    SPtr<Shaders> m_pBlurV_Shader;
+    SPtr<Shaders> m_pLightningShader;
+
+    /*
+    * @brief Members for renter targets.
+    */
+    SPtr<RenderTarget> m_pGbufferRT;
+    SPtr<RenderTarget> m_pSSAO_RT;
+    SPtr<RenderTarget> m_pBlurH_RT;
+    SPtr<RenderTarget> m_pBlurV_RT;
   
     /*
     * @brief Variable that stores the CB data.
@@ -175,14 +246,18 @@ class AppTest : public BaseApp
     SPtr<ConstantBuffer> m_pBufferCamera;
     SPtr<ConstantBuffer> m_pBufferWorld;
     SPtr<ConstantBuffer> m_pCBufferBones;
-    SPtr<ConstantBuffer> m_pCBSSAO;
-    SPtr<ConstantBuffer> m_pCBViewPortDimension;
-    SPtr<ConstantBuffer> m_pCBLightning;
+
+    SPtr<ConstantBuffer> m_pCB_SSAO;
+    SPtr<ConstantBuffer> m_pCB_ViewPortDimension;
+    SPtr<ConstantBuffer> m_pCB_Lightning;
 
     /*
     * @brief .
     */
     SPtr<Mesh> m_mesh;
 
+    /*
+    * @brief .
+    */
     SPtr<SamplerState> m_pSampler;
 };

@@ -6,9 +6,9 @@
 #define M_PI 3.14159265383
 #define EPSILON 0.00001
 
-Texture2D baseColor  : register(t0);
-Texture2D normalTex     : register(t1);
-Texture2D emissiveTex   : register(t2);
+Texture2D baseColor : register(t0);
+Texture2D normalTex : register(t1);
+Texture2D emissiveTex : register(t2);
 Texture2D AOTexture  : register(t3);
 Texture2D posTexture : register(t4);
 
