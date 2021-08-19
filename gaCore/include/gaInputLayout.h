@@ -1,17 +1,17 @@
 #pragma once
 
 namespace gaEngineSDK {
-	class InputLayout
-	{
-	  public:
-			/***********************************************************************/
-			/**
-			* Constructor and destructor.
-			*/
-			/***********************************************************************/
-			InputLayout() = default;
+  class InputLayout
+  {
+   public:
+    /*************************************************************************/
+    /**
+    * Constructor and destructor.
+    */
+    /*************************************************************************/
+    InputLayout() = default;
 
-			virtual 
-			~InputLayout() = default;
-	};
+    virtual
+    ~InputLayout() = default;
+  };
 }

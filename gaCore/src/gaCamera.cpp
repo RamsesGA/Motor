@@ -2,14 +2,14 @@
 #include "gaRadians.h"
 
 namespace gaEngineSDK {
-  
+
   void
   Camera::startCamera() {
-	  createView();
-	  createProjectionMatrix();
-	  updateViewMatrix();
+    createView();
+    createProjectionMatrix();
+    updateViewMatrix();
   }
-  
+
   void
   Camera::updateViewMatrix() {
     m_right = m_view.getColumnMatrixInfo(0);
@@ -17,34 +17,34 @@ namespace gaEngineSDK {
     m_up = m_view.getColumnMatrixInfo(1);
 
     m_front = m_view.getColumnMatrixInfo(2);
-	  
-	  m_cameraDesc.camLookAt = m_cameraDesc.camEye + m_front;
+
+    m_cameraDesc.camLookAt = m_cameraDesc.camEye + m_front;
   }
-  
+
   void
   Camera::inputDetection(sf::Event param, const float& deltaTime) {
-	  if ((sf::Keyboard::Up == param.key.code)  || 
+    if ((sf::Keyboard::Up == param.key.code) ||
         (sf::Keyboard::Down == param.key.code)) {
-	  	pitchX(param);
-	  }
-	  if ((sf::Keyboard::Right == param.key.code) ||
+      pitchX(param);
+    }
+    if ((sf::Keyboard::Right == param.key.code) ||
         (sf::Keyboard::Left == param.key.code)) {
-	  	rollZ(param);
-	  }
-	  if ((sf::Keyboard::Z == param.key.code)||
-			  (sf::Keyboard::C == param.key.code)) {
-	  	yawY(param);
-	  }
-	  else {
-	  	move(param, deltaTime);
-	  }
+      rollZ(param);
+    }
+    if ((sf::Keyboard::Z == param.key.code) ||
+        (sf::Keyboard::C == param.key.code)) {
+      yawY(param);
+    }
+    else {
+      move(param, deltaTime);
+    }
   }
-  
+
   void
   Camera::pitchX(sf::Event param) {
     Matrix4x4 rotation;
 
-    float speedrot = 1.35f;
+    float speedrot = 0.35f;
 
     if (sf::Keyboard::Up == param.key.code) {
       rotation.rotationX(speedrot);
@@ -53,16 +53,16 @@ namespace gaEngineSDK {
       rotation.rotationX(-speedrot);
     }
 
-    m_view = m_view * rotation;
+    m_view = rotation * m_view;
 
     updateViewMatrix();
   }
-  
-  void 
+
+  void
   Camera::rollZ(sf::Event param) {
     Matrix4x4 rotation;
 
-    float speedrot = 1.35f;
+    float speedrot = 0.35f;
 
     if (sf::Keyboard::Right == param.key.code) {
       rotation.rotationZ(-speedrot);
@@ -71,16 +71,16 @@ namespace gaEngineSDK {
       rotation.rotationZ(speedrot);
     }
 
-    m_view = m_view * rotation;
+    m_view = rotation * m_view;
 
     updateViewMatrix();
   }
-  
-  void 
+
+  void
   Camera::yawY(sf::Event param) {
     Matrix4x4 rotation;
 
-    float speedrot = 1.35f;
+    float speedrot = 0.35f;
 
     if (sf::Keyboard::Z == param.key.code) {
       rotation.rotationY(speedrot);
@@ -89,46 +89,46 @@ namespace gaEngineSDK {
       rotation.rotationY(-speedrot);
     }
 
-    m_view = m_view * rotation;
+    m_view = rotation * m_view;
 
     updateViewMatrix();
   }
-  
-  void 
+
+  void
   Camera::move(sf::Event param, const float& deltaTime) {
     float speedMove = 1550.0f * deltaTime;
 
-  	if (sf::Keyboard::W == param.key.code) {
-  		m_cameraDesc.camEye += m_front * speedMove;
-  	}
-  	else if (sf::Keyboard::S == param.key.code) {
-  		m_cameraDesc.camEye -= m_front * speedMove;
-  	}
-  	else if (sf::Keyboard::A == param.key.code) {
-  		m_cameraDesc.camEye -= m_right * speedMove;
-  	}
-  	else if (sf::Keyboard::D == param.key.code) {
-  		m_cameraDesc.camEye += m_right * speedMove;
-  	}
-  	else if (sf::Keyboard::Q == param.key.code) {
-  		m_cameraDesc.camEye += m_up * speedMove;
-  	}
-  	else if (sf::Keyboard::E == param.key.code) {
-  		m_cameraDesc.camEye -= m_up * speedMove;
-  	}
-  
+    if (sf::Keyboard::W == param.key.code) {
+      m_cameraDesc.camEye += m_front * speedMove;
+    }
+    else if (sf::Keyboard::S == param.key.code) {
+      m_cameraDesc.camEye -= m_front * speedMove;
+    }
+    else if (sf::Keyboard::A == param.key.code) {
+      m_cameraDesc.camEye -= m_right * speedMove;
+    }
+    else if (sf::Keyboard::D == param.key.code) {
+      m_cameraDesc.camEye += m_right * speedMove;
+    }
+    else if (sf::Keyboard::Q == param.key.code) {
+      m_cameraDesc.camEye += m_up * speedMove;
+    }
+    else if (sf::Keyboard::E == param.key.code) {
+      m_cameraDesc.camEye -= m_up * speedMove;
+    }
+
     m_axis.calculateAxis(m_right, m_up, m_front);
-  
+
     m_position.calculatePosition(m_cameraDesc.camEye);
-  
+
     m_position = m_position * m_axis;
-  
-  	m_view = m_position;
-  
-  	updateViewMatrix();
+
+    m_view = m_position;
+
+    updateViewMatrix();
   }
-  
-  void 
+
+  void
   Camera::mouseRotation() {
     Vector2 firstPos;
     Vector2 secondPos;
@@ -164,7 +164,7 @@ namespace gaEngineSDK {
         m_angule = m_maxAngule;
       }
       else {
-        Pitch.rotationX(speedAngule * Math::PI / 180);
+        Pitch.rotationY(speedAngule * Math::PI / 180);
       }
     }
 
@@ -175,28 +175,28 @@ namespace gaEngineSDK {
         m_angule = -m_maxAngule;
       }
       else {
-        Pitch.rotationX(-speedAngule * Math::PI / 180);
+        Pitch.rotationY(-speedAngule * Math::PI / 180);
       }
     }
 
     SetCursorPos((int32)m_originalMousePos.x, (int32)m_originalMousePos.y);
-    
-    m_view = m_view * Yaw;
+
+    m_view = Yaw * m_view;
 
     updateViewMatrix();
 
-    m_view = m_view * Pitch;
+    m_view = Pitch * m_view;
 
     updateViewMatrix();
   }
-  
+
   /***************************************************************************/
   /**
   * Creates
   */
   /***************************************************************************/
-  
-  void 
+
+  void
   Camera::createView() {
     m_front = m_cameraDesc.camLookAt - m_cameraDesc.camEye;
     m_front.normalize();
@@ -211,32 +211,32 @@ namespace gaEngineSDK {
 
     m_position.calculatePosition(m_cameraDesc.camEye);
 
-    m_view = m_axis * m_position;
+    m_view = m_position * m_axis;
   }
-  
+
   void
   Camera::createProjectionMatrix() {
-  	m_projection = m_projection.perspectiveFovLH(m_cameraDesc.camFoV, 
+    m_projection = m_projection.perspectiveFovLH(m_cameraDesc.camFoV,
                                                  (float)m_cameraDesc.camWidth,
-                                                 (float)m_cameraDesc.camHeight, 
-                                                 m_cameraDesc.camNear, 
+                                                 (float)m_cameraDesc.camHeight,
+                                                 m_cameraDesc.camNear,
                                                  m_cameraDesc.camFar);
   }
-  
+
   /***************************************************************************/
   /**
   * Sets
   */
   /***************************************************************************/
-  
-  void 
+
+  void
   Camera::setOriginalMousePos(float x, float y) {
-  	m_originalMousePos = { x, y };
+    m_originalMousePos = { x, y };
   }
-  
-  void 
+
+  void
   Camera::setClickPressed(bool _bool) {
-  	m_clickPressed = _bool;
+    m_clickPressed = _bool;
   }
 
   void
@@ -244,7 +244,7 @@ namespace gaEngineSDK {
     m_cameraDesc.camLookAt = lookAt;
   }
 
-  void 
+  void
   Camera::setEye(Vector3 eye) {
     m_cameraDesc.camEye = eye;
   }
@@ -254,12 +254,12 @@ namespace gaEngineSDK {
     m_cameraDesc.camUp = up;
   }
 
-  void 
+  void
   Camera::setFar(float farCam) {
     m_cameraDesc.camFar = farCam;
   }
 
-  void 
+  void
   Camera::setNear(float nearCam) {
     m_cameraDesc.camNear = nearCam;
   }
@@ -269,40 +269,44 @@ namespace gaEngineSDK {
     m_cameraDesc.camFoV = fieldOfView;
   }
 
-  void 
+  void
   Camera::setHeight(float height) {
     m_cameraDesc.camHeight = height;
   }
 
-  void 
+  void
   Camera::setWidth(float width) {
     m_cameraDesc.camWidth = width;
   }
-  
+
   /***************************************************************************/
   /**
   * Gets
   */
   /***************************************************************************/
-  
+
   Matrix4x4
   Camera::getView() {
-  	return m_view;
+    return m_view;
   }
-  
+
   Matrix4x4
   Camera::getProjection() {
     return m_projection;
   }
-  
+
   Vector2
   Camera::getOriginalMousePos() {
-  	return m_originalMousePos;
+    return m_originalMousePos;
   }
-  
-  bool 
+
+  bool
   Camera::getClickPressed() {
-  	return m_clickPressed;
+    return m_clickPressed;
   }
-  
+
+  Vector3
+  Camera::getCamEye() {
+    return m_cameraDesc.camEye;
+  }
 }

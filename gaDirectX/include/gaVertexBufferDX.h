@@ -3,25 +3,30 @@
 #include <gaVertexBuffer.h>
 
 namespace gaEngineSDK {
-	class VertexBufferDX final : public VertexBuffer
-	{
-	  public:
-			/***********************************************************************/
-			/**
-			* Constructor and destructor.
-			*/
-			/***********************************************************************/
-			VertexBufferDX() = default;
+  class VertexBufferDX final : public VertexBuffer
+  {
+   public:
+    /*************************************************************************/
+    /**
+    * Constructor and destructor.
+    */
+    /*************************************************************************/
+    VertexBufferDX() = default;
 
-			~VertexBufferDX() = default;
+    ~VertexBufferDX() = default;
 
-	  protected:
-			
-			/**
-			* @brief DX member to save the buffer.
-			*/
-			ID3D11Buffer* m_pVertexBuffer = nullptr;
+   protected:
+    /*************************************************************************/
+    /**
+    * Members.
+    */
+    /*************************************************************************/
 
-			friend class GraphicsApiDX;
-	};
+    /**
+    * @brief DX member to save the buffer.
+    */
+    ID3D11Buffer* m_pVertexBuffer = nullptr;
+
+    friend class GraphicsApiDX;
+  };
 }

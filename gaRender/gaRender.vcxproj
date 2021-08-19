@@ -24,6 +24,7 @@
     <ProjectGuid>{55fc0a08-7302-4cb1-9443-cd2c45c4651e}</ProjectGuid>
     <RootNamespace>gaRender</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>gaRenderer</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

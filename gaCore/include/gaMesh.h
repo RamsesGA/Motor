@@ -30,208 +30,210 @@ namespace gaEngineSDK {
 
   class GA_CORE_EXPORT Mesh
   {
-    public:
-      /***********************************************************************/
-      /*
-      * Constructor and destructor.
-      */
-      /***********************************************************************/
-      Mesh() = default;
-    
-      ~Mesh() = default;
+   public:
+    /*************************************************************************/
+    /*
+    * Constructor and destructor.
+    */
+    /*************************************************************************/
+    Mesh() = default;
 
-      /***********************************************************************/
-      /*
-      * Methods.
-      */
-      /***********************************************************************/
+    ~Mesh() = default;
 
-      /*
-      * @brief Function to save information for m_vertexBuffer and m_indexBuffer.
-      * @param Variable with API information.
-      */
-      void 
-      setUpMesh(Vector<Vertex> pVertices, Vector<uint32> pIndices, 
-                Vector<Textures*> textures);
+    /*************************************************************************/
+    /*
+    * Methods.
+    */
+    /*************************************************************************/
 
-      void 
-      animated(const float& animationTime, SPtr<AnimationData> animation, 
-               WeakSPtr<ModelNodes> structModelNode);
+    /*
+    * @brief Function to save information for m_vertexBuffer and m_indexBuffer.
+    * @param Variable with API information.
+    */
+    void
+    setUpMesh(Vector<Vertex> pVertices, Vector<uint32> pIndices, Vector<Textures*> textures);
 
-      void 
-      boneTransform(const float& deltaTime, SPtr<AnimationData> animation, 
-                    WeakSPtr<ModelNodes> structModelNode);
+    void
+    animated(const float& animationTime, 
+             SPtr<AnimationData> animation,
+             WeakSPtr<ModelNodes> structModelNode);
 
-      void
-      readNodeHierarchy(const float& animationTime, WeakSPtr<ModelNodes> structModelNode,
-                        const Matrix4x4& parentTransform, SPtr<AnimationData> animation);
+    void
+    boneTransform(const float& deltaTime, 
+                  SPtr<AnimationData> animation,
+                  WeakSPtr<ModelNodes> structModelNode);
 
-      const AnimationNode*
-      findNodeAnim(AnimationData* animation, const String& nodeName);
+    void
+    readNodeHierarchy(const float& animationTime, 
+                      WeakSPtr<ModelNodes> structModelNode,
+                      const Matrix4x4& parentTransform,
+                      SPtr<AnimationData> animation);
 
-      Vector3
-      calcInterpolatedScaling(const float& animationTime, const AnimationNode* animationNode);
+    const AnimationNode*
+    findNodeAnim(AnimationData* animation, const String& nodeName);
 
-      Matrix4x4
-      calcInterpolatedRotation(const float& animationTime, const AnimationNode* animationNode);
+    Vector3
+    calcInterpolatedScaling(const float& animationTime, const AnimationNode* animationNode);
 
-      Vector3
-      calcInterpolatedPosition(const float& animationTime, const AnimationNode* animationNode);
+    Matrix4x4
+    calcInterpolatedRotation(const float& animationTime, const AnimationNode* animationNode);
 
-      uint32
-      findScaling(const float& animationTime, const AnimationNode* animationNode);
+    Vector3
+    calcInterpolatedPosition(const float& animationTime, const AnimationNode* animationNode);
 
-      uint32
-      findRotation(const float& animationTime, const AnimationNode* animationNode);
+    uint32
+    findScaling(const float& animationTime, const AnimationNode* animationNode);
 
-      uint32
-      findPosition(const float& animationTime, const AnimationNode* animationNode);
+    uint32
+    findRotation(const float& animationTime, const AnimationNode* animationNode);
 
-      Matrix4x4
-      nlerp(Quaternions a, Quaternions b, const float& blend);
+    uint32
+    findPosition(const float& animationTime, const AnimationNode* animationNode);
 
-      /***********************************************************************/
-      /*
-      * Sets.
-      */
-      /***********************************************************************/
+    Matrix4x4
+    nlerp(Quaternions a, Quaternions b, const float& blend);
 
-      /*
-      * @brief .
-      */
-      void
-      setVertexData(WeakSPtr<Vertex> vertexData);
+    /*************************************************************************/
+    /*
+    * Sets.
+    */
+    /*************************************************************************/
 
-      /*
-      * @brief .
-      */
-      void
-      setVertexBuffer(WeakSPtr<VertexBuffer> vertexBuffer);
+    /*
+    * @brief .
+    */
+    void
+    setVertexData(WeakSPtr<Vertex> vertexData);
 
-      /*
-      * @brief .
-      */
-      void
-      setIndexBuffer(WeakSPtr<IndexBuffer> indexBuffer);
+    /*
+    * @brief .
+    */
+    void
+    setVertexBuffer(WeakSPtr<VertexBuffer> vertexBuffer);
 
-      /*
-      * @brief .
-      */
-      void
-      setIndex(WeakSPtr<uint32> index);
+    /*
+    * @brief .
+    */
+    void
+    setIndexBuffer(WeakSPtr<IndexBuffer> indexBuffer);
 
-      /*
-      * @brief .
-      */
-      void
-      setIndexNum(uint32 indexNum);
+    /*
+    * @brief .
+    */
+    void
+    setIndex(WeakSPtr<uint32> index);
 
-      /*
-      * @brief .
-      */
-      void
-      setVerticesNum(uint32 verticesNum);
+    /*
+    * @brief .
+    */
+    void
+    setIndexNum(uint32 indexNum);
 
-      /***********************************************************************/
-      /*
-      * Gets.
-      */
-      /***********************************************************************/
+    /*
+    * @brief .
+    */
+    void
+    setVerticesNum(uint32 verticesNum);
 
-      Vector<Vertex>
-      getVecVertex();
+    /*************************************************************************/
+    /*
+    * Gets.
+    */
+    /*************************************************************************/
 
-      Vector<uint32>
-      getVecIndex();
+    Vector<Vertex>
+    getVecVertex();
 
-      uint32
-      getVertices();
+    Vector<uint32>
+    getVecIndex();
 
-      uint32
-      getNumIndices();
+    uint32
+    getVertices();
 
-      SPtr<VertexBuffer>
-      getVertexBuffer();
+    uint32
+    getNumIndices();
 
-      SPtr<IndexBuffer>
-      getIndexBuffer();
+    SPtr<VertexBuffer>
+    getVertexBuffer();
 
-      /***********************************************************************/
-      /*
-      * Members.
-      */
-      /***********************************************************************/
+    SPtr<IndexBuffer>
+    getIndexBuffer();
 
-      /*
-      * @brief .
-      */
-      Vector<Matrix4x4> m_bonesTransforms;
+    /*************************************************************************/
+    /*
+    * Members.
+    */
+    /*************************************************************************/
 
-      /*
-      * @brief .
-      */
-      ConstBuffBonesTransform* m_cbBonesTrans;
+    /*
+    * @brief .
+    */
+    Vector<Matrix4x4> m_bonesTransforms;
 
-      /*
-      * @brief Member to store the texture information.
-      */
-      Vector<Textures*> m_vTextures;
+    /*
+    * @brief .
+    */
+    ConstBuffBonesTransform* m_cbBonesTrans;
 
-      /*
-      * @brief Member to store vertex information.
-      */
-      SPtr<VertexBuffer> m_pVertexBuffer;
+    /*
+    * @brief Member to store the texture information.
+    */
+    Vector<Textures*> m_vTextures;
 
-      /*
-      * @brief Member to store the index information.
-      */
-      SPtr<IndexBuffer> m_pIndexBuffer;
+    /*
+    * @brief Member to store vertex information.
+    */
+    SPtr<VertexBuffer> m_pVertexBuffer;
 
-      /*
-      * @brief .
-      */
-      SPtr<SkeletalMesh> m_skeletalMesh;
+    /*
+    * @brief Member to store the index information.
+    */
+    SPtr<IndexBuffer> m_pIndexBuffer;
 
-    private:
+    /*
+    * @brief .
+    */
+    SPtr<SkeletalMesh> m_skeletalMesh;
 
-      /*
-      * @brief .
-      */
-      uint32 m_numIndices = 0;
+  private:
+    /*
+    * @brief .
+    */
+    uint32 m_numIndices = 0;
 
-      /*
-      * @brief .
-      */
-      uint32 m_numVertices = 0;
+    /*
+    * @brief .
+    */
+    uint32 m_numVertices = 0;
 
-      /*
-      * @brief .
-      */
-      String m_meshName = "Default_Name_Mesh";
+    /*
+    * @brief .
+    */
+    String m_meshName = "Default_Name_Mesh";
 
-      /*
-      * @brief .
-      */
-      Vector<Matrix4x4> m_bonesTransform;
+    /*
+    * @brief .
+    */
+    Vector<Matrix4x4> m_bonesTransform;
 
-      /*
-      * @brief Member to store vertex information.
-      */
-      Vector<Vertex> m_vVertices;
+    /*
+    * @brief Member to store vertex information.
+    */
+    Vector<Vertex> m_vVertices;
 
-      /*
-      * @brief Member to store index information.
-      */
-      Vector<uint32> m_vIndices;
+    /*
+    * @brief Member to store index information.
+    */
+    Vector<uint32> m_vIndices;
 
-      /*
-      * @brief .
-      */
-      SPtr<Vertex> m_vertexData;
+    /*
+    * @brief .
+    */
+    SPtr<Vertex> m_vertexData;
 
-      /*
-      * @brief .
-      */
-      SPtr<uint32> m_pIndex;
+    /*
+    * @brief .
+    */
+    SPtr<uint32> m_pIndex;
   };
 }

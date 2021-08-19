@@ -11,8 +11,9 @@
 #include "gaIndexBufferOGL.h"
 #include "stb_image.h"
 
-namespace gaEngineSDK {
+using std::cout;
 
+namespace gaEngineSDK {
   String
   ReadShaderOGL(const WString& _nameVS) {
     IfStream shaderFile;
@@ -30,12 +31,12 @@ namespace gaEngineSDK {
       return shaderStream.str();
     }
     catch (IfStream::failure e) {
-      std::cout << "ERROR, no se pudo leer el shader\n";
+      cout << "ERROR, no se pudo leer el shader\n";
       return "";
     }
   }
 
-  bool 
+  bool
   AnalyzeVertexShaderOGL(const WString& _nameVS) {
     String bufferAnalyze;
 
@@ -44,11 +45,11 @@ namespace gaEngineSDK {
       bufferAnalyze += _nameVS[i];
 
       if (('_' == bufferAnalyze[i]) &&
-          ("data/shaders/OGL_" != bufferAnalyze)) {
+        ("data/shaders/OGL_" != bufferAnalyze)) {
         return false;
       }
       else if (('_' == bufferAnalyze[i]) &&
-               ("data/shaders/OGL_" == bufferAnalyze)) {
+        ("data/shaders/OGL_" == bufferAnalyze)) {
         return true;
       }
     }
@@ -56,7 +57,7 @@ namespace gaEngineSDK {
     return false;
   }
 
-  bool 
+  bool
   AnalyzePixelShaderOGL(const WString& _namePS) {
     String bufferAnalyze;
 
@@ -65,18 +66,18 @@ namespace gaEngineSDK {
       bufferAnalyze += _namePS[i];
 
       if (('_' == bufferAnalyze[i]) &&
-          ("data/shaders/OGL_" != bufferAnalyze)) {
+        ("data/shaders/OGL_" != bufferAnalyze)) {
         return false;
       }
       else if (('_' == bufferAnalyze[i]) &&
-               ("data/shaders/OGL_" == bufferAnalyze)) {
+        ("data/shaders/OGL_" == bufferAnalyze)) {
         return true;
       }
     }
 
     return false;
   }
-  
+
   /***************************************************************************/
   /**
   * Destructor.
@@ -87,14 +88,14 @@ namespace gaEngineSDK {
     // delete the rendering context  
     wglDeleteContext(m_renderingContext);
   }
-  
+
   /***************************************************************************/
   /**
   * Inheritance methods.
   */
   /***************************************************************************/
-  
-  bool 
+
+  bool
   GraphicsApiOGL::initDevice(sf::WindowHandle hWnd) {
 
     PIXELFORMATDESCRIPTOR pfd = {
@@ -153,13 +154,13 @@ namespace gaEngineSDK {
 
     return true;
   }
-  
-  void 
+
+  void
   GraphicsApiOGL::drawIndex(uint32 indexCount,
                             uint32 startIndexLocation,
                             uint32 baseVertexLocation) {
     glDrawElements(m_topology, indexCount,
-                   GL_UNSIGNED_INT, 0);
+      GL_UNSIGNED_INT, 0);
 
     uint32 detectError = glGetError();
 
@@ -167,20 +168,19 @@ namespace gaEngineSDK {
       exit(1);
     }
   }
-  
-  void 
-  GraphicsApiOGL::swapChainPresent(uint32 syncInterval,
-                                   uint32 flags) {
+
+  void
+  GraphicsApiOGL::swapChainPresent(uint32 syncInterval, uint32 flags) {
     SwapBuffers(m_HandleToDC);
   }
-  
+
   Textures*
   GraphicsApiOGL::loadTextureFromFile(String srcFile) {
     int32 width;
     int32 height;
     int32 components;
     unsigned char* data = stbi_load(srcFile.c_str(),
-                                    &width, &height, &components, 0);
+      &width, &height, &components, 0);
     if (!data) {
       return nullptr;
       stbi_image_free(data);
@@ -221,27 +221,27 @@ namespace gaEngineSDK {
       return texture;
     }
   }
-  
+
   void GraphicsApiOGL::unbindOGL() {
     glUseProgram(0);
   }
 
-  Matrix4x4 
+  Matrix4x4
   GraphicsApiOGL::matrixPolicy(const Matrix4x4& mat4x4) {
     return mat4x4;
   }
-  
+
   /***************************************************************************/
   /**
   * Updates.
   */
   /***************************************************************************/
-  
-  void 
+
+  void
   GraphicsApiOGL::updateConstantBuffer(const void* srcData,
                                        WeakSPtr<ConstantBuffer> updateDataCB) {
     if (nullptr == &updateDataCB) {
-      throw new std::exception("Error, parametro de ConstanBuffer nulo OGL");
+      throw new std::exception("Error, de ConstanBuffer nulo OGL");
     }
 
     ConstantBufferOGL* UBO = reinterpret_cast<ConstantBufferOGL*>(updateDataCB.lock().get());
@@ -256,34 +256,36 @@ namespace gaEngineSDK {
       throw new std::exception("Error, al actualizar el Constant Buffer OGL");
     }
   }
-  
+
   /***************************************************************************/
   /**
   * Clears.
   */
   /***************************************************************************/
-  
-  void 
+
+  void
   GraphicsApiOGL::clearYourRenderTargetView(WeakSPtr<Textures> renderTarget, Vector4 rgba) {
     glClearColor(rgba.x, rgba.y, rgba.z, rgba.w);
 
     glClear(GL_COLOR_BUFFER_BIT);
   }
-  
-  void 
+
+  void
   GraphicsApiOGL::clearYourDepthStencilView(WeakSPtr<Textures> depthStencil) {
     glClear(GL_DEPTH_BUFFER_BIT);
   }
-  
+
   /***************************************************************************/
   /**
   * Creates.
   */
   /***************************************************************************/
-  
-  Shaders* 
-  GraphicsApiOGL::createShadersProgram(const WString& nameVS, const String& entryPointVS, 
-                                       const WString& namePS, const String& entryPointPS) {
+
+  Shaders*
+  GraphicsApiOGL::createShadersProgram(const WString& nameVS, 
+                                       const String& entryPointVS,
+                                       const WString& namePS, 
+                                       const String& entryPointPS) {
     if (!(AnalyzeVertexShaderOGL(nameVS))) {
       throw new std::exception("Error, no se encontro vertex shader OGL");
     }
@@ -409,21 +411,21 @@ namespace gaEngineSDK {
     return shaders;
   }
 
-  SPtr<VertexShader> 
-  GraphicsApiOGL::loadVertexShaderFromFile(const char* vertexFilePath, 
-                                           const char* vertexMainFuntion, 
+  SPtr<VertexShader>
+  GraphicsApiOGL::loadVertexShaderFromFile(const char* vertexFilePath,
+                                           const char* vertexMainFuntion,
                                            const char* shaderVersion) {
     return SPtr<VertexShader>();
   }
 
-  SPtr<PixelShader> 
-  GraphicsApiOGL::loadPixelShaderFromFile(const char* pixelFilePath, 
-                                          const char* pixelMainFuntion, 
+  SPtr<PixelShader>
+  GraphicsApiOGL::loadPixelShaderFromFile(const char* pixelFilePath,
+                                          const char* pixelMainFuntion,
                                           const char* shaderVersion) {
     return SPtr<PixelShader>();
   }
-  
-  VertexBuffer* 
+
+  VertexBuffer*
   GraphicsApiOGL::createVertexBuffer(const void* data, const uint32 size) {
     auto* VBO = new VertexBufferOGL();
 
@@ -438,8 +440,8 @@ namespace gaEngineSDK {
 
     ///Copiamos los datos en el objeto de búfer
     glBufferData(GL_ARRAY_BUFFER,
-                 VBO->m_vertexBufferSize,
-                 data, GL_STATIC_DRAW);
+      VBO->m_vertexBufferSize,
+      data, GL_STATIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -452,8 +454,8 @@ namespace gaEngineSDK {
 
     return VBO;
   }
-  
-  IndexBuffer* 
+
+  IndexBuffer*
   GraphicsApiOGL::createIndexBuffer(const void* data, const uint32 size) {
     auto* EBO = new IndexBufferOGL();
 
@@ -467,7 +469,7 @@ namespace gaEngineSDK {
 
     ///Copiamos los datos en el objeto de búfer
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, EBO->m_indexBufferSize, data,
-                 GL_STATIC_DRAW);
+      GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
@@ -480,8 +482,8 @@ namespace gaEngineSDK {
 
     return EBO;
   }
-  
-  ConstantBuffer* 
+
+  ConstantBuffer*
   GraphicsApiOGL::createConstantBuffer(const uint32 bufferSize) {
     auto* UBO = new ConstantBufferOGL();
 
@@ -502,10 +504,12 @@ namespace gaEngineSDK {
 
     return UBO;
   }
-  
-  Textures* 
-  GraphicsApiOGL::createTexture(const uint32 width, const uint32 height,
-                                const uint32 bindFlags, TEXTURE_FORMAT::E textureFormat,
+
+  Textures*
+  GraphicsApiOGL::createTexture(const uint32 width, 
+                                const uint32 height,
+                                const uint32 bindFlags, 
+                                TEXTURE_FORMAT::E textureFormat,
                                 const String fileName) {
     auto* tex = new TexturesOGL();
 
@@ -550,7 +554,7 @@ namespace gaEngineSDK {
 
     return tex;
   }
-  
+
   SPtr<SamplerState>
   GraphicsApiOGL::createSamplerState() {
     auto* samplerState = new SamplerStateOGL();
@@ -570,8 +574,8 @@ namespace gaEngineSDK {
 
     return SPtr<SamplerState>(samplerState);
   }
-  
-  InputLayout* 
+
+  InputLayout*
   GraphicsApiOGL::createInputLayout(WeakSPtr<Shaders> vertexShader) {
     auto* inputLayout = new InputLayoutOGL();
     ShadersOGL* shader = reinterpret_cast<ShadersOGL*>(vertexShader.lock().get());
@@ -603,8 +607,8 @@ namespace gaEngineSDK {
       GLenum type = GL_ZERO;
 
       glGetActiveAttrib(shader->m_rendererID, uint32(i),
-                        sizeof(name) - 1, &name_len, &num,
-                        &type, name);
+        sizeof(name) - 1, &name_len, &num,
+        &type, name);
 
       name[name_len] = 0;
 
@@ -614,33 +618,33 @@ namespace gaEngineSDK {
       /// y asignar su offset correspondiente
       switch (type) {
 
-        case GL_FLOAT_VEC2:
-          sizeComponent = 2;
-          if (!firstOffSet) {
-            offSet += 8;
-          }
-          break;
-        
-        case GL_FLOAT_VEC3:
-          sizeComponent = 3;
-          if (!firstOffSet) {
-            offSet += 12;
-          }
-          break;
-        
-        case GL_FLOAT_VEC4:
-          sizeComponent = 4;
-          if (!firstOffSet) {
-            offSet += 16;
-          }
-          break;
+      case GL_FLOAT_VEC2:
+        sizeComponent = 2;
+        if (!firstOffSet) {
+          offSet += 8;
+        }
+        break;
 
-        case GL_INT_VEC4:
-          sizeComponent = 4;
-          if (!firstOffSet) {
-            offSet += 16;
-          }
-          break;
+      case GL_FLOAT_VEC3:
+        sizeComponent = 3;
+        if (!firstOffSet) {
+          offSet += 12;
+        }
+        break;
+
+      case GL_FLOAT_VEC4:
+        sizeComponent = 4;
+        if (!firstOffSet) {
+          offSet += 16;
+        }
+        break;
+
+      case GL_INT_VEC4:
+        sizeComponent = 4;
+        if (!firstOffSet) {
+          offSet += 16;
+        }
+        break;
       }
 
       glVertexAttribFormat(location, sizeComponent, GL_FLOAT, false, offSet);
@@ -666,19 +670,23 @@ namespace gaEngineSDK {
     return inputLayout;
   }
 
-  SPtr<RenderTarget> 
-  GraphicsApiOGL::createRenderTarget(uint32 width, uint32 heigth, uint32 mipLevels, 
-                                     uint32 numRenderTargets, float scale, bool depth) {
+  SPtr<RenderTarget>
+  GraphicsApiOGL::createRenderTarget(uint32 width, 
+                                     uint32 heigth, 
+                                     uint32 mipLevels,
+                                     uint32 numRenderTargets, 
+                                     float scale, 
+                                     bool depth) {
     return nullptr;
   }
-  
+
   /***************************************************************************/
   /**
   * Sets.
   */
   /***************************************************************************/
-  
-  void 
+
+  void
   GraphicsApiOGL::setPixelShader(WeakSPtr<Shaders> pixelShader) {
     ShadersOGL* shader = reinterpret_cast<ShadersOGL*>(pixelShader.lock().get());
 
@@ -690,8 +698,8 @@ namespace gaEngineSDK {
       exit(1);
     }
   }
-  
-  void 
+
+  void
   GraphicsApiOGL::setVertexShader(WeakSPtr<Shaders> vertexShader) {
     ShadersOGL* shader = reinterpret_cast<ShadersOGL*>(vertexShader.lock().get());
 
@@ -703,34 +711,36 @@ namespace gaEngineSDK {
       exit(1);
     }
   }
-  
-  void 
+
+  void
   GraphicsApiOGL::setVertexBuffer(WeakSPtr<VertexBuffer> vertexBuffer) {
     if (nullptr == &vertexBuffer) {
-      throw new std::exception("Error, parametro nulo en set Vertex Buffer OGL");
+      throw new std::exception("Error, nulo en set Vertex Buffer OGL");
     }
 
     VertexBufferOGL* vertex = reinterpret_cast<VertexBufferOGL*>(vertexBuffer.lock().get());
 
     glBindVertexBuffer(0, vertex->m_vertexBufferObject, 0, sizeof(Vertex));
   }
-  
-  void 
+
+  void
   GraphicsApiOGL::setIndexBuffer(WeakSPtr<IndexBuffer> indexBuffer) {
     if (nullptr == &indexBuffer) {
-      throw new std::exception("Error, parametro nulo en set Index Buffer OGL");
+      throw new std::exception("Error, nulo en set Index Buffer OGL");
     }
 
     IndexBufferOGL* index = reinterpret_cast<IndexBufferOGL*>(indexBuffer.lock().get());
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index->m_indexBufferObject);
   }
-  
-  void 
-  GraphicsApiOGL::setConstantBuffer(bool isVertex, WeakSPtr<ConstantBuffer> constantBuffer,
-                                    const uint32 startSlot, const uint32 numBuffers) {
+
+  void
+  GraphicsApiOGL::setConstantBuffer(bool isVertex, 
+                                    WeakSPtr<ConstantBuffer> constantBuffer,
+                                    const uint32 startSlot,
+                                    const uint32 numBuffers) {
     ConstantBufferOGL* cBuffer =
-                       reinterpret_cast<ConstantBufferOGL*>(constantBuffer.lock().get());
+      reinterpret_cast<ConstantBufferOGL*>(constantBuffer.lock().get());
 
     glBindBuffer(GL_UNIFORM_BUFFER, cBuffer->m_uniformBufferObject);
 
@@ -740,9 +750,10 @@ namespace gaEngineSDK {
       exit(1);
     }
   }
-  
-  void 
-  GraphicsApiOGL::setSamplerState(WeakSPtr<SamplerState> sampler, uint32 startSlot, 
+
+  void
+  GraphicsApiOGL::setSamplerState(WeakSPtr<SamplerState> sampler, 
+                                  uint32 startSlot,
                                   uint32 numSamplers) {
     if (nullptr != sampler.lock().get()) {
       //uint32 tempSize = texture.size();
@@ -761,19 +772,21 @@ namespace gaEngineSDK {
     }
   }
 
-  void 
-  GraphicsApiOGL::setSamplerVertexShader(WeakSPtr<SamplerState> sampler, uint32 startSlot, 
+  void
+  GraphicsApiOGL::setSamplerVertexShader(WeakSPtr<SamplerState> sampler, 
+                                         uint32 startSlot,
                                          uint32 numSamplers) {
   }
 
   void
-  GraphicsApiOGL::setSamplerPixelShader(WeakSPtr<SamplerState> sampler, uint32 startSlot, 
+  GraphicsApiOGL::setSamplerPixelShader(WeakSPtr<SamplerState> sampler, 
+                                        uint32 startSlot,
                                         uint32 numSamplers) {
   }
 
-  
+
   void
-  GraphicsApiOGL::setShaderResourceView(const Vector<Textures*>& texture, 
+  GraphicsApiOGL::setShaderResourceView(const Vector<Textures*>& texture,
                                         const uint32 startSlot,
                                         const uint32 numViews) {
     uint32 tempSize = texture.size();
@@ -792,9 +805,9 @@ namespace gaEngineSDK {
       }
     }
   }
-  
+
   void
-  GraphicsApiOGL::setRenderTarget(WeakSPtr<Textures> renderTarget,
+  GraphicsApiOGL::setRenderTarget(WeakSPtr<Textures> renderTarget, 
                                   WeakSPtr<Textures> depthStencil) {
     if (nullptr != renderTarget.lock().get()) {
       TexturesOGL* rTarget = reinterpret_cast<TexturesOGL*>(renderTarget.lock().get());
@@ -803,8 +816,8 @@ namespace gaEngineSDK {
       glBindFramebuffer(GL_FRAMEBUFFER, rTarget->m_framebuffer);
 
       glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH24_STENCIL8,
-                                GL_RENDERBUFFER, 
-                                dStencil->m_renderBufferObject);
+        GL_RENDERBUFFER,
+        dStencil->m_renderBufferObject);
 
       uint32 detectError = glGetError();
 
@@ -815,49 +828,50 @@ namespace gaEngineSDK {
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
   }
-  
-  void 
+
+  void
   GraphicsApiOGL::setDepthStencil(WeakSPtr<Textures> depthStencil, const uint32 stencilRef) {}
-  
-  void 
+
+  void
   GraphicsApiOGL::setInputLayout(WeakSPtr<InputLayout> vertexLayout) {
     if (nullptr == &vertexLayout) {
-      throw new std::exception("Error, parametro nulo en set Input Layout OGL");
+      throw new std::exception("Error, nulo en set Input Layout OGL");
     }
 
     InputLayoutOGL* inputLayout = reinterpret_cast<InputLayoutOGL*>(vertexLayout.lock().get());
 
     glBindVertexArray(inputLayout->m_inputLayout);
   }
-  
-  void 
-  GraphicsApiOGL::setViewports(const uint32 width, const uint32 heigth, 
+
+  void
+  GraphicsApiOGL::setViewports(const uint32 width, 
+                               const uint32 heigth, 
                                const uint32 numViewports) {
     glViewport(0, 0, width, heigth);
   }
-  
-  void 
+
+  void
   GraphicsApiOGL::setPrimitiveTopology(const uint32 topology) {
     switch (topology) {
-      case PRIMITIVE_TOPOLOGY::E::kPointList:
-        m_topology = GL_POINTS;
-        break;
-      
-      case PRIMITIVE_TOPOLOGY::E::kLineList:
-        m_topology = GL_LINES;
-        break;
-      
-      case PRIMITIVE_TOPOLOGY::E::kLineStrip:
-        m_topology = GL_LINE_STRIP;
-        break;
-      
-      case PRIMITIVE_TOPOLOGY::E::kTriangleList:
-        m_topology = GL_TRIANGLES;
-        break;
-      
-      case PRIMITIVE_TOPOLOGY::E::kTriangleStrip:
-        m_topology = GL_TRIANGLE_STRIP;
-        break;
+    case PRIMITIVE_TOPOLOGY::E::kPointList:
+      m_topology = GL_POINTS;
+      break;
+
+    case PRIMITIVE_TOPOLOGY::E::kLineList:
+      m_topology = GL_LINES;
+      break;
+
+    case PRIMITIVE_TOPOLOGY::E::kLineStrip:
+      m_topology = GL_LINE_STRIP;
+      break;
+
+    case PRIMITIVE_TOPOLOGY::E::kTriangleList:
+      m_topology = GL_TRIANGLES;
+      break;
+
+    case PRIMITIVE_TOPOLOGY::E::kTriangleStrip:
+      m_topology = GL_TRIANGLE_STRIP;
+      break;
     }
 
     uint32 detectError = glGetError();
@@ -866,48 +880,51 @@ namespace gaEngineSDK {
       exit(1);
     }
   }
-  
-  void 
+
+  void
   GraphicsApiOGL::setYourVS(WeakSPtr<Shaders> vertexShader) {}
-  
+
   void
   GraphicsApiOGL::setYourVSConstantBuffers(WeakSPtr<ConstantBuffer> constantBuffer,
-                                           const uint32 startSlot, const uint32 numBuffers) {
+                                           const uint32 startSlot, 
+                                           const uint32 numBuffers) {
     if (nullptr == constantBuffer.lock().get()) {
-      throw new std::exception("Error, parametro nulo en set Your Const Buff OGL");
+      throw new std::exception("Error, nulo en set Your Const Buff OGL");
     }
 
-    ConstantBufferOGL* cBuffer = 
+    ConstantBufferOGL* cBuffer =
                        reinterpret_cast<ConstantBufferOGL*>(constantBuffer.lock().get());
 
     glBindBufferBase(GL_UNIFORM_BUFFER, startSlot, cBuffer->m_uniformBufferObject);
   }
-  
-  void 
+
+  void
   GraphicsApiOGL::setYourPS(WeakSPtr<Shaders> pixelShader) {}
-  
-  void 
+
+  void
   GraphicsApiOGL::setYourPSConstantBuffers(WeakSPtr<ConstantBuffer> constantBuffer,
-                                           const uint32 startSlot, const uint32 numBuffers) {
+                                           const uint32 startSlot, 
+                                           const uint32 numBuffers) {
     if (nullptr == constantBuffer.lock().get()) {
-      throw new std::exception("Error, parametro nulo en set Your Pixel Shader Const Buff OGL");
+      throw new std::exception("Error, nulo en set Your Pixel Shader Const Buff OGL");
     }
 
-    ConstantBufferOGL* cBuffer = 
+    ConstantBufferOGL* cBuffer =
                        reinterpret_cast<ConstantBufferOGL*>(constantBuffer.lock().get());
 
     glBindBufferBase(GL_UNIFORM_BUFFER, startSlot,
-                     cBuffer->m_uniformBufferObject);
+      cBuffer->m_uniformBufferObject);
   }
-  
+
   void
-  GraphicsApiOGL::setYourPSSampler(WeakSPtr<SamplerState> sampler, const uint32 startSlot,
+  GraphicsApiOGL::setYourPSSampler(WeakSPtr<SamplerState> sampler, 
+                                   const uint32 startSlot,
                                    const uint32 numSamplers) {}
-  
+
   void
   GraphicsApiOGL::setShaders(WeakSPtr<Shaders> shaders) {
     if (nullptr == &shaders) {
-      throw new std::exception("Error, parametro nulo en set Shaders OGL");
+      throw new std::exception("Error, nulo en set Shaders OGL");
     }
 
     ShadersOGL* shader = reinterpret_cast<ShadersOGL*>(shaders.lock().get());
@@ -915,7 +932,7 @@ namespace gaEngineSDK {
     glUseProgram(shader->m_rendererID);
   }
 
-  void 
+  void
   GraphicsApiOGL::setConstBufferBones(WeakSPtr<ConstantBuffer> cbBones) {
   }
 
@@ -931,7 +948,7 @@ namespace gaEngineSDK {
   Textures*
   GraphicsApiOGL::getDefaultDepthStencil() { return nullptr; }
 
-  SPtr<ConstantBuffer> 
+  SPtr<ConstantBuffer>
   GraphicsApiOGL::getConstBufferBones() {
     return SPtr<ConstantBuffer>();
   }

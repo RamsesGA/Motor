@@ -11,7 +11,7 @@ namespace gaEngineSDK {
 
   class GA_CORE_EXPORT StaticMesh : public Component
   {
-  public:
+   public:
     /*************************************************************************/
     /*
     * Constructor and destructor.
@@ -50,7 +50,7 @@ namespace gaEngineSDK {
     */
     SPtr<Models> m_pModel;
 
-  private: 
+   private:
     /*
     * @brief .
     */

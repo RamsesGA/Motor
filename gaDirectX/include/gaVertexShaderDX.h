@@ -6,30 +6,33 @@
 namespace gaEngineSDK {
   class VertexShaderDX final : public VertexShader
   {
-    public:
-      /***********************************************************************/
-      /**
-      * Constructor and destructor.
-      */
-      /***********************************************************************/
-      VertexShaderDX() = default;
-    
-      /**
-       * @brief Default destructor
-       */
-      ~VertexShaderDX() = default;
-    
-    protected:
-      /**
-       * @brief pointer to direct 11 VertexShader class
-       */
-      ID3D11VertexShader* m_pVertexShader = nullptr;
-    
-      /**
-       * @brief pointer to direct 11 Blob class
-       */
-      ID3DBlob* m_pVSBlob = nullptr;
+   public:
+    /*************************************************************************/
+    /**
+    * Constructor and destructor.
+    */
+    /*************************************************************************/
+    VertexShaderDX() = default;
 
-      friend class GraphicsApiDX;
+    ~VertexShaderDX() = default;
+
+   protected:
+    /*************************************************************************/
+    /**
+    * Members.
+    */
+    /*************************************************************************/
+
+    /**
+     * @brief pointer to direct 11 VertexShader class
+     */
+    ID3D11VertexShader* m_pVertexShader = nullptr;
+
+    /**
+     * @brief pointer to direct 11 Blob class
+     */
+    ID3DBlob* m_pVSBlob = nullptr;
+
+    friend class GraphicsApiDX;
   };
 }

@@ -5,30 +5,33 @@
 namespace gaEngineSDK {
   class VertexShaderOGL final : public VertexShader
   {
-    public:
-      /***********************************************************************/
-      /**
-      * Constructor and destructor.
-      */
-      /***********************************************************************/
-      VertexShaderOGL() = default;
+   public:
+    /*************************************************************************/
+    /**
+    * Constructor and destructor.
+    */
+    /*************************************************************************/
+    VertexShaderOGL() = default;
     
-      /**
-       * @brief Default destructor
-       */
-      ~VertexShaderOGL() = default;
-    
-    protected:
-      /**
-      * @brief Member to save position information
-      */
-      uint32 m_vertexShader;
+    ~VertexShaderOGL() = default;
 
-      /**
-      * @brief Member to link the program.
-      */
-      uint32_t m_rendererID;
+   protected:
+    /*************************************************************************/
+    /**
+    * Members.
+    */
+    /*************************************************************************/
+
+    /**
+    * @brief Member to save position information
+    */
+    uint32 m_vertexShader;
     
-      friend class GraphicsApiOGL;
+    /**
+    * @brief Member to link the program.
+    */
+    uint32_t m_rendererID;
+    
+    friend class GraphicsApiOGL;
   };
 }

@@ -6,47 +6,47 @@
 namespace gaEngineSDK {
   class GA_CORE_EXPORT Materials : public Resource
   {
-    public:
-      /***********************************************************************/
-      /*
-      * Constructor and destructor.
-      */
-      /***********************************************************************/
-      Materials() = default;
-      
-      ~Materials() = default;
+   public:
+    /*************************************************************************/
+    /*
+    * Constructor and destructor.
+    */
+    /*************************************************************************/
+    Materials() = default;
 
-      void
-      setTexture(String typeTexture, String file, String textureName);
+    ~Materials() = default;
 
-      /***********************************************************************/
-      /*
-      * Inheritance.
-      */
-      /***********************************************************************/
+    void
+    setTexture(String typeTexture, String file, String textureName);
 
-      void
-      loadFromFile(const String& file) override;
+    /*************************************************************************/
+    /*
+    * Inheritance.
+    */
+    /*************************************************************************/
 
-      /***********************************************************************/
-      /*
-      * Members.
-      */
-      /***********************************************************************/
+    void
+    loadFromFile(const String& file) override;
 
-      /*
-      * @brief .
-      */
-      String m_matName;
+    /*************************************************************************/
+    /*
+    * Members.
+    */
+    /*************************************************************************/
 
-      /*
-      * @brief .
-      */
-      String m_typeTexture;
+    /*
+    * @brief .
+    */
+    String m_matName;
 
-      /*
-      * @brief .
-      */
-      Vector<Textures*> m_vTextures;
+    /*
+    * @brief .
+    */
+    String m_typeTexture;
+
+    /*
+    * @brief .
+    */
+    Vector<Textures*> m_vTextures;
   };
 }

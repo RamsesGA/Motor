@@ -4,7 +4,6 @@
 #include "gaResource.h"
 
 namespace gaEngineSDK {
-
   /**
   * @brief Enum with all numbers with the type of bind flag for DX.
   */
@@ -125,32 +124,31 @@ namespace gaEngineSDK {
     };
   }
 
-	class Textures : public Resource
-	{
-	  public:
-	  	/***********************************************************************/
-	  	/**
-	  	* Constructor and destructor.
-	  	*/
-	  	/***********************************************************************/
-			Textures() = default;
+  class Textures : public Resource
+  {
+   public:
+    /*************************************************************************/
+    /**
+    * Constructor and destructor.
+    */
+    /*************************************************************************/
+    Textures() = default;
 
-      ~Textures() = default;
+    ~Textures() = default;
 
-      virtual void*
-      getTexture(uint32 index = 0) { return nullptr; };
+    virtual void*
+    getTexture(uint32 index = 0) { return nullptr; };
 
-      /***********************************************************************/
-      /*
-      * Inheritance.
-      */
-      /***********************************************************************/
+    /*************************************************************************/
+    /*
+    * Inheritance.
+    */
+    /*************************************************************************/
 
-      void
-      loadFromFile(const String& file) override {
+    void
+    loadFromFile(const String& file) override {
+    }
 
-      }
-
-      String m_textureName;
-	};
+    String m_textureName;
+  };
 }

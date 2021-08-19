@@ -95,5 +95,4 @@ namespace gaEngineSDK {
   SceneNode::getChildNodes() {
     return m_pChildNodes;
   }
-  
 }

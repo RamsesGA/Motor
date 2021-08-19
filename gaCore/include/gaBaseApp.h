@@ -13,156 +13,155 @@ using sf::VideoMode;
 using sf::WindowHandle;
 
 namespace gaEngineSDK {
-
   class SceneGraph;
   class ResourceManager;
 
   class GA_CORE_EXPORT BaseApp
   {
-    public:
-      /***********************************************************************/
-      /*
-      * Constructor and destructor.
-      */
-      /***********************************************************************/
-      BaseApp() = default;
+   public:
+    /*************************************************************************/
+    /*
+    * Constructor and destructor.
+    */
+    /*************************************************************************/
+    BaseApp() = default;
 
-      virtual 
-      ~BaseApp() = default;
+    virtual
+    ~BaseApp() = default;
 
-      /***********************************************************************/
-      /*
-      * Methods.
-      */
-      /***********************************************************************/
+    /*************************************************************************/
+    /*
+    * Methods.
+    */
+    /*************************************************************************/
 
-      /*
-      * @brief Run is the function that starts the 
-      *        entire creation and initialization process.
-      * @param windowTitle, assigning a name.
-      * @param sizeX, screen size x.
-      * @param sizeY, screen size y.
-      * @return Return 0 or 1 to confirm the function.
-      */
-      int32
-      run(String windowTitle, int32 sizeX = 1440, int32 sizeY = 900);
+    /*
+    * @brief Run is the function that starts the
+    *      entire creation and initialization process.
+    * @param windowTitle, assigning a name.
+    * @param sizeX, screen size x.
+    * @param sizeY, screen size y.
+    * @return Return 0 or 1 to confirm the function.
+    */
+    int32
+    run(String windowTitle, int32 sizeX = 1440, int32 sizeY = 900);
 
-      /*
-      * @brief Load the DLL and initialize the graphic api.
-      * @return Return 0 or 1 to confirm the function.
-      */
-      int32
-      initSys();
+    /*
+    * @brief Load the DLL and initialize the graphic api.
+    * @return Return 0 or 1 to confirm the function.
+    */
+    int32
+    initSys();
 
-      /*
-      * @brief Keyboard or mouse detection.
-      * @param windowEvent, input detected on screen.
-      * @param deltaTime, time elapsed since the last frame.
-      */
-      void
-      handleWindowEvents(Event& windowEvent, const float& deltaTime);
+    /*
+    * @brief Keyboard or mouse detection.
+    * @param windowEvent, input detected on screen.
+    * @param deltaTime, time elapsed since the last frame.
+    */
+    void
+    handleWindowEvents(Event& windowEvent, const float& deltaTime);
 
-    protected:
-      /*
-      * @brief Create the information for the window.
-      * @param windowTitle, assigning a name..
-      */
-      void
-      createWindow(String windowTitle);
+   protected:
+    /*
+    * @brief Create the information for the window.
+    * @param windowTitle, assigning a name..
+    */
+    void
+    createWindow(String windowTitle);
 
-      /*
-      * @brief Command to call the onResize function.
-      * @param width, screen size x.
-      * @param height, screen size y.
-      */
-      void
-      resize(int32 width, int32 height);
+    /*
+    * @brief Command to call the onResize function.
+    * @param width, screen size x.
+    * @param height, screen size y.
+    */
+    void
+    resize(int32 width, int32 height);
 
-      /***********************************************************************/
-      /*
-      * On Methods (virtual).
-      */
-      /***********************************************************************/
+    /*************************************************************************/
+    /*
+    * On Methods (virtual).
+    */
+    /*************************************************************************/
 
-      /*
-      * @brief Initialize the camera and all its default values.
-      */
-      virtual void
-      onInitCamera() { };
+    /*
+    * @brief Initialize the camera and all its default values.
+    */
+    virtual void
+    onInitCamera() { };
 
-      /*
-      * @brief Update the constant buffer of the api.
-      * @param deltaTime, time elapsed since the last frame.
-      */
-      virtual void
-      onUpdate(float deltaTime) { };
+    /*
+    * @brief Update the constant buffer of the api.
+    * @param deltaTime, time elapsed since the last frame.
+    */
+    virtual void
+    onUpdate(float deltaTime) { };
 
-      /*
-      * @brief Save new data, update other and clean old data.
-      */
-      virtual void
-      onRender() { };
+    /*
+    * @brief Save new data, update other and clean old data.
+    */
+    virtual void
+    onRender() { };
 
-      /*
-      * @brief Create the data for the api and confirm that everything exists without problem.
-      */
-      virtual void
-      onCreate() { };
+    /*
+    * @brief Create the data for the api and confirm that everything exists without problem.
+    */
+    virtual void
+    onCreate() { };
 
-      /*
-      * @brief Delete variables to end the program.
-      */
-      virtual void
-      onDestroySystem() { };
+    /*
+    * @brief Delete variables to end the program.
+    */
+    virtual void
+    onDestroySystem() { };
 
-      /*
-      * @brief Detect keyboard input.
-      * @param param, SFML event to know the input pressed.
-      * @param deltaTime, time elapsed since the last frame.
-      */
-      virtual void
-      onKeyboardDown(sf::Event param, const float& deltaTime) { };
+    /*
+    * @brief Detect keyboard input.
+    * @param param, SFML event to know the input pressed.
+    * @param deltaTime, time elapsed since the last frame.
+    */
+    virtual void
+    onKeyboardDown(sf::Event param, const float& deltaTime) { };
 
-      /*
-      * @brief Indicates if the left mouse button is pressed.
-      */
-      virtual void
-      onLeftMouseBtnDown() { };
+    /*
+    * @brief Indicates if the left mouse button is pressed.
+    */
+    virtual void
+    onLeftMouseBtnDown() { };
 
-      /*
-      * @brief Indicates whether the left mouse button was lifted.
-      */
-      virtual void
-      onLeftMouseBtnUp() { };
+    /*
+    * @brief Indicates whether the left mouse button was lifted.
+    */
+    virtual void
+    onLeftMouseBtnUp() { };
 
-      /*
-      * @brief Detects if the mouse is moving on the screen.
-      */
-      virtual void
-      onMouseMove() { };
+    /*
+    * @brief Detects if the mouse is moving on the screen.
+    */
+    virtual void
+    onMouseMove() { };
 
-    protected:
-      /***********************************************************************/
-      /*
-      * Members.
-      */
-      /***********************************************************************/
+   protected:
+    /*************************************************************************/
+    /*
+    * Members.
+    */
+    /*************************************************************************/
 
-      /*
-      * @param Members with screen size.
-      */
-      uint32 m_width = 0;
-      uint32 m_height = 0;
+    /*
+    * @param Members with screen size.
+    */
+    uint32 m_width = 0;
+    uint32 m_height = 0;
 
-      /*
-      * @param Members with window size and position.
-      */    
-      Vector2I m_windowSize;
-      Vector2I m_windowPosition;
+    /*
+    * @param Members with window size and position.
+    */
+    Vector2I m_windowSize;
+    Vector2I m_windowPosition;
 
-      /*
-      * @param SFML member with window information.
-      */
-      Window m_sfmlWindow;
+    /*
+    * @param SFML member with window information.
+    */
+    Window m_sfmlWindow;
   };
 }

@@ -5,15 +5,15 @@
 namespace gaEngineSDK {
   class VertexShader
   {
-    public:
-      /***********************************************************************/
-      /**
-      * Constructor and destructor.
-      */
-      /***********************************************************************/
-      VertexShader() = default;
+   public:
+    /*************************************************************************/
+    /**
+    * Constructor and destructor.
+    */
+    /*************************************************************************/
+    VertexShader() = default;
 
-      virtual 
-      ~VertexShader() {};
+    virtual
+    ~VertexShader() {};
   };
 }

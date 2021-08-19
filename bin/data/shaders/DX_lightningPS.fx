@@ -35,13 +35,13 @@ cbuffer linkToCBLightning : register(b2)
   float emissiveIntensity;
   float lightIntensity0;
   float3 lightPos0;
-  float4 vViewPosition;
+  float3 vViewPosition;
 }
 
 //----------------------------------------------------------------------------
 struct PS_INPUT
 {
-  float4 position : POSITION0;
+  float4 position : SV_POSITION;
   float2 texCoord : TEXCOORD0;
 };
 

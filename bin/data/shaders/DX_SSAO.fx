@@ -9,7 +9,7 @@ Texture2D normalSampler : register(t1);
 SamplerState simpleSampler : register(s0);
 
 //----------------------------------------------------------------------------
-cbuffer linkTocbSSAO : register(b0)
+cbuffer linkTocbSSAO : register(b2)
 {
   float2 mViewportDimensions;
   float2 mNothing;
@@ -22,7 +22,7 @@ cbuffer linkTocbSSAO : register(b0)
 
 struct PS_INPUT
 {
-  float4 position : POSITION0;
+  float4 position : SV_POSITION;
   float2 texCoord : TEXCOORD0;
 };
 
@@ -77,7 +77,7 @@ PS_OUTPUT ps_ssao(PS_INPUT input)
   float2 randValue = GetRandom(input.texCoord);
 
   float ao = 0.0f;
-  float2 rad = mSample_radius / p.z;
+  float rad = mSample_radius / p.z;
 
   int iterators = 4;
   for (int j = 0; j < iterators; ++j)

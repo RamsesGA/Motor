@@ -3,7 +3,6 @@
 #include "gaResourceManager.h"
 
 namespace gaEngineSDK {
-
   int32 
   gaEngineSDK::BaseApp::run(String windowTitle, int32 sizeX, int32 sizeY) {
     m_width = sizeX;

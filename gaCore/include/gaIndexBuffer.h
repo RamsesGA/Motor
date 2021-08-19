@@ -1,19 +1,19 @@
 #pragma once
 
 namespace gaEngineSDK {
-	class IndexBuffer
-	{
-	  public:
-			/***********************************************************************/
-			/**
-			* Constructor and destructor.
-			*/
-			/***********************************************************************/
-			IndexBuffer() = default;
+  class IndexBuffer
+  {
+   public:
+    /*************************************************************************/
+    /**
+    * Constructor and destructor.
+    */
+    /*************************************************************************/
+    IndexBuffer() = default;
 
-			virtual 
-			~IndexBuffer() = default;
+    virtual
+    ~IndexBuffer() = default;
 
-			uint32 m_index = 0;
-	};
+    uint32 m_index = 0;
+  };
 }

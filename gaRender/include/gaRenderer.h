@@ -10,51 +10,55 @@
 namespace gaEngineSDK {
   class GA_RENDER_EXPORT Renderer : public Module<Renderer>
   {
-    public:
-      /***********************************************************************/
-      /**
-      * Constructor and destructor.
-      */
-      /***********************************************************************/
-      
-      Renderer() = default;
+   public:
+    /***********************************************************************/
+    /**
+    * Constructor and destructor.
+    */
+    /***********************************************************************/
 
-      virtual
-      ~Renderer() = default;
+    Renderer() = default;
 
-      /***********************************************************************/
-      /**
-      * Methods.
-      */
-      /***********************************************************************/
+    virtual
+    ~Renderer() = default;
 
-      /*
-      * @brief .
-      */
-      void
-      setObject(Renderer* api) {
-        Renderer::_instance() = api;
-      }
+    /***********************************************************************/
+    /**
+    * Methods.
+    */
+    /***********************************************************************/
 
-      /*
-      * @brief .
-      */
-      virtual void
-      init(void* wndHandle) { };
+    /*
+    * @brief .
+    */
+    void
+    setObject(Renderer* api) {
+      Renderer::_instance() = api;
+    }
 
-      /*
-      * @brief .
-      */
-      virtual void
-      update(const float& deltaTime) { };
+    /*
+    * @brief .
+    */
+    virtual void
+    init(void* wndHandle) { };
 
-      /*
-      * @brief .
-      */
-      virtual void
-      render() { };
+    /*
+    * @brief .
+    */
+    virtual void
+    update(const float& deltaTime) { };
 
+    /*
+    * @brief .
+    */
+    virtual void
+    render() { };
 
+    /*
+    * @brief .
+    */
+    virtual void
+    resize() { };
   };
 
   /***************************************************************************/

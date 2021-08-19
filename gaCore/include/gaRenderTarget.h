@@ -5,7 +5,7 @@
 namespace gaEngineSDK {
   class RenderTarget
   {
-  public:
+   public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
@@ -31,11 +31,11 @@ namespace gaEngineSDK {
     * @brief .
     */
     uint32
-    getID() { 
+    getID() {
       return m_id;
     };
 
-  private:
+   private:
     /*************************************************************************/
     /**
     * Members.

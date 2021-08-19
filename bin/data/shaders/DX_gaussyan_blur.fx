@@ -8,7 +8,7 @@ Texture2D inputImage : register(t0);
 
 SamplerState simpleSampler : register(s0);
 //----------------------------------------------------------------------------
-cbuffer linkToCBViewportDimension: register(b0)
+cbuffer linkToCBViewportDimension: register(b2)
 {
   float2 viewportDimensions;
   float2 mNothing;
@@ -17,6 +17,7 @@ cbuffer linkToCBViewportDimension: register(b0)
 //----------------------------------------------------------------------------
 struct PS_INPUT
 {
+  float4 position : SV_POSITION;
   float2 texCoord : TEXCOORD0;
 };
 
@@ -40,7 +41,8 @@ float4 ps_gaussian_blurH(PS_INPUT input) : SV_Target0
                         (float2(offset[i], 0.0f) / viewportDimensions)), g_gamma) * weight[i];
   }
   
-  return pow(fragmentColor, 1.0f/g_gamma);
+  fragmentColor = pow(fragmentColor, 1.0f/g_gamma);
+  return fragmentColor;
 }
 
 float4 ps_gaussian_blurV(PS_INPUT input) : SV_Target0
@@ -60,5 +62,6 @@ float4 ps_gaussian_blurV(PS_INPUT input) : SV_Target0
                         (float2(0.0f, offset[i]) / viewportDimensions)), g_gamma) * weight[i];
   }
   
-  return pow(fragmentColor, 1.0f/g_gamma);
+  fragmentColor = pow(fragmentColor, 1.0f/g_gamma);
+  return fragmentColor;
 }

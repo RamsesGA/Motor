@@ -25,12 +25,12 @@ struct VS_INPUT
   float3 biTangent   : BINORMAL0;
   float2 texCoords   : TEXCOORD0;
   float4 boneWeights : BLENDWEIGHT0;
-  uint4  boneIds      : BLENDINDICES0;
+  uint4  boneIds     : BLENDINDICES0;
 };
 
 struct VS_OUTPUT
 {
-  float4 position : POSITION0;
+  float4 position : SV_POSITION;
   float2 texCoord : TEXCOORD0;
 };
 
@@ -40,7 +40,7 @@ VS_OUTPUT vs_ssAligned(VS_INPUT input)
 
   output.position = input.position;
 
-  output.texCoord = input.texCoord;
+  output.texCoord = input.texCoords;
 
   return(output);
 }

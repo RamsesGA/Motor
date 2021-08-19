@@ -5,64 +5,63 @@
 #include "gaSceneNode.h"
 
 namespace gaEngineSDK {
-
   class Actor;
   class ResourceManager;
   class Models;
 
   class GA_CORE_EXPORT SceneGraph : public Module<SceneGraph>
   {
-    public:
-      /***********************************************************************/
-      /**
-      * Constructor and destructor.
-      */
-      /***********************************************************************/
-      
-      SceneGraph();
-      
-      ~SceneGraph() = default;
+   public:
+    /*************************************************************************/
+    /**
+    * Constructor and destructor.
+    */
+    /*************************************************************************/
 
-      /***********************************************************************/
-      /**
-      * Methods.
-      */
-      /***********************************************************************/
+    SceneGraph();
 
-      /*
-      * @brief .
-      */
-      void
-      update(const float& deltaTime);
+    ~SceneGraph() = default;
 
-      /*
-      * @brief .
-      */
-      void
-      render();
+    /*************************************************************************/
+    /**
+    * Methods.
+    */
+    /*************************************************************************/
 
-      /*
-      * @brief .
-      */
-      void
-      createNewActor(WeakSPtr<Actor> actor, WeakSPtr<SceneNode> parent);
+    /*
+    * @brief .
+    */
+    void
+    update(const float& deltaTime);
 
-    private:
-      /***********************************************************************/
-      /**
-      * Members.
-      */
-      /***********************************************************************/
+    /*
+    * @brief .
+    */
+    void
+    render();
 
-      /*
-      * @brief .
-      */
-      SPtr<SceneNode> m_root;
+    /*
+    * @brief .
+    */
+    void
+    createNewActor(WeakSPtr<Actor> actor, WeakSPtr<SceneNode> parent);
 
-      /*
-      * @brief .
-      */
-      SPtr<Models> m_accessModel;
+   private:
+    /*************************************************************************/
+    /**
+    * Members.
+    */
+    /*************************************************************************/
+
+    /*
+    * @brief .
+    */
+    SPtr<SceneNode> m_root;
+
+    /*
+    * @brief .
+    */
+    SPtr<Models> m_accessModel;
   };
 
   /***************************************************************************/

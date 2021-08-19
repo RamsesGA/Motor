@@ -1,17 +1,17 @@
 #pragma once
 
 namespace gaEngineSDK {
-	class ConstantBuffer
-	{
-	  public:
-			/***********************************************************************/
-	    /**
-	    * Constructor and destructor.
-	    */
-	    /***********************************************************************/
-			ConstantBuffer() = default;
+  class ConstantBuffer
+  {
+   public:
+    /*************************************************************************/
+    /**
+    * Constructor and destructor.
+    */
+    /*************************************************************************/
+    ConstantBuffer() = default;
 
-			virtual 
-			~ConstantBuffer() = default;
-	};
+    virtual
+    ~ConstantBuffer() = default;
+  };
 }

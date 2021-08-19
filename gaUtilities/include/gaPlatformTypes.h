@@ -1,8 +1,5 @@
 #pragma once
 
-/**
-* Includes
-*/
 #include <cstdint>
 #include "gaPlatformDefines.h"
 
@@ -15,7 +12,7 @@ namespace gaEngineSDK {
   using std::int16_t;
   using std::int32_t;
   using std::int64_t;
-
+  
   /**
   * Basic unsigned types
   */
@@ -23,7 +20,7 @@ namespace gaEngineSDK {
   using uint16 = uint16_t;  //16-bit unsigned
   using uint32 = uint32_t;  //32-bit unsigned
   using uint64 = uint64_t;  //64-bit unsigned
-
+  
   /**
   * Basic signed types
   */

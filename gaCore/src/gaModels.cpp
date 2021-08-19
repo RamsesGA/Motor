@@ -6,8 +6,10 @@
 #include "gaModels.h"
 #include "gaGraphicsApi.h"
 
-namespace gaEngineSDK {
+using std::make_shared;
+using std::pair;
 
+namespace gaEngineSDK {
   String g_texturesDirectory;
 
   Animations g_animInfo;
@@ -252,8 +254,7 @@ namespace gaEngineSDK {
         skeletal->bonesMap[boneName] = boneIndex;
 
         //Check if memcpy works
-        std::memcpy(&skeletal->vBones[boneIndex].offSet, &bone->mOffsetMatrix, 
-                    sizeof(Matrix4x4));
+        memcpy(&skeletal->vBones[boneIndex].offSet, &bone->mOffsetMatrix, sizeof(Matrix4x4));
 
         uint32 tempNumWeights = bone->mNumWeights;
         for (uint32 j = 0; j < tempNumWeights; ++j) {
@@ -301,7 +302,7 @@ namespace gaEngineSDK {
 
     uint32 tempNumAnims = pAScene->mNumAnimations;
     for (uint32 i = 0; i < tempNumAnims; ++i) {
-      SPtr<AnimationData> newAnimation = std::make_shared<AnimationData>();
+      SPtr<AnimationData> newAnimation = make_shared<AnimationData>();
 
       newAnimation->m_animationName = pAScene->mAnimations[i]->mName.C_Str();
       g_animInfo.setAnimName(newAnimation->m_animationName);
@@ -321,7 +322,7 @@ namespace gaEngineSDK {
       newAnimation->m_vChannels.resize(numCH);
 
       for (uint32 j = 0; j < numCH; ++j) {
-        SPtr<AnimationNode> newAnimNode = std::make_shared<AnimationNode>();
+        SPtr<AnimationNode> newAnimNode = make_shared<AnimationNode>();
 
         newAnimNode->m_nodeName =
           pAScene->mAnimations[i]->mChannels[j]->mNodeName.C_Str();
@@ -400,7 +401,7 @@ namespace gaEngineSDK {
 
   void
   loadModelNodes(WeakSPtr<ModelNodes> myNode, const aiNode* ainode) {
-    SPtr<ModelNodes> modelNode = std::make_shared<ModelNodes>();
+    SPtr<ModelNodes> modelNode = make_shared<ModelNodes>();
     modelNode = myNode.lock();
 
     uint32 num;
@@ -409,7 +410,7 @@ namespace gaEngineSDK {
     num = modelNode->m_numChildrens = (uint32)ainode->mNumChildren;
     modelNode->m_numMeshes = (uint32)ainode->mNumMeshes;
 
-    std::memcpy(&modelNode->m_transformMatrix, &ainode->mTransformation, sizeof(Matrix4x4));
+    memcpy(&modelNode->m_transformMatrix, &ainode->mTransformation, sizeof(Matrix4x4));
 
     modelNode->m_vChildrenNodes.resize(num);
 
@@ -477,7 +478,7 @@ namespace gaEngineSDK {
       //Found the material
     }
     else {
-      g_mMaterials[matId] = std::make_shared<Materials>();
+      g_mMaterials[matId] = make_shared<Materials>();
       SPtr<Materials> newMaterial = g_mMaterials[matId];
 
       aiString textureNames[6];
@@ -543,7 +544,7 @@ namespace gaEngineSDK {
         newMaterial->m_vTextures.push_back(nullptr);
       }
 
-      g_mMaterials.insert(std::pair<String, SPtr<Materials>>(texName, newMaterial));
+      g_mMaterials.insert(pair<String, SPtr<Materials>>(texName, newMaterial));
 
       if (0 != newMaterial->m_vTextures.size()) {
         for (uint32 i = 0; i < 6; ++i) {

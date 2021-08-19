@@ -3,6 +3,8 @@
 #include "gaModels.h"
 #include "gaResourceManager.h"
 
+using std::memcpy;
+
 namespace gaEngineSDK {
   void 
   Mesh::setUpMesh(Vector<Vertex> pVertices, Vector<uint32> pIndices, 
@@ -45,7 +47,7 @@ namespace gaEngineSDK {
 
     Matrix4x4 nodeTransform;
 
-    std::memcpy(&nodeTransform, &animNode->m_transformMatrix, sizeof(Matrix4x4));
+    memcpy(&nodeTransform, &animNode->m_transformMatrix, sizeof(Matrix4x4));
 
     const AnimationNode* animationNode = findNodeAnim(animation.get(), nodeName);
 

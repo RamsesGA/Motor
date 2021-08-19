@@ -15,249 +15,264 @@ namespace gaEngineSDK {
   class StaticMesh;
 }
 
-class AppTest : public BaseApp 
+class AppTest : public BaseApp
 {
-  public:
-    /*************************************************************************/
-    /*
-    * Constructor and destructor.
-    */
-    /*************************************************************************/
-    AppTest() = default;
-  
-    ~AppTest() = default;
-  
-    /*************************************************************************/
-    /*
-    * Inheritance.
-    */
-    /*************************************************************************/
+ public:
+  /***************************************************************************/
+  /*
+  * Constructor and destructor.
+  */
+  /***************************************************************************/
+  AppTest() = default;
 
-    void
-    onInitCamera();
+  ~AppTest() = default;
 
-    /*
-    * @brief .
-    */
-    void
-    onUpdate(float deltaTime) override;
+  /***************************************************************************/
+  /*
+  * Inheritance.
+  */
+  /***************************************************************************/
 
-    /*
-    * @brief .
-    */
-    void
-    onRender() override;
+  void
+  onInitCamera();
 
-    /*
-    * @brief .
-    */
-    void
-    onCreate() override;
+  /*
+  * @brief .
+  */
+  void
+  onUpdate(float deltaTime) override;
 
-    /*
-    * @brief .
-    */
-    void
-    onDestroySystem() override;
+  /*
+  * @brief .
+  */
+  void
+  onRender() override;
 
-    /*
-    * @brief .
-    */
-    void
-    onKeyboardDown(sf::Event param, const float& deltaTime) override;
+  /*
+  * @brief .
+  */
+  void
+  onCreate() override;
 
-    /*
-    * @brief .
-    */
-    void
-    onLeftMouseBtnDown() override;
+  /*
+  * @brief .
+  */
+  void
+  onDestroySystem() override;
 
-    /*
-    * @brief .
-    */
-    void
-    onLeftMouseBtnUp() override;
+  /*
+  * @brief .
+  */
+  void
+  onKeyboardDown(sf::Event param, const float& deltaTime) override;
 
-    /*
-    * @brief .
-    */
-    void
-    onMouseMove() override;
+  /*
+  * @brief .
+  */
+  void
+  onLeftMouseBtnDown() override;
 
-    /*************************************************************************/
-    /*
-    * Methods.
-    */
-    /*************************************************************************/
+  /*
+  * @brief .
+  */
+  void
+  onLeftMouseBtnUp() override;
 
-    /*
-    * @brief .
-    */
-    void
-    setRT_View();
+  /*
+  * @brief .
+  */
+  void
+  onMouseMove() override;
 
-    /*
-    * @brief .
-    */
-    void
-    setRTGbuffer();
+  /***************************************************************************/
+  /*
+  * Methods.
+  */
+  /***************************************************************************/
 
-    /*
-    * @brief .
-    */
-    void
-    setRT_SSAO();
+  /*
+  * @brief .
+  */
+  void
+  createNodePod();
 
-    /*
-    * @brief .
-    */
-    void
-    setBlurH();
+  /*
+  * @brief .
+  */
+  void
+  createNodeVela();
 
-    /*
-    * @brief .
-    */
-    void
-    setBlurV();
+  /*
+  * @brief .
+  */
+  void
+  createNodeTwoB();
 
-    /*
-    * @brief .
-    */
-    void
-    createNodePod();
+  /*
+  * @brief .
+  */
+  void
+  createNodeSpartan();
 
-    /*
-    * @brief .
-    */
-    void
-    createNodeVela();
+  /*
+  * @brief .
+  */
+  void
+  createNodeUgandan();
 
-    /*
-    * @brief .
-    */
-    void
-    createNodeTwoB();
+  /*
+  * @brief .
+  */
+  void
+  createNodeGrimoires();
 
-    /*
-    * @brief .
-    */
-    void
-    createNodeSpartan();
+  /*
+  * @brief .
+  */
+  void
+  createNodeRamlethalSwords();
 
-    /*
-    * @brief .
-    */
-    void
-    createNodeUgandan();
+  /*
+  * @brief .
+  */
+  void
+  createSAQ();
 
-    /*
-    * @brief .
-    */
-    void
-    createNodeGrimoires();
+  /***************************************************************************/
+  /*
+  * Sets.
+  */
+  /***************************************************************************/
 
-    /*
-    * @brief .
-    */
-    void
-    createNodeRamlethalSwords();
+  /*
+  * @brief .
+  */
+  void
+  setSAQ();
 
-    /*
-    * @brief .
-    */
-    void
-    createSAQ();
+  /*
+  * @brief .
+  */
+  void
+  setRTGbufferPass();
 
-    /*
-    * @brief .
-    */
-    void
-    setSAQ();
+  /*
+  * @brief .
+  */
+  void
+  setRT_SSAO_Pass();
 
-  public:
-    /*************************************************************************/
-    /*
-    * Members.
-    */
-    /*************************************************************************/
+  /*
+  * @brief .
+  */
+  void
+  setBlurH_Pass(void* texture);
 
-    /*
-    * @brief Variable with camera information.
-    */
-    Camera m_mainCamera;
+  /*
+  * @brief .
+  */
+  void
+  setBlurV_Pass(void* texture);
 
-    /*
-    * @brief 4x4 matrix of the world.
-    */
-    Matrix4x4 m_world;
+  /*
+  * @brief .
+  */
+  void
+  setAdditionPass(void* texture1, void* texture2);
 
-    /*
-    * @brief .
-    */
-    Vector4 m_rgba = { (87.0f / 255.0f), (35.0f / 255.0f), (100.0f / 255.0f), (255.0f) };
+  /*
+  * @brief .
+  */
+  void
+  setLightningPass();
 
-    /*
-    * @brief .
-    */
-    Vector<SPtr<StaticMesh>> m_vStaticMeshes;
+ public:
+  /***************************************************************************/
+  /*
+  * Members.
+  */
+  /***************************************************************************/
 
-    /*
-    * @brief .
-    */
-    SPtr<Models> m_SAQ;
+  /*
+  * @brief Variable with camera information.
+  */
+  Camera m_mainCamera;
 
-    /*
-    * @brief .
-    */
-    SPtr<ResourceManager> m_resourceInfo;
+  /*
+  * @brief 4x4 matrix of the world.
+  */
+  Matrix4x4 m_world;
 
-    /*
-    * @brief Variables with the information of the
-    *        render target and depth stencil, both of the texture class.
-    */
-    SPtr<Textures> m_pRenderTargetView;
-    SPtr<Textures> m_pDepthStencil;
-  
-    /*
-    * @brief Variable that stores the vertex layout data.
-    */
-    SPtr<InputLayout> m_pVertexLayout = nullptr;
-  
-    /*
-    * @brief Variable that saves the data of the shaders to be read.
-    */
-    SPtr<Shaders> m_pGBufferShader;
-    SPtr<Shaders> m_pSSAO_Shader;
-    SPtr<Shaders> m_pBlurH_Shader;
-    SPtr<Shaders> m_pBlurV_Shader;
-    SPtr<Shaders> m_pLightningShader;
+  /*
+  * @brief .
+  */
+  Vector4 m_rgba = { (0.0f / 255.0f), (35.0f / 255.0f), (100.0f / 255.0f), (255.0f) };
 
-    /*
-    * @brief Members for renter targets.
-    */
-    SPtr<RenderTarget> m_pGbufferRT;
-    SPtr<RenderTarget> m_pSSAO_RT;
-    SPtr<RenderTarget> m_pBlurH_RT;
-    SPtr<RenderTarget> m_pBlurV_RT;
-  
-    /*
-    * @brief Variable that stores the CB data.
-    */
-    SPtr<ConstantBuffer> m_pBufferCamera;
-    SPtr<ConstantBuffer> m_pBufferWorld;
-    SPtr<ConstantBuffer> m_pCBufferBones;
+  /*
+  * @brief .
+  */
+  Vector<SPtr<StaticMesh>> m_vStaticMeshes;
 
-    SPtr<ConstantBuffer> m_pCB_SSAO;
-    SPtr<ConstantBuffer> m_pCB_ViewPortDimension;
-    SPtr<ConstantBuffer> m_pCB_Lightning;
+  /*
+  * @brief .
+  */
+  SPtr<Models> m_SAQ;
 
-    /*
-    * @brief .
-    */
-    SPtr<Mesh> m_mesh;
+  /*
+  * @brief .
+  */
+  SPtr<ResourceManager> m_resourceInfo;
 
-    /*
-    * @brief .
-    */
-    SPtr<SamplerState> m_pSampler;
+  /*
+  * @brief Variables with the information of the
+  *    render target and depth stencil, both of the texture class.
+  */
+  SPtr<Textures> m_pRenderTargetView;
+  SPtr<Textures> m_pDepthStencil;
+
+  /*
+  * @brief Variable that stores the vertex layout data.
+  */
+  SPtr<InputLayout> m_pVertexLayout = nullptr;
+
+  /*
+  * @brief Variable that saves the data of the shaders to be read.
+  */
+  SPtr<Shaders> m_pGBufferShader;
+  SPtr<Shaders> m_pSSAO_Shader;
+  SPtr<Shaders> m_pBlurH_Shader;
+  SPtr<Shaders> m_pBlurV_Shader;
+  SPtr<Shaders> m_pLightningShader;
+  SPtr<Shaders> m_pAdditionShader;
+
+  /*
+  * @brief Members for renter targets.
+  */
+  SPtr<RenderTarget> m_pGbufferRT;
+  SPtr<RenderTarget> m_pSSAO_RT;
+  SPtr<RenderTarget> m_pBlurH_RT;
+  SPtr<RenderTarget> m_pBlurV_RT;
+  SPtr<RenderTarget> m_pLightningRT;
+  SPtr<RenderTarget> m_pAdditionRT;
+
+  /*
+  * @brief Variable that stores the CB data.
+  */
+  SPtr<ConstantBuffer> m_pBufferCamera;
+  SPtr<ConstantBuffer> m_pBufferWorld;
+  SPtr<ConstantBuffer> m_pCBufferBones;
+  SPtr<ConstantBuffer> m_pCB_SSAO;
+  SPtr<ConstantBuffer> m_pCB_ViewPortDimension;
+  SPtr<ConstantBuffer> m_pCB_Lightning;
+  SPtr<ConstantBuffer> m_pCB_MipLevels;
+
+  /*
+  * @brief .
+  */
+  SPtr<Mesh> m_mesh;
+
+  /*
+  * @brief .
+  */
+  SPtr<SamplerState> m_pSampler;
 };

@@ -6,7 +6,7 @@
 namespace gaEngineSDK {
   class RenderTargetDX final : public RenderTarget
   {
-  public:
+   public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
@@ -34,7 +34,7 @@ namespace gaEngineSDK {
       return m_renderTarget.m_vShaderResourceView[index];
     };
 
-  protected:
+   protected:
     /*************************************************************************/
     /**
     * Members.

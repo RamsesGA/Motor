@@ -4,29 +4,35 @@
 #include <gaInputLayout.h>
 
 namespace gaEngineSDK {
-	class InputLayoutDX final : public InputLayout
-	{
-	  public:
-			/***********************************************************************/
-			/**
-			* Constructor and destructor.
-			*/
-			/***********************************************************************/
-			InputLayoutDX() = default;
+  class InputLayoutDX final : public InputLayout
+  {
+   public:
+    /*************************************************************************/
+    /**
+    * Constructor and destructor.
+    */
+    /*************************************************************************/
+    InputLayoutDX() = default;
 
-			~InputLayoutDX() = default;
+    ~InputLayoutDX() = default;
 
-	  protected:
-			/**
-			* @brief DX member to save byte off set.
-			*/
-			uint32* m_inputLayoutByteLength = 0;
+   protected:
+    /*************************************************************************/
+    /**
+    * Members.
+    */
+    /*************************************************************************/
 
-			/**
-			* @brief DX member to save the vertex layout.
-			*/
-			ID3D11InputLayout* m_pVertexLayout = nullptr;
+    /**
+    * @brief DX member to save byte off set.
+    */
+    uint32* m_inputLayoutByteLength = 0;
 
-			friend class GraphicsApiDX;
-	};
+    /**
+    * @brief DX member to save the vertex layout.
+    */
+    ID3D11InputLayout* m_pVertexLayout = nullptr;
+
+    friend class GraphicsApiDX;
+  };
 }

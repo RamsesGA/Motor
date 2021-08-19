@@ -58,7 +58,6 @@
 #include <functional>
 
 namespace gaEngineSDK {
-
   /**
   * @brief
   */
@@ -81,10 +80,10 @@ namespace gaEngineSDK {
   * @brief
   */
   template<typename K,
-           typename V,
-           typename P = std::less<K>,
-           typename A = std::allocator<std::pair<const K, V>>>
-  using Map = std::map<K, V, P, A>;
+    typename V,
+    typename P = std::less<K>,
+    typename A = std::allocator<std::pair<const K, V>>>
+    using Map = std::map<K, V, P, A>;
 
   /**
   * @brief
@@ -96,9 +95,9 @@ namespace gaEngineSDK {
   * @brief
   */
   template<typename T,
-           typename P = std::less<T>,
-           typename A = std::allocator<T>>
-  using Set = std::set<T, P, A>;
+    typename P = std::less<T>,
+    typename A = std::allocator<T>>
+    using Set = std::set<T, P, A>;
 
   /**
   * @brief
@@ -123,9 +122,9 @@ namespace gaEngineSDK {
   */
   template<typename T>
   using WeakSPtr = std::weak_ptr<T>;
-  
+
   /**
-  * @brief 
+  * @brief
   */
   using String = std::string;
 
@@ -154,18 +153,13 @@ namespace gaEngineSDK {
   */
   using StrStream = std::stringstream;
 
-  /**
-  template <class T, class... Types>
-  using Make_Shared = std::make_shared<Types>();
-  */
-  
-  class StringID 
+  class StringID
   {
-  public:
+   public:
     StringID() = default;
 
     StringID(String data) : m_data(data) { }
-    
+
     ~StringID() = default;
 
     uint32 m_id = 0;

@@ -10,11 +10,11 @@
 #endif
 
 namespace gaEngineSDK {
-  #if GA_PLATFORM == GA_PLATFORM_WIN32
-    using Math = WindowsMath;
-  #elif GA_PLATFORM = GA_PLATFORM_LINUX
-    using Math = LinuxMath;
-  #else
-    using Math = PlatformMath;
-  #endif
+#if GA_PLATFORM == GA_PLATFORM_WIN32
+  using Math = WindowsMath;
+#elif GA_PLATFORM = GA_PLATFORM_LINUX
+  using Math = LinuxMath;
+#else
+  using Math = PlatformMath;
+#endif
 }

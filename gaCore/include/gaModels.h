@@ -7,27 +7,26 @@
 #include "gaMaterials.h"
 
 namespace gaEngineSDK {
-
   class StaticMesh;
 
   class GA_CORE_EXPORT Models : public Resource
   {
-  public:
-    /**************************************************************************/
+   public:
+    /*************************************************************************/
     /*
     * Constructor and destructor.
     */
-    /**************************************************************************/
+    /*************************************************************************/
     Models() = default;
-    
+
     ~Models() = default;
-    
-    /**************************************************************************/
+
+    /*************************************************************************/
     /*
     * Inheritance.
     */
-    /**************************************************************************/
-    
+    /*************************************************************************/
+
     /*
     * @brief Function to initialize class members and start with assimp.
     * @param Variable string with the address of the file.
@@ -41,18 +40,18 @@ namespace gaEngineSDK {
     Mesh
     getMesh(uint32 index);
 
-  protected:
+   protected:
     /*
     * @brief .
     */
     void
     createDirectories(const String& file);
 
-    /**************************************************************************/
+    /*************************************************************************/
     /*
     * Members.
     */
-    /**************************************************************************/
+    /*************************************************************************/
 
     /*
     * @brief Member to store the full name of the folder.
@@ -83,7 +82,7 @@ namespace gaEngineSDK {
     * @brief .
     */
     Vector<SPtr<AnimationData>> m_vAnimationData;
-    
+
     /*
     * @brief .
     */

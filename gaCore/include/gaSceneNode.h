@@ -6,122 +6,121 @@
 namespace gaEngineSDK {
   class SceneNode
   {
-    public:
-      /***********************************************************************/
-      /**
-      * Constructor and destructor.
-      */
-      /***********************************************************************/
-      SceneNode() = default;
+   public:
+    /*************************************************************************/
+    /**
+    * Constructor and destructor.
+    */
+    /*************************************************************************/
+    SceneNode() = default;
 
-      SceneNode(WeakSPtr<Actor> actor, WeakSPtr<SceneNode> parent);
-    
-      ~SceneNode() = default;
-    
-      /***********************************************************************/
-      /**
-      * Methods.
-      */
-      /***********************************************************************/
+    SceneNode(WeakSPtr<Actor> actor, WeakSPtr<SceneNode> parent);
 
-      /*
-      * @brief .
-      */
-      void
-      detectSelectedNode();
+    ~SceneNode() = default;
 
-      /*
-      * @brief .
-      */
-      SPtr<SceneNode>
-      createNewActorNode(WeakSPtr<Actor> actor, WeakSPtr<SceneNode> parent);
+    /*************************************************************************/
+    /**
+    * Methods.
+    */
+    /*************************************************************************/
 
-      /*
-      * @brief .
-      */
-      void
-      update(const float& deltaTime);
+    /*
+    * @brief .
+    */
+    void
+    detectSelectedNode();
 
-      /*
-      * @brief .
-      */
-      void
-      render();
+    /*
+    * @brief .
+    */
+    SPtr<SceneNode>
+    createNewActorNode(WeakSPtr<Actor> actor, WeakSPtr<SceneNode> parent);
 
-      /***********************************************************************/
-      /**
-      * Sets.
-      */
-      /***********************************************************************/
+    /*
+    * @brief .
+    */
+    void
+    update(const float& deltaTime);
 
-      /*
-      * @brief .
-      */
-      void
-      setActorNode(WeakSPtr<Actor> actor);
+    /*
+    * @brief .
+    */
+    void
+    render();
 
-      /*
-      * @brief .
-      */
-      void
-      setParentNode(WeakSPtr<SceneNode> parent);
+    /*************************************************************************/
+    /**
+    * Sets.
+    */
+    /*************************************************************************/
 
-      /*
-      * @brief .
-      */
-      void
-      setChildNode(WeakSPtr<SceneNode> child);
+    /*
+    * @brief .
+    */
+    void
+    setActorNode(WeakSPtr<Actor> actor);
 
-      /***********************************************************************/
-      /**
-      * Gets.
-      */
-      /***********************************************************************/
+    /*
+    * @brief .
+    */
+    void
+    setParentNode(WeakSPtr<SceneNode> parent);
 
-      /*
-      * @brief .
-      */
-      SPtr<Actor>
-      getActorNode();
+    /*
+    * @brief .
+    */
+    void
+    setChildNode(WeakSPtr<SceneNode> child);
 
-      /*
-      * @brief .
-      */
-      WeakSPtr<SceneNode>
-      getParentNode();
+    /*************************************************************************/
+    /**
+    * Gets.
+    */
+    /*************************************************************************/
 
-      /*
-      * @brief .
-      */
-      Vector<SPtr<SceneNode>>
-      getChildNodes();
-    
-    private:
-      /***********************************************************************/
-      /**
-      * Members.
-      */
-      /***********************************************************************/
+    /*
+    * @brief .
+    */
+    SPtr<Actor>
+    getActorNode();
 
-      /*
-      * @brief .
-      */
-      SPtr<Actor> m_pActor;
+    /*
+    * @brief .
+    */
+    WeakSPtr<SceneNode>
+    getParentNode();
 
-      /*
-      * @brief .
-      */
-      SPtr<SceneNode> m_pSelectedNode;
+    /*
+    * @brief .
+    */
+    Vector<SPtr<SceneNode>>
+    getChildNodes();
 
-      /*
-      * @brief .
-      */
-      SPtr<SceneNode> m_pParentNode;
+   private:
+    /*************************************************************************/
+    /**
+    * Members.
+    */
+    /*************************************************************************/
 
-      /*
-      * @brief .
-      */
-      Vector<SPtr<SceneNode>> m_pChildNodes;
+    /*
+    * @brief .
+    */
+    SPtr<Actor> m_pActor;
 
+    /*
+    * @brief .
+    */
+    SPtr<SceneNode> m_pSelectedNode;
+
+    /*
+    * @brief .
+    */
+    SPtr<SceneNode> m_pParentNode;
+
+    /*
+    * @brief .
+    */
+    Vector<SPtr<SceneNode>> m_pChildNodes;
   };
 }

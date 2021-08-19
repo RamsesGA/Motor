@@ -26,7 +26,7 @@ namespace gaEngineSDK {
 
   class GA_CORE_EXPORT ResourceManager : public Module<ResourceManager>
   {
-  public:
+   public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
@@ -51,18 +51,18 @@ namespace gaEngineSDK {
       if (isAlreadyLoaded(file)) {
         return dynamic_pointer_cast<T>(m_mLoadedResources[file]);
       }
-
+      
       m_mLoadedResources.insert(make_pair(file, make_shared<T>()));
       auto& resourceObj = m_mLoadedResources[file];
       resourceObj->loadFromFile(file);
-
+      
       return dynamic_pointer_cast<T>(resourceObj);
     }
 
-    bool 
+    bool
     isAlreadyLoaded(String file);
 
-  private:
+   private:
     /*************************************************************************/
     /**
     * Members.

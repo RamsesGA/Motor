@@ -28,20 +28,9 @@ AppTest::onUpdate(float deltaTime) {
   auto myGraphicsApi = g_graphicApi().instancePtr();
   auto mySceneGraph = SceneGraph::instancePtr();
 
-  cbViewportDimension viewportDimenData;
-  viewportDimenData.viewportDimensions = { 807.0f, 680.0f };
-
-  //Clear the back buffer.
-  myGraphicsApi->clearYourRenderTargetView(m_pRenderTargetView, m_rgba);
-  
-  myGraphicsApi->clearYourRenderTarget(m_pBlurH_RT, m_rgba);
-  myGraphicsApi->clearYourRenderTarget(m_pBlurV_RT, m_rgba);
-
   // Clear the depth buffer to 1.0 (max depth).
   myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
   
-  myGraphicsApi->updateConstantBuffer(&viewportDimenData, m_pCB_ViewPortDimension);
-
   //Update the nodes info.
   mySceneGraph->update(deltaTime);
 }
@@ -57,8 +46,19 @@ AppTest::onRender() {
   /***************************************************************************/
 
   //We save the render targets.
-  setRTGbuffer();
-  setRT_SSAO();
+  setRTGbufferPass();
+  setRT_SSAO_Pass();
+  setBlurH_Pass(m_pSSAO_RT->getRenderTexture(0));
+  setBlurV_Pass(m_pSSAO_RT->getRenderTexture(0));
+  setAdditionPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
+
+  for (uint32 i = 0; i < 2; ++i) {
+    setBlurH_Pass(m_pAdditionRT->getRenderTexture(0));
+    setBlurV_Pass(m_pAdditionRT->getRenderTexture(0));
+    setAdditionPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
+  }
+
+  setLightningPass();
 
   //We save a viewport.
   myGraphicsApi->setViewports(m_width, m_height);
@@ -109,11 +109,15 @@ AppTest::onCreate() {
                                                             L"data/shaders/DX_gaussyan_blur.fx",
                                                             "ps_gaussian_blurV"));
 
-  //We create the vertex shader and pixel shader.
-  //m_pGBufferShader = myGraphicsApi->createShadersProgram(L"data/shaders/OGL_VSAnim.fx",
-  //                                                     "main",
-  //                                                     L"data/shaders/OGL_PSAnim.fx",
-  //                                                     "main");
+  m_pLightningShader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_screenAlignedQuad.fx",
+                                                               "vs_ssAligned",
+                                                               L"data/shaders/DX_lightningPS.fx",
+                                                               "ps_main"));
+
+  m_pAdditionShader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_screenAlignedQuad.fx",
+                                                              "vs_ssAligned",
+                                                              L"data/shaders/DX_AdditionPS.fx",
+                                                              "Add"));
 
   //We create the input layout.
   m_pVertexLayout.reset(myGraphicsApi->createInputLayout(m_pGBufferShader));
@@ -135,6 +139,8 @@ AppTest::onCreate() {
 
   m_pCB_SSAO.reset(myGraphicsApi->createConstantBuffer(sizeof(cbSSAO)));
   m_pCB_ViewPortDimension.reset(myGraphicsApi->createConstantBuffer(sizeof(cbViewportDimension)));
+  m_pCB_Lightning.reset(myGraphicsApi->createConstantBuffer(sizeof(cbLightning)));
+  m_pCB_MipLevels.reset(myGraphicsApi->createConstantBuffer(sizeof(cbMipLevels)));
 
   /*
   * C R E A T E
@@ -147,11 +153,15 @@ AppTest::onCreate() {
   m_pSSAO_RT = make_shared<RenderTarget>();
   m_pBlurH_RT = make_shared<RenderTarget>();
   m_pBlurV_RT = make_shared<RenderTarget>();
+  m_pAdditionRT = make_shared<RenderTarget>();
+  m_pLightningRT = make_shared<RenderTarget>();
 
   m_pGbufferRT = myGraphicsApi->createRenderTarget(m_width, m_height, 1, 4);
   m_pSSAO_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
   m_pBlurH_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
   m_pBlurV_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
+  m_pAdditionRT = myGraphicsApi->createRenderTarget(m_width, m_height);
+  m_pLightningRT = myGraphicsApi->createRenderTarget(m_width, m_height);
 
   /***************************************************************************/
   /*
@@ -161,11 +171,11 @@ AppTest::onCreate() {
   /***************************************************************************/
 
   //createNodePod();
-  createNodeVela();
+  //createNodeVela();
   //createNodeTwoB();
   //createNodeSpartan();
   //createNodeUgandan();
-  //createNodeGrimoires();
+  createNodeGrimoires();
   //createNodeRamlethalSwords();
 
   /*
@@ -176,6 +186,7 @@ AppTest::onCreate() {
   m_pSampler = myGraphicsApi->createSamplerState();
   myGraphicsApi->setSamplerState(m_pSampler, 0);
 
+  //Create the one face of cube.
   createSAQ();
 }
 
@@ -231,137 +242,6 @@ AppTest::onMouseMove() {
 
     myGraphicsApi->updateConstantBuffer(&cb, m_pBufferCamera);
   }
-}
-
-/*****************************************************************************/
-/*
-* Sets.
-*/
-/*****************************************************************************/
-
-void
-AppTest::setRT_View() {
-  auto myGraphicsApi = g_graphicApi().instancePtr();
-
-  myGraphicsApi->setRenderTarget(m_pRenderTargetView, m_pDepthStencil);
-  myGraphicsApi->setShaders(m_pGBufferShader);
-}
-
-void
-AppTest::setRTGbuffer() {
-  auto myGraphicsApi = g_graphicApi().instancePtr();
-  auto mySceneGraph = SceneGraph::instancePtr();
-
-  //We save the input layout.
-  myGraphicsApi->setInputLayout(m_pVertexLayout);
-
-  //We save the vertex buffer.
-  myGraphicsApi->setVertexBuffer(m_mesh->m_pVertexBuffer);
-
-  //We save the index buffer.
-  myGraphicsApi->setIndexBuffer(m_mesh->m_pIndexBuffer);
-
-  //We save the topology.
-  myGraphicsApi->setPrimitiveTopology();
-
-  //We keep the cb of the bones.
-  myGraphicsApi->setConstBufferBones(m_pCBufferBones);
-
-  //Here starts the TOTSUGEKI
-  myGraphicsApi->setRenderTarget(m_pGbufferRT, m_pDepthStencil);
-  myGraphicsApi->setShaders(m_pGBufferShader);
-
-  //VS CB
-  myGraphicsApi->setYourVSConstantBuffers(m_pBufferCamera, 0);
-  myGraphicsApi->setYourVSConstantBuffers(m_pBufferWorld,  1);
-
-  //Animation
-  //myGraphicsApi->setYourVSConstantBuffers(m_pCBufferBones, 2);
-  //PS CB
-  //myGraphicsApi->setYourPSConstantBuffers(m_pBufferWorld, 1);
-
-  myGraphicsApi->clearYourRenderTarget(m_pGbufferRT, m_rgba);
-
-  ConstantBuffer1 meshData;
-  meshData.mProjection = myGraphicsApi->matrixPolicy(m_mainCamera.getProjection());
-  meshData.mView = myGraphicsApi->matrixPolicy(m_mainCamera.getView());
-
-  ConstantBuffer2 cb;
-  cb.mWorld = m_world;
-  cb.objectPosition = { 0.0f, 0.0f, 0.0f };
-
-  //Update CB.
-  myGraphicsApi->updateConstantBuffer(&meshData, m_pBufferCamera);
-  myGraphicsApi->updateConstantBuffer(&cb, m_pBufferWorld);
-
-  //Render model
-  mySceneGraph->render();
-}
-
-void 
-AppTest::setRT_SSAO() {
-  auto myGraphicsApi = g_graphicApi().instancePtr();
-
-  myGraphicsApi->setRenderTarget(m_pRenderTargetView, m_pDepthStencil);
-  myGraphicsApi->setShaders(m_pSSAO_Shader);
-
-  //VS CB
-  myGraphicsApi->setYourVSConstantBuffers(m_pBufferCamera, 0);
-  myGraphicsApi->setYourVSConstantBuffers(m_pBufferWorld, 1);
-
-  //PS CB
-  myGraphicsApi->setYourPSConstantBuffers(m_pCB_SSAO, 0);
-
-  myGraphicsApi->clearYourRenderTarget(m_pSSAO_RT, m_rgba);
-
-  cbSSAO ssaoData;
-  ssaoData.mBias = 0.08000f;
-  ssaoData.mIntensity = 2.0f;
-  ssaoData.mSample_radius = 10.0f;
-  ssaoData.mScale = 1.0f;
-  ssaoData.mViewportDimensions = { 807.0f, 680.0f };
-
-  myGraphicsApi->updateConstantBuffer(&ssaoData, m_pCB_SSAO);
-
-  //Set textures
-  myGraphicsApi->setShaderResourceView(m_pGbufferRT->getRenderTexture(2), 0);
-  myGraphicsApi->setShaderResourceView(m_pGbufferRT->getRenderTexture(1), 1);
-
-  setSAQ();
-}
-
-void
-AppTest::setBlurH() {
-  auto myGraphicsApi = g_graphicApi().instancePtr();
-
-  myGraphicsApi->setRenderTarget(m_pBlurH_RT, m_pDepthStencil);
-  myGraphicsApi->setShaders(m_pBlurH_Shader);
-
-  //VS CB
-  myGraphicsApi->setYourVSConstantBuffers(m_pBufferCamera, 0);
-  myGraphicsApi->setYourVSConstantBuffers(m_pBufferWorld, 1);
-
-  //PS CB
-  myGraphicsApi->setYourPSConstantBuffers(m_pCB_ViewPortDimension, 0);
-
-  setSAQ();
-}
-
-void 
-AppTest::setBlurV() {
-  auto myGraphicsApi = g_graphicApi().instancePtr();
-
-  myGraphicsApi->setRenderTarget(m_pBlurV_RT, m_pDepthStencil);
-  myGraphicsApi->setShaders(m_pBlurV_Shader);
-
-  //VS CB
-  myGraphicsApi->setYourVSConstantBuffers(m_pBufferCamera, 0);
-  myGraphicsApi->setYourVSConstantBuffers(m_pBufferWorld, 1);
-
-  //PS CB
-  myGraphicsApi->setYourPSConstantBuffers(m_pCB_ViewPortDimension, 0);
-
-  setSAQ();
 }
 
 /*****************************************************************************/
@@ -610,7 +490,7 @@ AppTest::createNodeRamlethalSwords() {
   mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
 }
 
-void 
+void
 AppTest::createSAQ() {
   auto myGraphicsApi = g_graphicApi().instancePtr();
   Models* newModel = new Models();
@@ -619,8 +499,8 @@ AppTest::createSAQ() {
   Vertex* meshVertex = new Vertex[4];
   meshVertex[0].position = { -1.0f, -1.0f, 0.0f, 1.0f };
   meshVertex[1].position = { -1.0f,  1.0f, 0.0f, 1.0f };
-  meshVertex[2].position = {  1.0f, -1.0f, 0.0f, 1.0f };
-  meshVertex[3].position = {  1.0f,  1.0f, 0.0f, 1.0f };
+  meshVertex[2].position = { 1.0f, -1.0f, 0.0f, 1.0f };
+  meshVertex[3].position = { 1.0f,  1.0f, 0.0f, 1.0f };
 
   meshVertex[0].normal = { 0.0f, 0.0f, -1.0f };
   meshVertex[1].normal = { 0.0f, 0.0f, -1.0f };
@@ -643,18 +523,25 @@ AppTest::createSAQ() {
   SPtr<Vertex> spVetexData(meshVertex);
   newMesh->setVertexData(spVetexData);
 
-  newMesh->m_pVertexBuffer.reset(myGraphicsApi->createVertexBuffer(meshVertex, sizeof(Vertex)));
+  newMesh->m_pVertexBuffer.reset(myGraphicsApi->createVertexBuffer(meshVertex, 
+                                                                   sizeof(Vertex) * 4));
 
   SPtr<uint32> spIndex(meshIndex);
   newMesh->setIndex(spIndex);
   newMesh->setIndexNum(6);
 
-  SPtr<IndexBuffer> tempIB(myGraphicsApi->createIndexBuffer(meshIndex, 6));
+  SPtr<IndexBuffer> tempIB(myGraphicsApi->createIndexBuffer(meshIndex, sizeof(uint32) * 6));
   newMesh->setIndexBuffer(tempIB);
 
   newModel->addNewMesh(*newMesh);
   m_SAQ.reset(newModel);
 }
+
+/*****************************************************************************/
+/*
+* Set.
+*/
+/*****************************************************************************/
 
 void 
 AppTest::setSAQ() {
@@ -663,5 +550,223 @@ AppTest::setSAQ() {
 
   myGraphicsApi->setVertexBuffer(mesh.getVertexBuffer());
   myGraphicsApi->setIndexBuffer(mesh.getIndexBuffer());
-  myGraphicsApi->drawIndex(mesh.getNumIndices());
+  myGraphicsApi->drawIndex(6);
+}
+
+void
+AppTest::setRTGbufferPass() {
+  auto myGraphicsApi = g_graphicApi().instancePtr();
+  auto mySceneGraph = SceneGraph::instancePtr();
+
+  //We save the input layout.
+  myGraphicsApi->setInputLayout(m_pVertexLayout);
+
+  //We save the vertex buffer.
+  myGraphicsApi->setVertexBuffer(m_mesh->m_pVertexBuffer);
+
+  //We save the index buffer.
+  myGraphicsApi->setIndexBuffer(m_mesh->m_pIndexBuffer);
+
+  //We save the topology.
+  myGraphicsApi->setPrimitiveTopology();
+
+  //We keep the cb of the bones.
+  myGraphicsApi->setConstBufferBones(m_pCBufferBones);
+
+  //Here starts the TOTSUGEKI
+  myGraphicsApi->setRenderTarget(m_pGbufferRT, m_pDepthStencil);
+  myGraphicsApi->setShaders(m_pGBufferShader);
+
+  //VS CB
+  myGraphicsApi->setYourVSConstantBuffers(m_pBufferCamera, 0);
+  myGraphicsApi->setYourVSConstantBuffers(m_pBufferWorld, 1);
+
+  //Animation
+  //myGraphicsApi->setYourVSConstantBuffers(m_pCBufferBones, 2);
+  //PS CB
+  //myGraphicsApi->setYourPSConstantBuffers(m_pBufferWorld, 1);
+
+  myGraphicsApi->clearYourRenderTarget(m_pGbufferRT, m_rgba);
+
+  ConstantBuffer1 meshData;
+  meshData.mProjection = myGraphicsApi->matrixPolicy(m_mainCamera.getProjection());
+  meshData.mView = myGraphicsApi->matrixPolicy(m_mainCamera.getView());
+
+  ConstantBuffer2 cb;
+  cb.mWorld = m_world;
+  cb.objectPosition = { 0.0f, 0.0f, 0.0f };
+
+  //Update CB.
+  myGraphicsApi->updateConstantBuffer(&meshData, m_pBufferCamera);
+  myGraphicsApi->updateConstantBuffer(&cb, m_pBufferWorld);
+
+  //Render model
+  mySceneGraph->render();
+}
+
+void
+AppTest::setRT_SSAO_Pass() {
+  auto myGraphicsApi = g_graphicApi().instancePtr();
+
+  myGraphicsApi->setRenderTarget(m_pSSAO_RT);
+  myGraphicsApi->setShaders(m_pSSAO_Shader);
+
+  //VS CB
+  myGraphicsApi->setYourVSConstantBuffers(m_pBufferCamera, 0);
+  myGraphicsApi->setYourVSConstantBuffers(m_pBufferWorld, 1);
+
+  //PS CB
+  myGraphicsApi->setYourPSConstantBuffers(m_pCB_SSAO, 2);
+
+  //Clear
+  myGraphicsApi->clearYourRenderTarget(m_pSSAO_RT, m_rgba);
+
+  //Update CB
+  cbSSAO ssaoData;
+  ssaoData.mBias = 0.08000f;
+  ssaoData.mIntensity = 2.0f;
+  ssaoData.mNothing = { 0.0f, 0.0f };
+  ssaoData.mSample_radius = 10.0f;
+  ssaoData.mScale = 1.0f;
+
+  ssaoData.mViewportDimensions = { (float)m_width, (float)m_height };
+
+  myGraphicsApi->updateConstantBuffer(&ssaoData, m_pCB_SSAO);
+
+  //Set textures
+  myGraphicsApi->setShaderResourceView(m_pGbufferRT->getRenderTexture(2), 0);
+  myGraphicsApi->setShaderResourceView(m_pGbufferRT->getRenderTexture(1), 1);
+
+  setSAQ();
+}
+
+void
+AppTest::setBlurH_Pass(void* texture) {
+  auto myGraphicsApi = g_graphicApi().instancePtr();
+
+  myGraphicsApi->setRenderTarget(m_pBlurH_RT);
+  myGraphicsApi->setShaders(m_pBlurH_Shader);
+
+  //VS CB
+  myGraphicsApi->setYourVSConstantBuffers(m_pBufferCamera, 0);
+  myGraphicsApi->setYourVSConstantBuffers(m_pBufferWorld, 1);
+
+  //PS CB
+  myGraphicsApi->setYourPSConstantBuffers(m_pCB_ViewPortDimension, 2);
+
+  //Clear RT
+  myGraphicsApi->clearYourRenderTarget(m_pBlurH_RT, m_rgba);
+
+  //Update CB
+  cbViewportDimension viewportDimenData;
+  viewportDimenData.viewportDimensions = { (float)m_width, (float)m_height };
+  viewportDimenData.mNothing = { 0.0f, 0.0f };
+
+  myGraphicsApi->updateConstantBuffer(&viewportDimenData, m_pCB_ViewPortDimension);
+
+  //Set texture
+  myGraphicsApi->setShaderResourceView(texture, 0);
+
+  setSAQ();
+}
+
+void
+AppTest::setBlurV_Pass(void* texture) {
+  auto myGraphicsApi = g_graphicApi().instancePtr();
+
+  myGraphicsApi->setRenderTarget(m_pBlurV_RT);
+  myGraphicsApi->setShaders(m_pBlurV_Shader);
+
+  //VS CB
+  myGraphicsApi->setYourVSConstantBuffers(m_pBufferCamera, 0);
+  myGraphicsApi->setYourVSConstantBuffers(m_pBufferWorld, 1);
+
+  //PS CB
+  myGraphicsApi->setYourPSConstantBuffers(m_pCB_ViewPortDimension, 2);
+
+  //Clear RT
+  myGraphicsApi->clearYourRenderTarget(m_pBlurV_RT, m_rgba);
+
+  //Update CB
+  cbViewportDimension viewportDimenData;
+  viewportDimenData.viewportDimensions = { (float)m_width, (float)m_height };
+  viewportDimenData.mNothing = { 0.0f, 0.0f };
+
+  myGraphicsApi->updateConstantBuffer(&viewportDimenData, m_pCB_ViewPortDimension);
+
+  //Set textures
+  myGraphicsApi->setShaderResourceView(texture, 0);
+
+  setSAQ();
+}
+
+void 
+AppTest::setAdditionPass(void* texture1, void* texture2) {
+  auto myGraphicsApi = g_graphicApi().instancePtr();
+
+  myGraphicsApi->setRenderTarget(m_pAdditionRT);
+  myGraphicsApi->setShaders(m_pAdditionShader);
+
+  //VS CB
+  myGraphicsApi->setYourVSConstantBuffers(m_pBufferCamera, 0);
+  myGraphicsApi->setYourVSConstantBuffers(m_pBufferWorld, 1);
+
+  //PS CB
+  myGraphicsApi->setYourPSConstantBuffers(m_pCB_MipLevels, 2);
+
+  //Clean RT
+  myGraphicsApi->clearYourRenderTarget(m_pAdditionRT, m_rgba);
+
+  //Update CB
+  cbMipLevels mipLevelsData;
+  mipLevelsData.mipLevel0 = 0;
+  mipLevelsData.mipLevel1 = 0;
+  mipLevelsData.mipLevel2 = 0;
+  mipLevelsData.mipLevel3 = 0;
+
+  myGraphicsApi->updateConstantBuffer(&mipLevelsData, m_pCB_MipLevels);
+
+  //Set textures
+  myGraphicsApi->setShaderResourceView(texture1, 0);
+  myGraphicsApi->setShaderResourceView(texture2, 1);
+
+  setSAQ();
+}
+
+void 
+AppTest::setLightningPass() {
+  auto myGraphicsApi = g_graphicApi().instancePtr();
+
+  myGraphicsApi->setRenderTarget(m_pRenderTargetView);
+  myGraphicsApi->setShaders(m_pLightningShader);
+
+  //VS CB
+  myGraphicsApi->setYourVSConstantBuffers(m_pBufferCamera, 0);
+  myGraphicsApi->setYourVSConstantBuffers(m_pBufferWorld, 1);
+
+  //PS CB
+  myGraphicsApi->setYourPSConstantBuffers(m_pBufferCamera, 0);
+  myGraphicsApi->setYourPSConstantBuffers(m_pBufferWorld, 1);
+  myGraphicsApi->setYourPSConstantBuffers(m_pCB_Lightning, 2);
+
+  //Clean RT
+  myGraphicsApi->clearYourRenderTargetView(m_pRenderTargetView, m_rgba);
+
+  //Update CB
+  cbLightning lightningData;
+  lightningData.emissiveIntensity = 1.0f;
+  lightningData.lightIntensity0 = 2.0f;
+  lightningData.lightPos0 = {0.0f, 0.0f, 0.0f};
+  lightningData.vViewPosition = m_mainCamera.getCamEye();
+
+  myGraphicsApi->updateConstantBuffer(&lightningData, m_pCB_Lightning);
+
+  //Set textures
+  myGraphicsApi->setShaderResourceView(m_pGbufferRT->getRenderTexture(0), 0);
+  myGraphicsApi->setShaderResourceView(m_pGbufferRT->getRenderTexture(1), 1);
+  myGraphicsApi->setShaderResourceView(m_pGbufferRT->getRenderTexture(3), 2);
+  myGraphicsApi->setShaderResourceView(m_pAdditionRT->getRenderTexture(0), 3);
+  myGraphicsApi->setShaderResourceView(m_pGbufferRT->getRenderTexture(2), 4);
+
+  setSAQ();
 }

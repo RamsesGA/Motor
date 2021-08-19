@@ -3,6 +3,8 @@
 #include "gaModels.h"
 #include "gaMesh.h"
 
+using std::make_shared;
+
 namespace gaEngineSDK {
   /***************************************************************************/
   /**
@@ -12,7 +14,7 @@ namespace gaEngineSDK {
   void
   StaticMesh::update(const float& deltaTime) {
     if (!(m_pModel->m_vAnimationData.empty())) {
-      SPtr<AnimationData> currentAnimation = std::make_shared<AnimationData>();
+      SPtr<AnimationData> currentAnimation = make_shared<AnimationData>();
       currentAnimation = m_pModel->m_vAnimationData[0];
 
       if (m_playAnimation) {

@@ -6,14 +6,14 @@
 namespace gaEngineSDK {
   class GA_UTILITY_EXPORT WindowsMath : public PlatformMath 
   {
-    public:
-      /***********************************************************************/
-      /*
-      * Constructor and destructor.
-      */
-      /***********************************************************************/
-      WindowsMath() = default;
-
-      ~WindowsMath() = default;
+   public:
+    /***********************************************************************/
+    /*
+    * Constructor and destructor.
+    */
+    /***********************************************************************/
+    WindowsMath() = default;
+    
+    ~WindowsMath() = default;
   };
 }

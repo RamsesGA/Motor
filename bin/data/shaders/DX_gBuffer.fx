@@ -76,9 +76,9 @@ PS_INPUT vs_gBuffer(VS_INPUT input)
 
   output.texCoords = input.texCoords;
 
-  output.TBN[0] = normalize(mul(float4(input.tangent, 0.0f), matWV));
-  output.TBN[1] = normalize(mul(float4(input.biTangent, 0.0f), matWV));
-  output.TBN[2] = normalize(mul(float4(input.normal, 0.0f), matWV));
+  output.TBN[0] = normalize(mul(float4(input.tangent, 0.0f), matWV)).xyz;
+  output.TBN[2] = normalize(mul(float4(input.normal, 0.0f), matWV)).xyz;
+  output.TBN[1] = normalize(cross(output.TBN[2], output.TBN[0])).xyz;
 
   return(output);
 }

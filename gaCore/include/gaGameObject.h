@@ -4,88 +4,87 @@
 #include "gaComponent.h"
 
 namespace gaEngineSDK {
-
-  class GA_CORE_EXPORT GameObject 
+  class GA_CORE_EXPORT GameObject
   {
-    public:
-      /***********************************************************************/
-      /**
-      * Constructor and destructor.
-      */
-      /***********************************************************************/
-      GameObject() = default;
-      
-      ~GameObject() = default;
-    
-      /***********************************************************************/
-      /**
-      * Methods.
-      */
-      /***********************************************************************/
+   public:
+    /*************************************************************************/
+    /**
+    * Constructor and destructor.
+    */
+    /*************************************************************************/
+    GameObject() = default;
 
-      /*
-      * @brief Removing the component from an actor.
-      */
-      virtual void
-      removeComponent() { };
+    ~GameObject() = default;
 
-      /*
-      * @brief Actor information update.
-      */
-      virtual void
-      actorRender() { };
+    /*************************************************************************/
+    /**
+    * Methods.
+    */
+    /*************************************************************************/
 
-      /***********************************************************************/
-      /**
-      * Gets.
-      */
-      /***********************************************************************/
+    /*
+    * @brief Removing the component from an actor.
+    */
+    virtual void
+    removeComponent() { };
 
-      /*
-      * @brief Notify if the actor is selected.
-      * @return Bool member to indicate true or false.
-      */
-      virtual bool
-      getIsSelected() { return false; };
+    /*
+    * @brief Actor information update.
+    */
+    virtual void
+    actorRender() { };
 
-      /*
-      * @brief Get the name of the current actor.
-      * @return String with the member's information.
-      */
-      virtual String 
-      getActorName() { return "Default"; };
+    /*************************************************************************/
+    /**
+    * Gets.
+    */
+    /*************************************************************************/
 
-      /*
-      * @brief .
-      */
-      virtual SPtr<Component>
-      getComponent() { return nullptr; };
+    /*
+    * @brief Notify if the actor is selected.
+    * @return Bool member to indicate true or false.
+    */
+    virtual bool
+    getIsSelected() { return false; };
 
-      /***********************************************************************/
-      /**
-      * Sets.
-      */
-      /***********************************************************************/
+    /*
+    * @brief Get the name of the current actor.
+    * @return String with the member's information.
+    */
+    virtual String
+    getActorName() { return "Default"; };
 
-      /*
-      * @brief Save the corresponding information in the member.
-      * @param isSelect, bool to indicate true or false.
-      */
-      virtual void
-      setIsSelected(bool isSelect) { };
+    /*
+    * @brief .
+    */
+    virtual SPtr<Component>
+    getComponent() { return nullptr; };
 
-      /*
-      * @brief Save the corresponding information in the member.
-      * @param name of the actor.
-      */
-      virtual void
-      setActorName(String name) { };
+    /*************************************************************************/
+    /**
+    * Sets.
+    */
+    /*************************************************************************/
 
-      /*
-      * @brief Save the corresponding information in the member.
-      * @param compoInfo, pointer with the information of a component.
-      */
-      virtual void
-      setComponent(WeakSPtr<Component> compoInfo) { };
+    /*
+    * @brief Save the corresponding information in the member.
+    * @param isSelect, bool to indicate true or false.
+    */
+    virtual void
+    setIsSelected(bool isSelect) { };
+
+    /*
+    * @brief Save the corresponding information in the member.
+    * @param name of the actor.
+    */
+    virtual void
+    setActorName(String name) { };
+
+    /*
+    * @brief Save the corresponding information in the member.
+    * @param compoInfo, pointer with the information of a component.
+    */
+    virtual void
+    setComponent(WeakSPtr<Component> compoInfo) { };
   };
 }

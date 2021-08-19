@@ -1,17 +1,17 @@
 #pragma once
 
 namespace gaEngineSDK {
-	class VertexBuffer
-	{
-	  public:
-			/***********************************************************************/
-			/**
-			* Constructor and destructor.
-			*/
-			/***********************************************************************/
-			VertexBuffer() = default;
+  class VertexBuffer
+  {
+   public:
+    /*************************************************************************/
+    /**
+    * Constructor and destructor.
+    */
+    /*************************************************************************/
+    VertexBuffer() = default;
 
-			virtual 
-		  ~VertexBuffer() = default;
-	};
+    virtual
+    ~VertexBuffer() = default;
+  };
 }

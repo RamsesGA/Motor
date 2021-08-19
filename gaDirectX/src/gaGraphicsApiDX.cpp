@@ -13,24 +13,30 @@
 #include "stb_image.h"
 
 namespace gaEngineSDK {
-  HRESULT 
-  CompileShaderFromFile(const WString& szFileName, const String& szEntryPoint,
-                        const String& szShaderModel, ID3DBlob** ppBlobOut) {
+  HRESULT
+  CompileShaderFromFile(const WString& szFileName, 
+                        const String& szEntryPoint,
+                        const String& szShaderModel, 
+                        ID3DBlob** ppBlobOut) {
     HRESULT hr = S_OK;
 
     DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
-  
-  #if defined( DEBUG ) || defined( _DEBUG )
+
+#if defined( DEBUG ) || defined( _DEBUG )
     dwShaderFlags |= D3DCOMPILE_DEBUG;
-  #endif
-  
+#endif
+
     ID3DBlob* pErrorBlob;
     hr = D3DCompileFromFile(szFileName.c_str(),
-                            nullptr, nullptr,
+                            nullptr,  
+                            nullptr,
                             szEntryPoint.c_str(),
                             szShaderModel.c_str(),
-                            dwShaderFlags, 0, ppBlobOut,
+                            dwShaderFlags, 
+                            0, 
+                            ppBlobOut,
                             &pErrorBlob);
+
     if (FAILED(hr)) {
       if (pErrorBlob != nullptr) {
         OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
@@ -40,116 +46,106 @@ namespace gaEngineSDK {
       }
       return hr;
     }
-  
+
     if (pErrorBlob) {
       pErrorBlob->Release();
     }
-  
+
     return S_OK;
   }
-  
-  bool 
+
+  bool
   AnalyzeVertexShaderDX(const WString& nameVS) {
     String bufferAnalyze;
-  
+
     uint32 tempVSsize = nameVS.size();
     for (uint32 i = 0; i < tempVSsize; ++i) {
       bufferAnalyze += nameVS[i];
-  
+
       if (('_' == bufferAnalyze[i]) &&
-          ("data/shaders/DX_" != bufferAnalyze)) {
+        ("data/shaders/DX_" != bufferAnalyze)) {
         return false;
       }
       else if (('_' == bufferAnalyze[i]) &&
-               ("data/shaders/DX_" == bufferAnalyze)) {
+        ("data/shaders/DX_" == bufferAnalyze)) {
         return true;
       }
     }
-  
+
     return false;
   }
-  
-  bool 
+
+  bool
   AnalyzePixelShaderDX(const WString& namePS) {
     String bufferAnalyze;
-  
+
     uint32 tempPSsize = namePS.size();
     for (uint32 i = 0; i < tempPSsize; ++i) {
       bufferAnalyze += namePS[i];
-  
+
       if (('_' == bufferAnalyze[i]) &&
-          ("data/shaders/DX_" != bufferAnalyze)) {
+        ("data/shaders/DX_" != bufferAnalyze)) {
         return false;
       }
       else if (('_' == bufferAnalyze[i]) &&
-               ("data/shaders/DX_" == bufferAnalyze)) {
+        ("data/shaders/DX_" == bufferAnalyze)) {
         return true;
       }
     }
-  
+
     return false;
   }
-  
+
   /***************************************************************************/
   /**
   * Destructor.
   */
   /***************************************************************************/
-  
+
   GraphicsApiDX::~GraphicsApiDX() {
-  
-    //Liberar mis miembros del API
-    // (SON LOS QUE TENGO DOMINIO PROPIO)
-    //delete m_pd3dDevice;
-  
-    //delete m_pSwapChain;
-  
-    //delete m_pDeviceContext;
-  
     delete m_pDepthStencil;
-  
     delete m_pBackBuffer;
   }
-  
+
   /***************************************************************************/
   /**
   * Inheritance methods.
   */
   /***************************************************************************/
-  
-  bool 
+
+  bool
   GraphicsApiDX::initDevice(sf::WindowHandle hWnd) {
 
     HRESULT hr = S_OK;
-    
+
     RECT rc;
-    
+
     D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
-    
+
     m_hWnd = hWnd;
-    
+
     GetClientRect(m_hWnd, &rc);
-    
+
     m_width = rc.right - rc.left;
     m_height = rc.bottom - rc.top;
-    
+
     uint32 createDeviceFlags = 0;
     createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
-    
+
     Vector<D3D_DRIVER_TYPE> driverTypes =
     {
       D3D_DRIVER_TYPE_HARDWARE,
       D3D_DRIVER_TYPE_WARP,
       D3D_DRIVER_TYPE_REFERENCE,
     };
-    
+
     Vector<D3D_FEATURE_LEVEL> featureLevels =
     {
       D3D_FEATURE_LEVEL_11_0,
       D3D_FEATURE_LEVEL_10_1,
       D3D_FEATURE_LEVEL_10_0,
     };
-    
+
     DXGI_SWAP_CHAIN_DESC sd;
     ZeroMemory(&sd, sizeof(sd));
     sd.BufferCount = 1;
@@ -163,48 +159,56 @@ namespace gaEngineSDK {
     sd.SampleDesc.Count = 1;
     sd.SampleDesc.Quality = 0;
     sd.Windowed = TRUE;
-    
-    uint32 tempDriverTypesSize = driverTypes.size();
-    for (uint32 driverTypeIndex = 0; driverTypeIndex < tempDriverTypesSize; ++driverTypeIndex) {
-      hr = D3D11CreateDeviceAndSwapChain(nullptr, driverTypes[driverTypeIndex],
-                                         nullptr, createDeviceFlags,
-                                         featureLevels.data(), (uint32)featureLevels.size(),
-                                         D3D11_SDK_VERSION, &sd,
-                                         &m_pSwapChain, &m_pd3dDevice,
-                                         &featureLevel, &m_pDeviceContext);
+
+    uint32 tempDriverTSize = driverTypes.size();
+    for (uint32 driverTypeIndex = 0; driverTypeIndex < tempDriverTSize; ++driverTypeIndex) {
+      hr = D3D11CreateDeviceAndSwapChain(nullptr,
+                                         driverTypes[driverTypeIndex],
+                                         nullptr, 
+                                         createDeviceFlags,
+                                         featureLevels.data(), 
+                                         (uint32)featureLevels.size(),
+                                         D3D11_SDK_VERSION,
+                                         &sd,
+                                         &m_pSwapChain, 
+                                         &m_pd3dDevice,
+                                         &featureLevel,
+                                         &m_pDeviceContext);
       if (SUCCEEDED(hr)) {
         break;
       }
     }
-    
+
     if (FAILED(hr)) {
       return false;
     }
-    
+
     auto* backBuffer = new TexturesDX();
-    
-    hr = m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
+
+    hr = m_pSwapChain->GetBuffer(0, 
+                                 __uuidof(ID3D11Texture2D), 
                                  (LPVOID*)&backBuffer->m_pTexture);
-    
+
     //We check that everything goes well, if we do not send an error.
     if (FAILED(hr)) {
       delete backBuffer;
       return false;
     }
-    
+
     backBuffer->m_vRenderTargetView.resize(1);
     hr = m_pd3dDevice->CreateRenderTargetView(backBuffer->m_pTexture,
                                               nullptr,
                                               &backBuffer->m_vRenderTargetView[0]);
+
     if (FAILED(hr)) {
       delete backBuffer;
       return false;
     }
-    
+
     m_pBackBuffer = backBuffer;
-    
+
     auto* depthStencil = new TexturesDX();
-    
+
     //Texture of the depth and I do the depth.
     D3D11_TEXTURE2D_DESC textureDesc;
     ZeroMemory(&textureDesc, sizeof(textureDesc));
@@ -219,53 +223,52 @@ namespace gaEngineSDK {
     textureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
     textureDesc.CPUAccessFlags = 0;
     textureDesc.MiscFlags = 0;
-    
+
     //We create the texture.
-    hr = m_pd3dDevice->CreateTexture2D(&textureDesc,
-                                       nullptr, &depthStencil->m_pTexture);
-    
+    hr = m_pd3dDevice->CreateTexture2D(&textureDesc, nullptr, &depthStencil->m_pTexture);
+
     if (FAILED(hr)) {
       delete backBuffer;
       delete depthStencil;
       return false;
     }
-    
+
     D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilDesc;
     ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
     depthStencilDesc.Format = textureDesc.Format;
     depthStencilDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
     depthStencilDesc.Texture2D.MipSlice = 0;
-    
-    hr = m_pd3dDevice->CreateDepthStencilView(depthStencil->m_pTexture, &depthStencilDesc,
+
+    hr = m_pd3dDevice->CreateDepthStencilView(depthStencil->m_pTexture, 
+                                              &depthStencilDesc,
                                               &depthStencil->m_pDepthStencilView);
-    
+
     //We check that everything goes well, if we do not send an error.
     if (FAILED(hr)) {
       delete backBuffer;
       delete depthStencil;
       return false;
     }
-    
-    m_pDeviceContext->OMSetRenderTargets(backBuffer->m_vRenderTargetView.size(), 
+
+    m_pDeviceContext->OMSetRenderTargets(backBuffer->m_vRenderTargetView.size(),
                                          &backBuffer->m_vRenderTargetView[0],
                                          depthStencil->m_pDepthStencilView);
     m_pDepthStencil = depthStencil;
 
     return true;
   }
-  
-  void 
+
+  void
   GraphicsApiDX::drawIndex(uint32 indexCount, uint32 startIndexLocation,
                            uint32 baseVertexLocation) {
-    m_pDeviceContext->DrawIndexed(indexCount, startIndexLocation,
-                                     baseVertexLocation);
+    m_pDeviceContext->DrawIndexed(indexCount, startIndexLocation, baseVertexLocation);
   }
-  
-  void 
+
+  void
   GraphicsApiDX::swapChainPresent(uint32 syncInterval, uint32 flags) {
     m_pSwapChain->Present(syncInterval, flags);
   }
-  
+
   Textures*
   GraphicsApiDX::loadTextureFromFile(String srcFile) {
     int32 width;
@@ -316,7 +319,8 @@ namespace gaEngineSDK {
     viewDesc.Texture2D.MipLevels = 1;
 
     texture->m_vShaderResourceView.resize(1);
-    if (FAILED(m_pd3dDevice->CreateShaderResourceView(texture->m_pTexture, &viewDesc, 
+    if (FAILED(m_pd3dDevice->CreateShaderResourceView(texture->m_pTexture, 
+                                                      &viewDesc,
                                                       &texture->m_vShaderResourceView[0]))) {
       delete texture;
       stbi_image_free(data);
@@ -325,11 +329,11 @@ namespace gaEngineSDK {
 
     return texture;
   }
-  
-  void 
+
+  void
   GraphicsApiDX::unbindOGL() {}
 
-  Matrix4x4 
+  Matrix4x4
   GraphicsApiDX::matrixPolicy(const Matrix4x4& mat4x4) {
     Matrix4x4 temp;
     temp = mat4x4;
@@ -342,74 +346,84 @@ namespace gaEngineSDK {
   * Updates.
   */
   /***************************************************************************/
-  
-  void 
+
+  void
   GraphicsApiDX::updateConstantBuffer(const void* srcData,
                                       WeakSPtr<ConstantBuffer> updateDataCB) {
     auto cb = updateDataCB.lock().get();
     if (nullptr != cb) {
       ConstantBufferDX* constBuff = reinterpret_cast<ConstantBufferDX*>(cb);
-  
-      m_pDeviceContext->UpdateSubresource(constBuff->m_pConstantBuffer, 0, nullptr, srcData, 
-                                          0, 0);
+
+      m_pDeviceContext->UpdateSubresource(constBuff->m_pConstantBuffer, 
+                                          0, 
+                                          nullptr, 
+                                          srcData,
+                                          0,
+                                          0);
     }
   }
-  
+
   /***************************************************************************/
   /**
   * Clears.
   */
   /***************************************************************************/
-  
-  void 
+
+  void
   GraphicsApiDX::clearYourRenderTargetView(WeakSPtr<Textures> renderTarget, Vector4 rgba) {
-    if (nullptr != renderTarget.lock().get()) {
+    auto tempRT = renderTarget.lock().get();
+    if (nullptr != tempRT) {
       float clearColor[4] = { rgba.x, rgba.y, rgba.z, rgba.w };
 
-      TexturesDX* renderTGT = reinterpret_cast<TexturesDX*>(renderTarget.lock().get());
+      TexturesDX* renderTGT = reinterpret_cast<TexturesDX*>(tempRT);
 
       m_pDeviceContext->ClearRenderTargetView(renderTGT->m_vRenderTargetView[0], clearColor);
     }
   }
 
-  void 
+  void
   GraphicsApiDX::clearYourRenderTarget(WeakSPtr<RenderTarget> renderTarget, Vector4 rgba) {
     auto rt = renderTarget.lock().get();
     if (nullptr != rt) {
       float clearColor[4] = { rgba.x, rgba.y, rgba.z, rgba.w };
 
       RenderTargetDX* renderTGT = reinterpret_cast<RenderTargetDX*>(rt);
-      
+
       uint32 numOfTargets = renderTGT->m_renderTarget.m_vRenderTargetView.size();
       for (uint32 i = 0; i < numOfTargets; ++i) {
-        m_pDeviceContext->ClearRenderTargetView(renderTGT->m_renderTarget.m_vRenderTargetView[i], 
+        m_pDeviceContext->ClearRenderTargetView(renderTGT->m_renderTarget.m_vRenderTargetView[i],
                                                 clearColor);
       }
     }
   }
-  
-  void 
+
+  void
   GraphicsApiDX::clearYourDepthStencilView(WeakSPtr<Textures> depthStencil) {
-    if (nullptr != depthStencil.lock().get()) {
-      TexturesDX* depthSten = reinterpret_cast<TexturesDX*>(depthStencil.lock().get());
+    auto tempDepth = depthStencil.lock().get();
+    if (nullptr != tempDepth) {
+      TexturesDX* depthSten = reinterpret_cast<TexturesDX*>(tempDepth);
 
       m_pDeviceContext->ClearDepthStencilView(depthSten->m_pDepthStencilView,
-                                                 D3D11_CLEAR_DEPTH, 1.0f, 0);
+                                              D3D11_CLEAR_DEPTH, 
+                                              1.0f,
+                                              0);
     }
   }
-  
+
   /***************************************************************************/
   /**
   * Creates.
   */
   /***************************************************************************/
-  
-  Shaders* 
-  GraphicsApiDX::createShadersProgram(const WString& nameVS, const String& entryPointVS, 
-                                      const WString& namePS, const String& entryPointPS) {
+
+  Shaders*
+  GraphicsApiDX::createShadersProgram(const WString& nameVS,
+                                      const String& entryPointVS,
+                                      const WString& namePS,
+                                      const String& entryPointPS) {
     //We generate an auto variable to adapt the type of data we occupy.
     ShadersDX* shaders = new ShadersDX();
-  
+
     if (!(AnalyzeVertexShaderDX(nameVS))) {
       delete shaders;
       return nullptr;
@@ -418,85 +432,87 @@ namespace gaEngineSDK {
       delete shaders;
       return nullptr;
     }
-  
+
     //Assign data to variables.
     shaders->m_pPSBlob = nullptr;
     HRESULT hr = S_OK;
-  
+
     //We compile the received shader.
     hr = CompileShaderFromFile(namePS, entryPointPS.c_str(), "ps_4_0", &shaders->m_pPSBlob);
-  
+
     //We check that everything goes well, if we do not send an error.
     if (FAILED(hr)) {
       delete shaders;
       return nullptr;
     }
-  
+
     //We create the pixel shader with the DX function.
     hr = m_pd3dDevice->CreatePixelShader(shaders->m_pPSBlob->GetBufferPointer(),
                                          shaders->m_pPSBlob->GetBufferSize(),
                                          nullptr, &shaders->m_pPixelShader);
+
     shaders->m_pPSBlob->Release();
-  
+
     //Finally we return the data in case of not getting an error.
     if (FAILED(hr)) {
       delete shaders;
       return nullptr;
     }
-  
+
     //Assign data to variables.
     shaders->m_pVSBlob = nullptr;
-  
+
     //We compile the received shader.
     hr = CompileShaderFromFile(nameVS, entryPointVS.c_str(), "vs_4_0", &shaders->m_pVSBlob);
-  
+
     //We check that everything goes well, if we do not send an error.
     if (FAILED(hr)) {
       delete shaders;
       return nullptr;
     }
-  
+
     //We create the vertex shader with the DX function.
     hr = m_pd3dDevice->CreateVertexShader(shaders->m_pVSBlob->GetBufferPointer(),
                                           shaders->m_pVSBlob->GetBufferSize(),
                                           nullptr, &shaders->m_pVertexShader);
+
     //Finally we return the data in case of not getting an error.
     if (FAILED(hr)) {
       shaders->m_pVSBlob->Release();
       delete shaders;
       return nullptr;
     }
-  
+
     return shaders;
   }
 
-  SPtr<VertexShader> 
-  GraphicsApiDX::loadVertexShaderFromFile(const char* vertexFilePath, 
-                                          const char* vertexMainFuntion, 
+  SPtr<VertexShader>
+  GraphicsApiDX::loadVertexShaderFromFile(const char* vertexFilePath,
+                                          const char* vertexMainFuntion,
                                           const char* shaderVersion) {
     return SPtr<VertexShader>();
   }
 
-  SPtr<PixelShader> 
-  GraphicsApiDX::loadPixelShaderFromFile(const char* pixelFilePath, 
-                                         const char* pixelMainFuntion, 
+  SPtr<PixelShader>
+  GraphicsApiDX::loadPixelShaderFromFile(const char* pixelFilePath,
+                                         const char* pixelMainFuntion,
                                          const char* shaderVersion) {
     return SPtr<PixelShader>();
   }
-  
-  VertexBuffer* 
+
+  VertexBuffer*
   GraphicsApiDX::createVertexBuffer(const void* data, const uint32 size) {
     //Generamos una variable auto
     //para adaptar el tipo de dato que ocupamos
     VertexBufferDX* VB = new VertexBufferDX();
-  
+
     //Asignamos datos a la variable
     HRESULT hr = S_OK;
-  
+
     if (0 != size) {
       //Rellenamos el descriptor de buffer
       CD3D11_BUFFER_DESC bd(size, D3D11_BIND_VERTEX_BUFFER);
-  
+
       if (nullptr != data) {
         //Generamos una variable descriptor
         D3D11_SUBRESOURCE_DATA InitData;
@@ -507,11 +523,11 @@ namespace gaEngineSDK {
 
         //Asignamos datos a las variables
         InitData.pSysMem = data;
-  
+
         //Creamos el buffer
         hr = m_pd3dDevice->CreateBuffer(&bd, &InitData,
-                                        &VB->m_pVertexBuffer);
-  
+          &VB->m_pVertexBuffer);
+
         if (FAILED(hr)) {
           delete VB;
           return nullptr;
@@ -521,7 +537,7 @@ namespace gaEngineSDK {
       }
       else {
         hr = m_pd3dDevice->CreateBuffer(&bd, nullptr, &VB->m_pVertexBuffer);
-  
+
         if (FAILED(hr)) {
           delete VB;
           return nullptr;
@@ -530,20 +546,20 @@ namespace gaEngineSDK {
         return VB;
       }
     }
-  
+
     delete VB;
     return nullptr;
   }
-  
-  IndexBuffer* 
+
+  IndexBuffer*
   GraphicsApiDX::createIndexBuffer(const void* data, const uint32 size) {
     //Generamos una variable auto
     //para adaptar el tipo de dato que ocupamos
     IndexBufferDX* IB = new IndexBufferDX();
-  
+
     //Asignamos datos a la variable
     HRESULT hr = S_OK;
-  
+
     if (0 != size) {
       //Rellenamos el descriptor de buffer
       D3D11_BUFFER_DESC bd;
@@ -553,7 +569,7 @@ namespace gaEngineSDK {
       bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
       bd.CPUAccessFlags = 0;
       bd.MiscFlags = 0;
-  
+
       if (nullptr != data) {
         //Generamos una variable descriptor
         D3D11_SUBRESOURCE_DATA InitData;
@@ -566,10 +582,10 @@ namespace gaEngineSDK {
         InitData.pSysMem = data;
         InitData.SysMemPitch = 0;
         InitData.SysMemSlicePitch = 0;
-  
+
         //Creamos el buffer
         hr = m_pd3dDevice->CreateBuffer(&bd, &InitData,
-                                        &IB->m_pIndexBuffer);
+          &IB->m_pIndexBuffer);
         if (FAILED(hr)) {
           delete IB;
           return nullptr;
@@ -578,7 +594,7 @@ namespace gaEngineSDK {
       }
       else {
         hr = m_pd3dDevice->CreateBuffer(&bd, nullptr, &IB->m_pIndexBuffer);
-  
+
         if (FAILED(hr)) {
           delete IB;
           return nullptr;
@@ -586,43 +602,46 @@ namespace gaEngineSDK {
         return IB;
       }
     }
-  
+
     delete IB;
     return nullptr;
   }
-  
-  ConstantBuffer* 
+
+  ConstantBuffer*
   GraphicsApiDX::createConstantBuffer(const uint32 bufferSize) {
     //We generate an auto variable to adapt the type of data that we occupy.
     ConstantBufferDX* constantBuffer = new ConstantBufferDX();
-  
+
     //Assign data to the variable.
     HRESULT hr = S_OK;
-  
+
     //We fill the buffer descriptor.
     CD3D11_BUFFER_DESC bd(bufferSize, D3D11_BIND_CONSTANT_BUFFER);
-  
+
     //We create the buffer.
     hr = m_pd3dDevice->CreateBuffer(&bd, nullptr, &constantBuffer->m_pConstantBuffer);
-  
+
     //Finally we return the data in case of not getting an error.
     if (FAILED(hr)) {
       delete constantBuffer;
       return nullptr;
     }
-  
+
     return constantBuffer;
   }
-  
-  Textures* 
-  GraphicsApiDX::createTexture(const uint32 width, const uint32 height, const uint32 bindFlags,
-                               TEXTURE_FORMAT::E textureFormat, const String fileName) {
+
+  Textures*
+  GraphicsApiDX::createTexture(const uint32 width, 
+                               const uint32 height, 
+                               const uint32 bindFlags,
+                               TEXTURE_FORMAT::E textureFormat, 
+                               const String fileName) {
     //Assign data to variable
     HRESULT hr = S_OK;
-  
+
     //We generate an auto variable to adapt the type of data we occupy.
     TexturesDX* texture = new TexturesDX();
-  
+
     //We fill in the descriptor.
     D3D11_TEXTURE2D_DESC textureDesc;
     ZeroMemory(&textureDesc, sizeof(textureDesc));
@@ -637,28 +656,30 @@ namespace gaEngineSDK {
     textureDesc.BindFlags = bindFlags;
     textureDesc.CPUAccessFlags = 0;
     textureDesc.MiscFlags = 0;
-  
+
     //We create the texture.
     hr = m_pd3dDevice->CreateTexture2D(&textureDesc, nullptr, &texture->m_pTexture);
-  
+
     if (FAILED(hr)) {
       delete texture;
       return nullptr;
     }
-  
+
     //RenderTargetView
     if (bindFlags & D3D11_BIND_RENDER_TARGET) {
       texture->m_vRenderTargetView.resize(1);
-      hr = m_pd3dDevice->CreateRenderTargetView(texture->m_pTexture, nullptr,
+
+      hr = m_pd3dDevice->CreateRenderTargetView(texture->m_pTexture, 
+                                                nullptr,
                                                 &texture->m_vRenderTargetView[0]);
       if (FAILED(hr)) {
         delete texture;
         return nullptr;
       }
-  
+
       return texture;
     }
-  
+
     //DepthStencilView
     if (bindFlags & D3D11_BIND_DEPTH_STENCIL) {
       D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilDesc;
@@ -666,7 +687,7 @@ namespace gaEngineSDK {
       depthStencilDesc.Format = textureDesc.Format;
       depthStencilDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
       depthStencilDesc.Texture2D.MipSlice = 0;
-  
+
       hr = m_pd3dDevice->CreateDepthStencilView(texture->m_pTexture,
                                                 &depthStencilDesc,
                                                 &texture->m_pDepthStencilView);
@@ -675,38 +696,38 @@ namespace gaEngineSDK {
         delete texture;
         return nullptr;
       }
-  
+
       return texture;
     }
-  
+
     //ShaderResourceView
     if (bindFlags & D3D11_BIND_SHADER_RESOURCE) {
       CD3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc(D3D11_SRV_DIMENSION_TEXTURE2D);
-  
+
       texture->m_vShaderResourceView.resize(1);
       hr = m_pd3dDevice->CreateShaderResourceView(texture->m_pTexture,
-                                                  &shaderResourceViewDesc,
-                                                  &texture->m_vShaderResourceView[0]);
+        &shaderResourceViewDesc,
+        &texture->m_vShaderResourceView[0]);
       //We check that everything goes well, if we do not send an error.
       if (FAILED(hr)) {
         delete texture;
         return nullptr;
       }
-  
+
       return texture;
     }
 
     return texture;
   }
-  
+
   SPtr<SamplerState>
   GraphicsApiDX::createSamplerState() {
     //We generate an auto variable to adapt the type of data we occupy.
     SamplerStateDX* samplerState = new SamplerStateDX();
-  
+
     //Assign data to variable.
     HRESULT hr = S_OK;
-  
+
     //We define the sampler state.
     D3D11_SAMPLER_DESC sampDesc;
     ZeroMemory(&sampDesc, sizeof(sampDesc));
@@ -718,7 +739,7 @@ namespace gaEngineSDK {
     sampDesc.MinLOD = 0;
     sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
     sampDesc.MipLODBias = 0;
-  
+
     hr = m_pd3dDevice->CreateSamplerState(&sampDesc, &samplerState->m_pSamplerState);
 
     //Finally we return the data in case of not getting an error.
@@ -726,18 +747,18 @@ namespace gaEngineSDK {
       delete samplerState;
       return nullptr;
     }
-  
+
     return SPtr<SamplerState>(samplerState);
   }
-  
-  InputLayout* 
+
+  InputLayout*
   GraphicsApiDX::createInputLayout(WeakSPtr<Shaders> vertexShader) {
     //Asignamos datos a la variable
     HRESULT hr = S_OK;
-  
+
     InputLayoutDX* inputLayout = new InputLayoutDX();
     ShadersDX* vShader = reinterpret_cast<ShadersDX*>(vertexShader.lock().get());
-  
+
     //Generamos la información del shader
     ID3D11ShaderReflection* pVertexShaderReflection = nullptr;
 
@@ -748,32 +769,32 @@ namespace gaEngineSDK {
                           vShader->m_pVSBlob->GetBufferSize(),
                           IID_ID3D11ShaderReflection,
                           (void**)&pVertexShaderReflection))) {
-      delete inputLayout;
-      pVertexShaderReflection->Release();
+                          delete inputLayout;
+                          pVertexShaderReflection->Release();
       return nullptr;
     }
-  
+
     //Generamos una descriptor del shader
     D3D11_SHADER_DESC shaderDesc;
-  
+
     //Obtenemos la información de nuestro
     //descriptor del shader
     pVertexShaderReflection->GetDesc(&shaderDesc);
-  
+
     //Leer la descripción del input layout de 
     // la información del sombreador
     uint32 byteOffset = 0;
     Vector<D3D11_INPUT_ELEMENT_DESC> inputLayoutDesc;
-  
+
     uint32 tempInputParams = shaderDesc.InputParameters;
     for (uint32 i = 0; i < tempInputParams; ++i) {
       D3D11_SIGNATURE_PARAMETER_DESC paramDesc;
       pVertexShaderReflection->GetInputParameterDesc(i, &paramDesc);
-  
+
       //Creamos y guardamos la información
       //para input element
       D3D11_INPUT_ELEMENT_DESC elementDesc;
-  
+
       //Rellenamos 6 datos de 7 el formato es
       //lo que sigue
       elementDesc.SemanticName = paramDesc.SemanticName;
@@ -782,7 +803,7 @@ namespace gaEngineSDK {
       elementDesc.AlignedByteOffset = byteOffset;
       elementDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
       elementDesc.InstanceDataStepRate = 0;
-  
+
       //Determinamos el formato DXGI
       // DXGI_FORMAT_R32_UINT
       // DXGI_FORMAT_R32_SINT
@@ -844,38 +865,42 @@ namespace gaEngineSDK {
         }
         byteOffset += 16;
       }
-  
+
       //Guardamos el element desc
       inputLayoutDesc.push_back(elementDesc);
     }
-  
+
     //Creamos el input layout
     hr = m_pd3dDevice->CreateInputLayout(&inputLayoutDesc[0],
-                                         (uint32)inputLayoutDesc.size(), 
+                                         (uint32)inputLayoutDesc.size(),
                                          vShader->m_pVSBlob->GetBufferPointer(),
-                                         vShader->m_pVSBlob->GetBufferSize(), 
+                                         vShader->m_pVSBlob->GetBufferSize(),
                                          &inputLayout->m_pVertexLayout);
     //Liberamos el puntero blob
     vShader->m_pVSBlob->Release();
-  
+
     //Liberación de memoria de reflexión de shader de asignación
     pVertexShaderReflection->Release();
-  
+
     //Checamos que todo salga bien, si no mandamos un error
     if (FAILED(hr)) {
       delete inputLayout;
       return nullptr;
     }
-  
+
     //Registro de longitud de bytes
     inputLayout->m_inputLayoutByteLength = &byteOffset;
-  
+
     return inputLayout;
   }
-  
-  SPtr<RenderTarget> 
-  GraphicsApiDX::createRenderTarget(uint32 width, uint32 height, uint32 mipLevels,
-                                    uint32 numRenderTargets, float scale, bool depth) {
+
+  SPtr<RenderTarget>
+  GraphicsApiDX::createRenderTarget(uint32 width, 
+                                    uint32 height, 
+                                    uint32 mipLevels,
+                                    uint32 numRenderTargets, 
+                                    float scale, 
+                                    bool depth) {
     if (0 >= numRenderTargets) {
       numRenderTargets = 1;
     }
@@ -924,9 +949,10 @@ namespace gaEngineSDK {
       renderTargetViewDesc.Texture2D.MipSlice = 0;
 
       // Create the render target view.
-      m_pd3dDevice->CreateRenderTargetView(newRT->m_renderTarget.m_pTexture, 
+      m_pd3dDevice->CreateRenderTargetView(newRT->m_renderTarget.m_pTexture,
                                            &renderTargetViewDesc,
                                            &newRT->m_renderTarget.m_vRenderTargetView[i]);
+
       /*
       *  Map's Shader Resource View
       */
@@ -959,12 +985,15 @@ namespace gaEngineSDK {
       descDepth.MiscFlags = 0;
 
       m_pd3dDevice->CreateTexture2D(&descDepth, nullptr, &newRT->m_renderTarget.m_pTexture);
+
       D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
       ZeroMemory(&descDSV, sizeof(descDSV));
       descDSV.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
       descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
       descDSV.Texture2D.MipSlice = 0;
-      m_pd3dDevice->CreateDepthStencilView(newRT->m_renderTarget.m_pTexture, &descDSV,
+
+      m_pd3dDevice->CreateDepthStencilView(newRT->m_renderTarget.m_pTexture, 
+                                           &descDSV,
                                            &newRT->m_pDepthStencil);
     }
 
@@ -978,140 +1007,163 @@ namespace gaEngineSDK {
   * Sets.
   */
   /***************************************************************************/
-  
-  void 
+
+  void
   GraphicsApiDX::setPixelShader(WeakSPtr<Shaders> pixelShader) {
-    //Generamos una variable auto
-    //para adaptar el tipo de dato que ocupamos
-    //Y hacemos un casteo reinterprete para convertir el puntero
     ShadersDX* pShader = reinterpret_cast<ShadersDX*> (pixelShader.lock().get());
-  
+
     m_pDeviceContext->PSSetShader(pShader->m_pPixelShader, nullptr, 0);
   }
-  
-  void 
+
+  void
   GraphicsApiDX::setVertexShader(WeakSPtr<Shaders> vertexShader) {
     ShadersDX* vShader = reinterpret_cast<ShadersDX*>(vertexShader.lock().get());
-  
+
     m_pDeviceContext->VSSetShader(vShader->m_pVertexShader, nullptr, 0);
   }
-  
-  void 
+
+  void
   GraphicsApiDX::setVertexBuffer(WeakSPtr<VertexBuffer> vertexBuffer) {
-    if (nullptr != &vertexBuffer) {
-      VertexBufferDX* vBuffer = reinterpret_cast<VertexBufferDX*>(vertexBuffer.lock().get());
+    auto tempVertex = vertexBuffer.lock().get();
+    if (nullptr != tempVertex) {
+      VertexBufferDX* vBuffer = reinterpret_cast<VertexBufferDX*>(tempVertex);
 
       //TODO: cambiar a que este dato sea manipulable y no dependa de ese nombre "vertex"
       uint32 stride = sizeof(Vertex);
       uint32 offset = 0;
 
-      m_pDeviceContext->IASetVertexBuffers(0, 1, &vBuffer->m_pVertexBuffer, &stride, 
-                                              &offset);
+      m_pDeviceContext->IASetVertexBuffers(0, 
+                                           1, 
+                                           &vBuffer->m_pVertexBuffer, 
+                                           &stride,
+                                           &offset);
     }
   }
-  
-  void 
+
+  void
   GraphicsApiDX::setIndexBuffer(WeakSPtr<IndexBuffer> indexBuffer) {
-    if (nullptr != &indexBuffer) {
-      IndexBufferDX* iBuffer = reinterpret_cast<IndexBufferDX*>(indexBuffer.lock().get());
+    auto tempIndex = indexBuffer.lock().get();
+    if (nullptr != tempIndex) {
+      IndexBufferDX* iBuffer = reinterpret_cast<IndexBufferDX*>(tempIndex);
 
       m_pDeviceContext->IASetIndexBuffer(iBuffer->m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
     }
   }
-  
-  void 
-  GraphicsApiDX::setConstantBuffer(bool isVertex, WeakSPtr<ConstantBuffer> constantBuffer,
-                                   const uint32 startSlot, const uint32 numBuffers) {
-    ConstantBufferDX* constBuffer = 
+
+  void
+  GraphicsApiDX::setConstantBuffer(bool isVertex, 
+                                   WeakSPtr<ConstantBuffer> constantBuffer,
+                                   const uint32 startSlot, 
+                                   const uint32 numBuffers) {
+    ConstantBufferDX* constBuffer =
                       reinterpret_cast<ConstantBufferDX*>(constantBuffer.lock().get());
-  
     if (true == isVertex) {
-      m_pDeviceContext->VSSetConstantBuffers(startSlot, numBuffers,
-                                                &constBuffer->m_pConstantBuffer);
+      m_pDeviceContext->VSSetConstantBuffers(startSlot, 
+                                             numBuffers,
+                                             &constBuffer->m_pConstantBuffer);
     }
     else {
-      m_pDeviceContext->PSSetConstantBuffers(startSlot, numBuffers,
-                                                &constBuffer->m_pConstantBuffer);
+      m_pDeviceContext->PSSetConstantBuffers(startSlot,
+                                             numBuffers, 
+                                             &constBuffer->m_pConstantBuffer);
     }
   }
-  
-  void 
-  GraphicsApiDX::setSamplerState(WeakSPtr<SamplerState> sampler, uint32 startSlot, 
+
+  void
+  GraphicsApiDX::setSamplerState(WeakSPtr<SamplerState> sampler, 
+                                 uint32 startSlot,
                                  uint32 numSamplers) {
-    if (nullptr != sampler.lock().get()) {
-      SPtr<SamplerState> tempSampler = sampler.lock();
+    auto tempSamp = sampler.lock().get();
+    if (nullptr != tempSamp) {
+      SPtr<SamplerState> tempSampler(tempSamp);
 
       setSamplerVertexShader(tempSampler, startSlot, numSamplers);
       setSamplerPixelShader(tempSampler, startSlot, numSamplers);
     }
   }
 
-  void 
-  GraphicsApiDX::setSamplerVertexShader(WeakSPtr<SamplerState> sampler, uint32 startSlot, 
+  void
+  GraphicsApiDX::setSamplerVertexShader(WeakSPtr<SamplerState> sampler, 
+                                        uint32 startSlot,
                                         uint32 numSamplers) {
-    if (nullptr != sampler.lock().get()) {
-      SamplerStateDX* samplerDX = reinterpret_cast<SamplerStateDX*>(sampler.lock().get());
+    auto tempSamp = sampler.lock().get();
+    if (nullptr != tempSamp) {
+      SamplerStateDX* samplerDX = reinterpret_cast<SamplerStateDX*>(tempSamp);
 
       m_pDeviceContext->VSSetSamplers(startSlot, numSamplers, &samplerDX->m_pSamplerState);
     }
   }
 
   void
-  GraphicsApiDX::setSamplerPixelShader(WeakSPtr<SamplerState> sampler, uint32 startSlot, 
+  GraphicsApiDX::setSamplerPixelShader(WeakSPtr<SamplerState> sampler, 
+                                       uint32 startSlot,
                                        uint32 numSamplers) {
-    if (nullptr != sampler.lock().get()) {
-      SamplerStateDX* samplerDX = reinterpret_cast<SamplerStateDX*>(sampler.lock().get());
+    auto tempSamp = sampler.lock().get();
+    if (nullptr != tempSamp) {
+      SamplerStateDX* samplerDX = reinterpret_cast<SamplerStateDX*>(tempSamp);
 
       m_pDeviceContext->PSSetSamplers(startSlot, numSamplers, &samplerDX->m_pSamplerState);
     }
   }
-  
+
   void
   GraphicsApiDX::setShaderResourceView(const Vector<Textures*>& texture,
-                                       const uint32 startSlot, const uint32 numViews) {
+                                       const uint32 startSlot,
+                                       const uint32 numViews) {
     uint32 tempSize = texture.size();
     for (uint32 i = 0; i < tempSize; ++i) {
       TexturesDX* shaderResource = reinterpret_cast<TexturesDX*>(texture[i]);
 
       if (nullptr != shaderResource) {
-        m_pDeviceContext->PSSetShaderResources(i, numViews,
+        m_pDeviceContext->PSSetShaderResources(i, 
+                                               numViews, 
                                                shaderResource->m_vShaderResourceView.data());
       }
     }
   }
-  
-  void 
-  GraphicsApiDX::setShaderResourceView(void* renderTexture, 
-                                       const uint32 startSlot, 
+
+  void
+  GraphicsApiDX::setShaderResourceView(void* renderTexture,
+                                       const uint32 startSlot,
                                        const uint32 numViews) {
-    ID3D11ShaderResourceView* shaderResource = 
+    ID3D11ShaderResourceView* shaderResource =
                               reinterpret_cast<ID3D11ShaderResourceView*>(renderTexture);
 
     if (nullptr != shaderResource) {
-      m_pDeviceContext->PSSetShaderResources(startSlot, 
-                                             numViews, 
-                                             &shaderResource);
+      m_pDeviceContext->PSSetShaderResources(startSlot, numViews, &shaderResource);
     }
   }
 
   void
-  GraphicsApiDX::setRenderTarget(WeakSPtr<Textures> renderTarget,
+  GraphicsApiDX::setRenderTarget(WeakSPtr<Textures> renderTarget, 
                                  WeakSPtr<Textures> depthStencil) {
     auto rt = renderTarget.lock().get();
     auto ds = depthStencil.lock().get();
-    if ((nullptr != rt) &&  (nullptr != ds)) {
+
+    if ((nullptr != rt) && (nullptr != ds)) {
       TexturesDX* rTarget = reinterpret_cast<TexturesDX*>(rt);
       TexturesDX* dStencil = reinterpret_cast<TexturesDX*>(ds);
 
-      m_pDeviceContext->OMSetRenderTargets(rTarget->m_vRenderTargetView.size(), 
+      m_pDeviceContext->OMSetRenderTargets(rTarget->m_vRenderTargetView.size(),
                                            &rTarget->m_vRenderTargetView[0],
                                            dStencil->m_pDepthStencilView);
     }
     else if ((nullptr != rt) && (nullptr == ds)) {
+      SPtr<Textures> temp(rt);
+      setRenderTarget(temp);
+    }
+  }
+
+  void
+  GraphicsApiDX::setRenderTarget(WeakSPtr<Textures> renderTarget) {
+    auto rt = renderTarget.lock().get();
+
+    if (nullptr != rt) {
       TexturesDX* rTarget = reinterpret_cast<TexturesDX*>(rt);
 
       m_pDeviceContext->OMSetRenderTargets(rTarget->m_vRenderTargetView.size(),
-                                           &rTarget->m_vRenderTargetView[0], nullptr);
+                                           &rTarget->m_vRenderTargetView[0], 
+                                           nullptr);
     }
   }
 
@@ -1120,6 +1172,7 @@ namespace gaEngineSDK {
                                  WeakSPtr<Textures> depthStencil) {
     auto rt = renderTarget.lock().get();
     auto ds = depthStencil.lock().get();
+
     if ((nullptr != rt) && (nullptr != ds)) {
       RenderTargetDX* rTarget = reinterpret_cast<RenderTargetDX*>(rt);
       TexturesDX* dStencil = reinterpret_cast<TexturesDX*>(ds);
@@ -1129,15 +1182,25 @@ namespace gaEngineSDK {
                                            dStencil->m_pDepthStencilView);
     }
     else if ((nullptr != rt) && (nullptr == ds)) {
+      SPtr<RenderTarget>temp(rt);
+      setRenderTarget(temp);
+    }
+  }
+
+  void
+  GraphicsApiDX::setRenderTarget(WeakSPtr<RenderTarget> renderTarget) {
+    auto rt = renderTarget.lock().get();
+
+    if (nullptr != rt) {
       RenderTargetDX* rTarget = reinterpret_cast<RenderTargetDX*>(rt);
 
       m_pDeviceContext->OMSetRenderTargets(rTarget->m_renderTarget.m_vRenderTargetView.size(),
-                                           &rTarget->m_renderTarget.m_vRenderTargetView[0], 
+                                           &rTarget->m_renderTarget.m_vRenderTargetView[0],
                                            nullptr);
     }
   }
-  
-  void 
+
+  void
   GraphicsApiDX::setDepthStencil(WeakSPtr<Textures>depthStencil, const uint32 stencilRef) {
     auto ds = depthStencil.lock().get();
     if (nullptr != ds) {
@@ -1146,8 +1209,8 @@ namespace gaEngineSDK {
       m_pDeviceContext->OMSetDepthStencilState(dStencil->m_pDepthStencilState, stencilRef);
     }
   }
-  
-  void 
+
+  void
   GraphicsApiDX::setInputLayout(WeakSPtr<InputLayout> vertexLayout) {
     auto vl = vertexLayout.lock().get();
     if (nullptr != vl) {
@@ -1156,9 +1219,10 @@ namespace gaEngineSDK {
       m_pDeviceContext->IASetInputLayout(inputLayout->m_pVertexLayout);
     }
   }
-  
-  void 
-  GraphicsApiDX::setViewports(const uint32 width, const uint32 heigth,
+
+  void
+  GraphicsApiDX::setViewports(const uint32 width, 
+                              const uint32 heigth,
                               const uint32 numViewports) {
     D3D11_VIEWPORT vp;
     vp.Width = (float)width;
@@ -1167,16 +1231,16 @@ namespace gaEngineSDK {
     vp.MaxDepth = 1.0f;
     vp.TopLeftX = 0;
     vp.TopLeftY = 0;
-  
+
     m_pDeviceContext->RSSetViewports(numViewports, &vp);
   }
-  
-  void 
+
+  void
   GraphicsApiDX::setPrimitiveTopology(const uint32 topology) {
     m_pDeviceContext->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)topology);
   }
-  
-  void 
+
+  void
   GraphicsApiDX::setYourVS(WeakSPtr<Shaders> vertexShader) {
     auto vs = vertexShader.lock().get();
     if (nullptr != vs) {
@@ -1185,20 +1249,22 @@ namespace gaEngineSDK {
       m_pDeviceContext->VSSetShader(vShader->m_pVertexShader, nullptr, 0);
     }
   }
-  
+
   void
   GraphicsApiDX::setYourVSConstantBuffers(WeakSPtr<ConstantBuffer> constantBuffer,
-                                          const uint32 startSlot, const uint32 numBuffers) {
+                                          const uint32 startSlot,
+                                          const uint32 numBuffers) {
     auto cb = constantBuffer.lock().get();
     if (nullptr != cb) {
       ConstantBufferDX* cBuffer = reinterpret_cast<ConstantBufferDX*>(cb);
 
-      m_pDeviceContext->VSSetConstantBuffers(startSlot, numBuffers, 
+      m_pDeviceContext->VSSetConstantBuffers(startSlot, 
+                                             numBuffers,
                                              &cBuffer->m_pConstantBuffer);
     }
   }
-  
-  void 
+
+  void
   GraphicsApiDX::setYourPS(WeakSPtr<Shaders> pixelShader) {
     auto ps = pixelShader.lock().get();
     if (nullptr != ps) {
@@ -1207,34 +1273,37 @@ namespace gaEngineSDK {
       m_pDeviceContext->PSSetShader(pShader->m_pPixelShader, nullptr, 0);
     }
   }
-  
-  void 
+
+  void
   GraphicsApiDX::setYourPSConstantBuffers(WeakSPtr<ConstantBuffer> constantBuffer,
-                                          const uint32 startSlot, const uint32 numBuffers) {
+      const uint32 startSlot, const uint32 numBuffers) {
     auto cb = constantBuffer.lock().get();
     if (nullptr != cb) {
-      ConstantBufferDX* cBuffer =
-        reinterpret_cast<ConstantBufferDX*>(cb);
+      ConstantBufferDX* cBuffer = reinterpret_cast<ConstantBufferDX*>(cb);
 
-      m_pDeviceContext->PSSetConstantBuffers(startSlot, numBuffers, 
-                                                &cBuffer->m_pConstantBuffer);
+      m_pDeviceContext->PSSetConstantBuffers(startSlot, 
+                                             numBuffers, 
+                                             &cBuffer->m_pConstantBuffer);
     }
   }
-  
+
   void
-  GraphicsApiDX::setYourPSSampler(WeakSPtr<SamplerState> sampler, const uint32 startSlot,
+  GraphicsApiDX::setYourPSSampler(WeakSPtr<SamplerState> sampler, 
+                                  const uint32 startSlot,
                                   const uint32 numSamplers) {
-    if (nullptr != sampler.lock().get()) {
-      SamplerStateDX* SMP = reinterpret_cast<SamplerStateDX*>(sampler.lock().get());
+    auto tempSamp = sampler.lock().get();
+    if (nullptr != tempSamp) {
+      SamplerStateDX* SMP = reinterpret_cast<SamplerStateDX*>(tempSamp);
 
       m_pDeviceContext->PSSetSamplers(startSlot, numSamplers, &SMP->m_pSamplerState);
     }
   }
-  
+
   void
   GraphicsApiDX::setShaders(WeakSPtr<Shaders> shaders) {
-    if (nullptr != shaders.lock().get()) {
-      ShadersDX* shader = reinterpret_cast<ShadersDX*>(shaders.lock().get());
+    auto tempShader = shaders.lock().get();
+    if (nullptr != tempShader) {
+      ShadersDX* shader = reinterpret_cast<ShadersDX*>(tempShader);
 
       m_pDeviceContext->VSSetShader(shader->m_pVertexShader, 0, 0);
 
@@ -1263,7 +1332,7 @@ namespace gaEngineSDK {
     return m_pDepthStencil;
   }
 
-  SPtr<ConstantBuffer> 
+  SPtr<ConstantBuffer>
   GraphicsApiDX::getConstBufferBones() {
     if (nullptr != m_bonesBuffer) {
       return m_bonesBuffer;
