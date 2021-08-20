@@ -5,16 +5,18 @@
 #include <SFML/Window.hpp>
 
 #include "gaPrerequisitesCore.h"
-#include "gaGraphicsApi.h"
 
 using sf::Event;
 using sf::Window;
 using sf::VideoMode;
 using sf::WindowHandle;
+using sf::Clock;
+using sf::Mouse;
 
 namespace gaEngineSDK {
   class SceneGraph;
   class ResourceManager;
+  class GraphicsApi;
 
   class GA_CORE_EXPORT BaseApp
   {
@@ -113,32 +115,6 @@ namespace gaEngineSDK {
     */
     virtual void
     onDestroySystem() { };
-
-    /*
-    * @brief Detect keyboard input.
-    * @param param, SFML event to know the input pressed.
-    * @param deltaTime, time elapsed since the last frame.
-    */
-    virtual void
-    onKeyboardDown(sf::Event param, const float& deltaTime) { };
-
-    /*
-    * @brief Indicates if the left mouse button is pressed.
-    */
-    virtual void
-    onLeftMouseBtnDown() { };
-
-    /*
-    * @brief Indicates whether the left mouse button was lifted.
-    */
-    virtual void
-    onLeftMouseBtnUp() { };
-
-    /*
-    * @brief Detects if the mouse is moving on the screen.
-    */
-    virtual void
-    onMouseMove() { };
 
    protected:
     /*************************************************************************/

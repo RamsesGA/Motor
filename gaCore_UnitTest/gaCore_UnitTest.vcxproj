@@ -106,7 +106,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>./include/;./include/Externals/;$(DEVLIBS)/SFML/include;$(DEVLIBS)/Assimp/include;$(DEVLIBS)/GoogleTest/include;$(SolutionDir)gaCore/include;$(SolutionDir)gaUtilities/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./include/;./include/Externals/;$(DEVLIBS)/SFML/include;$(DEVLIBS)/Assimp/include;$(DEVLIBS)/GoogleTest/include;$(SolutionDir)gaCore/include;$(SolutionDir)gaUtilities/include;$(SolutionDir)gaRenderer/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -144,7 +144,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>./include/;./include/Externals/;$(DEVLIBS)/SFML/include;$(DEVLIBS)/Assimp/include;$(DEVLIBS)/GoogleTest/include;$(SolutionDir)gaCore/include;$(SolutionDir)gaUtilities/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./include/;./include/Externals/;$(DEVLIBS)/SFML/include;$(DEVLIBS)/Assimp/include;$(DEVLIBS)/GoogleTest/include;$(SolutionDir)gaCore/include;$(SolutionDir)gaUtilities/include;$(SolutionDir)gaRenderer/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>

@@ -17,9 +17,9 @@ namespace gaEngineSDK {
     float camFar = 0.0f;
     float camFoV = 0.0f;
 
-    Vector3 camEye = { 0.0f, 0.0f, 0.0f };
-    Vector3 camLookAt = { 0.0f, 0.0f, 0.0f };
-    Vector3 camUp = { 0.0f, 0.0f, 0.0f };
+    Vector3 camEye;
+    Vector3 camLookAt;
+    Vector3 camUp;
   };
 
   class GA_CORE_EXPORT Camera : public Component
@@ -87,7 +87,7 @@ namespace gaEngineSDK {
     * @brief Function to be able to apply a rotation of the view.
     */
     void
-    mouseRotation();
+    mouseRotation(const float& deltaTime);
 
     /*************************************************************************/
     /**
@@ -133,21 +133,21 @@ namespace gaEngineSDK {
     * @param lookAt, vector 3 to save position to member.
     */
     void
-    setLookAt(Vector3 lookAt);
+    setLookAt(Vector3 lookAt = { 0.0f, 1.0f, 0.0f });
 
     /**
     * @brief Save the values for the corresponding member.
     * @param eye, vector 3 to save position to member.
     */
     void
-    setEye(Vector3 eye);
+    setEye(Vector3 eye = { 0.0f, 0.0f, -700.0f });
 
     /**
     * @brief Save the values for the corresponding member.
     * @param up, vector 3 to save position to member.
     */
     void
-    setUp(Vector3 up);
+    setUp(Vector3 up = { 0.0f, 1.0f, 0.0f });
 
     /**
     * @brief Save the values for the corresponding member.
@@ -239,11 +239,6 @@ namespace gaEngineSDK {
     float m_angule = 0.0f;
 
     /**
-    * @brief Member to define a maximum angle that the user can rotate.
-    */
-    float m_maxAngule = 2160.0f;
-
-    /**
     * @brief Member to save original mouse position.
     */
     Vector2 m_originalMousePos;
@@ -257,21 +252,6 @@ namespace gaEngineSDK {
     * @brief Member to save the front vectors.
     */
     Vector3 m_front;
-
-    /**
-    * @brief Member to save vectors.
-    */
-    Vector3 m_locketFront;
-
-    /**
-    * @brief Member to save vectors in motion X Y.
-    */
-    Vector3 m_onlyXnY;
-
-    /**
-    * @brief Member to save the X Y vectors and lock the camera.
-    */
-    Vector3 m_locketonlyXnY;
 
     /**
     * @brief Member to save the vectors of the right position.

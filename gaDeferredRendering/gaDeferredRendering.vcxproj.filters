@@ -2,19 +2,19 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Archivos de origen">
-      <UniqueIdentifier>{b08c0333-9672-495c-9eb2-bb0698ed50f3}</UniqueIdentifier>
+      <UniqueIdentifier>{19a48f1b-ad41-4bff-aa31-02a9235add63}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\gaRenderer.h">
+    <ClInclude Include="include\gaDeferredRendering.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
-    <ClInclude Include="include\gaPrerequisitesRender.h">
+    <ClInclude Include="include\gaPrerequisitesDefRend.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\gaRenderer.cpp">
+    <ClCompile Include="src\gaDeferredRendering.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

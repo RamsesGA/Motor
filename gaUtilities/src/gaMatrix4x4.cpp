@@ -132,11 +132,11 @@ namespace gaEngineSDK {
   
     m_mat4x4[0][1] = 0.0f;
     m_mat4x4[1][1] = cosf(speedRotation);
-    m_mat4x4[2][1] = sinf(speedRotation);
+    m_mat4x4[2][1] = -sinf(speedRotation);
     m_mat4x4[3][1] = 0.0f;
   
     m_mat4x4[0][2] = 0.0f;
-    m_mat4x4[1][2] = -sinf(speedRotation);
+    m_mat4x4[1][2] = sinf(speedRotation);
     m_mat4x4[2][2] = cosf(speedRotation);
     m_mat4x4[3][2] = 0.0f;
   
@@ -164,7 +164,7 @@ namespace gaEngineSDK {
   Matrix4x4::rotationY(float speedRotation) {
     m_mat4x4[0][0] = cosf(speedRotation);
     m_mat4x4[1][0] = 0.0f;
-    m_mat4x4[2][0] = -sinf(speedRotation);
+    m_mat4x4[2][0] = sinf(speedRotation);
     m_mat4x4[3][0] = 0.0f;
   
     m_mat4x4[0][1] = 0.0f;
@@ -172,7 +172,7 @@ namespace gaEngineSDK {
     m_mat4x4[2][1] = 0.0f;
     m_mat4x4[3][1] = 0.0f;
   
-    m_mat4x4[0][2] = sinf(speedRotation);
+    m_mat4x4[0][2] = -sinf(speedRotation);
     m_mat4x4[1][2] = 0.0f;
     m_mat4x4[2][2] = cosf(speedRotation);
     m_mat4x4[3][2] = 0.0f;
@@ -200,19 +200,24 @@ namespace gaEngineSDK {
   void
   Matrix4x4::rotationZ(float speedRotation) {
     m_mat4x4[0][0] = cosf(speedRotation);
-    m_mat4x4[1][0] = sinf(speedRotation);
+    m_mat4x4[1][0] = -sinf(speedRotation);
     m_mat4x4[2][0] = 0.0f;
     m_mat4x4[3][0] = 0.0f;
   
-    m_mat4x4[0][1] = -sinf(speedRotation);
+    m_mat4x4[0][1] = sinf(speedRotation);
     m_mat4x4[1][1] = cosf(speedRotation);
     m_mat4x4[2][1] = 0.0f;
     m_mat4x4[3][1] = 0.0f;
   
-    m_mat4x4[0][2] = 0.0f; m_mat4x4[0][3] = 0.0f;
-    m_mat4x4[1][2] = 0.0f; m_mat4x4[1][3] = 0.0f;
-    m_mat4x4[2][2] = 1.0f; m_mat4x4[2][3] = 0.0f;
-    m_mat4x4[3][2] = 0.0f; m_mat4x4[3][3] = 1.0f;
+    m_mat4x4[0][2] = 0.0f;
+    m_mat4x4[1][2] = 0.0f;
+    m_mat4x4[2][2] = 1.0f;
+    m_mat4x4[3][2] = 0.0f;
+
+    m_mat4x4[0][3] = 0.0f;
+    m_mat4x4[1][3] = 0.0f;
+    m_mat4x4[2][3] = 0.0f;
+    m_mat4x4[3][3] = 1.0f;
   }
   
   void

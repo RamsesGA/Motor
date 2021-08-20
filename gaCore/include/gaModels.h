@@ -33,12 +33,20 @@ namespace gaEngineSDK {
     */
     void
     loadFromFile(const String& file) override;
+    
+    void
+    loadFromFile(const String& file, TYPE_TEXTURES::E typeTexture) override { }
 
     void
     addNewMesh(Mesh newMesh);
 
     Mesh
     getMesh(uint32 index);
+
+    /*
+    * @brief .
+    */
+    Map<String, SPtr<Materials>> m_mMaterials;
 
    protected:
     /*
@@ -64,11 +72,6 @@ namespace gaEngineSDK {
     Animations m_animInfo;
 
     /*
-    * @brief Member to store a .
-    */
-    Vector<Materials> m_vMaterials;
-
-    /*
     * @brief .
     */
     Vector<ConstBuffBonesTransform> m_vMeshBones;
@@ -83,10 +86,7 @@ namespace gaEngineSDK {
     */
     Vector<SPtr<AnimationData>> m_vAnimationData;
 
-    /*
-    * @brief .
-    */
-    Map<String, SPtr<Materials>> m_mMaterials;
+    
 
     friend class StaticMesh;
   };

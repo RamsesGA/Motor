@@ -44,7 +44,7 @@ namespace gaEngineSDK {
   Camera::pitchX(sf::Event param) {
     Matrix4x4 rotation;
 
-    float speedrot = 0.35f;
+    float speedrot = 0.15f;
 
     if (sf::Keyboard::Up == param.key.code) {
       rotation.rotationX(speedrot);
@@ -62,7 +62,7 @@ namespace gaEngineSDK {
   Camera::rollZ(sf::Event param) {
     Matrix4x4 rotation;
 
-    float speedrot = 0.35f;
+    float speedrot = 0.25f;
 
     if (sf::Keyboard::Right == param.key.code) {
       rotation.rotationZ(-speedrot);
@@ -80,7 +80,7 @@ namespace gaEngineSDK {
   Camera::yawY(sf::Event param) {
     Matrix4x4 rotation;
 
-    float speedrot = 0.35f;
+    float speedrot = 0.15f;
 
     if (sf::Keyboard::Z == param.key.code) {
       rotation.rotationY(speedrot);
@@ -89,7 +89,7 @@ namespace gaEngineSDK {
       rotation.rotationY(-speedrot);
     }
 
-    m_view = rotation * m_view;
+    m_view = m_view * rotation;
 
     updateViewMatrix();
   }
@@ -129,15 +129,11 @@ namespace gaEngineSDK {
   }
 
   void
-  Camera::mouseRotation() {
+  Camera::mouseRotation(const float& deltaTime) {
     Vector2 firstPos;
     Vector2 secondPos;
 
-    float speedRot = 0.010f;
-    float speedAngule = 0.5f;
-
-    Matrix4x4 Yaw;
-    Matrix4x4 Pitch;
+    float speedRot = 2.30f * deltaTime;
 
     POINT Temp;
     GetCursorPos(&Temp);
@@ -149,45 +145,33 @@ namespace gaEngineSDK {
       m_cameraDesc.camLookAt -= m_right * speedRot;
       m_cameraDesc.camUp = m_up;
       createView();
+      updateViewMatrix();
     }
 
     if (firstPos.x > m_originalMousePos.x) {
       m_cameraDesc.camLookAt += m_right * speedRot;
       m_cameraDesc.camUp = m_up;
       createView();
+      updateViewMatrix();
     }
 
-    if ((secondPos.y < m_originalMousePos.y) && (m_angule < m_maxAngule)) {
-      m_angule += speedAngule;
-
-      if (m_angule > m_maxAngule) {
-        m_angule = m_maxAngule;
-      }
-      else {
-        Pitch.rotationY(speedAngule * Math::PI / 180);
-      }
+    if (secondPos.y < m_originalMousePos.y) {
+      Matrix4x4 rotation;
+      rotation.rotationX(speedRot);
+      m_view *= rotation;
+      
+      updateViewMatrix();
     }
 
-    if ((secondPos.y > m_originalMousePos.y) && (m_angule > -m_maxAngule)) {
-      m_angule -= speedAngule;
+    if (secondPos.y > m_originalMousePos.y) {
+      Matrix4x4 rotation;
+      rotation.rotationX(-speedRot);
+      m_view *= rotation;
 
-      if (m_angule < -m_maxAngule) {
-        m_angule = -m_maxAngule;
-      }
-      else {
-        Pitch.rotationY(-speedAngule * Math::PI / 180);
-      }
+      updateViewMatrix();
     }
 
     SetCursorPos((int32)m_originalMousePos.x, (int32)m_originalMousePos.y);
-
-    m_view = Yaw * m_view;
-
-    updateViewMatrix();
-
-    m_view = Pitch * m_view;
-
-    updateViewMatrix();
   }
 
   /***************************************************************************/

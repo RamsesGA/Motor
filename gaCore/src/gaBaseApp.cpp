@@ -1,10 +1,12 @@
 #include "gaBaseApp.h"
 #include "gaSceneGraph.h"
+#include "gaGraphicsApi.h"
+#include "gaBaseRenderer.h"
 #include "gaResourceManager.h"
 
 namespace gaEngineSDK {
   int32 
-  gaEngineSDK::BaseApp::run(String windowTitle, int32 sizeX, int32 sizeY) {
+  BaseApp::run(String windowTitle, int32 sizeX, int32 sizeY) {
     m_width = sizeX;
     m_height = sizeY;
 
@@ -15,8 +17,11 @@ namespace gaEngineSDK {
     onCreate();
     
     bool shoudClose = false;
-    sf::Clock deltaTime;
+    Clock deltaTime;
     float trueDeltaTime = 0.0f;
+
+    auto myRenderer = g_baseRenderer().instancePtr();
+    myRenderer->init(m_width, m_height);
 
     while (m_sfmlWindow.isOpen()) {
       Event event;
@@ -38,7 +43,9 @@ namespace gaEngineSDK {
 
       deltaTime.restart();
     
+      myRenderer->update(trueDeltaTime);
       onUpdate(trueDeltaTime);
+      myRenderer->render();
       onRender();
     }
 
@@ -48,8 +55,13 @@ namespace gaEngineSDK {
   }
 
   int32
-  gaEngineSDK::BaseApp::initSys() {
-    HINSTANCE hInstance = LoadLibraryExA("gaDirectX_d.dll", nullptr,
+  BaseApp::initSys() {
+    /*
+    * G R A P H I C S
+    * A P I
+    */
+    HINSTANCE hInstance = LoadLibraryExA("gaDirectX_d.dll",
+                                         nullptr,
                                          LOAD_WITH_ALTERED_SEARCH_PATH);
     //HINSTANCE hInstance = LoadLibraryExA("gaOpenGL_d.dll", nullptr,
     //                                     LOAD_WITH_ALTERED_SEARCH_PATH);
@@ -60,10 +72,8 @@ namespace gaEngineSDK {
     }
 
     using fnProt = GraphicsApi * (*)();
-
     fnProt graphicsApiFunc = reinterpret_cast<fnProt>
                                               (GetProcAddress(hInstance, "createGraphicApi"));
-
     //In case of error
     if (!(graphicsApiFunc)) {
       return -1;
@@ -73,7 +83,37 @@ namespace gaEngineSDK {
     GraphicsApi* graphicApi = graphicsApiFunc();
     g_graphicApi().setObject(graphicApi);
 
-    //Module initialization
+    /*
+    * B A S E
+    * R E N D E R E R
+    * D E F E R R E D
+    * R E N D E R I N G
+    * A P I
+    */
+    hInstance = LoadLibraryExA("gaDeferredRendering_d.dll",
+                               nullptr,
+                               LOAD_WITH_ALTERED_SEARCH_PATH);
+    //In case of error
+    if (!(hInstance)) {
+      return -1;
+    }
+
+    using fnBR = BaseRenderer * (*)();
+    fnBR baseRendApiFunc = reinterpret_cast<fnBR>(GetProcAddress
+                                                  (hInstance, "createBaseRenderer"));
+    //In case of error
+    if (!(baseRendApiFunc)) {
+      return -1;
+    }
+
+    BaseRenderer::startUp();
+    BaseRenderer* newBR = baseRendApiFunc();
+    g_baseRenderer().setObject(newBR);
+
+    /*
+    * M O D U L E
+    * I N I T I A L I Z A T I O N
+    */
     SceneGraph::startUp();
     ResourceManager::startUp();
 
@@ -82,25 +122,27 @@ namespace gaEngineSDK {
 
   void 
   BaseApp::handleWindowEvents(Event& windowEvent, const float& deltaTime) {
+    auto myRenderer = g_baseRenderer().instancePtr();
+
     switch (windowEvent.type) {
       case Event::KeyPressed:
-        onKeyboardDown(windowEvent, deltaTime);
+        myRenderer->onKeyboardDown(windowEvent, deltaTime);
         break;
 
       case Event::MouseButtonPressed:
-        if (sf::Mouse::Left == windowEvent.key.code) {
-          onLeftMouseBtnDown();
+        if (Mouse::Left == windowEvent.key.code) {
+          myRenderer->onLeftMouseBtnDown();
         }
         break;
 
       case Event::MouseButtonReleased:
-        if (sf::Mouse::Left == windowEvent.key.code) {
-          onLeftMouseBtnUp();
+        if (Mouse::Left == windowEvent.key.code) {
+          myRenderer->onLeftMouseBtnUp();
         }
         break;
 
       case Event::MouseMoved:
-        onMouseMove();
+        myRenderer->onMouseMove(deltaTime);
         break;
 
       default:
@@ -113,7 +155,7 @@ namespace gaEngineSDK {
     m_windowSize.x = m_width;
     m_windowSize.y = m_height;
 
-    m_sfmlWindow.create(sf::VideoMode(m_windowSize.x, m_windowSize.y), windowTitle);
+    m_sfmlWindow.create(VideoMode(m_windowSize.x, m_windowSize.y), windowTitle);
   }
 
   void 

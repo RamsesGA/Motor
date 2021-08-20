@@ -146,9 +146,14 @@ namespace gaEngineSDK {
     /*************************************************************************/
 
     void
-    loadFromFile(const String& file) override {
-    }
+    loadFromFile(const String& file) override { }
+    
+    void
+    loadFromFile(const String& file, TYPE_TEXTURES::E typeTexture) override { }
 
+    /*
+    * @brief .
+    */
     String m_textureName;
   };
 }

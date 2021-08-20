@@ -19,6 +19,9 @@ namespace gaEngineSDK {
     void
     setTexture(String typeTexture, String file, String textureName);
 
+    void
+    getNameFile(const String& file);
+
     /*************************************************************************/
     /*
     * Inheritance.
@@ -27,6 +30,9 @@ namespace gaEngineSDK {
 
     void
     loadFromFile(const String& file) override;
+    
+    void
+    loadFromFile(const String& file, TYPE_TEXTURES::E typeTexture) override;
 
     /*************************************************************************/
     /*

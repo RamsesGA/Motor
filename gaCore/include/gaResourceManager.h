@@ -7,19 +7,6 @@
 #include "gaModels.h"
 
 namespace gaEngineSDK {
-  namespace TYPE_TEXTURES {
-    enum E {
-    kDiffuse = 0,
-    kAlbedo,
-    kMetallic,
-    kNormal,
-    kRoughness,
-    kSpecular,
-    kAO,
-    kEmissive
-    };
-  }
-
   using std::make_shared;
   using std::make_pair;
   using std::dynamic_pointer_cast;
@@ -55,6 +42,23 @@ namespace gaEngineSDK {
       m_mLoadedResources.insert(make_pair(file, make_shared<T>()));
       auto& resourceObj = m_mLoadedResources[file];
       resourceObj->loadFromFile(file);
+      
+      return dynamic_pointer_cast<T>(resourceObj);
+    }
+
+    /*
+    * @brief .
+    */
+    template<typename T>
+    SPtr<T>
+    load(String file, TYPE_TEXTURES::E typeTexture) {
+      if (isAlreadyLoaded(file)) {
+        return dynamic_pointer_cast<T>(m_mLoadedResources[file]);
+      }
+      
+      m_mLoadedResources.insert(make_pair(file, make_shared<T>()));
+      auto& resourceObj = m_mLoadedResources[file];
+      resourceObj->loadFromFile(file, typeTexture);
       
       return dynamic_pointer_cast<T>(resourceObj);
     }

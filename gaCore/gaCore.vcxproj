@@ -99,7 +99,7 @@
       <PreprocessorDefinitions>GA_CORE_EXPORTS;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>./include/;./include/Externals/;$(DEVLIBS)/SFML/include;$(DEVLIBS)/Assimp/include;$(SolutionDir)gaUtilities/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./include/;./include/Externals/;$(DEVLIBS)/SFML/include;$(DEVLIBS)/Assimp/include;$(SolutionDir)gaUtilities/include;$(SolutionDir)gaRenderer/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,7 +137,7 @@
       <PreprocessorDefinitions>GA_CORE_EXPORTS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>./include/;./include/Externals/;$(DEVLIBS)/SFML/include;$(DEVLIBS)/Assimp/include;$(SolutionDir)gaUtilities/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./include/;./include/Externals/;$(DEVLIBS)/SFML/include;$(DEVLIBS)/Assimp/include;$(SolutionDir)gaUtilities/include;$(SolutionDir)gaRenderer/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -172,6 +172,7 @@
     <ClInclude Include="include\gaActor.h" />
     <ClInclude Include="include\gaAnimations.h" />
     <ClInclude Include="include\gaBaseApp.h" />
+    <ClInclude Include="include\gaBaseRenderer.h" />
     <ClInclude Include="include\gaCamera.h" />
     <ClInclude Include="include\gaComponent.h" />
     <ClInclude Include="include\gaConstantBuffer.h" />
@@ -183,6 +184,7 @@
     <ClInclude Include="include\gaMesh.h" />
     <ClInclude Include="include\gaModels.h" />
     <ClInclude Include="include\gaPixelShader.h" />
+    <ClInclude Include="include\gaPlane.h" />
     <ClInclude Include="include\gaPrerequisitesCore.h" />
     <ClInclude Include="include\gaRenderTarget.h" />
     <ClInclude Include="include\gaResource.h" />
@@ -202,13 +204,14 @@
     <ClCompile Include="src\gaActor.cpp" />
     <ClCompile Include="src\gaAnimations.cpp" />
     <ClCompile Include="src\gaBaseApp.cpp" />
+    <ClCompile Include="src\gaBaseRenderer.cpp" />
     <ClCompile Include="src\gaCamera.cpp" />
     <ClCompile Include="src\gaGameObject.cpp" />
     <ClCompile Include="src\gaGraphicsApi.cpp" />
     <ClCompile Include="src\gaMaterials.cpp" />
     <ClCompile Include="src\gaMesh.cpp" />
     <ClCompile Include="src\gaModels.cpp" />
-    <ClCompile Include="src\gaResource.cpp" />
+    <ClCompile Include="src\gaPlane.cpp" />
     <ClCompile Include="src\gaResourceManager.cpp" />
     <ClCompile Include="src\gaSceneGraph.cpp" />
     <ClCompile Include="src\gaSceneNode.cpp" />

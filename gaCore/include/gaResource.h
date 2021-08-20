@@ -3,12 +3,16 @@
 #include "gaPrerequisitesCore.h"
 
 namespace gaEngineSDK {
-  namespace RESOURCE_TYPES {
+  namespace TYPE_TEXTURES {
     enum E {
-    kUnknown = 0,
-    kModel,
-    kTexture,
-    //TODO: AÑADIR MAS TIPOS DE RECURSOS
+      kDiffuse = 0,
+      kAlbedo,
+      kMetallic,
+      kNormal,
+      kRoughness,
+      kSpecular,
+      kAO,
+      kEmissive
     };
   }
 
@@ -32,5 +36,8 @@ namespace gaEngineSDK {
 
     virtual void
     loadFromFile(const String& file) = 0;
+
+    virtual void
+    loadFromFile(const String& file, TYPE_TEXTURES::E typeTexture) = 0;
   };
 }
