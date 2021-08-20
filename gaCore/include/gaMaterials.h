@@ -54,5 +54,10 @@ namespace gaEngineSDK {
     * @brief .
     */
     Vector<Textures*> m_vTextures;
+
+    /*
+    * @brief .
+    */
+    Textures* m_pTexture;
   };
 }

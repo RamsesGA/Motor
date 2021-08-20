@@ -1276,7 +1276,8 @@ namespace gaEngineSDK {
 
   void
   GraphicsApiDX::setYourPSConstantBuffers(WeakSPtr<ConstantBuffer> constantBuffer,
-      const uint32 startSlot, const uint32 numBuffers) {
+                                          const uint32 startSlot, 
+                                          const uint32 numBuffers) {
     auto cb = constantBuffer.lock().get();
     if (nullptr != cb) {
       ConstantBufferDX* cBuffer = reinterpret_cast<ConstantBufferDX*>(cb);

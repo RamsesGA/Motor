@@ -40,8 +40,11 @@ namespace gaEngineSDK {
     void
     addNewMesh(Mesh newMesh);
 
-    Mesh
+    Mesh&
     getMesh(uint32 index);
+
+    uint32
+    getSizeMeshes();
 
     /*
     * @brief .
@@ -85,8 +88,6 @@ namespace gaEngineSDK {
     * @brief .
     */
     Vector<SPtr<AnimationData>> m_vAnimationData;
-
-    
 
     friend class StaticMesh;
   };

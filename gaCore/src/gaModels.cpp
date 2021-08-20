@@ -120,9 +120,14 @@ namespace gaEngineSDK {
     m_vMeshes.push_back(newMesh);
   }
 
-  Mesh
+  Mesh&
   Models::getMesh(uint32 index) {
     return m_vMeshes.at(index);
+  }
+
+  uint32
+  Models::getSizeMeshes() {
+    return m_vMeshes.size();
   }
 
   /***************************************************************************/

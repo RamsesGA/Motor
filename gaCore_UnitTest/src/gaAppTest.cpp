@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include <gaPlane.h>
 #include <gaModels.h>
+#include <gaTextures.h>
 #include <gaMaterials.h>
 #include <gaSceneGraph.h>
 #include <gaStaticMesh.h>
@@ -197,30 +198,50 @@ AppTest::createNodeRamlethalSwords() {
 
   SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/ramlethal/Ramlethal Sword.fbx");
 
+  Vector<Textures*> vTextures;
   SPtr<Materials> myMaterial = myRSRCMG->load<Materials>
                                          ("data/textures/ramlethal/RamuSword_albedo.png", 
                                          TYPE_TEXTURES::kAlbedo);
-  myModel->m_mMaterials["02 - Default"] = myMaterial;
+  vTextures.push_back(myMaterial->m_pTexture);
 
   myMaterial = myRSRCMG->load<Materials>("data/textures/ramlethal/RamuSword_ao.png",
                                         TYPE_TEXTURES::kAO);
-  myModel->m_mMaterials["03 - Default"] = myMaterial;
+  vTextures.push_back(myMaterial->m_pTexture);
 
   myMaterial = myRSRCMG->load<Materials>("data/textures/ramlethal/RamuSword_emissive.png",
                                         TYPE_TEXTURES::kEmissive);
-  myModel->m_mMaterials["07 - Default"] = myMaterial;
+  vTextures.push_back(myMaterial->m_pTexture);
 
   myMaterial = myRSRCMG->load<Materials>("data/textures/ramlethal/RamuSword_metallic.png",
                                         TYPE_TEXTURES::kMetallic);
-  myModel->m_mMaterials["08 - Default"] = myMaterial;
+  vTextures.push_back(myMaterial->m_pTexture);
 
   myMaterial = myRSRCMG->load<Materials>("data/textures/ramlethal/RamuSword_normal.png",
                                         TYPE_TEXTURES::kNormal);
-  myModel->m_mMaterials["09 - Default"] = myMaterial;
+  vTextures.push_back(myMaterial->m_pTexture);
 
   myMaterial = myRSRCMG->load<Materials>("data/textures/ramlethal/RamuSword_roughness.png",
                                         TYPE_TEXTURES::kRoughness);
-  myModel->m_mMaterials["13 - Default"] = myMaterial;
+  vTextures.push_back(myMaterial->m_pTexture);
+
+  uint32 sizeMeshes = myModel->getSizeMeshes();
+  uint32 sizeTextures = vTextures.size();
+  for (uint32 i = 0; i < sizeMeshes; ++i) {
+    for (uint32 j = 0; j < sizeTextures; ++j) {
+
+      uint32 sizeMeshTex = myModel->getMesh(i).m_vTextures.size();
+      if (sizeTextures == sizeMeshTex) {
+        myModel->getMesh(i).m_vTextures[j] = vTextures[j];
+      }
+    }
+    /*myModel->m_mMaterials["03 - Default"]->m_vTextures[i] = vTextures[i];
+    myModel->m_mMaterials["02 - Default"]->m_vTextures[i] = vTextures[i];
+    myModel->m_mMaterials["08 - Default"]->m_vTextures[i] = vTextures[i];
+    myModel->m_mMaterials["09 - Default"]->m_vTextures[i] = vTextures[i];
+    myModel->m_mMaterials["13 - Default"]->m_vTextures[i] = vTextures[i];
+    myModel->m_mMaterials["07 - Default"]->m_vTextures[i] = vTextures[i];*/
+  }
+
 
   SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
   myStaticMesh->m_pModel = myModel;

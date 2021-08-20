@@ -350,7 +350,7 @@ namespace gaEngineSDK {
     cbLightning lightningData;
     lightningData.emissiveIntensity = 1.0f;
     lightningData.lightIntensity0 = 2.0f;
-    lightningData.lightPos0 = { 0.0f, 0.0f, 0.0f };
+    lightningData.lightPos0 = { 650.0f, 300.0f, -200.0f };
     lightningData.vViewPosition = m_mainCamera.getCamEye();
 
     myGraphicsApi->updateConstantBuffer(&lightningData, m_pCB_Lightning);
