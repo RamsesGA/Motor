@@ -525,8 +525,7 @@ namespace gaEngineSDK {
         InitData.pSysMem = data;
 
         //Creamos el buffer
-        hr = m_pd3dDevice->CreateBuffer(&bd, &InitData,
-          &VB->m_pVertexBuffer);
+        hr = m_pd3dDevice->CreateBuffer(&bd, &InitData, &VB->m_pVertexBuffer);
 
         if (FAILED(hr)) {
           delete VB;
@@ -1338,7 +1337,22 @@ namespace gaEngineSDK {
     if (nullptr != m_bonesBuffer) {
       return m_bonesBuffer;
     }
+    return nullptr;
+  }
 
+  void*
+  GraphicsApiDX::getDevice() {
+    if (nullptr != m_pd3dDevice) {
+      return m_pd3dDevice;
+    }
+    return nullptr;
+  }
+
+  void*
+  GraphicsApiDX::getDeviceContext() {
+    if (nullptr != m_pDeviceContext) {
+      return m_pDeviceContext;
+    }
     return nullptr;
   }
 }

@@ -31,6 +31,9 @@
     <Filter Include="Archivos de origen\BaseRenderer">
       <UniqueIdentifier>{7380110a-a752-47e7-8ccd-6ced4267f341}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\BaseInterface">
+      <UniqueIdentifier>{b344c018-4235-4ffe-b5ea-eea9dea14da1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gaConstantBuffer.h">
@@ -121,6 +124,9 @@
     <ClInclude Include="include\gaBaseRenderer.h">
       <Filter>Archivos de origen\BaseRenderer</Filter>
     </ClInclude>
+    <ClInclude Include="include\gaBaseInterface.h">
+      <Filter>Archivos de origen\BaseInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gaBaseApp.cpp">
@@ -167,6 +173,9 @@
     </ClCompile>
     <ClCompile Include="src\gaBaseRenderer.cpp">
       <Filter>Archivos de origen\BaseRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaBaseInterface.cpp">
+      <Filter>Archivos de origen\BaseInterface</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

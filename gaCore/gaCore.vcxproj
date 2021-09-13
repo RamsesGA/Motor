@@ -99,7 +99,7 @@
       <PreprocessorDefinitions>GA_CORE_EXPORTS;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>./include/;./include/Externals/;$(DEVLIBS)/SFML/include;$(DEVLIBS)/Assimp/include;$(SolutionDir)gaUtilities/include;$(SolutionDir)gaRenderer/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./include/;./include/Externals/;$(DEVLIBS)/SFML/include;$(DEVLIBS)/Assimp/include;$(SolutionDir)gaUtilities/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,7 +137,7 @@
       <PreprocessorDefinitions>GA_CORE_EXPORTS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>./include/;./include/Externals/;$(DEVLIBS)/SFML/include;$(DEVLIBS)/Assimp/include;$(SolutionDir)gaUtilities/include;$(SolutionDir)gaRenderer/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./include/;./include/Externals/;$(DEVLIBS)/SFML/include;$(DEVLIBS)/Assimp/include;$(SolutionDir)gaUtilities/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -172,6 +172,7 @@
     <ClInclude Include="include\gaActor.h" />
     <ClInclude Include="include\gaAnimations.h" />
     <ClInclude Include="include\gaBaseApp.h" />
+    <ClInclude Include="include\gaBaseInterface.h" />
     <ClInclude Include="include\gaBaseRenderer.h" />
     <ClInclude Include="include\gaCamera.h" />
     <ClInclude Include="include\gaComponent.h" />
@@ -204,6 +205,7 @@
     <ClCompile Include="src\gaActor.cpp" />
     <ClCompile Include="src\gaAnimations.cpp" />
     <ClCompile Include="src\gaBaseApp.cpp" />
+    <ClCompile Include="src\gaBaseInterface.cpp" />
     <ClCompile Include="src\gaBaseRenderer.cpp" />
     <ClCompile Include="src\gaCamera.cpp" />
     <ClCompile Include="src\gaGameObject.cpp" />

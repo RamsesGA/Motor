@@ -110,12 +110,6 @@ namespace gaEngineSDK {
     virtual void
     onCreate() { };
 
-    /*
-    * @brief Delete variables to end the program.
-    */
-    virtual void
-    onDestroySystem() { };
-
    protected:
     /*************************************************************************/
     /*

@@ -5,7 +5,6 @@
 #include "gaDeferredRendering.h"
 
 namespace gaEngineSDK {
-
   void 
   DeferredRendering::init(uint32 width, uint32 height) {
     auto myGraphicsApi = g_graphicApi().instancePtr();
@@ -17,9 +16,6 @@ namespace gaEngineSDK {
 
     defaultCamera();
 
-    //We save a viewport.
-    myGraphicsApi->setViewports(m_width, m_height);
-
     //We create the render target view.
     m_pRenderTargetView.reset(myGraphicsApi->getDefaultBackBuffer());
 
@@ -28,9 +24,9 @@ namespace gaEngineSDK {
 
     //We create the vertex shader and pixel shader.
     m_pGBuffer_Shader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_gBuffer.fx",
-                                                               "vs_gBuffer",
-                                                               L"data/shaders/DX_gBuffer.fx",
-                                                               "ps_gBuffer"));
+                                                                "vs_gBuffer",
+                                                                L"data/shaders/DX_gBuffer.fx",
+                                                                "ps_gBuffer"));
 
     m_pSSAO_Shader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_screenAlignedQuad.fx",
                                                              "vs_ssAligned",
@@ -38,24 +34,29 @@ namespace gaEngineSDK {
                                                              "ps_ssao"));
 
     m_pBlurH_Shader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_screenAlignedQuad.fx",
-                                                               "vs_ssAligned",
-                                                               L"data/shaders/DX_gaussyan_blur.fx",
-                                                               "ps_gaussian_blurH"));
+                                                              "vs_ssAligned",
+                                                              L"data/shaders/DX_gaussyan_blur.fx",
+                                                              "ps_gaussian_blurH"));
 
     m_pBlurV_Shader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_screenAlignedQuad.fx",
-                                                               "vs_ssAligned",
-                                                               L"data/shaders/DX_gaussyan_blur.fx",
-                                                               "ps_gaussian_blurV"));
+                                                              "vs_ssAligned",
+                                                              L"data/shaders/DX_gaussyan_blur.fx",
+                                                              "ps_gaussian_blurV"));
 
     m_pLightning_Shader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_screenAlignedQuad.fx",
-                                                               "vs_ssAligned",
-                                                               L"data/shaders/DX_lightningPS.fx",
-                                                               "ps_main"));
+                                                                  "vs_ssAligned",
+                                                                  L"data/shaders/DX_lightningPS.fx",
+                                                                  "ps_main"));
 
     m_pAddition_Shader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_screenAlignedQuad.fx",
-                                                               "vs_ssAligned",
-                                                               L"data/shaders/DX_AdditionPS.fx",
-                                                               "Add"));
+                                                                 "vs_ssAligned",
+                                                                 L"data/shaders/DX_AdditionPS.fx",
+                                                                 "Add"));
+
+    m_pShadowMap_Shader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_ShadowMap.fx",
+                                                                  "VS",
+                                                                  L"data/shaders/DX_ShadowMap.fx",
+                                                                  "ShadowMap"));
 
     //We create the input layout.
     m_pVertexLayout.reset(myGraphicsApi->createInputLayout(m_pGBuffer_Shader));
@@ -85,7 +86,6 @@ namespace gaEngineSDK {
     * T A R G E TS
     * Z O N E
     */
-
     m_pGbuffer_RT = make_shared<RenderTarget>();
     m_pSSAO_RT = make_shared<RenderTarget>();
     m_pBlurH_RT = make_shared<RenderTarget>();
@@ -117,6 +117,24 @@ namespace gaEngineSDK {
   DeferredRendering::update(const float& deltaTime) {
     auto myGraphicsApi = g_graphicApi().instancePtr();
 
+    /*
+    * P A S S E S
+    * Z O N E
+    */
+    rtGbufferPass();
+    rtSSAO_Pass();
+    blurH_Pass(m_pSSAO_RT->getRenderTexture(0));
+    blurV_Pass(m_pSSAO_RT->getRenderTexture(0));
+    additionPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
+
+    for (uint32 i = 0; i < 2; ++i) {
+      blurH_Pass(m_pAddition_RT->getRenderTexture(0));
+      blurV_Pass(m_pAddition_RT->getRenderTexture(0));
+      additionPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
+    }
+
+    lightningPass();
+
     // Clear the depth buffer to 1.0 (max depth).
     myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
   }
@@ -124,21 +142,6 @@ namespace gaEngineSDK {
   void
   DeferredRendering::render() {
     auto myGraphicsApi = g_graphicApi().instancePtr();
-
-    //We save the render targets.
-    RTGbufferPass();
-    RT_SSAO_Pass();
-    BlurH_Pass(m_pSSAO_RT->getRenderTexture(0));
-    BlurV_Pass(m_pSSAO_RT->getRenderTexture(0));
-    AdditionPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
-
-    for (uint32 i = 0; i < 2; ++i) {
-      BlurH_Pass(m_pAddition_RT->getRenderTexture(0));
-      BlurV_Pass(m_pAddition_RT->getRenderTexture(0));
-      AdditionPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
-    }
-
-    LightningPass();
 
     //We save a viewport.
     myGraphicsApi->setViewports(m_width, m_height);
@@ -148,7 +151,62 @@ namespace gaEngineSDK {
   DeferredRendering::resize() { }
 
   void
-  DeferredRendering::RTGbufferPass() {
+  DeferredRendering::onKeyboardDown(Event param, const float& deltaTime) {
+    auto myGraphicsApi = g_graphicApi().instancePtr();
+
+    m_mainCamera.inputDetection(param, deltaTime);
+
+    ConstantBuffer1 cb;
+    cb.mView = myGraphicsApi->matrixPolicy(m_mainCamera.getView());
+
+    myGraphicsApi->updateConstantBuffer(&cb, m_pCB_BufferCamera);
+  }
+
+  void
+  DeferredRendering::onLeftMouseBtnDown() {
+    Vector2i position = Mouse::getPosition();
+
+    m_mainCamera.setOriginalMousePos(position.x, position.y);
+    m_mainCamera.setClickPressed(true);
+  }
+
+  void
+  DeferredRendering::onLeftMouseBtnUp() {
+    m_mainCamera.setClickPressed(false);
+  }
+
+  void
+  DeferredRendering::onMouseMove(const float& deltaTime) {
+    if (m_mainCamera.getClickPressed()) {
+      auto myGraphicsApi = g_graphicApi().instancePtr();
+
+      m_mainCamera.setOriginalMousePos(m_mainCamera.getOriginalMousePos().x,
+                                       m_mainCamera.getOriginalMousePos().y);
+
+      m_mainCamera.mouseRotation(deltaTime);
+
+      ConstantBuffer1 cb;
+      cb.mView = myGraphicsApi->matrixPolicy(m_mainCamera.getView());
+
+      myGraphicsApi->updateConstantBuffer(&cb, m_pCB_BufferCamera);
+    }
+  }
+
+  void
+  DeferredRendering::defaultCamera() {
+    m_mainCamera.setLookAt();
+    m_mainCamera.setEye();
+    m_mainCamera.setUp();
+    m_mainCamera.setFar();
+    m_mainCamera.setNear();
+    m_mainCamera.setFoV();
+    m_mainCamera.setWidth(m_width);
+    m_mainCamera.setHeight(m_height);
+    m_mainCamera.startCamera();
+  }
+
+  void
+  DeferredRendering::rtGbufferPass() {
     auto myGraphicsApi = g_graphicApi().instancePtr();
     auto mySceneGraph = SceneGraph::instancePtr();
 
@@ -199,7 +257,7 @@ namespace gaEngineSDK {
   }
 
   void 
-  DeferredRendering::RT_SSAO_Pass() {
+  DeferredRendering::rtSSAO_Pass() {
     auto myGraphicsApi = g_graphicApi().instancePtr();
 
     myGraphicsApi->setRenderTarget(m_pSSAO_RT);
@@ -235,7 +293,7 @@ namespace gaEngineSDK {
   }
 
   void 
-  DeferredRendering::BlurH_Pass(void* texture) {
+  DeferredRendering::blurH_Pass(void* texture) {
     auto myGraphicsApi = g_graphicApi().instancePtr();
 
     myGraphicsApi->setRenderTarget(m_pBlurH_RT);
@@ -265,7 +323,7 @@ namespace gaEngineSDK {
   }
 
   void 
-  DeferredRendering::BlurV_Pass(void* texture) {
+  DeferredRendering::blurV_Pass(void* texture) {
     auto myGraphicsApi = g_graphicApi().instancePtr();
 
     myGraphicsApi->setRenderTarget(m_pBlurV_RT);
@@ -295,7 +353,7 @@ namespace gaEngineSDK {
   }
 
   void 
-  DeferredRendering::AdditionPass(void* texture1, void* texture2) {
+  DeferredRendering::additionPass(void* texture1, void* texture2) {
     auto myGraphicsApi = g_graphicApi().instancePtr();
 
     myGraphicsApi->setRenderTarget(m_pAddition_RT);
@@ -313,10 +371,10 @@ namespace gaEngineSDK {
 
     //Update CB
     cbMipLevels mipLevelsData;
-    mipLevelsData.mipLevel0 = 0;
-    mipLevelsData.mipLevel1 = 0;
-    mipLevelsData.mipLevel2 = 0;
-    mipLevelsData.mipLevel3 = 0;
+    mipLevelsData.mipLevel0 = 1;
+    mipLevelsData.mipLevel1 = 1;
+    mipLevelsData.mipLevel2 = 1;
+    mipLevelsData.mipLevel3 = 1;
 
     myGraphicsApi->updateConstantBuffer(&mipLevelsData, m_pCB_MipLevels);
 
@@ -328,7 +386,7 @@ namespace gaEngineSDK {
   }
 
   void 
-  DeferredRendering::LightningPass() {
+  DeferredRendering::lightningPass() {
     auto myGraphicsApi = g_graphicApi().instancePtr();
 
     myGraphicsApi->setRenderTarget(m_pRenderTargetView);
@@ -350,7 +408,7 @@ namespace gaEngineSDK {
     cbLightning lightningData;
     lightningData.emissiveIntensity = 1.0f;
     lightningData.lightIntensity0 = 2.0f;
-    lightningData.lightPos0 = { 650.0f, 300.0f, -200.0f };
+    lightningData.lightPos0 = { 700.0f, 300.0f, -200.0f };
     lightningData.vViewPosition = m_mainCamera.getCamEye();
 
     myGraphicsApi->updateConstantBuffer(&lightningData, m_pCB_Lightning);
@@ -364,4 +422,10 @@ namespace gaEngineSDK {
 
     m_mySAQ->setSAQ();
   }
+
+  void 
+  DeferredRendering::shadowMapPass() {
+
+  }
+
 }

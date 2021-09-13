@@ -16,6 +16,8 @@ namespace gaEngineSDK {
 
   Vector<Mesh> g_vMeshes;
 
+  Vector<String> g_vMeshName;
+
   Vector<Textures*> g_vTextures;
 
   Vector<SPtr<AnimationData>> g_vAnimationData;
@@ -113,6 +115,7 @@ namespace gaEngineSDK {
     m_vMeshBones.resize(g_vMeshes.size());
     m_vMeshes = g_vMeshes;
     m_mMaterials = g_mMaterials;
+    m_vMeshName = g_vMeshName;
   }
 
   void
@@ -473,6 +476,8 @@ namespace gaEngineSDK {
   searchTextures(aiMesh* pAMesh, const aiScene* pAScene) {
     auto& matIndex = pAMesh->mMaterialIndex;
     auto& meshMaterial = pAScene->mMaterials[matIndex];
+    auto& meshName = pAMesh->mName;
+    g_vMeshName.push_back(meshName.C_Str());
 
     aiString tempMatName;
     meshMaterial->Get(AI_MATKEY_NAME, tempMatName);

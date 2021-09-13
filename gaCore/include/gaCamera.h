@@ -8,6 +8,8 @@
 #include "gaPrerequisitesCore.h"
 #include "gaComponent.h"
 
+using sf::Event;
+
 namespace gaEngineSDK {
   struct CameraDescriptor {
     uint32 camWidth = 0;
@@ -52,28 +54,28 @@ namespace gaEngineSDK {
     * @param deltaTime, time elapsed since the last frame.
     */
     void
-    inputDetection(sf::Event param, const float& deltaTime);
+    inputDetection(Event param, const float& deltaTime);
 
     /**
     * @brief Function to be able to apply a PITCH rotation.
     * @param param, SFML event for input detection.
     */
     void
-    pitchX(sf::Event param);
+    pitchX(Event param);
 
     /**
     * @brief Function to be able to apply a ROLL rotation.
     * @param param, SFML event for input detection.
     */
     void
-    rollZ(sf::Event param);
+    rollZ(Event param);
 
     /**
     * @brief Function to be able to apply a YAW rotation.
     * @param param, SFML event for input detection.
     */
     void
-    yawY(sf::Event param);
+    yawY(Event param);
 
     /**
     * @brief Function to be able to apply a movement to the camera.
@@ -81,7 +83,7 @@ namespace gaEngineSDK {
     * @param deltaTime, time elapsed since the last frame.
     */
     void
-    move(sf::Event param, const float& deltaTime);
+    move(Event param, const float& deltaTime);
 
     /**
     * @brief Function to be able to apply a rotation of the view.
@@ -218,6 +220,9 @@ namespace gaEngineSDK {
     bool
     getClickPressed();
 
+    /*
+    * @brief .
+    */
     Vector3
     getCamEye();
 

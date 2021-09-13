@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Archivos de origen">
+      <UniqueIdentifier>{43f9503a-19c5-4397-86dd-fcfafa696874}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\ImGui">
+      <UniqueIdentifier>{2a404a68-cc51-42ae-86e2-2af4b5ae49c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\ImGui-SFML">
+      <UniqueIdentifier>{f4127ef4-7a0c-47f8-b9ce-cde51e9a3579}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\gaPrerequisitesInterface.h">
+      <Filter>Archivos de origen</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaInterface.h">
+      <Filter>Archivos de origen</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imconfig.h">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imgui_impl_dx11.h">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imgui_internal.h">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imstb_rectpack.h">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imstb_textedit.h">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imstb_truetype.h">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imconfig-SFML.h">
+      <Filter>Archivos de origen\ImGui-SFML</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imgui-SFML.h">
+      <Filter>Archivos de origen\ImGui-SFML</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imgui-SFML_export.h">
+      <Filter>Archivos de origen\ImGui-SFML</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imgui.h">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imgui_impl_win32.h">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\gaInterface.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\imgui_impl_dx11.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\imgui-SFML.cpp">
+      <Filter>Archivos de origen\ImGui-SFML</Filter>
+    </ClCompile>
+    <ClCompile Include="src\imgui.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\imgui_draw.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\imgui_impl_win32.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\imgui_widgets.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

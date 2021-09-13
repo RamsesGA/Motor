@@ -2,6 +2,7 @@
 #include "gaSceneGraph.h"
 #include "gaGraphicsApi.h"
 #include "gaBaseRenderer.h"
+#include "gaBaseInterface.h"
 #include "gaResourceManager.h"
 
 namespace gaEngineSDK {
@@ -17,11 +18,28 @@ namespace gaEngineSDK {
     onCreate();
     
     bool shoudClose = false;
-    Clock deltaTime;
     float trueDeltaTime = 0.0f;
+    Clock deltaTime;
 
+    /*
+    * Init Renderer
+    */
     auto myRenderer = g_baseRenderer().instancePtr();
     myRenderer->init(m_width, m_height);
+
+    /*
+    * Init ImGui
+    */
+    //auto myInterface = g_baseInterface().instancePtr();
+    //myInterface->init(m_width, m_height, m_sfmlWindow.getSystemHandle());
+
+    /*
+    * W I N D O W
+    */
+    auto myGraphicsApi = g_graphicApi().instancePtr();
+
+    //We save a viewport.
+    myGraphicsApi->setViewports(m_width, m_height);
 
     while (m_sfmlWindow.isOpen()) {
       Event event;
@@ -42,15 +60,16 @@ namespace gaEngineSDK {
       }
 
       deltaTime.restart();
-    
+
+      //myInterface->update(trueDeltaTime);
       myRenderer->update(trueDeltaTime);
       onUpdate(trueDeltaTime);
+
+      //myInterface->render();
       myRenderer->render();
       onRender();
     }
 
-    onDestroySystem();
-    
     return 0;
   }
 
@@ -109,6 +128,29 @@ namespace gaEngineSDK {
     BaseRenderer::startUp();
     BaseRenderer* newBR = baseRendApiFunc();
     g_baseRenderer().setObject(newBR);
+
+    /*
+    * B A S E
+    * I N T E R F A C E
+    */
+    //hInstance = LoadLibraryExA("gaInterface_d.dll", nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
+
+    //In case of error
+    //if (!(hInstance)) {
+    //  return -1;
+    //}
+
+    //using fnBI = BaseInterface * (*)();
+    //fnBI baseInter = reinterpret_cast<fnBI>(GetProcAddress(hInstance, "createNewInterface"));
+
+    //In case of error
+    //if (!(baseInter)) {
+    //  return -1;
+    //}
+
+    //BaseInterface::startUp();
+    //BaseInterface* newBI = baseInter();
+    //g_baseInterface().setObject(newBI);
 
     /*
     * M O D U L E

@@ -63,6 +63,41 @@ struct cbMipLevels {
   int32 mipLevel3;
 };
 
+struct ConstBuffBonesTransform {
+  Matrix4x4 bonesTransform[maxBones];
+};
+
+/*
+* Shadow maps
+*/
+struct cbViews {
+  Matrix4x4 view;
+  Matrix4x4 viewInv;
+};
+
+struct cbProjections {
+  Matrix4x4 projection;
+  Matrix4x4 projectionInv;
+  Matrix4x4 viewProjection;
+  Matrix4x4 viewProjectionInv;
+};
+
+struct cbWorldInformation {
+  Matrix4x4 world;
+  Matrix4x4 worldInv;
+  Matrix4x4 worldView;
+  Matrix4x4 worldViewInv;
+  Matrix4x4 worldProj;
+  Matrix4x4 worldProjInv;
+  Matrix4x4 worldViewProj;
+  Matrix4x4 worldViewProjInv;
+  Vector4 viewPosition;
+  Vector4 vMeshColor;
+};
+
+struct cbLights {
+  lightInformation lights[20];
+};
 
 //-----------------------------------------------------------------------------
 struct Matrices {
@@ -89,12 +124,21 @@ struct Vertex {
   uint32 boneIds[4] = { 0, 0, 0, 0 };
 };
 
-struct ConstBuffBonesTransform {
-  Matrix4x4 bonesTransform[maxBones];
-};
-
 struct ssoaInput {
   Vector2 texCoord;
+};
+
+/*
+* Shadow maps
+*/
+struct lightInformation {
+  Vector4 m_lightDirection = { 0.0f, 0.0f, 0.0f, 0.0f };
+  Vector4 m_lightPosition = { 0.0f, 0.0f, 0.0f, 0.0f };
+  Vector4 m_lightColor = { 0.0f, 0.0f, 0.0f, 0.0f };
+  uint32 m_type = 0;
+  uint32 m_numberOfLights = 0;
+  uint32 m_relleno1 = 0;
+  uint32 m_relleno2 = 0;
 };
 
 //-----------------------------------------------------------------------------

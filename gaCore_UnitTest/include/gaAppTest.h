@@ -53,12 +53,6 @@ class AppTest : public BaseApp
   void
   onCreate() override;
 
-  /*
-  * @brief .
-  */
-  void
-  onDestroySystem() override;
-
   /***************************************************************************/
   /*
   * Methods.

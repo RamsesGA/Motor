@@ -259,6 +259,12 @@ namespace gaEngineSDK {
     SPtr<ConstantBuffer>
     getConstBufferBones() override;
 
+    void*
+    getDevice() override;
+
+    void*
+    getDeviceContext() override;
+
    private:
     /*************************************************************************/
     /**

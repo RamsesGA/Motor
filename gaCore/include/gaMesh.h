@@ -135,6 +135,9 @@ namespace gaEngineSDK {
     void
     setVerticesNum(uint32 verticesNum);
 
+    void
+    setMeshName(String name);
+
     /*************************************************************************/
     /*
     * Gets.

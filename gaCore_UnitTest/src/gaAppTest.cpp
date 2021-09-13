@@ -43,16 +43,13 @@ AppTest::onCreate() {
   /***************************************************************************/
 
   //createNodePod();
-  createNodeVela();
+  //createNodeVela();
   //createNodeTwoB();
   //createNodeSpartan();
   //createNodeUgandan();
   //createNodeGrimoires();
-  //createNodeRamlethalSwords();
+  createNodeRamlethalSwords();
 }
-
-void
-AppTest::onDestroySystem() { }
 
 /*****************************************************************************/
 /*
@@ -132,6 +129,40 @@ AppTest::createNodeSpartan() {
 
   SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/spartan/Spartan.fbx");
 
+  /*
+  * M A T E R I A L
+  * Z O N E
+  */
+  Vector<Textures*> vTextures;
+  SPtr<Materials> myMaterial = myRSRCMG->load<Materials>
+                                         ("data/textures/spartan/Spartan_Chest_Mat_BaseColor.png", 
+                                          TYPE_TEXTURES::kAlbedo);
+  vTextures.push_back(myMaterial->m_pTexture);
+
+  myMaterial = myRSRCMG->load<Materials>("data/textures/spartan/Spartan_Helmet_Mat_Metallic.png", 
+                                         TYPE_TEXTURES::kMetallic);
+  vTextures.push_back(myMaterial->m_pTexture);
+
+  myMaterial = myRSRCMG->load<Materials>("data/textures/spartan/Spartan_Helmet_Mat_Roughness.png", 
+                                         TYPE_TEXTURES::kRoughness);
+  vTextures.push_back(myMaterial->m_pTexture);
+
+  myMaterial = myRSRCMG->load<Materials>("data/textures/spartan/Spartan_Helmet_Mat_Normal.png", 
+                                         TYPE_TEXTURES::kNormal);
+  vTextures.push_back(myMaterial->m_pTexture);
+
+  /*myMaterial = myRSRCMG->load<Materials>("data/textures/spartan/.png", 
+                                         TYPE_TEXTURES::kEmissive);*/
+
+  myMaterial = myRSRCMG->load<Materials>("data/textures/spartan/Spartan_Helmet_Mat_AO.png", 
+                                         TYPE_TEXTURES::kAO);
+  vTextures.push_back(myMaterial->m_pTexture);
+
+
+
+  /*
+  * Z O N E
+  */
   SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
   myStaticMesh->m_pModel = myModel;
 
@@ -198,32 +229,42 @@ AppTest::createNodeRamlethalSwords() {
 
   SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/ramlethal/Ramlethal Sword.fbx");
 
+  /*
+  * M A T E R I A L
+  * Z O N E
+  */
   Vector<Textures*> vTextures;
   SPtr<Materials> myMaterial = myRSRCMG->load<Materials>
                                          ("data/textures/ramlethal/RamuSword_albedo.png", 
-                                         TYPE_TEXTURES::kAlbedo);
-  vTextures.push_back(myMaterial->m_pTexture);
-
-  myMaterial = myRSRCMG->load<Materials>("data/textures/ramlethal/RamuSword_ao.png",
-                                        TYPE_TEXTURES::kAO);
-  vTextures.push_back(myMaterial->m_pTexture);
-
-  myMaterial = myRSRCMG->load<Materials>("data/textures/ramlethal/RamuSword_emissive.png",
-                                        TYPE_TEXTURES::kEmissive);
+                                          TYPE_TEXTURES::kAlbedo);
   vTextures.push_back(myMaterial->m_pTexture);
 
   myMaterial = myRSRCMG->load<Materials>("data/textures/ramlethal/RamuSword_metallic.png",
-                                        TYPE_TEXTURES::kMetallic);
-  vTextures.push_back(myMaterial->m_pTexture);
-
-  myMaterial = myRSRCMG->load<Materials>("data/textures/ramlethal/RamuSword_normal.png",
-                                        TYPE_TEXTURES::kNormal);
+                                         TYPE_TEXTURES::kMetallic);
   vTextures.push_back(myMaterial->m_pTexture);
 
   myMaterial = myRSRCMG->load<Materials>("data/textures/ramlethal/RamuSword_roughness.png",
-                                        TYPE_TEXTURES::kRoughness);
+                                         TYPE_TEXTURES::kRoughness);
   vTextures.push_back(myMaterial->m_pTexture);
 
+  myMaterial = myRSRCMG->load<Materials>("data/textures/ramlethal/RamuSword_normal.png",
+                                         TYPE_TEXTURES::kNormal);
+  vTextures.push_back(myMaterial->m_pTexture);
+
+  myMaterial = myRSRCMG->load<Materials>("data/textures/ramlethal/RamuSword_emissive.png",
+                                         TYPE_TEXTURES::kEmissive);
+  vTextures.push_back(myMaterial->m_pTexture);
+
+  myMaterial = myRSRCMG->load<Materials>("data/textures/ramlethal/RamuSword_ao.png",
+                                         TYPE_TEXTURES::kAO);
+  vTextures.push_back(myMaterial->m_pTexture);
+
+  /*
+  * M A T E R I A L
+  * Z O N E
+  * T O
+  * M E S H E S
+  */
   uint32 sizeMeshes = myModel->getSizeMeshes();
   uint32 sizeTextures = vTextures.size();
   for (uint32 i = 0; i < sizeMeshes; ++i) {
@@ -242,7 +283,9 @@ AppTest::createNodeRamlethalSwords() {
     myModel->m_mMaterials["07 - Default"]->m_vTextures[i] = vTextures[i];*/
   }
 
-
+  /*
+  * Z O N E
+  */
   SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
   myStaticMesh->m_pModel = myModel;
 

@@ -636,6 +636,20 @@ namespace gaEngineSDK {
     virtual SPtr<ConstantBuffer>
     getConstBufferBones() { return nullptr; };
 
+    /**
+    * @brief get ptr to device
+    * @return share ptr to device
+    */
+    virtual void*
+    getDevice() { return nullptr; };
+
+    /**
+    * @brief get ptr to device context
+    * @return share ptr to device context
+    */
+    virtual void*
+    getDeviceContext() { return nullptr; };
+
    protected:
     /*************************************************************************/
     /**

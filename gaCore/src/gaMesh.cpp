@@ -328,6 +328,11 @@ namespace gaEngineSDK {
     m_numVertices = verticesNum;
   }
 
+  void
+  Mesh::setMeshName(String name) {
+    m_meshName = name;
+  }
+
   /***************************************************************************/
   /*
   * Gets.
