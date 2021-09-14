@@ -1,5 +1,6 @@
 /*
 * Shader for DirectX 11.
+* Lighting Shader
 * Made by: Ramses Guerrero Ambriz.
 */
 
@@ -79,7 +80,17 @@ float4 ps_main(PS_INPUT input) : SV_Target0
 {
    float gamma = 2.2f;
    float4 posWorld = posTexture.Sample(simpleSampler, input.texCoord);
-
+   
+   float4x4 myLocalWorld = (1,0,0,0,
+                            0,1,0,0,
+                            0,0,1,0,
+                            0,0,0,1);
+							
+	float4x4 myLocalView = (1,0,0,0,
+                            0,1,0,0,
+                            0,0,1,0,
+                            0,0,0,1);
+							
    float4x4 matWV = mul(mWorld, mView);
 
    float4 normal = normalTex.Sample(simpleSampler, input.texCoord);
@@ -98,7 +109,7 @@ float4 ps_main(PS_INPUT input) : SV_Target0
 
    float3 specular_F0 = lerp(0.04f, diffuse.xyz, metallic);
 
-   float3 wvLightPos_0 = mul(lightPos0, matWV);
+   float3 wvLightPos_0 = mul(float3(0,0,0), matWV);
    float4 wvViewPosition = mul(vViewPosition.xyz, matWV);
 
    float3 LightDir = normalize(wvLightPos_0.xyz - posWorld.xyz);
@@ -137,10 +148,7 @@ float4 ps_main(PS_INPUT input) : SV_Target0
      ambientLighting = (siColor * specular_F0) + diffuseAmbient;
    }
 
-   return float4 (pow(
-                     (diffuse.xyz * NdL * lightIntensity0) + //diffuse
-                     (emissive.xyz * emissiveIntensity) +    //emissive
-                     (specular)+
-                     (ambientLighting) * ao                  //specular
-                     , 1.0f / gamma), 1);
+   float4 finalColor = float4(pow((diffuse.xyz * NdL * lightIntensity0) + (emissive.xyz * emissiveIntensity) + (specular) + (ambientLighting) , 1.0f / gamma), 1);
+   finalColor = finalColor * ao;
+   return finalColor;
 }

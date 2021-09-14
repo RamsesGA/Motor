@@ -3,50 +3,27 @@
 * Shadow Map
 * Made by: Ramses Guerrero Ambriz.
 */
-#define M_PI 3.1415926538
+#define M_PI 3.14159265383
 #define EPSILON 0.00001
 
 //----------------------------------------------------------------------------
-//Type: 0 = directional 1 = point 2 = spot
-struct lightInformation
+struct myLight
 {
-  float4 lightDirection;
-  float4 lightPosition;
-  float4 lightColor;
-  uint type;
-  uint numberOfLights;
-};
+  float4 lDirection;
+  float4 lColor;
+  float3 lPosition;
 
-struct VS_INPUT
-{
-  float4 position    : POSITION;
-  float4 normal      : NORMAL0;
-  float4 tangent     : TANGENT0;
-  float3 biTangent   : BINORMAL0;
-  float2 texCoords   : TEXCOORD0;
-  float4 boneWeights : BLENDWEIGHT0;
-  uint4 boneIds      : BLENDINDICES0;
+  uint32 numberLights;
 };
-
-struct PS_INPUT
-{
-  float4 position : SV_POSITION;
-  float depth     : TEXCOORD0;
-};
-
-float Lambert_Diffuse(in float3 lightDir, in float3 surfNormal)
-{
-  return max(0.0f, dot(lightDir, surfNormal));
-}
 
 //----------------------------------------------------------------------------
-cbuffer linkToBufferViews : register(b0)
+cbuffer linkToBufferViewMatrixes : register(b0)
 {
   matrix View;
   matrix ViewInv;
 };
 
-cbuffer linkToBufferProjections : register(b1)
+cbuffer linkToBufferProjectionMatrixes : register(b1)
 {
   matrix Projection;
   matrix ProjectionInv;
@@ -69,20 +46,44 @@ cbuffer linkToBufferWorldInfo : register(b2)
   float4 vMeshColor;
 };
 
-cbuffer linkToBufferBonesTrans : register (b3)
+cbuffer linkToBufferBonesTransform : register (b3)
 {
   matrix boneTransform[200];
 };
 
-cbuffer linkToBufferLights : register (b4)
+cbuffer linkToBufferLight : register (b4)
 {
-  lightInformation lights[20];
+  myLight lights[5];
 };
+
+//----------------------------------------------------------------------------
+struct VS_INPUT
+{
+  float4 position    : POSITION;
+  float3 normal      : NORMAL0;
+  float3 tangent     : TANGENT0;
+  float3 biTangent   : BINORMAL0;
+  float2 texCoords   : TEXCOORD0;
+  float4 boneWeights : BLENDWEIGHT0;
+  uint4  boneIds     : BLENDINDICES0;
+};
+
+struct PS_INPUT
+{
+  float4 position : SV_POSITION;
+  float depth     : TEXCOORD0;
+};
+
+//----------------------------------------------------------------------------
+float Lambert_Diffuse(in float3 lightDir, in float3 surfNormal)
+{
+  return max(0.0f, dot(lightDir, surfNormal));
+}
 
 //----------------------------------------------------------------------------
 // Vertex Shader
 //----------------------------------------------------------------------------
-PS_INPUT VS(VS_INPUT input)
+PS_INPUT vs_ShadowMap(VS_INPUT input)
 {
   PS_INPUT output = (PS_INPUT)0;
   

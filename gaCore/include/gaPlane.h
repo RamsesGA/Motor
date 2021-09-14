@@ -1,5 +1,9 @@
 #pragma once
 
+#include <gaVector3.h>
+#include <gaVector4.h>
+#include <gaMatrix4x4.h>
+
 #include "gaPrerequisitesCore.h"
 
 namespace gaEngineSDK {

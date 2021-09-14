@@ -194,6 +194,12 @@ namespace gaEngineSDK {
     SPtr<ConstantBuffer> m_pCB_Lightning;
     SPtr<ConstantBuffer> m_pCB_MipLevels;
 
+    //Shadow maps
+    SPtr<ConstantBuffer> m_pCB_ViewMatrixes;
+    SPtr<ConstantBuffer> m_pCB_ProjectionMatrixes;
+    SPtr<ConstantBuffer> m_pCB_WorldInfo;
+    SPtr<ConstantBuffer> m_pCB_light;
+
     /*
     * @brief .
     */

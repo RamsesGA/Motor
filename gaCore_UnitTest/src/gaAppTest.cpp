@@ -41,14 +41,15 @@ AppTest::onCreate() {
   * Set Node
   */
   /***************************************************************************/
-
+  
+  //createCube();
   //createNodePod();
   //createNodeVela();
   //createNodeTwoB();
   //createNodeSpartan();
   //createNodeUgandan();
-  //createNodeGrimoires();
-  createNodeRamlethalSwords();
+  createNodeGrimoires();
+  //createNodeRamlethalSwords();
 }
 
 /*****************************************************************************/
@@ -294,6 +295,28 @@ AppTest::createNodeRamlethalSwords() {
 
   //Creating actor
   SPtr<Actor> actor(new Actor("Sword"));
+  actor->setIsSelected(true);
+  actor->setComponent(newComponent);
+
+  //Adding the actor to node root
+  mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+}
+
+void
+AppTest::createCube() {
+  auto mySceneGraph = SceneGraph::instancePtr();
+  auto myRSRCMG = ResourceManager::instancePtr();
+
+  SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/cube/cube.obj");
+
+  SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
+  myStaticMesh->m_pModel = myModel;
+
+  //Creating the component
+  SPtr<Component> newComponent(myStaticMesh);
+
+  //Creating actor
+  SPtr<Actor> actor(new Actor("Cube"));
   actor->setIsSelected(true);
   actor->setComponent(newComponent);
 

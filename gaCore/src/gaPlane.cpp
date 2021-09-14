@@ -49,7 +49,7 @@ namespace gaEngineSDK {
     m_SAQ.reset(newModel);
   }
 
-  void 
+  void
   Plane::setSAQ() {
     auto myGraphicsApi = g_graphicApi().instancePtr();
     auto mesh = m_SAQ->getMesh(0);

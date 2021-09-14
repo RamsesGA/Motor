@@ -67,36 +67,42 @@ struct ConstBuffBonesTransform {
   Matrix4x4 bonesTransform[maxBones];
 };
 
-/*
-* Shadow maps
-*/
-struct cbViews {
-  Matrix4x4 view;
-  Matrix4x4 viewInv;
+//Shadow map
+struct cbViewMatrixes {
+  Matrix4x4 mView;
+  Matrix4x4 mViewInv;
 };
 
-struct cbProjections {
-  Matrix4x4 projection;
-  Matrix4x4 projectionInv;
-  Matrix4x4 viewProjection;
-  Matrix4x4 viewProjectionInv;
+struct cbProjectionMatrixes {
+  Matrix4x4 mProjection;
+  Matrix4x4 mProjectionInv;
+  Matrix4x4 mViewProjection;
+  Matrix4x4 mViewProjectionInv;
 };
 
-struct cbWorldInformation {
-  Matrix4x4 world;
-  Matrix4x4 worldInv;
-  Matrix4x4 worldView;
-  Matrix4x4 worldViewInv;
-  Matrix4x4 worldProj;
-  Matrix4x4 worldProjInv;
-  Matrix4x4 worldViewProj;
-  Matrix4x4 worldViewProjInv;
+struct cbWorldInfo {
+  Matrix4x4 mWorld;
+  Matrix4x4 mWorldInv;
+  Matrix4x4 mWorldView;
+  Matrix4x4 mWorldViewInv;
+  Matrix4x4 mWorldProjection;
+  Matrix4x4 mWorldProjectionInv;
+  Matrix4x4 mWorldViewProjection;
+  Matrix4x4 mWorldViewProjectionInv;
+
   Vector4 viewPosition;
-  Vector4 vMeshColor;
 };
 
-struct cbLights {
-  lightInformation lights[20];
+struct myLight {
+  Vector4 lDirection;
+  Vector4 lColor;
+  Vector3 lPosition;
+
+  uint32 numberLights;
+};
+
+struct cbLight {
+  myLight currentLight[5];
 };
 
 //-----------------------------------------------------------------------------
@@ -115,31 +121,21 @@ struct ViewCB {
 };
 
 struct Vertex {
-  Vector4 position = { 0.0f, 0.0f, 0.0f, 1.0f };
-  Vector3 normal = { 0.0f, 0.0f, 0.0f };
-  Vector3 tangent = { 0.0f, 0.0f, 0.0f };
-  Vector3 biTangent = { 0.0f, 0.0f, 0.0f };
-  Vector2 texCoords = { 0.0f, 0.0f };
+  Vector4 position     = { 0.0f, 0.0f, 0.0f, 1.0f };
+  Vector3 normal       = { 0.0f, 0.0f, 0.0f };
+  Vector3 tangent      = { 0.0f, 0.0f, 0.0f };
+  Vector3 biTangent    = { 0.0f, 0.0f, 0.0f };
+  Vector2 texCoords    = { 0.0f, 0.0f };
   float boneWeights[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-  uint32 boneIds[4] = { 0, 0, 0, 0 };
+  uint32 boneIds[4]    = { 0, 0, 0, 0 };
 };
 
 struct ssoaInput {
   Vector2 texCoord;
 };
 
-/*
-* Shadow maps
-*/
-struct lightInformation {
-  Vector4 m_lightDirection = { 0.0f, 0.0f, 0.0f, 0.0f };
-  Vector4 m_lightPosition = { 0.0f, 0.0f, 0.0f, 0.0f };
-  Vector4 m_lightColor = { 0.0f, 0.0f, 0.0f, 0.0f };
-  uint32 m_type = 0;
-  uint32 m_numberOfLights = 0;
-  uint32 m_relleno1 = 0;
-  uint32 m_relleno2 = 0;
-};
+//Shadow map
+
 
 //-----------------------------------------------------------------------------
 namespace FILTER {

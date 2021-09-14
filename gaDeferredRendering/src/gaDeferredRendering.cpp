@@ -54,7 +54,7 @@ namespace gaEngineSDK {
                                                                  "Add"));
 
     m_pShadowMap_Shader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_ShadowMap.fx",
-                                                                  "VS",
+                                                                  "vs_ShadowMap",
                                                                   L"data/shaders/DX_ShadowMap.fx",
                                                                   "ShadowMap"));
 
@@ -80,6 +80,12 @@ namespace gaEngineSDK {
     m_pCB_Lightning.reset(myGraphicsApi->createConstantBuffer(sizeof(cbLightning)));
     m_pCB_MipLevels.reset(myGraphicsApi->createConstantBuffer(sizeof(cbMipLevels)));
 
+    //Shadow maps
+    m_pCB_ViewMatrixes.reset(myGraphicsApi->createConstantBuffer(sizeof(cbViewMatrixes)));
+    m_pCB_ProjectionMatrixes.reset(myGraphicsApi->createConstantBuffer(sizeof(cbProjectionMatrixes)));
+    m_pCB_WorldInfo.reset(myGraphicsApi->createConstantBuffer(sizeof(cbWorldInfo)));
+    m_pCB_light.reset(myGraphicsApi->createConstantBuffer(sizeof(cbLight)));
+
     /*
     * C R E A T E
     * R E N D E R
@@ -93,12 +99,18 @@ namespace gaEngineSDK {
     m_pAddition_RT = make_shared<RenderTarget>();
     m_pLightning_RT = make_shared<RenderTarget>();
 
+    //Shadow map
+    m_pShadowMap_RT = make_shared<RenderTarget>();
+
     m_pGbuffer_RT = myGraphicsApi->createRenderTarget(m_width, m_height, 1, 4);
     m_pSSAO_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
     m_pBlurH_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
     m_pBlurV_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
     m_pAddition_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
     m_pLightning_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
+
+    //Shadow map
+    m_pShadowMap_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
 
     /*
     * C R E A T E
@@ -122,6 +134,7 @@ namespace gaEngineSDK {
     * Z O N E
     */
     rtGbufferPass();
+    //shadowMapPass();
     rtSSAO_Pass();
     blurH_Pass(m_pSSAO_RT->getRenderTexture(0));
     blurV_Pass(m_pSSAO_RT->getRenderTexture(0));
@@ -408,7 +421,8 @@ namespace gaEngineSDK {
     cbLightning lightningData;
     lightningData.emissiveIntensity = 1.0f;
     lightningData.lightIntensity0 = 2.0f;
-    lightningData.lightPos0 = { 700.0f, 300.0f, -200.0f };
+    //TODO: check lightPos, the information in shader
+    //lightningData.lightPos0 = { 0.0f, 0.0f, 0.0f };
     lightningData.vViewPosition = m_mainCamera.getCamEye();
 
     myGraphicsApi->updateConstantBuffer(&lightningData, m_pCB_Lightning);
@@ -425,7 +439,28 @@ namespace gaEngineSDK {
 
   void 
   DeferredRendering::shadowMapPass() {
+    auto myGraphicsApi = g_graphicApi().instancePtr();
 
+    //First steps
+
+
+
+
+    //Final steps
+    myGraphicsApi->setRenderTarget(m_pShadowMap_RT);
+    myGraphicsApi->setShaders(m_pShadowMap_Shader);
+    myGraphicsApi->createMipMaps(m_pShadowMap_RT);
+
+    //VS CB
+    myGraphicsApi->setYourVSConstantBuffers(m_pCB_Views, 0);
+    myGraphicsApi->setYourVSConstantBuffers(m_pCB_Projections, 1);
+    myGraphicsApi->setYourVSConstantBuffers(m_pCB_WorldInfo, 2);
+    myGraphicsApi->setYourVSConstantBuffers(m_pCB_BufferBones, 3);
+    myGraphicsApi->setYourVSConstantBuffers(m_pCB_Lights, 4);
+
+    //Clear
+    myGraphicsApi->clearYourRenderTarget(m_pShadowMap_RT, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+
+    //Update CB
   }
-
 }

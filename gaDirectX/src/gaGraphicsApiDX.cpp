@@ -1001,6 +1001,19 @@ namespace gaEngineSDK {
     return newRenderTarg;
   }
 
+  void
+  GraphicsApiDX::createMipMaps(WeakSPtr<RenderTarget> renderTarg) {
+    auto rt = renderTarg.lock().get();
+    if (nullptr != rt) {
+      RenderTargetDX* rendTarget = reinterpret_cast<RenderTargetDX*>(rt);
+
+      uint32 numRT = rendTarget->m_renderTarget.m_vShaderResourceView.size();
+      for (uint32 i = 0; i < numRT; ++i) {
+        m_pDeviceContext->GenerateMips(rendTarget->m_renderTarget.m_vShaderResourceView[i]);
+      }
+    }
+  }
+
   /***************************************************************************/
   /**
   * Sets.

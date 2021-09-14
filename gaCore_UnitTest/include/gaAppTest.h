@@ -101,5 +101,10 @@ class AppTest : public BaseApp
   void
   createNodeRamlethalSwords();
 
+  /*
+  * @brief .
+  */
+  void
+  createCube();
 
 };

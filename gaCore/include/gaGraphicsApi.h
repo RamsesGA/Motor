@@ -332,6 +332,12 @@ namespace gaEngineSDK {
       return nullptr;
     };
 
+    /*
+    * @brief .
+    */
+    virtual void
+    createMipMaps(WeakSPtr<RenderTarget> renderTarg){ GA_UNREFERENCED_PARAMETER(renderTarg); };
+
     /*************************************************************************/
     /**
     * Set methods.

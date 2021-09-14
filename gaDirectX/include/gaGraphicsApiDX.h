@@ -139,6 +139,8 @@ namespace gaEngineSDK {
                        uint32 numRenderTargets = 1, 
                        float scale = 1.0f,
                        bool depth = false) override;
+    void
+    createMipMaps(WeakSPtr<RenderTarget> renderTarg) override;
 
     /*************************************************************************/
     /**
