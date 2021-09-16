@@ -58,6 +58,12 @@ namespace gaEngineSDK {
     
     Matrix4x4
     perspectiveFovLH(float FOV, float width, float height, float near, float farF);
+
+    Matrix4x4
+    matrixLookAtLH(Matrix4x4* pOut, 
+                   const Vector3* pEye, 
+                   const Vector3* pAt, 
+                   const Vector3* pUp);
     
     /**
     * @brief Obtain a vector with the values of the matrix.

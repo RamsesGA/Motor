@@ -438,7 +438,7 @@ namespace gaEngineSDK {
     HRESULT hr = S_OK;
 
     //We compile the received shader.
-    hr = CompileShaderFromFile(namePS, entryPointPS.c_str(), "ps_4_0", &shaders->m_pPSBlob);
+    hr = CompileShaderFromFile(namePS, entryPointPS.c_str(), "ps_5_0", &shaders->m_pPSBlob);
 
     //We check that everything goes well, if we do not send an error.
     if (FAILED(hr)) {
@@ -463,7 +463,7 @@ namespace gaEngineSDK {
     shaders->m_pVSBlob = nullptr;
 
     //We compile the received shader.
-    hr = CompileShaderFromFile(nameVS, entryPointVS.c_str(), "vs_4_0", &shaders->m_pVSBlob);
+    hr = CompileShaderFromFile(nameVS, entryPointVS.c_str(), "vs_5_0", &shaders->m_pVSBlob);
 
     //We check that everything goes well, if we do not send an error.
     if (FAILED(hr)) {
@@ -629,6 +629,66 @@ namespace gaEngineSDK {
     return constantBuffer;
   }
 
+  ConstantBuffer* 
+  GraphicsApiDX::createConstantBuffer(const uint32 bufferSize,
+                                      CPU_ACCESS::E typeCpu,
+                                      USAGE::E typeUsage) {
+    //We generate an auto variable to adapt the type of data that we occupy.
+    ConstantBufferDX* constantBuffer = new ConstantBufferDX();
+
+    //Assign data to the variable.
+    HRESULT hr = S_OK;
+
+    //We fill the buffer descriptor.
+    D3D11_BUFFER_DESC bufferDesc;
+    bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    bufferDesc.ByteWidth = bufferSize;
+    switch (typeCpu) {
+
+      case CPU_ACCESS::kCpuAccessRead:
+        bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+        break;
+
+      case CPU_ACCESS::kCpuAccessWrite:
+        bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+        break;
+      default:
+        break;
+    }
+    bufferDesc.MiscFlags = 0;
+    bufferDesc.StructureByteStride = 0;
+    switch (typeUsage) {
+      case USAGE::kUsageDefault:
+        bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+        break;
+
+      case USAGE::kUsageDynamic:
+        bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+        break;
+
+      case USAGE::kUsageImmutable:
+        bufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
+        break;
+
+      case USAGE::kUsageStaging:
+        bufferDesc.Usage = D3D11_USAGE_STAGING;
+        break;
+      default:
+        break;
+    }
+
+    //We create the buffer.
+    hr = m_pd3dDevice->CreateBuffer(&bufferDesc, nullptr, &constantBuffer->m_pConstantBuffer);
+
+    //Finally we return the data in case of not getting an error.
+    if (FAILED(hr)) {
+      delete constantBuffer;
+      return nullptr;
+    }
+
+    return constantBuffer;
+  }
+
   Textures*
   GraphicsApiDX::createTexture(const uint32 width, 
                                const uint32 height, 
@@ -720,7 +780,9 @@ namespace gaEngineSDK {
   }
 
   SPtr<SamplerState>
-  GraphicsApiDX::createSamplerState() {
+  GraphicsApiDX::createSamplerState(FILTER::E typeFilter,
+                                    TEXTURE_ADDRESS::E textureAddress,
+                                    COMPARISON::E typeComparison) {
     //We generate an auto variable to adapt the type of data we occupy.
     SamplerStateDX* samplerState = new SamplerStateDX();
 
@@ -730,11 +792,142 @@ namespace gaEngineSDK {
     //We define the sampler state.
     D3D11_SAMPLER_DESC sampDesc;
     ZeroMemory(&sampDesc, sizeof(sampDesc));
-    sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-    sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-    sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-    sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-    sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+    switch (typeFilter) {
+      case FILTER::kFilterMinMagMipPoint:
+        sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+        break;
+
+      case FILTER::kFilterMinMagPointMipLinear:
+        sampDesc.Filter = D3D11_FILTER_MIN_MAG_POINT_MIP_LINEAR;
+        break;
+
+      case FILTER::kFilterMinPointMagLinearMipPoint:
+        sampDesc.Filter = D3D11_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT;
+        break;
+
+      case FILTER::kFilterMinPointMagMipLinear:
+        sampDesc.Filter = D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR;
+        break;
+
+      case FILTER::kFilterMinLinearMagMipPoint:
+        sampDesc.Filter = D3D11_FILTER_MIN_LINEAR_MAG_MIP_POINT;
+        break;
+
+      case FILTER::kFilterMinLinearMagPointMipLinear:
+        sampDesc.Filter = D3D11_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
+        break;
+
+      case FILTER::kFilterMinMagLinearMipPoint:
+        sampDesc.Filter = D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
+        break;
+
+      case FILTER::kFilterMinMagMipLinear:
+        sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+        break;
+
+      case FILTER::kFilterAnisotropic:
+        sampDesc.Filter = D3D11_FILTER_ANISOTROPIC;
+        break;
+
+      case FILTER::kFilterComparisionMinPointMagLinearMipPoint:
+        sampDesc.Filter = D3D11_FILTER_COMPARISON_MIN_POINT_MAG_LINEAR_MIP_POINT;
+        break;
+
+      case FILTER::kFilterComparisionMinPointMagMipLinear:
+        sampDesc.Filter = D3D11_FILTER_COMPARISON_MIN_POINT_MAG_MIP_LINEAR;
+        break;
+
+      case FILTER::kFilterComparisionMinLinearMagMipPoint:
+        sampDesc.Filter = D3D11_FILTER_COMPARISON_MIN_LINEAR_MAG_MIP_POINT;
+        break;
+
+      case FILTER::kFilterComparisionMinLinearMagPointMipLinear:
+        sampDesc.Filter = D3D11_FILTER_COMPARISON_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
+        break;
+
+      case FILTER::kFilterComparisionMinMagLinearMipPoint:
+        sampDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
+        break;
+
+      case FILTER::kFilterComparisionMinMagMipLinear:
+        sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+        break;
+
+      case FILTER::kFilterComparisionAnisotropic:
+        sampDesc.Filter = D3D11_FILTER_COMPARISON_ANISOTROPIC;
+        break;
+
+      default:
+        break;
+    }
+    switch (textureAddress) {
+      case TEXTURE_ADDRESS::kTextureAddressWrap:
+        sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+        sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+        sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+        break;
+
+      case TEXTURE_ADDRESS::kTextureAddressMirror:
+        sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_MIRROR;
+        sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR;
+        sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_MIRROR;
+        break;
+
+      case TEXTURE_ADDRESS::kTextureAddressClamp:
+        sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+        sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+        sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+        break;
+
+      case TEXTURE_ADDRESS::kTextureAddressBorder:
+        sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
+        sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
+        sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
+        break;
+
+      case TEXTURE_ADDRESS::kTextureAddressMirrorOnce:
+        sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
+        sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
+        sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
+        break;
+      default:
+        break;
+    }
+    switch (typeComparison) {
+      case COMPARISON::kComparisonNever:
+        sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+        break;
+      
+      case COMPARISON::kComparisonLess:
+        sampDesc.ComparisonFunc = D3D11_COMPARISON_LESS;
+        break;
+      
+      case COMPARISON::kComparisonEqual:
+        sampDesc.ComparisonFunc = D3D11_COMPARISON_EQUAL;
+        break;
+      
+      case COMPARISON::kComparisonLessEqual:
+        sampDesc.ComparisonFunc = D3D11_COMPARISON_LESS_EQUAL;
+        break;
+      
+      case COMPARISON::kComparisonGreater:
+        sampDesc.ComparisonFunc = D3D11_COMPARISON_GREATER;
+        break;
+      
+      case COMPARISON::kComparisonNotEqual:
+        sampDesc.ComparisonFunc = D3D11_COMPARISON_NOT_EQUAL;
+        break;
+      
+      case COMPARISON::kComparisonGreaterEqual:
+        sampDesc.ComparisonFunc = D3D11_COMPARISON_GREATER_EQUAL;
+        break;
+      
+      case COMPARISON::kComparisonAlways:
+        sampDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+        break;
+      default:
+        break;
+    }
     sampDesc.MinLOD = 0;
     sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
     sampDesc.MipLODBias = 0;

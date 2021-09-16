@@ -1,17 +1,7 @@
 #include <gaGraphicsApi.h>
+#include <imgui.h>
 
 #include "gaInterface.h"
-
-#include "imgui.h"
-#include "imgui_impl_dx11.h"
-#include "imgui_impl_win32.h"
-
-/*
-widgets 548 - 429
-imgui 429 - 86
-imgui draw 86 - 3
-imgui impl win 32 3 - 
-*/
 
 namespace gaEngineSDK {
   void 

@@ -119,6 +119,11 @@ namespace gaEngineSDK {
     ConstantBuffer*
     createConstantBuffer(const uint32 bufferSize) override;
 
+    ConstantBuffer*
+    createConstantBuffer(const uint32 bufferSize, 
+                         CPU_ACCESS::E typeCpu, 
+                         USAGE::E typeUsage) override;
+
     Textures*
     createTexture(const uint32 width, 
                   const uint32 height, 
@@ -127,7 +132,12 @@ namespace gaEngineSDK {
                   const String fileName) override;
 
     SPtr<SamplerState>
-    createSamplerState() override;
+    createSamplerState(FILTER::E typeFilter =
+                       FILTER::kFilterMinMagMipLinear,
+                       TEXTURE_ADDRESS::E textureAddress =
+                       TEXTURE_ADDRESS::kTextureAddressWrap,
+                       COMPARISON::E typeComparison =
+                       COMPARISON::kComparisonNever) override;
 
     InputLayout*
     createInputLayout(WeakSPtr<Shaders> vertexShader) override;

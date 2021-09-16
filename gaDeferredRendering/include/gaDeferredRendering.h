@@ -144,6 +144,8 @@ namespace gaEngineSDK {
     */
     Camera m_mainCamera;
 
+    Camera m_shadowCamera;
+
     /*
     * @brief 4x4 matrix of the world.
     */
@@ -194,16 +196,17 @@ namespace gaEngineSDK {
     SPtr<ConstantBuffer> m_pCB_Lightning;
     SPtr<ConstantBuffer> m_pCB_MipLevels;
 
-    //Shadow maps
-    SPtr<ConstantBuffer> m_pCB_ViewMatrixes;
-    SPtr<ConstantBuffer> m_pCB_ProjectionMatrixes;
-    SPtr<ConstantBuffer> m_pCB_WorldInfo;
-    SPtr<ConstantBuffer> m_pCB_light;
+    //Shader Map
+    SPtr<ConstantBuffer> m_pCB_Shadows;
+    SPtr<ConstantBuffer> m_pCB_Light;
+    SPtr<ConstantBuffer> m_pCB_Light2;
 
     /*
     * @brief .
     */
     SPtr<SamplerState> m_pSampler;
+    SPtr<SamplerState> m_pSampleStateClamp;
+    SPtr<SamplerState> m_pSampleStateWrap;
 
     /*
     * @brief Variable that stores the vertex layout data.

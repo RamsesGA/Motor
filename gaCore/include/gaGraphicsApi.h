@@ -272,6 +272,14 @@ namespace gaEngineSDK {
       return nullptr;
     };
 
+    virtual ConstantBuffer*
+    createConstantBuffer(const uint32 bufferSize, CPU_ACCESS::E typeCpu, USAGE::E typeUsage) {
+      GA_UNREFERENCED_PARAMETER(bufferSize);
+      GA_UNREFERENCED_PARAMETER(typeCpu);
+      GA_UNREFERENCED_PARAMETER(typeUsage);
+      return nullptr;
+    };
+
     /**
     * @brief Function to generate the following:
     *      ° ShaderResourceView
@@ -303,7 +311,16 @@ namespace gaEngineSDK {
     * @return SamplerState
     */
     virtual SPtr<SamplerState>
-    createSamplerState() { return nullptr; };
+    createSamplerState(FILTER::E typeFilter = 
+                       FILTER::kFilterMinMagMipLinear,
+                       TEXTURE_ADDRESS::E textureAddress = 
+                       TEXTURE_ADDRESS::kTextureAddressWrap,
+                       COMPARISON::E typeComparison = 
+                       COMPARISON::kComparisonNever) { 
+      GA_UNREFERENCED_PARAMETER(typeFilter);
+      GA_UNREFERENCED_PARAMETER(textureAddress);
+      GA_UNREFERENCED_PARAMETER(typeComparison);
+      return nullptr; };
 
     /**
     * @brief Function to generate the input layout.

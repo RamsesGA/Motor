@@ -30,7 +30,7 @@ namespace gaEngineSDK {
     /*
     * Init ImGui
     */
-    //auto myInterface = g_baseInterface().instancePtr();
+    auto myInterface = g_baseInterface().instancePtr();
     //myInterface->init(m_width, m_height, m_sfmlWindow.getSystemHandle());
 
     /*
@@ -133,24 +133,24 @@ namespace gaEngineSDK {
     * B A S E
     * I N T E R F A C E
     */
-    //hInstance = LoadLibraryExA("gaInterface_d.dll", nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
+    hInstance = LoadLibraryExA("gaInterface_d.dll", nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
 
     //In case of error
-    //if (!(hInstance)) {
-    //  return -1;
-    //}
+    if (!(hInstance)) {
+      return -1;
+    }
 
-    //using fnBI = BaseInterface * (*)();
-    //fnBI baseInter = reinterpret_cast<fnBI>(GetProcAddress(hInstance, "createNewInterface"));
+    using fnBI = BaseInterface * (*)();
+    fnBI baseInter = reinterpret_cast<fnBI>(GetProcAddress(hInstance, "createNewInterface"));
 
     //In case of error
-    //if (!(baseInter)) {
-    //  return -1;
-    //}
+    if (!(baseInter)) {
+      return -1;
+    }
 
-    //BaseInterface::startUp();
-    //BaseInterface* newBI = baseInter();
-    //g_baseInterface().setObject(newBI);
+    BaseInterface::startUp();
+    BaseInterface* newBI = baseInter();
+    g_baseInterface().setObject(newBI);
 
     /*
     * M O D U L E

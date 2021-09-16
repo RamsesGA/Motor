@@ -48,8 +48,8 @@ AppTest::onCreate() {
   //createNodeTwoB();
   //createNodeSpartan();
   //createNodeUgandan();
-  createNodeGrimoires();
-  //createNodeRamlethalSwords();
+  //createNodeGrimoires();
+  createNodeRamlethalSwords();
 }
 
 /*****************************************************************************/

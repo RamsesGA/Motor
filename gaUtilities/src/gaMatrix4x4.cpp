@@ -104,6 +104,14 @@ namespace gaEngineSDK {
     return result;
   }
   
+  Matrix4x4 
+  Matrix4x4::matrixLookAtLH(Matrix4x4* pOut, 
+                            const Vector3* pEye,
+                            const Vector3* pAt,
+                            const Vector3* pUp) {
+    return Matrix4x4();
+  }
+
   Vector3
   Matrix4x4::getColumnMatrixInfo(uint32 index) {
     Vector<Vector3>matrixData;

@@ -54,9 +54,9 @@ namespace gaEngineSDK {
                                                                  "Add"));
 
     m_pShadowMap_Shader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_ShadowMap.fx",
-                                                                  "vs_ShadowMap",
+                                                                  "ShadowVS",
                                                                   L"data/shaders/DX_ShadowMap.fx",
-                                                                  "ShadowMap"));
+                                                                  "ShadowPS"));
 
     //We create the input layout.
     m_pVertexLayout.reset(myGraphicsApi->createInputLayout(m_pGBuffer_Shader));
@@ -80,11 +80,18 @@ namespace gaEngineSDK {
     m_pCB_Lightning.reset(myGraphicsApi->createConstantBuffer(sizeof(cbLightning)));
     m_pCB_MipLevels.reset(myGraphicsApi->createConstantBuffer(sizeof(cbMipLevels)));
 
-    //Shadow maps
-    m_pCB_ViewMatrixes.reset(myGraphicsApi->createConstantBuffer(sizeof(cbViewMatrixes)));
-    m_pCB_ProjectionMatrixes.reset(myGraphicsApi->createConstantBuffer(sizeof(cbProjectionMatrixes)));
-    m_pCB_WorldInfo.reset(myGraphicsApi->createConstantBuffer(sizeof(cbWorldInfo)));
-    m_pCB_light.reset(myGraphicsApi->createConstantBuffer(sizeof(cbLight)));
+    //Shadow map
+    m_pCB_Shadows.reset(myGraphicsApi->createConstantBuffer(sizeof(cbShadows), 
+                                                            CPU_ACCESS::kCpuAccessWrite,
+                                                            USAGE::kUsageDynamic));
+
+    m_pCB_Light.reset(myGraphicsApi->createConstantBuffer(sizeof(cbLight), 
+                                                          CPU_ACCESS::kCpuAccessWrite,
+                                                          USAGE::kUsageDynamic));
+
+    m_pCB_Light2.reset(myGraphicsApi->createConstantBuffer(sizeof(cbLight2), 
+                                                           CPU_ACCESS::kCpuAccessWrite,
+                                                           USAGE::kUsageDynamic));
 
     /*
     * C R E A T E
@@ -118,7 +125,20 @@ namespace gaEngineSDK {
     * Z O N E
     */
     m_pSampler = myGraphicsApi->createSamplerState();
+
+    m_pSampleStateClamp = myGraphicsApi->createSamplerState(
+                                         FILTER::kFilterMinMagMipLinear,
+                                         TEXTURE_ADDRESS::kTextureAddressClamp,
+                                         COMPARISON::kComparisonAlways);
+
+    m_pSampleStateWrap = myGraphicsApi->createSamplerState(
+                                        FILTER::kFilterMinMagMipLinear,
+                                        TEXTURE_ADDRESS::kTextureAddressWrap,
+                                        COMPARISON::kComparisonAlways);
+
     myGraphicsApi->setSamplerState(m_pSampler, 0);
+    myGraphicsApi->setSamplerState(m_pSampleStateClamp, 1);
+    myGraphicsApi->setSamplerState(m_pSampleStateWrap, 2);
 
     //Create the one face of cube.
     m_mySAQ.reset(new Plane());
@@ -438,29 +458,58 @@ namespace gaEngineSDK {
   }
 
   void 
-  DeferredRendering::shadowMapPass() {
+    DeferredRendering::shadowMapPass() {
     auto myGraphicsApi = g_graphicApi().instancePtr();
+    auto mySceneGraph = SceneGraph::instancePtr();
 
-    //First steps
+    //Defining shadow camera's value
+    m_shadowCamera.setLookAt(Vector3(-100.0f, 250.0f, -100.0f));
+    m_shadowCamera.setEye();
+    m_shadowCamera.setUp();
+    m_shadowCamera.setFar();
+    m_shadowCamera.setNear();
+    m_shadowCamera.setFoV();
+    m_shadowCamera.setWidth(m_width);
+    m_shadowCamera.setHeight(m_height);
+    m_shadowCamera.startCamera();
 
-
-
-
-    //Final steps
     myGraphicsApi->setRenderTarget(m_pShadowMap_RT);
     myGraphicsApi->setShaders(m_pShadowMap_Shader);
-    myGraphicsApi->createMipMaps(m_pShadowMap_RT);
 
     //VS CB
-    myGraphicsApi->setYourVSConstantBuffers(m_pCB_Views, 0);
-    myGraphicsApi->setYourVSConstantBuffers(m_pCB_Projections, 1);
-    myGraphicsApi->setYourVSConstantBuffers(m_pCB_WorldInfo, 2);
-    myGraphicsApi->setYourVSConstantBuffers(m_pCB_BufferBones, 3);
-    myGraphicsApi->setYourVSConstantBuffers(m_pCB_Lights, 4);
+    myGraphicsApi->setYourVSConstantBuffers(m_pCB_Shadows, 0);
+    myGraphicsApi->setYourVSConstantBuffers(m_pCB_Light, 1);
+    myGraphicsApi->setYourPSConstantBuffers(m_pCB_Light2, 2);
 
     //Clear
-    myGraphicsApi->clearYourRenderTarget(m_pShadowMap_RT, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+    myGraphicsApi->clearYourRenderTarget(m_pShadowMap_RT, Vector4(135.0f, 135.0f, 135.0f, 1.0f));
 
     //Update CB
+    cbShadows shadowsData;
+    shadowsData.mLightProjection = m_shadowCamera.getProjection();
+    shadowsData.mLightView = m_shadowCamera.getView();
+    shadowsData.mProjection = m_shadowCamera.getProjection();
+    shadowsData.mView = m_shadowCamera.getView();
+    shadowsData.mWorld = m_world;
+
+    cbLight lightData;
+    lightData.lightPosition = Vector3(-100.0f, 250.0f, -100.0f);
+    lightData.padding = 0.0f;
+
+    cbLight2 light2Data;
+    light2Data.ambientColor = Vector4(0.15f, 0.15f, 0.15f, 1.0f);
+    light2Data.diffuseColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+
+    //Update CB.
+    myGraphicsApi->updateConstantBuffer(&shadowsData, m_pCB_Shadows);
+    myGraphicsApi->updateConstantBuffer(&lightData, m_pCB_Light);
+    myGraphicsApi->updateConstantBuffer(&light2Data, m_pCB_Light2);
+
+    //Set textures
+    myGraphicsApi->setShaderResourceView(nullptr, 0);//shaderTexture  m_pGbuffer_RT->getRenderTexture(1)
+    myGraphicsApi->setShaderResourceView(nullptr, 1);//depthMapTexture
+
+    //Render model
+    mySceneGraph->render();
   }
 }

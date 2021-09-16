@@ -67,42 +67,23 @@ struct ConstBuffBonesTransform {
   Matrix4x4 bonesTransform[maxBones];
 };
 
-//Shadow map
-struct cbViewMatrixes {
-  Matrix4x4 mView;
-  Matrix4x4 mViewInv;
-};
-
-struct cbProjectionMatrixes {
-  Matrix4x4 mProjection;
-  Matrix4x4 mProjectionInv;
-  Matrix4x4 mViewProjection;
-  Matrix4x4 mViewProjectionInv;
-};
-
-struct cbWorldInfo {
+//shadow maps
+struct cbShadows {
   Matrix4x4 mWorld;
-  Matrix4x4 mWorldInv;
-  Matrix4x4 mWorldView;
-  Matrix4x4 mWorldViewInv;
-  Matrix4x4 mWorldProjection;
-  Matrix4x4 mWorldProjectionInv;
-  Matrix4x4 mWorldViewProjection;
-  Matrix4x4 mWorldViewProjectionInv;
-
-  Vector4 viewPosition;
-};
-
-struct myLight {
-  Vector4 lDirection;
-  Vector4 lColor;
-  Vector3 lPosition;
-
-  uint32 numberLights;
+  Matrix4x4 mView;
+  Matrix4x4 mProjection;
+  Matrix4x4 mLightView;
+  Matrix4x4 mLightProjection;
 };
 
 struct cbLight {
-  myLight currentLight[5];
+  Vector3 lightPosition;
+  float padding;
+};
+
+struct cbLight2 {
+  Vector4 ambientColor;
+  Vector4 diffuseColor;
 };
 
 //-----------------------------------------------------------------------------
@@ -115,7 +96,6 @@ struct Matrices {
 /*
 * Structs for shaders
 */
-
 struct ViewCB {
   Matrix4x4 View;
 };
@@ -161,7 +141,7 @@ namespace FILTER {
   };
 }
 
-namespace TEXTURE_ADDRESS_MODE {
+namespace TEXTURE_ADDRESS {
   enum E {
     kTextureAddressWrap = 1,
     kTextureAddressMirror = 2,
@@ -171,12 +151,12 @@ namespace TEXTURE_ADDRESS_MODE {
   };
 }
 
-namespace COMPARISON_FUNC {
+namespace COMPARISON {
   enum E {
     kComparisonNever = 1,
     kComparisonLess = 2,
     kComparisonEqual = 3,
-    kComparisonLellEqual = 4,
+    kComparisonLessEqual = 4,
     kComparisonGreater = 5,
     kComparisonNotEqual = 6,
     kComparisonGreaterEqual = 7,
@@ -185,14 +165,30 @@ namespace COMPARISON_FUNC {
 }
 
 struct SAMPLER_DESC {
-  FILTER::E               myFilter;
-  TEXTURE_ADDRESS_MODE::E myAddressU;
-  TEXTURE_ADDRESS_MODE::E myAddressV;
-  TEXTURE_ADDRESS_MODE::E myAddressW;
-  COMPARISON_FUNC::E      myComparisonFunc;
-  uint32                  myMaxAnisotropy;
-  float                   myMipLODBias;
-  float                   myBorderColor[4];
-  float                   myMinLOD;
-  float                   myMaxLOD;
+  FILTER::E          myFilter;
+  TEXTURE_ADDRESS::E myAddressU;
+  TEXTURE_ADDRESS::E myAddressV;
+  TEXTURE_ADDRESS::E myAddressW;
+  COMPARISON::E      myComparisonFunc;
+  uint32             myMaxAnisotropy;
+  float              myMipLODBias;
+  float              myBorderColor[4];
+  float              myMinLOD;
+  float              myMaxLOD;
+};
+
+struct CPU_ACCESS {
+  enum E {
+    kCpuAccessRead = 1,
+    kCpuAccessWrite = 2
+  };
+};
+
+struct USAGE {
+  enum E {
+    kUsageDefault = 0,
+    kUsageDynamic = 1,
+    kUsageImmutable = 2,
+    kUsageStaging = 3
+  };
 };
