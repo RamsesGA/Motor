@@ -7,7 +7,7 @@
 #include "gaPrerequisitesCore.h"
 
 namespace gaEngineSDK {
-  class Lights
+  class GA_CORE_EXPORT Lights
   {
    public:
     /*************************************************************************/

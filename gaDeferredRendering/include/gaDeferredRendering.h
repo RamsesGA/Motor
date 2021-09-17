@@ -1,6 +1,7 @@
 #pragma once
 
 #include <gaBaseRenderer.h>
+#include <gaLights.h>
 
 #include "gaPrerequisitesDefRend.h"
 
@@ -124,6 +125,12 @@ namespace gaEngineSDK {
     * @brief .
     */
     void
+    depthPass();
+
+    /*
+    * @brief .
+    */
+    void
     shadowMapPass();
 
    protected:
@@ -172,6 +179,7 @@ namespace gaEngineSDK {
     SPtr<Shaders> m_pBlurV_Shader;
     SPtr<Shaders> m_pLightning_Shader;
     SPtr<Shaders> m_pAddition_Shader;
+    SPtr<Shaders> m_pDepth_Shader;
     SPtr<Shaders> m_pShadowMap_Shader;
 
     /*
@@ -183,6 +191,11 @@ namespace gaEngineSDK {
     SPtr<RenderTarget> m_pBlurV_RT;
     SPtr<RenderTarget> m_pAddition_RT;
     SPtr<RenderTarget> m_pLightning_RT;
+
+    //Depth map
+    SPtr<RenderTarget> m_pMatrix_RT;
+
+    //Shader Map
     SPtr<RenderTarget> m_pShadowMap_RT;
 
     /*
@@ -195,6 +208,9 @@ namespace gaEngineSDK {
     SPtr<ConstantBuffer> m_pCB_ViewPortDimension;
     SPtr<ConstantBuffer> m_pCB_Lightning;
     SPtr<ConstantBuffer> m_pCB_MipLevels;
+
+    //Depth map
+    SPtr<ConstantBuffer> m_pCB_Matrix;
 
     //Shader Map
     SPtr<ConstantBuffer> m_pCB_Shadows;
@@ -222,6 +238,11 @@ namespace gaEngineSDK {
     * @brief .
     */
     SPtr<Plane> m_mySAQ;
+
+    /*
+    * @brief .
+    */
+    SPtr<Lights> m_pLight;
   };
 
   /***************************************************************************/

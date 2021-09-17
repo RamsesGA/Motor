@@ -67,6 +67,13 @@ struct ConstBuffBonesTransform {
   Matrix4x4 bonesTransform[maxBones];
 };
 
+//Depth
+struct cbMatrixBuffer {
+  Matrix4x4 mWorld;
+  Matrix4x4 mView;
+  Matrix4x4 mProjection;
+};
+
 //shadow maps
 struct cbShadows {
   Matrix4x4 mWorld;

@@ -1,7 +1,6 @@
 #include "gaLights.h"
 
 namespace gaEngineSDK {
-
   void 
   Lights::generateViewMatrix() {
     Vector3 up;
@@ -12,7 +11,7 @@ namespace gaEngineSDK {
     up.z = 0.0f;
 
     // Create the view matrix from the three vectors.
-    m_viewMatrix = m_viewMatrix.matrixLookAtLH(&m_viewMatrix, &m_position, &m_lookAt, &up);
+    m_viewMatrix = m_viewMatrix.matrixLookAtLH(&m_position, &m_lookAt, &up);
   }
 
   void 
@@ -25,10 +24,12 @@ namespace gaEngineSDK {
     screenAspect = 1.0f;
 
     // Create the projection matrix for the light.
-    //m_projectionMatrix = m_projectionMatrix.perspectiveFovLH();
+    m_projectionMatrix = m_projectionMatrix.perspectiveFovLH(fieldOfView, 
+                                                             screenAspect, 
+                                                             screenAspect,
+                                                             screenNear,
+                                                             screenDepth);
   }
-
-  
 
   /***************************************************************************/
   /**

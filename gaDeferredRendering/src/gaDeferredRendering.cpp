@@ -23,40 +23,52 @@ namespace gaEngineSDK {
     m_pDepthStencil.reset(myGraphicsApi->getDefaultDepthStencil());
 
     //We create the vertex shader and pixel shader.
-    m_pGBuffer_Shader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_gBuffer.fx",
-                                                                "vs_gBuffer",
-                                                                L"data/shaders/DX_gBuffer.fx",
-                                                                "ps_gBuffer"));
+    m_pGBuffer_Shader.reset(myGraphicsApi->createShadersProgram(
+                                           L"data/shaders/DX_gBuffer.hlsl",
+                                           "vs_gBuffer",
+                                           L"data/shaders/DX_gBuffer.hlsl",
+                                           "ps_gBuffer"));
 
-    m_pSSAO_Shader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_screenAlignedQuad.fx",
-                                                             "vs_ssAligned",
-                                                             L"data/shaders/DX_SSAO.fx",
-                                                             "ps_ssao"));
+    m_pSSAO_Shader.reset(myGraphicsApi->createShadersProgram(
+                                        L"data/shaders/DX_screenAlignedQuad.hlsl",
+                                        "vs_ssAligned",
+                                        L"data/shaders/DX_SSAO.hlsl",
+                                        "ps_ssao"));
 
-    m_pBlurH_Shader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_screenAlignedQuad.fx",
-                                                              "vs_ssAligned",
-                                                              L"data/shaders/DX_gaussyan_blur.fx",
-                                                              "ps_gaussian_blurH"));
+    m_pBlurH_Shader.reset(myGraphicsApi->createShadersProgram(
+                                         L"data/shaders/DX_screenAlignedQuad.hlsl",
+                                         "vs_ssAligned",
+                                         L"data/shaders/DX_gaussyan_blur.hlsl",
+                                         "ps_gaussian_blurH"));
 
-    m_pBlurV_Shader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_screenAlignedQuad.fx",
-                                                              "vs_ssAligned",
-                                                              L"data/shaders/DX_gaussyan_blur.fx",
-                                                              "ps_gaussian_blurV"));
+    m_pBlurV_Shader.reset(myGraphicsApi->createShadersProgram(
+                                         L"data/shaders/DX_screenAlignedQuad.hlsl",
+                                         "vs_ssAligned",
+                                         L"data/shaders/DX_gaussyan_blur.hlsl",
+                                         "ps_gaussian_blurV"));
 
-    m_pLightning_Shader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_screenAlignedQuad.fx",
-                                                                  "vs_ssAligned",
-                                                                  L"data/shaders/DX_lightningPS.fx",
-                                                                  "ps_main"));
+    m_pLightning_Shader.reset(myGraphicsApi->createShadersProgram(
+                                             L"data/shaders/DX_screenAlignedQuad.hlsl",
+                                             "vs_ssAligned",
+                                             L"data/shaders/DX_lightningPS.hlsl",
+                                             "ps_main"));
 
-    m_pAddition_Shader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_screenAlignedQuad.fx",
-                                                                 "vs_ssAligned",
-                                                                 L"data/shaders/DX_AdditionPS.fx",
-                                                                 "Add"));
+    m_pAddition_Shader.reset(myGraphicsApi->createShadersProgram( 
+                                            L"data/shaders/DX_screenAlignedQuad.hlsl",
+                                            "vs_ssAligned",
+                                            L"data/shaders/DX_AdditionPS.hlsl",
+                                            "Add"));
 
-    m_pShadowMap_Shader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_ShadowMap.fx",
-                                                                  "ShadowVS",
-                                                                  L"data/shaders/DX_ShadowMap.fx",
-                                                                  "ShadowPS"));
+    m_pDepth_Shader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_Depth.hlsl",
+                                                              "DepthVS",
+                                                              L"data/shaders/DX_Depth.hlsl",
+                                                              "DepthPS"));
+
+    m_pShadowMap_Shader.reset(myGraphicsApi->createShadersProgram(
+                                             L"data/shaders/DX_ShadowMap.hlsl",
+                                             "ShadowVS",
+                                             L"data/shaders/DX_ShadowMap.hlsl",
+                                             "ShadowPS"));
 
     //We create the input layout.
     m_pVertexLayout.reset(myGraphicsApi->createInputLayout(m_pGBuffer_Shader));
@@ -80,6 +92,10 @@ namespace gaEngineSDK {
     m_pCB_Lightning.reset(myGraphicsApi->createConstantBuffer(sizeof(cbLightning)));
     m_pCB_MipLevels.reset(myGraphicsApi->createConstantBuffer(sizeof(cbMipLevels)));
 
+    //Depth
+    m_pCB_Matrix.reset(myGraphicsApi->createConstantBuffer(sizeof(cbMatrixBuffer), 
+                                                           CPU_ACCESS::kCpuAccessWrite,
+                                                           USAGE::kUsageDynamic));
     //Shadow map
     m_pCB_Shadows.reset(myGraphicsApi->createConstantBuffer(sizeof(cbShadows), 
                                                             CPU_ACCESS::kCpuAccessWrite,
@@ -92,7 +108,6 @@ namespace gaEngineSDK {
     m_pCB_Light2.reset(myGraphicsApi->createConstantBuffer(sizeof(cbLight2), 
                                                            CPU_ACCESS::kCpuAccessWrite,
                                                            USAGE::kUsageDynamic));
-
     /*
     * C R E A T E
     * R E N D E R
@@ -106,6 +121,9 @@ namespace gaEngineSDK {
     m_pAddition_RT = make_shared<RenderTarget>();
     m_pLightning_RT = make_shared<RenderTarget>();
 
+    //Depth
+    m_pMatrix_RT = make_shared<RenderTarget>();
+
     //Shadow map
     m_pShadowMap_RT = make_shared<RenderTarget>();
 
@@ -115,6 +133,9 @@ namespace gaEngineSDK {
     m_pBlurV_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
     m_pAddition_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
     m_pLightning_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
+
+    //Depth
+    m_pMatrix_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
 
     //Shadow map
     m_pShadowMap_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
@@ -154,6 +175,7 @@ namespace gaEngineSDK {
     * Z O N E
     */
     rtGbufferPass();
+    //depthPass();
     //shadowMapPass();
     rtSSAO_Pass();
     blurH_Pass(m_pSSAO_RT->getRenderTexture(0));
@@ -458,7 +480,34 @@ namespace gaEngineSDK {
   }
 
   void 
-    DeferredRendering::shadowMapPass() {
+  DeferredRendering::depthPass() {
+    auto myGraphicsApi = g_graphicApi().instancePtr();
+    auto mySceneGraph = SceneGraph::instancePtr();
+
+    myGraphicsApi->setRenderTarget(m_pMatrix_RT);
+    myGraphicsApi->setShaders(m_pDepth_Shader);
+
+    //VS CB
+    myGraphicsApi->setYourVSConstantBuffers(m_pCB_Matrix, 0);
+
+    //Clear
+    myGraphicsApi->clearYourRenderTarget(m_pMatrix_RT, m_rgba);
+
+    //Update CB
+    cbMatrixBuffer matrixData;
+    matrixData.mProjection = myGraphicsApi->matrixPolicy(m_mainCamera.getProjection());
+    matrixData.mView = myGraphicsApi->matrixPolicy(m_mainCamera.getView());;
+    matrixData.mWorld = m_world;
+
+    //Update CB.
+    myGraphicsApi->updateConstantBuffer(&matrixData, m_pCB_Matrix);
+
+    //Render model
+    mySceneGraph->render();
+  }
+
+  void
+  DeferredRendering::shadowMapPass() {
     auto myGraphicsApi = g_graphicApi().instancePtr();
     auto mySceneGraph = SceneGraph::instancePtr();
 
@@ -473,32 +522,47 @@ namespace gaEngineSDK {
     m_shadowCamera.setHeight(m_height);
     m_shadowCamera.startCamera();
 
+    //Light info
+    m_pLight->generateViewMatrix();
+    m_pLight->setAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
+    m_pLight->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
+    m_pLight->setLookAt(-100.0f, 250.0f, -100.0f);
+    m_pLight->setPosition(0.0f, 0.0f, 0.0f);
+
+    Matrix4x4 lightVM;
+    Matrix4x4 lightPM;
+    m_pLight->getViewMatrix(lightVM);
+    m_pLight->getProjectionMatrix(lightPM);
+
+    //
     myGraphicsApi->setRenderTarget(m_pShadowMap_RT);
     myGraphicsApi->setShaders(m_pShadowMap_Shader);
 
     //VS CB
     myGraphicsApi->setYourVSConstantBuffers(m_pCB_Shadows, 0);
     myGraphicsApi->setYourVSConstantBuffers(m_pCB_Light, 1);
+
+    //PS CB
     myGraphicsApi->setYourPSConstantBuffers(m_pCB_Light2, 2);
 
     //Clear
-    myGraphicsApi->clearYourRenderTarget(m_pShadowMap_RT, Vector4(135.0f, 135.0f, 135.0f, 1.0f));
+    myGraphicsApi->clearYourRenderTarget(m_pShadowMap_RT, Vector4(0.0f, 1.0f, 0.0f, 1.0f));
 
     //Update CB
     cbShadows shadowsData;
-    shadowsData.mLightProjection = m_shadowCamera.getProjection();
-    shadowsData.mLightView = m_shadowCamera.getView();
-    shadowsData.mProjection = m_shadowCamera.getProjection();
-    shadowsData.mView = m_shadowCamera.getView();
+    shadowsData.mLightProjection = lightPM;
+    shadowsData.mLightView = lightVM;
+    shadowsData.mProjection = myGraphicsApi->matrixPolicy(m_shadowCamera.getProjection());
+    shadowsData.mView = myGraphicsApi->matrixPolicy(m_shadowCamera.getView());
     shadowsData.mWorld = m_world;
 
     cbLight lightData;
-    lightData.lightPosition = Vector3(-100.0f, 250.0f, -100.0f);
+    lightData.lightPosition = m_pLight->getPosition();
     lightData.padding = 0.0f;
 
     cbLight2 light2Data;
-    light2Data.ambientColor = Vector4(0.15f, 0.15f, 0.15f, 1.0f);
-    light2Data.diffuseColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+    light2Data.ambientColor = m_pLight->getAmbientColor();
+    light2Data.diffuseColor = m_pLight->getDiffuseColor();
 
     //Update CB.
     myGraphicsApi->updateConstantBuffer(&shadowsData, m_pCB_Shadows);

@@ -97,19 +97,45 @@ namespace gaEngineSDK {
     float h = Math::cos(float(0.5) * rad) / Math::sin(float(0.5) * rad);
     auto w = h * height / width;
   
-    Matrix4x4 result(w, 0, 0, 0,
-                     0, h, 0, 0,
-                     0, 0, (farF + near) / (farF - near), 1,
+    Matrix4x4 result(w, 0, 0,                                  0,
+                     0, h, 0,                                  0,
+                     0, 0, (farF + near) / (farF - near),      1,
                      0, 0, -(2 * farF * near) / (farF - near), 0);
     return result;
   }
   
   Matrix4x4 
-  Matrix4x4::matrixLookAtLH(Matrix4x4* pOut, 
-                            const Vector3* pEye,
-                            const Vector3* pAt,
-                            const Vector3* pUp) {
-    return Matrix4x4();
+  Matrix4x4::matrixLookAtLH(const Vector3* pEye, const Vector3* pAt, const Vector3* pUp) {
+    //to left hand
+    Matrix4x4 view;
+    Vector3 cameraFront = pAt - pEye;
+    cameraFront.normalize();
+
+    Vector3 cameraRight = pUp->crossProduct(cameraFront);
+    cameraRight.normalize();
+
+    Vector3 realUp = cameraFront.crossProduct(cameraRight);
+
+    Vector3 up = realUp;
+
+    view = {
+             cameraRight.x, cameraRight.y, cameraRight.z, 0.0f,
+             up.x,          up.y,          up.z,          0.0f,
+             cameraFront.x, cameraFront.y, cameraFront.z, 0.0f,
+             0.0f,          0.0f,          0.0f,          1.0f
+           };
+
+    Matrix4x4 pos = {
+                      1.0f, 0.0f, 0.0f, -pEye->x,
+                      0.0f, 1.0f, 0.0f, -pEye->y,
+                      0.0f, 0.0f, 1.0f, -pEye->z,
+                      0.0f, 0.0f, 0.0f, 1.0f
+                    };
+
+    view *= pos;
+    view.transpose();
+
+    return view;
   }
 
   Vector3
