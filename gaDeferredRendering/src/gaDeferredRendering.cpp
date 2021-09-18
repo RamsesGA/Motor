@@ -73,6 +73,9 @@ namespace gaEngineSDK {
     //We create the input layout.
     m_pVertexLayout.reset(myGraphicsApi->createInputLayout(m_pGBuffer_Shader));
 
+    //We create the input layout.
+    m_pDepthLayout.reset(myGraphicsApi->createInputLayout(m_pDepth_Shader));
+
     //We create the vertex buffer.
     m_mesh->m_pVertexBuffer.reset(myGraphicsApi->createVertexBuffer(nullptr, sizeof(Matrices)));
 
@@ -142,6 +145,16 @@ namespace gaEngineSDK {
 
     /*
     * C R E A T E
+    * T E X T U R E S
+    * Z O N E
+    */
+    m_depthTexture = myGraphicsApi->createTexture(m_width, 
+                                                  m_height, 
+                                                  D3D11_BIND_SHADER_RESOURCE,
+                                                  TEXTURE_FORMAT::E::kR16Float);
+
+    /*
+    * C R E A T E
     * S A M P L E R
     * Z O N E
     */
@@ -175,7 +188,7 @@ namespace gaEngineSDK {
     * Z O N E
     */
     rtGbufferPass();
-    //depthPass();
+    depthPass();
     //shadowMapPass();
     rtSSAO_Pass();
     blurH_Pass(m_pSSAO_RT->getRenderTexture(0));
@@ -293,7 +306,7 @@ namespace gaEngineSDK {
     //PS CB
     //myGraphicsApi->setYourPSConstantBuffers(m_pCB_BufferWorld, 1);
 
-    myGraphicsApi->clearYourRenderTarget(m_pGbuffer_RT, m_rgba);
+    myGraphicsApi->clearYourRenderTarget(m_pGbuffer_RT, m_rgbaBlue);
 
     ConstantBuffer1 meshData;
     meshData.mProjection = myGraphicsApi->matrixPolicy(m_mainCamera.getProjection());
@@ -326,7 +339,7 @@ namespace gaEngineSDK {
     myGraphicsApi->setYourPSConstantBuffers(m_pCB_SSAO, 2);
 
     //Clear
-    myGraphicsApi->clearYourRenderTarget(m_pSSAO_RT, m_rgba);
+    myGraphicsApi->clearYourRenderTarget(m_pSSAO_RT, m_rgbaBlue);
 
     //Update CB
     cbSSAO ssaoData;
@@ -362,7 +375,7 @@ namespace gaEngineSDK {
     myGraphicsApi->setYourPSConstantBuffers(m_pCB_ViewPortDimension, 2);
 
     //Clear RT
-    myGraphicsApi->clearYourRenderTarget(m_pBlurH_RT, m_rgba);
+    myGraphicsApi->clearYourRenderTarget(m_pBlurH_RT, m_rgbaBlue);
 
     //Update CB
     cbViewportDimension viewportDimenData;
@@ -392,7 +405,7 @@ namespace gaEngineSDK {
     myGraphicsApi->setYourPSConstantBuffers(m_pCB_ViewPortDimension, 2);
 
     //Clear RT
-    myGraphicsApi->clearYourRenderTarget(m_pBlurV_RT, m_rgba);
+    myGraphicsApi->clearYourRenderTarget(m_pBlurV_RT, m_rgbaBlue);
 
     //Update CB
     cbViewportDimension viewportDimenData;
@@ -422,7 +435,7 @@ namespace gaEngineSDK {
     myGraphicsApi->setYourPSConstantBuffers(m_pCB_MipLevels, 2);
 
     //Clean RT
-    myGraphicsApi->clearYourRenderTarget(m_pAddition_RT, m_rgba);
+    myGraphicsApi->clearYourRenderTarget(m_pAddition_RT, m_rgbaBlue);
 
     //Update CB
     cbMipLevels mipLevelsData;
@@ -457,7 +470,7 @@ namespace gaEngineSDK {
     myGraphicsApi->setYourPSConstantBuffers(m_pCB_Lightning, 2);
 
     //Clean RT
-    myGraphicsApi->clearYourRenderTargetView(m_pRenderTargetView, m_rgba);
+    myGraphicsApi->clearYourRenderTargetView(m_pRenderTargetView, m_rgbaBlue);
 
     //Update CB
     cbLightning lightningData;
@@ -484,6 +497,20 @@ namespace gaEngineSDK {
     auto myGraphicsApi = g_graphicApi().instancePtr();
     auto mySceneGraph = SceneGraph::instancePtr();
 
+    //Defining shadow camera's value
+    m_shadowCamera.setLookAt(Vector3(-100.0f, 250.0f, -100.0f));
+    m_shadowCamera.setEye();
+    m_shadowCamera.setUp();
+    m_shadowCamera.setFar();
+    m_shadowCamera.setNear();
+    m_shadowCamera.setFoV();
+    m_shadowCamera.setWidth(m_width);
+    m_shadowCamera.setHeight(m_height);
+    m_shadowCamera.startCamera();
+
+    //We save the input layout.
+    myGraphicsApi->setInputLayout(m_pDepthLayout);
+
     myGraphicsApi->setRenderTarget(m_pMatrix_RT);
     myGraphicsApi->setShaders(m_pDepth_Shader);
 
@@ -491,13 +518,13 @@ namespace gaEngineSDK {
     myGraphicsApi->setYourVSConstantBuffers(m_pCB_Matrix, 0);
 
     //Clear
-    myGraphicsApi->clearYourRenderTarget(m_pMatrix_RT, m_rgba);
+    myGraphicsApi->clearYourRenderTarget(m_pMatrix_RT, m_rgbaOrange);
 
     //Update CB
     cbMatrixBuffer matrixData;
-    matrixData.mProjection = myGraphicsApi->matrixPolicy(m_mainCamera.getProjection());
-    matrixData.mView = myGraphicsApi->matrixPolicy(m_mainCamera.getView());;
-    matrixData.mWorld = m_world;
+    matrixData.mProjection = myGraphicsApi->matrixPolicy(m_shadowCamera.getProjection());
+    matrixData.mView = myGraphicsApi->matrixPolicy(m_shadowCamera.getView());
+    matrixData.mWorld = m_world.identity();
 
     //Update CB.
     myGraphicsApi->updateConstantBuffer(&matrixData, m_pCB_Matrix);
@@ -510,17 +537,6 @@ namespace gaEngineSDK {
   DeferredRendering::shadowMapPass() {
     auto myGraphicsApi = g_graphicApi().instancePtr();
     auto mySceneGraph = SceneGraph::instancePtr();
-
-    //Defining shadow camera's value
-    m_shadowCamera.setLookAt(Vector3(-100.0f, 250.0f, -100.0f));
-    m_shadowCamera.setEye();
-    m_shadowCamera.setUp();
-    m_shadowCamera.setFar();
-    m_shadowCamera.setNear();
-    m_shadowCamera.setFoV();
-    m_shadowCamera.setWidth(m_width);
-    m_shadowCamera.setHeight(m_height);
-    m_shadowCamera.startCamera();
 
     //Light info
     m_pLight->generateViewMatrix();

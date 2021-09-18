@@ -693,8 +693,7 @@ namespace gaEngineSDK {
   GraphicsApiDX::createTexture(const uint32 width, 
                                const uint32 height, 
                                const uint32 bindFlags,
-                               TEXTURE_FORMAT::E textureFormat, 
-                               const String fileName) {
+                               TEXTURE_FORMAT::E textureFormat) {
     //Assign data to variable
     HRESULT hr = S_OK;
 
@@ -750,6 +749,7 @@ namespace gaEngineSDK {
       hr = m_pd3dDevice->CreateDepthStencilView(texture->m_pTexture,
                                                 &depthStencilDesc,
                                                 &texture->m_pDepthStencilView);
+
       //We check that everything goes well, if we do not send an error.
       if (FAILED(hr)) {
         delete texture;
@@ -765,8 +765,9 @@ namespace gaEngineSDK {
 
       texture->m_vShaderResourceView.resize(1);
       hr = m_pd3dDevice->CreateShaderResourceView(texture->m_pTexture,
-        &shaderResourceViewDesc,
-        &texture->m_vShaderResourceView[0]);
+                                                  &shaderResourceViewDesc,
+                                                  &texture->m_vShaderResourceView[0]);
+      
       //We check that everything goes well, if we do not send an error.
       if (FAILED(hr)) {
         delete texture;

@@ -128,8 +128,7 @@ namespace gaEngineSDK {
     createTexture(const uint32 width, 
                   const uint32 height, 
                   const uint32 bindFlags,
-                  TEXTURE_FORMAT::E textureFormat, 
-                  const String fileName) override;
+                  TEXTURE_FORMAT::E textureFormat) override;
 
     SPtr<SamplerState>
     createSamplerState(FILTER::E typeFilter =

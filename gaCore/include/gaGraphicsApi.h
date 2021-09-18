@@ -296,13 +296,11 @@ namespace gaEngineSDK {
     createTexture(const uint32 width, 
                   const uint32 height, 
                   const uint32 bindFlags,
-                  TEXTURE_FORMAT::E textureFormat, 
-                  const String fileName) {
+                  TEXTURE_FORMAT::E textureFormat) {
       GA_UNREFERENCED_PARAMETER(width);
       GA_UNREFERENCED_PARAMETER(height);
       GA_UNREFERENCED_PARAMETER(bindFlags);
       GA_UNREFERENCED_PARAMETER(textureFormat);
-      GA_UNREFERENCED_PARAMETER(fileName);
       return nullptr;
     };
 

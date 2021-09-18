@@ -161,7 +161,12 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    Vector4 m_rgba = { (0.0f / 255.0f), (35.0f / 255.0f), (130.0f / 255.0f), (255.0f) };
+    Vector4 m_rgbaBlue = { (0.0f / 255.0f), (35.0f / 255.0f), (130.0f / 255.0f), (255.0f) };
+
+    /*
+    * @brief .
+    */
+    Vector4 m_rgbaOrange = {255.0f, 165.0f, 0.0f, 1.0f};
 
     /*
     * @brief Variables with the information of the
@@ -169,6 +174,8 @@ namespace gaEngineSDK {
     */
     SPtr<Textures> m_pRenderTargetView;
     SPtr<Textures> m_pDepthStencil;
+
+    Textures* m_depthTexture;
 
     /*
     * @brief Variable that saves the data of the shaders to be read.
@@ -228,6 +235,8 @@ namespace gaEngineSDK {
     * @brief Variable that stores the vertex layout data.
     */
     SPtr<InputLayout> m_pVertexLayout;
+
+    SPtr<InputLayout> m_pDepthLayout;
 
     /*
     * @brief .
