@@ -410,6 +410,21 @@ namespace gaEngineSDK {
     }
   }
 
+  void
+  GraphicsApiDX::clearYourDepthStencilView(WeakSPtr<RenderTarget> renderTarg) {
+    auto tempDepth = renderTarg.lock().get();
+    if (nullptr != tempDepth) {
+      RenderTargetDX* depthSten = reinterpret_cast<RenderTargetDX*>(tempDepth);
+
+      if (nullptr != depthSten->m_pDepthStencilV) {
+        m_pDeviceContext->ClearDepthStencilView(depthSten->m_pDepthStencilV,
+                                                D3D11_CLEAR_DEPTH,
+                                                1.0f,
+                                                0);
+      }
+    }
+  }
+
   /***************************************************************************/
   /**
   * Creates.
@@ -1177,7 +1192,7 @@ namespace gaEngineSDK {
       descDepth.CPUAccessFlags = 0;
       descDepth.MiscFlags = 0;
 
-      m_pd3dDevice->CreateTexture2D(&descDepth, nullptr, &newRT->m_renderTarget.m_pTexture);
+      m_pd3dDevice->CreateTexture2D(&descDepth, nullptr, &newRT->m_pTextureDepthSV);
 
       D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
       ZeroMemory(&descDSV, sizeof(descDSV));
@@ -1185,9 +1200,9 @@ namespace gaEngineSDK {
       descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
       descDSV.Texture2D.MipSlice = 0;
 
-      m_pd3dDevice->CreateDepthStencilView(newRT->m_renderTarget.m_pTexture, 
+      m_pd3dDevice->CreateDepthStencilView(newRT->m_pTextureDepthSV,
                                            &descDSV,
-                                           &newRT->m_pDepthStencil);
+                                           &newRT->m_pDepthStencilV);
     }
 
     SPtr<RenderTarget> newRenderTarg(newRT);
@@ -1400,9 +1415,16 @@ namespace gaEngineSDK {
     if (nullptr != rt) {
       RenderTargetDX* rTarget = reinterpret_cast<RenderTargetDX*>(rt);
 
-      m_pDeviceContext->OMSetRenderTargets(rTarget->m_renderTarget.m_vRenderTargetView.size(),
-                                           &rTarget->m_renderTarget.m_vRenderTargetView[0],
-                                           nullptr);
+      if (nullptr != rTarget->m_pDepthStencilV) {
+        m_pDeviceContext->OMSetRenderTargets(rTarget->m_renderTarget.m_vRenderTargetView.size(),
+                                             &rTarget->m_renderTarget.m_vRenderTargetView[0],
+                                             rTarget->m_pDepthStencilV);
+      }
+      else {
+        m_pDeviceContext->OMSetRenderTargets(rTarget->m_renderTarget.m_vRenderTargetView.size(),
+                                             &rTarget->m_renderTarget.m_vRenderTargetView[0],
+                                             nullptr);
+      }
     }
   }
 

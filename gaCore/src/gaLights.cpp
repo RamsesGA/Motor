@@ -38,7 +38,7 @@ namespace gaEngineSDK {
   /***************************************************************************/
   void
   Lights::setAmbientColor(float r, float g, float b, float a) {
-    m_ambientColor = Vector4(r, g, b, a);
+    m_ambientColor = Vector4(r,g,b,a);
   }
 
   void

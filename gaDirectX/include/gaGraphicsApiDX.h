@@ -88,6 +88,9 @@ namespace gaEngineSDK {
     void
     clearYourDepthStencilView(WeakSPtr<Textures> depthStencil) override;
 
+    void
+    clearYourDepthStencilView(WeakSPtr<RenderTarget> renderTarg) override;
+
     /*************************************************************************/
     /**
     * Create methods.

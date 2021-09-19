@@ -34,6 +34,11 @@ namespace gaEngineSDK {
       return m_renderTarget.m_vShaderResourceView[index];
     };
 
+    void*
+    getDepthStencilView() override {
+      return m_pDepthStencilV;
+    }
+
    protected:
     /*************************************************************************/
     /**
@@ -49,7 +54,12 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    ID3D11DepthStencilView* m_pDepthStencil = nullptr;
+    ID3D11Texture2D* m_pTextureDepthSV = nullptr;
+
+    /*
+    * @brief .
+    */
+    ID3D11DepthStencilView* m_pDepthStencilV = nullptr;
 
     friend class GraphicsApiDX;
   };

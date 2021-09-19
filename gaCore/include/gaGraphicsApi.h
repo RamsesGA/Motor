@@ -182,6 +182,14 @@ namespace gaEngineSDK {
       GA_UNREFERENCED_PARAMETER(depthStencil);
     };
 
+    /*
+    * @brief .
+    */
+    virtual void
+    clearYourDepthStencilView(WeakSPtr<RenderTarget> renderTarg) {
+      GA_UNREFERENCED_PARAMETER(renderTarg);
+    };
+
     /*************************************************************************/
     /**
     * Create methods.
@@ -507,7 +515,8 @@ namespace gaEngineSDK {
     */
     virtual void
     setRenderTarget(WeakSPtr<RenderTarget> renderTarget, WeakSPtr<Textures> depthStencil) {
-      GA_UNREFERENCED_PARAMETER(renderTarget); GA_UNREFERENCED_PARAMETER(depthStencil);
+      GA_UNREFERENCED_PARAMETER(renderTarget); 
+      GA_UNREFERENCED_PARAMETER(depthStencil);
     };
 
     virtual void

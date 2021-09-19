@@ -30,6 +30,12 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
+    virtual void*
+    getDepthStencilView() { return nullptr; };
+
+    /*
+    * @brief .
+    */
     uint32
     getID() {
       return m_id;

@@ -70,10 +70,14 @@ namespace gaEngineSDK {
                                              L"data/shaders/DX_ShadowMap.hlsl",
                                              "ShadowPS"));
 
-    //We create the input layout.
+    /*
+    * C R E A T E
+    * I N P U T
+    * L A Y O U T
+    * Z O N E
+    */
     m_pVertexLayout.reset(myGraphicsApi->createInputLayout(m_pGBuffer_Shader));
 
-    //We create the input layout.
     m_pDepthLayout.reset(myGraphicsApi->createInputLayout(m_pDepth_Shader));
 
     //We create the vertex buffer.
@@ -96,21 +100,15 @@ namespace gaEngineSDK {
     m_pCB_MipLevels.reset(myGraphicsApi->createConstantBuffer(sizeof(cbMipLevels)));
 
     //Depth
-    m_pCB_Matrix.reset(myGraphicsApi->createConstantBuffer(sizeof(cbMatrixBuffer), 
-                                                           CPU_ACCESS::kCpuAccessWrite,
-                                                           USAGE::kUsageDynamic));
+    m_pCB_Depth.reset(myGraphicsApi->createConstantBuffer(sizeof(cbMatrixBuffer)));
+
     //Shadow map
-    m_pCB_Shadows.reset(myGraphicsApi->createConstantBuffer(sizeof(cbShadows), 
-                                                            CPU_ACCESS::kCpuAccessWrite,
-                                                            USAGE::kUsageDynamic));
+    m_pCB_Shadows.reset(myGraphicsApi->createConstantBuffer(sizeof(cbShadows)));
 
-    m_pCB_Light.reset(myGraphicsApi->createConstantBuffer(sizeof(cbLight), 
-                                                          CPU_ACCESS::kCpuAccessWrite,
-                                                          USAGE::kUsageDynamic));
+    m_pCB_Light.reset(myGraphicsApi->createConstantBuffer(sizeof(cbLight)));
 
-    m_pCB_Light2.reset(myGraphicsApi->createConstantBuffer(sizeof(cbLight2), 
-                                                           CPU_ACCESS::kCpuAccessWrite,
-                                                           USAGE::kUsageDynamic));
+    m_pCB_Light2.reset(myGraphicsApi->createConstantBuffer(sizeof(cbLight2)));
+
     /*
     * C R E A T E
     * R E N D E R
@@ -125,7 +123,7 @@ namespace gaEngineSDK {
     m_pLightning_RT = make_shared<RenderTarget>();
 
     //Depth
-    m_pMatrix_RT = make_shared<RenderTarget>();
+    m_pDepth_RT = make_shared<RenderTarget>();
 
     //Shadow map
     m_pShadowMap_RT = make_shared<RenderTarget>();
@@ -138,20 +136,10 @@ namespace gaEngineSDK {
     m_pLightning_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
 
     //Depth
-    m_pMatrix_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
+    m_pDepth_RT = myGraphicsApi->createRenderTarget(m_width, m_height, 1, 1, 1.0f, true);
 
     //Shadow map
-    m_pShadowMap_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
-
-    /*
-    * C R E A T E
-    * T E X T U R E S
-    * Z O N E
-    */
-    m_depthTexture = myGraphicsApi->createTexture(m_width, 
-                                                  m_height, 
-                                                  D3D11_BIND_SHADER_RESOURCE,
-                                                  TEXTURE_FORMAT::E::kR16Float);
+    m_pShadowMap_RT = myGraphicsApi->createRenderTarget(m_width, m_height, 1, 1, 1.0f, true);
 
     /*
     * C R E A T E
@@ -187,9 +175,10 @@ namespace gaEngineSDK {
     * P A S S E S
     * Z O N E
     */
-    rtGbufferPass();
     depthPass();
-    //shadowMapPass();
+    shadowMapPass();
+
+    rtGbufferPass();
     rtSSAO_Pass();
     blurH_Pass(m_pSSAO_RT->getRenderTexture(0));
     blurV_Pass(m_pSSAO_RT->getRenderTexture(0));
@@ -262,8 +251,8 @@ namespace gaEngineSDK {
 
   void
   DeferredRendering::defaultCamera() {
-    m_mainCamera.setLookAt();
-    m_mainCamera.setEye();
+    m_mainCamera.setLookAt(Vector3(8.0f, 1.0f, 0.0f));
+    m_mainCamera.setEye(Vector3(0.0f, 0.0f, -50.0f));
     m_mainCamera.setUp();
     m_mainCamera.setFar();
     m_mainCamera.setNear();
@@ -271,6 +260,17 @@ namespace gaEngineSDK {
     m_mainCamera.setWidth(m_width);
     m_mainCamera.setHeight(m_height);
     m_mainCamera.startCamera();
+
+    //Defining shadow camera's value  Vector3(0.0f, 50.0f, 50.0f)
+    m_shadowCamera.setLookAt(Vector3(-100.0f, 100.0f, -100.0f));
+    m_shadowCamera.setEye();
+    m_shadowCamera.setUp();
+    m_shadowCamera.setFar();
+    m_shadowCamera.setNear();
+    m_shadowCamera.setFoV();
+    m_shadowCamera.setWidth(m_width);
+    m_shadowCamera.setHeight(m_height);
+    m_shadowCamera.startCamera();
   }
 
   void
@@ -307,6 +307,7 @@ namespace gaEngineSDK {
     //myGraphicsApi->setYourPSConstantBuffers(m_pCB_BufferWorld, 1);
 
     myGraphicsApi->clearYourRenderTarget(m_pGbuffer_RT, m_rgbaBlue);
+    myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
 
     ConstantBuffer1 meshData;
     meshData.mProjection = myGraphicsApi->matrixPolicy(m_mainCamera.getProjection());
@@ -497,37 +498,27 @@ namespace gaEngineSDK {
     auto myGraphicsApi = g_graphicApi().instancePtr();
     auto mySceneGraph = SceneGraph::instancePtr();
 
-    //Defining shadow camera's value
-    m_shadowCamera.setLookAt(Vector3(-100.0f, 250.0f, -100.0f));
-    m_shadowCamera.setEye();
-    m_shadowCamera.setUp();
-    m_shadowCamera.setFar();
-    m_shadowCamera.setNear();
-    m_shadowCamera.setFoV();
-    m_shadowCamera.setWidth(m_width);
-    m_shadowCamera.setHeight(m_height);
-    m_shadowCamera.startCamera();
-
     //We save the input layout.
     myGraphicsApi->setInputLayout(m_pDepthLayout);
 
-    myGraphicsApi->setRenderTarget(m_pMatrix_RT);
+    myGraphicsApi->setRenderTarget(m_pDepth_RT);
     myGraphicsApi->setShaders(m_pDepth_Shader);
 
     //VS CB
-    myGraphicsApi->setYourVSConstantBuffers(m_pCB_Matrix, 0);
+    myGraphicsApi->setYourVSConstantBuffers(m_pCB_Depth, 0);
 
-    //Clear
-    myGraphicsApi->clearYourRenderTarget(m_pMatrix_RT, m_rgbaOrange);
+    //Clear m_rgbaGray
+    myGraphicsApi->clearYourRenderTarget(m_pDepth_RT, m_rgbaGray);
+    myGraphicsApi->clearYourDepthStencilView(m_pDepth_RT);
 
     //Update CB
-    cbMatrixBuffer matrixData;
+    static cbMatrixBuffer matrixData;
     matrixData.mProjection = myGraphicsApi->matrixPolicy(m_shadowCamera.getProjection());
     matrixData.mView = myGraphicsApi->matrixPolicy(m_shadowCamera.getView());
-    matrixData.mWorld = m_world.identity();
+    matrixData.mWorld = m_world;
 
     //Update CB.
-    myGraphicsApi->updateConstantBuffer(&matrixData, m_pCB_Matrix);
+    myGraphicsApi->updateConstantBuffer(&matrixData, m_pCB_Depth);
 
     //Render model
     mySceneGraph->render();
@@ -538,12 +529,14 @@ namespace gaEngineSDK {
     auto myGraphicsApi = g_graphicApi().instancePtr();
     auto mySceneGraph = SceneGraph::instancePtr();
 
+    m_pLight = make_shared<Lights>();
+
     //Light info
     m_pLight->generateViewMatrix();
     m_pLight->setAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
     m_pLight->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
-    m_pLight->setLookAt(-100.0f, 250.0f, -100.0f);
-    m_pLight->setPosition(0.0f, 0.0f, 0.0f);
+    m_pLight->setLookAt(-100.0f, 100.0f, -100.0f);
+    m_pLight->setPosition(0.0f, 0.0f, -500.0f);
 
     Matrix4x4 lightVM;
     Matrix4x4 lightPM;
@@ -562,7 +555,8 @@ namespace gaEngineSDK {
     myGraphicsApi->setYourPSConstantBuffers(m_pCB_Light2, 2);
 
     //Clear
-    myGraphicsApi->clearYourRenderTarget(m_pShadowMap_RT, Vector4(0.0f, 1.0f, 0.0f, 1.0f));
+    myGraphicsApi->clearYourRenderTarget(m_pShadowMap_RT, m_rgbaGray2);
+    myGraphicsApi->clearYourDepthStencilView(m_pShadowMap_RT);
 
     //Update CB
     cbShadows shadowsData;
@@ -586,8 +580,8 @@ namespace gaEngineSDK {
     myGraphicsApi->updateConstantBuffer(&light2Data, m_pCB_Light2);
 
     //Set textures
-    myGraphicsApi->setShaderResourceView(nullptr, 0);//shaderTexture  m_pGbuffer_RT->getRenderTexture(1)
-    myGraphicsApi->setShaderResourceView(nullptr, 1);//depthMapTexture
+    myGraphicsApi->setShaderResourceView(m_pGbuffer_RT->getRenderTexture(0), 0);//shaderTexture
+    myGraphicsApi->setShaderResourceView(m_pDepth_RT->getRenderTexture(0), 1);//depthMapTexture
 
     //Render model
     mySceneGraph->render();

@@ -142,7 +142,7 @@ namespace gaEngineSDK {
     * @param eye, vector 3 to save position to member.
     */
     void
-    setEye(Vector3 eye = { 0.0f, 0.0f, -700.0f });
+    setEye(Vector3 eye = { 0.0f, 0.0f, -500.0f });
 
     /**
     * @brief Save the values for the corresponding member.

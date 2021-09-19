@@ -109,8 +109,8 @@ float4 ps_main(PS_INPUT input) : SV_Target0
 
    float3 specular_F0 = lerp(0.04f, diffuse.xyz, metallic);
 
-   float3 wvLightPos_0 = mul(float3(-100,250,-100), matWV);
-   float4 wvViewPosition = mul(vViewPosition.xyz, matWV);
+   float3 wvLightPos_0 = mul(float3(-100,100,-100), matWV);
+   float4 wvViewPosition = mul(vViewPosition, matWV);
 
    float3 LightDir = normalize(wvLightPos_0.xyz - posWorld.xyz);
    float3 ViewDir = normalize(wvViewPosition.xyz - posWorld.xyz);

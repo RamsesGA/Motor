@@ -161,12 +161,17 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    Vector4 m_rgbaBlue = { (0.0f / 255.0f), (35.0f / 255.0f), (130.0f / 255.0f), (255.0f) };
+    Vector4 m_rgbaBlue = {0.0f, 0.0f, (120.0f / 255.0f), 255.0f};
 
     /*
     * @brief .
     */
-    Vector4 m_rgbaOrange = {255.0f, 165.0f, 0.0f, 1.0f};
+    Vector4 m_rgbaGray = {(184.0f / 255.0f), (184.0f / 255.0f), (184.0f / 255.0f), 255.0f};
+
+    /*
+    * @brief .
+    */
+    Vector4 m_rgbaGray2 = {(127.0f / 255.0f), (127.0f / 255.0f), (127.0f / 255.0f), 255.0f};
 
     /*
     * @brief Variables with the information of the
@@ -174,8 +179,6 @@ namespace gaEngineSDK {
     */
     SPtr<Textures> m_pRenderTargetView;
     SPtr<Textures> m_pDepthStencil;
-
-    Textures* m_depthTexture;
 
     /*
     * @brief Variable that saves the data of the shaders to be read.
@@ -200,7 +203,7 @@ namespace gaEngineSDK {
     SPtr<RenderTarget> m_pLightning_RT;
 
     //Depth map
-    SPtr<RenderTarget> m_pMatrix_RT;
+    SPtr<RenderTarget> m_pDepth_RT;
 
     //Shader Map
     SPtr<RenderTarget> m_pShadowMap_RT;
@@ -217,7 +220,7 @@ namespace gaEngineSDK {
     SPtr<ConstantBuffer> m_pCB_MipLevels;
 
     //Depth map
-    SPtr<ConstantBuffer> m_pCB_Matrix;
+    SPtr<ConstantBuffer> m_pCB_Depth;
 
     //Shader Map
     SPtr<ConstantBuffer> m_pCB_Shadows;
