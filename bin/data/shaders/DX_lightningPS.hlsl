@@ -7,11 +7,12 @@
 #define M_PI 3.14159265383
 #define EPSILON 0.00001
 
-Texture2D baseColor : register(t0);
-Texture2D normalTex : register(t1);
-Texture2D emissiveTex : register(t2);
-Texture2D AOTexture  : register(t3);
-Texture2D posTexture : register(t4);
+Texture2D baseColor     : register(t0);
+Texture2D normalTex     : register(t1);
+Texture2D emissiveTex   : register(t2);
+Texture2D AOTexture     : register(t3);
+Texture2D posTexture    : register(t4);
+Texture2D shadowTexture : register(t5);
 
 TextureCube IBL_specular;
 TextureCube IBL_diffuse;
@@ -46,11 +47,14 @@ struct PS_INPUT
   float2 texCoord : TEXCOORD0;
 };
 
+
+//----------------------------------------------------------------------------
 float3 fresnelSchlick(float3 F0, float cosTheta)
 {
   return F0 + (1.0f - F0) * pow(1.0f - cosTheta, 5.0f);
 }
 
+//----------------------------------------------------------------------------
 float ndf_GGX(float NdH, float roughness)
 {
   float alpha = roughness * roughness;
@@ -61,11 +65,13 @@ float ndf_GGX(float NdH, float roughness)
   return alphaSqr / (M_PI * denom * denom);
 }
 
+//----------------------------------------------------------------------------
 float ga_SchlickG1(float cosTheta, float k)
 {
   return cosTheta / (cosTheta * (1.0f - k) + k);
 }
 
+//----------------------------------------------------------------------------
 float ga_SchlickGGX(float cosLi, float cosLo, float roughness)
 {
   float r = roughness + 1.0f;
@@ -76,27 +82,19 @@ float ga_SchlickGGX(float cosLi, float cosLo, float roughness)
   return ga_SchlickG1(cosLi, k) * ga_SchlickG1(cosLo, k);
 }
 
+//----------------------------------------------------------------------------
 float4 ps_main(PS_INPUT input) : SV_Target0
 {
    float gamma = 2.2f;
-   float4 posWorld = posTexture.Sample(simpleSampler, input.texCoord);
    
-   float4x4 myLocalWorld = (1,0,0,0,
-                            0,1,0,0,
-                            0,0,1,0,
-                            0,0,0,1);
-							
-	float4x4 myLocalView = (1,0,0,0,
-                            0,1,0,0,
-                            0,0,1,0,
-                            0,0,0,1);
-							
+   float4 posWorld = posTexture.Sample(simpleSampler, input.texCoord);		
+   
    float4x4 matWV = mul(mWorld, mView);
 
    float4 normal = normalTex.Sample(simpleSampler, input.texCoord);
-   float roughness = normal.w;
-
    normal.w = 0;
+   
+   float roughness = normal.w;
 
    float4 diffuse = baseColor.Sample(simpleSampler, input.texCoord);
    diffuse.xyz = pow(diffuse.xyz, gamma);
@@ -148,7 +146,13 @@ float4 ps_main(PS_INPUT input) : SV_Target0
      ambientLighting = (siColor * specular_F0) + diffuseAmbient;
    }
 
-   float4 finalColor = float4(pow((diffuse.xyz * NdL * lightIntensity0) + (emissive.xyz * emissiveIntensity) + (specular) + (ambientLighting) , 1.0f / gamma), 1);
+   float4 finalColor = float4(pow((diffuse.xyz * NdL * lightIntensity0) + 
+                                  (emissive.xyz * emissiveIntensity) + 
+								  (specular) + 
+								  (ambientLighting), 
+								  1.0f / gamma),
+							      1);                                        //Float 4 (w)
+							
    finalColor = finalColor * ao;
    return finalColor;
 }

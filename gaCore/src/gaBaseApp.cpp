@@ -1,3 +1,5 @@
+#include <Windows.h>
+
 #include "gaBaseApp.h"
 #include "gaSceneGraph.h"
 #include "gaGraphicsApi.h"
@@ -31,7 +33,13 @@ namespace gaEngineSDK {
     * Init ImGui
     */
     auto myInterface = g_baseInterface().instancePtr();
-    //myInterface->init(m_width, m_height, m_sfmlWindow.getSystemHandle());
+    myInterface->init(m_width, m_height, m_sfmlWindow.getSystemHandle());
+
+    /*
+    * Init inputs
+    */
+    auto myInputs = g_baseInputs().instancePtr();
+    myInputs->init(m_width, m_height, m_sfmlWindow.getSystemHandle());
 
     /*
     * W I N D O W
@@ -45,6 +53,14 @@ namespace gaEngineSDK {
       Event event;
 
       trueDeltaTime = deltaTime.getElapsedTime().asSeconds();
+
+      MSG msg;
+      while (PeekMessageW(&msg, m_sfmlWindow.getSystemHandle(), 0, 0, PM_REMOVE)) {
+        TranslateMessage(&msg);
+        DispatchMessageW(&msg);
+        
+        myInputs->handleMsg(msg);
+      }
 
       while (m_sfmlWindow.pollEvent(event)) {
         if (Event::Closed == event.type) {
@@ -61,11 +77,12 @@ namespace gaEngineSDK {
 
       deltaTime.restart();
 
-      //myInterface->update(trueDeltaTime);
+      myInputs->update(trueDeltaTime);
+      myInterface->update(trueDeltaTime);
       myRenderer->update(trueDeltaTime);
       onUpdate(trueDeltaTime);
 
-      //myInterface->render();
+      myInterface->render();
       myRenderer->render();
       onRender();
     }
@@ -153,6 +170,29 @@ namespace gaEngineSDK {
     g_baseInterface().setObject(newBI);
 
     /*
+    * B A S E
+    * I N P U T S
+    */
+    hInstance = LoadLibraryExA("gaInputs_d.dll", nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
+
+    //In case of error
+    if (!(hInstance)) {
+      return -1;
+    }
+
+    using fnBInputs = BaseInputs * (*)();
+    fnBInputs baseInputs = reinterpret_cast<fnBInputs>(GetProcAddress(hInstance, "newInputs"));
+
+    //In case of error
+    if (!(baseInputs)) {
+      return -1;
+    }
+
+    BaseInputs::startUp();
+    BaseInputs* newBInputs = baseInputs();
+    g_baseInputs().setObject(newBInputs);
+
+    /*
     * M O D U L E
     * I N I T I A L I Z A T I O N
     */
@@ -165,26 +205,13 @@ namespace gaEngineSDK {
   void 
   BaseApp::handleWindowEvents(Event& windowEvent, const float& deltaTime) {
     auto myRenderer = g_baseRenderer().instancePtr();
+    auto myInterface = g_baseInterface().instancePtr();
 
     switch (windowEvent.type) {
-      case Event::KeyPressed:
-        myRenderer->onKeyboardDown(windowEvent, deltaTime);
-        break;
-
       case Event::MouseButtonPressed:
-        if (Mouse::Left == windowEvent.key.code) {
+        if ((Mouse::Left == windowEvent.key.code) && (!myInterface->m_touchingImGui)) {
           myRenderer->onLeftMouseBtnDown();
         }
-        break;
-
-      case Event::MouseButtonReleased:
-        if (Mouse::Left == windowEvent.key.code) {
-          myRenderer->onLeftMouseBtnUp();
-        }
-        break;
-
-      case Event::MouseMoved:
-        myRenderer->onMouseMove(deltaTime);
         break;
 
       default:

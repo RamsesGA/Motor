@@ -19,10 +19,24 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imconfig.h" />
+    <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imgui.h" />
+    <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imgui_impl_dx11.h" />
+    <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imgui_impl_win32.h" />
+    <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imgui_internal.h" />
+    <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imstb_rectpack.h" />
+    <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imstb_textedit.h" />
+    <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imstb_truetype.h" />
     <ClInclude Include="include\gaInterface.h" />
     <ClInclude Include="include\gaPrerequisitesInterface.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\DEVLIBS\ImGui\include\imgui.cpp" />
+    <ClCompile Include="..\..\..\..\DEVLIBS\ImGui\include\imgui_draw.cpp" />
+    <ClCompile Include="..\..\..\..\DEVLIBS\ImGui\include\imgui_impl_dx11.cpp" />
+    <ClCompile Include="..\..\..\..\DEVLIBS\ImGui\include\imgui_impl_win32.cpp" />
+    <ClCompile Include="..\..\..\..\DEVLIBS\ImGui\include\imgui_tables.cpp" />
+    <ClCompile Include="..\..\..\..\DEVLIBS\ImGui\include\imgui_widgets.cpp" />
     <ClCompile Include="src\gaInterface.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -107,8 +121,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib/$(PlatformTarget)/;$(DEVLIBS)/SFML/lib/$(PlatformTarget)/;$(DEVLIBS)/Assimp/lib/$(PlatformTarget)/;$(DEVLIBS)/ImGui/lib/$(PlatformTarget)/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>gaCore_d.lib;gaUtilities_d.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;sfml-network-d.lib;assimp-vc142-mtd.lib;OpenGL32.lib;ImGuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib/$(PlatformTarget)/;$(DEVLIBS)/SFML/lib/$(PlatformTarget)/;$(DEVLIBS)/Assimp/lib/$(PlatformTarget)/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>gaCore_d.lib;gaUtilities_d.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;sfml-network-d.lib;assimp-vc142-mtd.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)/lib/$(PlatformTarget)/$(TargetName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -140,8 +154,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib/$(PlatformTarget)/;$(DEVLIBS)/SFML/lib/$(PlatformTarget)/;$(DEVLIBS)/Assimp/lib/$(PlatformTarget)/;$(DEVLIBS)/ImGui/lib/$(PlatformTarget)/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>gaCore_d.lib;gaUtilities_d.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;sfml-network-d.lib;assimp-vc142-mtd.lib;OpenGL32.lib;ImGuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib/$(PlatformTarget)/;$(DEVLIBS)/SFML/lib/$(PlatformTarget)/;$(DEVLIBS)/Assimp/lib/$(PlatformTarget)/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>gaCore_d.lib;gaUtilities_d.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;sfml-network-d.lib;assimp-vc142-mtd.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)/lib/$(PlatformTarget)/$(TargetName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>

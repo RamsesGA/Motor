@@ -22,34 +22,30 @@ namespace gaEngineSDK {
   }
 
   void
-  Camera::inputDetection(sf::Event param, const float& deltaTime) {
-    if ((sf::Keyboard::Up == param.key.code) ||
-        (sf::Keyboard::Down == param.key.code)) {
-      pitchX(param);
+  Camera::inputDetection(KEYBOARD::E input, const float& deltaTime) {
+    if ((KEYBOARD::kUP == input) || (KEYBOARD::kDOWN == input)) {
+      pitchX(input, deltaTime);
     }
-    if ((sf::Keyboard::Right == param.key.code) ||
-        (sf::Keyboard::Left == param.key.code)) {
-      rollZ(param);
+    if ((KEYBOARD::kRIGHT == input) || (KEYBOARD::kLEFT == input)) {
+      rollZ(input, deltaTime);
     }
-    if ((sf::Keyboard::Z == param.key.code) ||
-        (sf::Keyboard::C == param.key.code)) {
-      yawY(param);
+    if ((KEYBOARD::kZ == input) || (KEYBOARD::kC == input)) {
+      yawY(input, deltaTime);
     }
     else {
-      move(param, deltaTime);
+      move(input, deltaTime);
     }
   }
 
   void
-  Camera::pitchX(sf::Event param) {
+  Camera::pitchX(KEYBOARD::E input, const float& deltaTime) {
     Matrix4x4 rotation;
+    float speedrot = 1.5f * deltaTime;
 
-    float speedrot = 0.15f;
-
-    if (sf::Keyboard::Up == param.key.code) {
+    if (KEYBOARD::kUP == input) {
       rotation.rotationX(speedrot);
     }
-    else if (sf::Keyboard::Down == param.key.code) {
+    else if (KEYBOARD::kDOWN == input) {
       rotation.rotationX(-speedrot);
     }
 
@@ -59,15 +55,14 @@ namespace gaEngineSDK {
   }
 
   void
-  Camera::rollZ(sf::Event param) {
+  Camera::rollZ(KEYBOARD::E input, const float& deltaTime) {
     Matrix4x4 rotation;
+    float speedrot = 3.5f * deltaTime;
 
-    float speedrot = 0.25f;
-
-    if (sf::Keyboard::Right == param.key.code) {
+    if (KEYBOARD::kRIGHT == input) {
       rotation.rotationZ(-speedrot);
     }
-    else if (sf::Keyboard::Left == param.key.code) {
+    else if (KEYBOARD::kLEFT == input) {
       rotation.rotationZ(speedrot);
     }
 
@@ -77,15 +72,14 @@ namespace gaEngineSDK {
   }
 
   void
-  Camera::yawY(sf::Event param) {
+  Camera::yawY(KEYBOARD::E input, const float& deltaTime) {
     Matrix4x4 rotation;
+    float speedrot = 1.5f * deltaTime;
 
-    float speedrot = 0.15f;
-
-    if (sf::Keyboard::Z == param.key.code) {
+    if (KEYBOARD::kZ == input) {
       rotation.rotationY(speedrot);
     }
-    else if (sf::Keyboard::C == param.key.code) {
+    else if (KEYBOARD::kC == input) {
       rotation.rotationY(-speedrot);
     }
 
@@ -95,32 +89,31 @@ namespace gaEngineSDK {
   }
 
   void
-  Camera::move(sf::Event param, const float& deltaTime) {
-    float speedMove = 1550.0f * deltaTime;
+  Camera::move(KEYBOARD::E input, const float& deltaTime) {
+    float speedMove = 450.0f * deltaTime;
 
-    if (sf::Keyboard::W == param.key.code) {
+    if (KEYBOARD::kW == input) {
       m_cameraDesc.camEye += m_front * speedMove;
     }
-    else if (sf::Keyboard::S == param.key.code) {
+    else if (KEYBOARD::kS == input) {
       m_cameraDesc.camEye -= m_front * speedMove;
     }
-    else if (sf::Keyboard::A == param.key.code) {
+    else if (KEYBOARD::kA == input) {
       m_cameraDesc.camEye -= m_right * speedMove;
     }
-    else if (sf::Keyboard::D == param.key.code) {
+    else if (KEYBOARD::kD == input) {
       m_cameraDesc.camEye += m_right * speedMove;
     }
-    else if (sf::Keyboard::Q == param.key.code) {
+    else if (KEYBOARD::kQ == input) {
       m_cameraDesc.camEye += m_up * speedMove;
     }
-    else if (sf::Keyboard::E == param.key.code) {
+    else if (KEYBOARD::kE == input) {
       m_cameraDesc.camEye -= m_up * speedMove;
     }
 
     m_axis.calculateAxis(m_right, m_up, m_front);
 
     m_position.calculatePosition(m_cameraDesc.camEye);
-
     m_position = m_position * m_axis;
 
     m_view = m_position;
@@ -174,6 +167,30 @@ namespace gaEngineSDK {
     SetCursorPos((int32)m_originalMousePos.x, (int32)m_originalMousePos.y);
   }
 
+  void 
+  Camera::rotationAxis(const Vector2I& xy, const float& deltaTime) {
+    Matrix4x4 rotation;
+
+    float speedrot = 2.30f * deltaTime;
+
+    if (xy.x > 0) {
+      //rotation.rotationX(speedrot);
+    }
+    else if (xy.x < 0) {
+      rotation.rotationX(-speedrot);
+    }
+    else if (xy.y > 0) {
+      //rotation.rotationY(speedrot);
+    }
+    else if (xy.y < 0) {
+      //rotation.rotationY(-speedrot);
+    }
+
+    m_view = rotation * m_view;
+
+    updateViewMatrix();
+  }
+
   /***************************************************************************/
   /**
   * Creates
@@ -216,11 +233,6 @@ namespace gaEngineSDK {
   void
   Camera::setOriginalMousePos(float x, float y) {
     m_originalMousePos = { x, y };
-  }
-
-  void
-  Camera::setClickPressed(bool _bool) {
-    m_clickPressed = _bool;
   }
 
   void
@@ -282,11 +294,6 @@ namespace gaEngineSDK {
   Vector2
   Camera::getOriginalMousePos() {
     return m_originalMousePos;
-  }
-
-  bool
-  Camera::getClickPressed() {
-    return m_clickPressed;
   }
 
   Vector3

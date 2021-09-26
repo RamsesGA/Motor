@@ -172,6 +172,7 @@
     <ClInclude Include="include\gaActor.h" />
     <ClInclude Include="include\gaAnimations.h" />
     <ClInclude Include="include\gaBaseApp.h" />
+    <ClInclude Include="include\gaBaseInputs.h" />
     <ClInclude Include="include\gaBaseInterface.h" />
     <ClInclude Include="include\gaBaseRenderer.h" />
     <ClInclude Include="include\gaCamera.h" />
@@ -206,6 +207,7 @@
     <ClCompile Include="src\gaActor.cpp" />
     <ClCompile Include="src\gaAnimations.cpp" />
     <ClCompile Include="src\gaBaseApp.cpp" />
+    <ClCompile Include="src\gaBaseInputs.cpp" />
     <ClCompile Include="src\gaBaseInterface.cpp" />
     <ClCompile Include="src\gaBaseRenderer.cpp" />
     <ClCompile Include="src\gaCamera.cpp" />

@@ -5,6 +5,7 @@
 #include <SFML/Window.hpp>
 
 #include "gaPrerequisitesCore.h"
+#include "gaBaseInputs.h"
 
 using sf::Event;
 using sf::Window;
@@ -55,14 +56,6 @@ namespace gaEngineSDK {
     int32
     initSys();
 
-    /*
-    * @brief Keyboard or mouse detection.
-    * @param windowEvent, input detected on screen.
-    * @param deltaTime, time elapsed since the last frame.
-    */
-    void
-    handleWindowEvents(Event& windowEvent, const float& deltaTime);
-
    protected:
     /*
     * @brief Create the information for the window.
@@ -78,6 +71,10 @@ namespace gaEngineSDK {
     */
     void
     resize(int32 width, int32 height);
+
+
+    void
+    handleWindowEvents(Event& windowEvent, const float& deltaTime);
 
     /*************************************************************************/
     /*

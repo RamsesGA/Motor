@@ -5,7 +5,7 @@
 #include "gaPrerequisitesInterface.h"
 
 namespace gaEngineSDK {
-  class GA_INTERFACE_EXPORT Interface final : public BaseInterface
+  class Interface final : public BaseInterface
   {
    public:
     /*************************************************************************/

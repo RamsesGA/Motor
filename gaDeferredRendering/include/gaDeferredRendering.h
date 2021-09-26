@@ -2,6 +2,7 @@
 
 #include <gaBaseRenderer.h>
 #include <gaLights.h>
+#include <gaBaseInputs.h>
 
 #include "gaPrerequisitesDefRend.h"
 
@@ -53,25 +54,19 @@ namespace gaEngineSDK {
     * @brief .
     */
     void
-    onKeyboardDown(Event param, const float& deltaTime) override;
+    keyboardButtons(const float& deltaTime);
+
+    /*
+    * @brief .
+    */
+    void
+    mouseRotation(const float& deltaTime);
 
     /*
     * @brief .
     */
     void
     onLeftMouseBtnDown() override;
-
-    /*
-    * @brief .
-    */
-    void
-    onLeftMouseBtnUp() override;
-
-    /*
-    * @brief .
-    */
-    void
-    onMouseMove(const float& deltaTime) override;
 
     /*
     * @brief .
@@ -114,6 +109,12 @@ namespace gaEngineSDK {
     */
     void
     additionPass(void* texture1, void* texture2);
+
+    /*
+    * @brief .
+    */
+    void
+    additionShadowPass(void* texture1, void* texture2);
 
     /*
     * @brief .
@@ -189,6 +190,7 @@ namespace gaEngineSDK {
     SPtr<Shaders> m_pBlurV_Shader;
     SPtr<Shaders> m_pLightning_Shader;
     SPtr<Shaders> m_pAddition_Shader;
+    SPtr<Shaders> m_pAdditionShadow_Shader;
     SPtr<Shaders> m_pDepth_Shader;
     SPtr<Shaders> m_pShadowMap_Shader;
 
@@ -200,6 +202,7 @@ namespace gaEngineSDK {
     SPtr<RenderTarget> m_pBlurH_RT;
     SPtr<RenderTarget> m_pBlurV_RT;
     SPtr<RenderTarget> m_pAddition_RT;
+    SPtr<RenderTarget> m_pAdditionShadow_RT;
     SPtr<RenderTarget> m_pLightning_RT;
 
     //Depth map

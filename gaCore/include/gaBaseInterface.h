@@ -43,6 +43,8 @@ namespace gaEngineSDK {
     */
     virtual void
     render() {};
+
+    bool m_touchingImGui = false;
   };
 
   /***************************************************************************/

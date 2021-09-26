@@ -28,7 +28,7 @@ struct VS_INPUT
 struct PS_INPUT
 {
   float4 position      : SV_POSITION;
-  float4 depthPosition : TEXTURE0;
+  float4 depthPosition : TEXCOORD0;
 };
 
 

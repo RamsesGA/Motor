@@ -37,6 +37,9 @@
     <Filter Include="Archivos de origen\Lights">
       <UniqueIdentifier>{38aab083-5ae6-430e-b710-454fd44f6a4b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\BaseInput">
+      <UniqueIdentifier>{692e0cf9-3c72-4d56-acd7-df3767280627}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gaConstantBuffer.h">
@@ -133,6 +136,9 @@
     <ClInclude Include="include\gaLights.h">
       <Filter>Archivos de origen\Lights</Filter>
     </ClInclude>
+    <ClInclude Include="include\gaBaseInputs.h">
+      <Filter>Archivos de origen\BaseInput</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gaBaseApp.cpp">
@@ -185,6 +191,9 @@
     </ClCompile>
     <ClCompile Include="src\gaLights.cpp">
       <Filter>Archivos de origen\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaBaseInputs.cpp">
+      <Filter>Archivos de origen\BaseInput</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

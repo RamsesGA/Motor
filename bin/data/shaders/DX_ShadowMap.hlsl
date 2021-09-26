@@ -59,6 +59,11 @@ struct PS_INPUT
   float3 lightPos          : TEXCOORD2;
 };
 
+struct PS_OUTPUT
+{
+  float4 mColor : SV_Target0;
+};
+
 
 //----------------------------------------------------------------------------
 // Vertex Shader
@@ -110,7 +115,7 @@ PS_INPUT ShadowVS(VS_INPUT input)
 //----------------------------------------------------------------------------
 // Pixel Shader
 //----------------------------------------------------------------------------
-float4 ShadowPS(PS_INPUT input) : SV_TARGET
+PS_OUTPUT ShadowPS(PS_INPUT input) : SV_TARGET
 {
   float bias;
   float depthValue;
@@ -119,6 +124,8 @@ float4 ShadowPS(PS_INPUT input) : SV_TARGET
   float2 projectTexCoord;
   float4 textureColor;
   float4 color;
+  
+  PS_OUTPUT output;
 
   // Set the bias value for fixing the floating point precision issues.
   bias = 0.001f;
@@ -168,5 +175,7 @@ float4 ShadowPS(PS_INPUT input) : SV_TARGET
   // Combine the light and texture color.
   color = color * textureColor;
   
-  return color;
+  output.mColor = color;
+  
+  return output;
 }

@@ -7,6 +7,7 @@
 
 #include "gaPrerequisitesCore.h"
 #include "gaComponent.h"
+#include "gaBaseInputs.h"
 
 using sf::Event;
 
@@ -54,28 +55,28 @@ namespace gaEngineSDK {
     * @param deltaTime, time elapsed since the last frame.
     */
     void
-    inputDetection(Event param, const float& deltaTime);
+    inputDetection(KEYBOARD::E input, const float& deltaTime);
 
     /**
     * @brief Function to be able to apply a PITCH rotation.
     * @param param, SFML event for input detection.
     */
     void
-    pitchX(Event param);
+    pitchX(KEYBOARD::E input, const float& deltaTime);
 
     /**
     * @brief Function to be able to apply a ROLL rotation.
     * @param param, SFML event for input detection.
     */
     void
-    rollZ(Event param);
+    rollZ(KEYBOARD::E input, const float& deltaTime);
 
     /**
     * @brief Function to be able to apply a YAW rotation.
     * @param param, SFML event for input detection.
     */
     void
-    yawY(Event param);
+    yawY(KEYBOARD::E input, const float& deltaTime);
 
     /**
     * @brief Function to be able to apply a movement to the camera.
@@ -83,13 +84,19 @@ namespace gaEngineSDK {
     * @param deltaTime, time elapsed since the last frame.
     */
     void
-    move(Event param, const float& deltaTime);
+    move(KEYBOARD::E input, const float& deltaTime);
 
     /**
     * @brief Function to be able to apply a rotation of the view.
     */
     void
     mouseRotation(const float& deltaTime);
+
+    /*
+    * @brief .
+    */
+    void
+    rotationAxis(const Vector2I& xy, const float& deltaTime);
 
     /*************************************************************************/
     /**
@@ -122,13 +129,6 @@ namespace gaEngineSDK {
     */
     void
     setOriginalMousePos(float x, float y);
-
-    /**
-    * @brief Function to save the bool value on a click or not.
-    * @param isClicked, Bool to know if you are pressing or not on the screen.
-    */
-    void
-    setClickPressed(bool isClicked);
 
     /**
     * @brief Save the values for the corresponding member.
@@ -213,13 +213,6 @@ namespace gaEngineSDK {
     Vector2
     getOriginalMousePos();
 
-    /**
-    * @brief Function to obtain the boolean of detection of a click.
-    * @return Bool to indicate if a click is true or false.
-    */
-    bool
-    getClickPressed();
-
     /*
     * @brief .
     */
@@ -232,16 +225,6 @@ namespace gaEngineSDK {
     * Members
     */
     /*************************************************************************/
-
-    /**
-    * @brief Member to detect and notify if user clicked.
-    */
-    bool m_clickPressed = false;
-
-    /**
-    * @brief Member to save angle.
-    */
-    float m_angule = 0.0f;
 
     /**
     * @brief Member to save original mouse position.

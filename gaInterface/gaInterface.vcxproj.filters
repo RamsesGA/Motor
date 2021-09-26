@@ -4,6 +4,9 @@
     <Filter Include="Archivos de origen">
       <UniqueIdentifier>{43f9503a-19c5-4397-86dd-fcfafa696874}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\ImGui">
+      <UniqueIdentifier>{b431f5ae-2820-419a-87a3-33f8c9633550}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gaPrerequisitesInterface.h">
@@ -12,10 +15,52 @@
     <ClInclude Include="include\gaInterface.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imconfig.h">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imgui.h">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imgui_impl_dx11.h">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imgui_impl_win32.h">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imgui_internal.h">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imstb_rectpack.h">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imstb_textedit.h">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imstb_truetype.h">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gaInterface.cpp">
       <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\DEVLIBS\ImGui\include\imgui.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\DEVLIBS\ImGui\include\imgui_draw.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\DEVLIBS\ImGui\include\imgui_impl_dx11.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\DEVLIBS\ImGui\include\imgui_impl_win32.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\DEVLIBS\ImGui\include\imgui_tables.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\DEVLIBS\ImGui\include\imgui_widgets.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

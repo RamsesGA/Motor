@@ -1,6 +1,7 @@
 #include <gaGraphicsApi.h>
 #include <gaPlane.h>
 #include <gaRenderTarget.h>
+#include <gaBaseInterface.h>
 
 #include "gaDeferredRendering.h"
 
@@ -59,6 +60,8 @@ namespace gaEngineSDK {
                                             L"data/shaders/DX_AdditionPS.hlsl",
                                             "Add"));
 
+    m_pAdditionShadow_Shader = m_pAddition_Shader;
+
     m_pDepth_Shader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_Depth.hlsl",
                                                               "DepthVS",
                                                               L"data/shaders/DX_Depth.hlsl",
@@ -115,12 +118,13 @@ namespace gaEngineSDK {
     * T A R G E TS
     * Z O N E
     */
-    m_pGbuffer_RT = make_shared<RenderTarget>();
-    m_pSSAO_RT = make_shared<RenderTarget>();
-    m_pBlurH_RT = make_shared<RenderTarget>();
-    m_pBlurV_RT = make_shared<RenderTarget>();
-    m_pAddition_RT = make_shared<RenderTarget>();
-    m_pLightning_RT = make_shared<RenderTarget>();
+    m_pGbuffer_RT        = make_shared<RenderTarget>();
+    m_pSSAO_RT           = make_shared<RenderTarget>();
+    m_pBlurH_RT          = make_shared<RenderTarget>();
+    m_pBlurV_RT          = make_shared<RenderTarget>();
+    m_pAddition_RT       = make_shared<RenderTarget>();
+    m_pAdditionShadow_RT = make_shared<RenderTarget>();
+    m_pLightning_RT      = make_shared<RenderTarget>();
 
     //Depth
     m_pDepth_RT = make_shared<RenderTarget>();
@@ -128,12 +132,13 @@ namespace gaEngineSDK {
     //Shadow map
     m_pShadowMap_RT = make_shared<RenderTarget>();
 
-    m_pGbuffer_RT = myGraphicsApi->createRenderTarget(m_width, m_height, 1, 4);
-    m_pSSAO_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
-    m_pBlurH_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
-    m_pBlurV_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
-    m_pAddition_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
-    m_pLightning_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
+    m_pGbuffer_RT        = myGraphicsApi->createRenderTarget(m_width, m_height, 1, 4);
+    m_pSSAO_RT           = myGraphicsApi->createRenderTarget(m_width, m_height);
+    m_pBlurH_RT          = myGraphicsApi->createRenderTarget(m_width, m_height);
+    m_pBlurV_RT          = myGraphicsApi->createRenderTarget(m_width, m_height);
+    m_pAddition_RT       = myGraphicsApi->createRenderTarget(m_width, m_height);
+    m_pAdditionShadow_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
+    m_pLightning_RT      = myGraphicsApi->createRenderTarget(m_width, m_height);
 
     //Depth
     m_pDepth_RT = myGraphicsApi->createRenderTarget(m_width, m_height, 1, 1, 1.0f, true);
@@ -171,6 +176,9 @@ namespace gaEngineSDK {
   DeferredRendering::update(const float& deltaTime) {
     auto myGraphicsApi = g_graphicApi().instancePtr();
 
+    keyboardButtons(deltaTime);
+    mouseRotation(deltaTime);
+
     /*
     * P A S S E S
     * Z O N E
@@ -180,16 +188,28 @@ namespace gaEngineSDK {
 
     rtGbufferPass();
     rtSSAO_Pass();
+
+    //Blur AO
     blurH_Pass(m_pSSAO_RT->getRenderTexture(0));
     blurV_Pass(m_pSSAO_RT->getRenderTexture(0));
     additionPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
-
     for (uint32 i = 0; i < 2; ++i) {
       blurH_Pass(m_pAddition_RT->getRenderTexture(0));
       blurV_Pass(m_pAddition_RT->getRenderTexture(0));
       additionPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
     }
 
+    //Blur Shadow
+    blurH_Pass(m_pShadowMap_RT->getRenderTexture(0));
+    blurV_Pass(m_pShadowMap_RT->getRenderTexture(0));
+    additionShadowPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
+    for (uint32 i = 0; i < 2; ++i) {
+      blurH_Pass(m_pAddition_RT->getRenderTexture(0));
+      blurV_Pass(m_pAddition_RT->getRenderTexture(0));
+      additionShadowPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
+    }
+
+    //Final pass
     lightningPass();
 
     // Clear the depth buffer to 1.0 (max depth).
@@ -207,11 +227,54 @@ namespace gaEngineSDK {
   void 
   DeferredRendering::resize() { }
 
-  void
-  DeferredRendering::onKeyboardDown(Event param, const float& deltaTime) {
+  /***************************************************************************/
+  /**
+  * Inputs.
+  */
+  /***************************************************************************/
+  void 
+  DeferredRendering::keyboardButtons(const float& deltaTime) {
+    auto myInputs = g_baseInputs().instancePtr();
     auto myGraphicsApi = g_graphicApi().instancePtr();
 
-    m_mainCamera.inputDetection(param, deltaTime);
+    //Normal movement
+    if (myInputs->getKey(KEYBOARD::kW)) {
+      m_mainCamera.move(KEYBOARD::kW, deltaTime);
+    }
+    else if (myInputs->getKey(KEYBOARD::kS)) {
+      m_mainCamera.move(KEYBOARD::kS, deltaTime);
+    }
+    else if (myInputs->getKey(KEYBOARD::kA)) {
+      m_mainCamera.move(KEYBOARD::kA, deltaTime);
+    }
+    else if (myInputs->getKey(KEYBOARD::kD)) {
+      m_mainCamera.move(KEYBOARD::kD, deltaTime);
+    }
+    else if (myInputs->getKey(KEYBOARD::kQ)) {
+      m_mainCamera.move(KEYBOARD::kQ, deltaTime);
+    }
+    else if (myInputs->getKey(KEYBOARD::kE)) {
+      m_mainCamera.move(KEYBOARD::kE, deltaTime);
+    }
+    //Roll, Yaw, Pitch
+    else if (myInputs->getKey(KEYBOARD::kUP)) {
+      m_mainCamera.inputDetection(KEYBOARD::kUP, deltaTime);
+    }
+    else if (myInputs->getKey(KEYBOARD::kDOWN)) {
+      m_mainCamera.inputDetection(KEYBOARD::kDOWN, deltaTime);
+    }
+    else if (myInputs->getKey(KEYBOARD::kLEFT)) {
+      m_mainCamera.inputDetection(KEYBOARD::kLEFT, deltaTime);
+    }
+    else if (myInputs->getKey(KEYBOARD::kRIGHT)) {
+      m_mainCamera.inputDetection(KEYBOARD::kRIGHT, deltaTime);
+    }
+    else if (myInputs->getKey(KEYBOARD::kZ)) {
+      m_mainCamera.inputDetection(KEYBOARD::kZ, deltaTime);
+    }
+    else if (myInputs->getKey(KEYBOARD::kC)) {
+      m_mainCamera.inputDetection(KEYBOARD::kC, deltaTime);
+    }
 
     ConstantBuffer1 cb;
     cb.mView = myGraphicsApi->matrixPolicy(m_mainCamera.getView());
@@ -220,33 +283,25 @@ namespace gaEngineSDK {
   }
 
   void
+  DeferredRendering::mouseRotation(const float& deltaTime) {
+    auto myGraphicsApi = g_graphicApi().instancePtr();
+    auto myInputs = g_baseInputs().instancePtr();
+    auto myInterface = g_baseInterface().instancePtr();
+
+    if ((myInputs->getMouseBtn(MOUSE_BUTTON::kLeft)) && (!myInterface->m_touchingImGui)) {
+      m_mainCamera.mouseRotation(deltaTime);
+    }
+
+    ConstantBuffer1 camera;
+    camera.mView = myGraphicsApi->matrixPolicy(m_mainCamera.getView());
+    myGraphicsApi->updateConstantBuffer(&camera, m_pCB_BufferCamera);
+  }
+
+  void
   DeferredRendering::onLeftMouseBtnDown() {
     Vector2i position = Mouse::getPosition();
 
     m_mainCamera.setOriginalMousePos(position.x, position.y);
-    m_mainCamera.setClickPressed(true);
-  }
-
-  void
-  DeferredRendering::onLeftMouseBtnUp() {
-    m_mainCamera.setClickPressed(false);
-  }
-
-  void
-  DeferredRendering::onMouseMove(const float& deltaTime) {
-    if (m_mainCamera.getClickPressed()) {
-      auto myGraphicsApi = g_graphicApi().instancePtr();
-
-      m_mainCamera.setOriginalMousePos(m_mainCamera.getOriginalMousePos().x,
-                                       m_mainCamera.getOriginalMousePos().y);
-
-      m_mainCamera.mouseRotation(deltaTime);
-
-      ConstantBuffer1 cb;
-      cb.mView = myGraphicsApi->matrixPolicy(m_mainCamera.getView());
-
-      myGraphicsApi->updateConstantBuffer(&cb, m_pCB_BufferCamera);
-    }
   }
 
   void
@@ -272,6 +327,12 @@ namespace gaEngineSDK {
     m_shadowCamera.setHeight(m_height);
     m_shadowCamera.startCamera();
   }
+
+  /***************************************************************************/
+  /**
+  * Passes.
+  */
+  /***************************************************************************/
 
   void
   DeferredRendering::rtGbufferPass() {
@@ -455,6 +516,39 @@ namespace gaEngineSDK {
   }
 
   void 
+  DeferredRendering::additionShadowPass(void* texture1, void* texture2) {
+    auto myGraphicsApi = g_graphicApi().instancePtr();
+
+    myGraphicsApi->setRenderTarget(m_pAdditionShadow_RT);
+    myGraphicsApi->setShaders(m_pAdditionShadow_Shader);
+
+    //VS CB
+    myGraphicsApi->setYourVSConstantBuffers(m_pCB_BufferCamera, 0);
+    myGraphicsApi->setYourVSConstantBuffers(m_pCB_BufferWorld, 1);
+
+    //PS CB
+    myGraphicsApi->setYourPSConstantBuffers(m_pCB_MipLevels, 2);
+
+    //Clean RT
+    myGraphicsApi->clearYourRenderTarget(m_pAdditionShadow_RT, m_rgbaBlue);
+
+    //Update CB
+    cbMipLevels mipLevelsData;
+    mipLevelsData.mipLevel0 = 1;
+    mipLevelsData.mipLevel1 = 1;
+    mipLevelsData.mipLevel2 = 1;
+    mipLevelsData.mipLevel3 = 1;
+
+    myGraphicsApi->updateConstantBuffer(&mipLevelsData, m_pCB_MipLevels);
+
+    //Set textures
+    myGraphicsApi->setShaderResourceView(texture1, 0);
+    myGraphicsApi->setShaderResourceView(texture2, 1);
+
+    m_mySAQ->setSAQ();
+  }
+
+  void 
   DeferredRendering::lightningPass() {
     auto myGraphicsApi = g_graphicApi().instancePtr();
 
@@ -477,8 +571,7 @@ namespace gaEngineSDK {
     cbLightning lightningData;
     lightningData.emissiveIntensity = 1.0f;
     lightningData.lightIntensity0 = 2.0f;
-    //TODO: check lightPos, the information in shader
-    //lightningData.lightPos0 = { 0.0f, 0.0f, 0.0f };
+    lightningData.lightPos0 = { 0.0f, 0.0f, 0.0f };
     lightningData.vViewPosition = m_mainCamera.getCamEye();
 
     myGraphicsApi->updateConstantBuffer(&lightningData, m_pCB_Lightning);
@@ -489,6 +582,7 @@ namespace gaEngineSDK {
     myGraphicsApi->setShaderResourceView(m_pGbuffer_RT->getRenderTexture(3), 2);
     myGraphicsApi->setShaderResourceView(m_pAddition_RT->getRenderTexture(0), 3);
     myGraphicsApi->setShaderResourceView(m_pGbuffer_RT->getRenderTexture(2), 4);
+    myGraphicsApi->setShaderResourceView(m_pAdditionShadow_RT->getRenderTexture(0), 5);
 
     m_mySAQ->setSAQ();
   }

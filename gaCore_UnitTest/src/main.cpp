@@ -6,7 +6,7 @@ int32
 main() {
   AppTest app;
 
-  app.run("GA Window");
+  app.run("GA Window", 1920, 1080);
 
   return 0;
 }
