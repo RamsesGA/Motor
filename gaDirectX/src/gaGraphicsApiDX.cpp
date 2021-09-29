@@ -1464,8 +1464,31 @@ namespace gaEngineSDK {
   }
 
   void
-  GraphicsApiDX::setPrimitiveTopology(const uint32 topology) {
-    m_pDeviceContext->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)topology);
+  GraphicsApiDX::setPrimitiveTopology(PRIMITIVE_TOPOLOGY::E topology) {
+    switch (topology) {
+      case gaEngineSDK::PRIMITIVE_TOPOLOGY::kPointList:
+        m_pDeviceContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
+        break;
+
+      case gaEngineSDK::PRIMITIVE_TOPOLOGY::kLineList:
+        m_pDeviceContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
+        break;
+
+      case gaEngineSDK::PRIMITIVE_TOPOLOGY::kLineStrip:
+        m_pDeviceContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINESTRIP);
+        break;
+
+      case gaEngineSDK::PRIMITIVE_TOPOLOGY::kTriangleList:
+        m_pDeviceContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+        break;
+
+      case gaEngineSDK::PRIMITIVE_TOPOLOGY::kTriangleStrip:
+        m_pDeviceContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+        break;
+
+      default:
+        break;
+    }
   }
 
   void

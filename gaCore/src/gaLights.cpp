@@ -58,6 +58,16 @@ namespace gaEngineSDK {
     m_lookAt.z = z;
   }
 
+  void
+  Lights::setIntensity(float value) {
+    m_intensity = value;
+  }
+
+  void
+  Lights::setEmissiveIntensity(float value) {
+    m_emissiveIntensity = value;
+  }
+
   /***************************************************************************/
   /**
   * G E T S.
@@ -86,5 +96,15 @@ namespace gaEngineSDK {
   void 
   Lights::getProjectionMatrix(Matrix4x4& mProjection) {
     mProjection = m_projectionMatrix;
+  }
+
+  float
+  Lights::getIntensity() {
+    return m_intensity;
+  }
+
+  float
+  Lights::getEmissiveIntensity() {
+    return m_emissiveIntensity;
   }
 }

@@ -28,13 +28,14 @@ x86/
 bld/
 [Bb]in/data/misc
 [Bb]in/data/models/2B
-[Bb]in/data/models/cube
+[Bb]in/data/models/scene
 [Bb]in/data/models/grimoires
 [Bb]in/data/models/pod
 [Bb]in/data/models/spartan
 [Bb]in/data/models/ugandan
 [Bb]in/data/models/vela
 [Bb]in/data/textures/2B
+[Bb]in/data/textures/scene
 [Bb]in/data/textures/grimoires
 [Bb]in/data/textures/pod
 [Bb]in/data/textures/spartan

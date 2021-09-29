@@ -1,25 +1,30 @@
 #pragma once
 
-#include <gaBasePhysics.h>
+#include <gaModule.h>
 
-//Nvidia
-
-
-#include "gaPrerequisitesPhysics.h"
+#include "gaPrerequisitesCore.h"
 
 namespace gaEngineSDK {
-  class Physics final : public BasePhysics
+  class GA_CORE_EXPORT BasePhysics : public Module<BasePhysics>
   {
-  public:
+   public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
     */
     /*************************************************************************/
 
-    Physics() = default;
+    BasePhysics() = default;
 
-    ~Physics() = default;
+    ~BasePhysics() = default;
+
+    /*
+    * @brief .
+    */
+    void
+    setObject(BasePhysics* api) {
+      BasePhysics::_instance() = api;
+    }
 
     /*************************************************************************/
     /**
@@ -30,24 +35,22 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    void
-    init(uint32 width, uint32 height, void* hwndHandle);
+    virtual void
+    init(uint32 width, uint32 height, void* hwndHandle) {};
 
     /*
     * @brief .
     */
-    void
-    update(const float& deltaTime);
+    virtual void
+    update(const float& deltaTime) {};
   };
 
   /***************************************************************************/
   /**
-  * Export.
+  * INSTANCE.
   */
   /***************************************************************************/
-  extern "C" GA_PHYSICS_EXPORT BasePhysics *
-  newPhysics() {
-    Physics* pPhysics = new Physics();
-    return pPhysics;
-  }
+
+  GA_CORE_EXPORT BasePhysics&
+  g_basePhysics();
 }

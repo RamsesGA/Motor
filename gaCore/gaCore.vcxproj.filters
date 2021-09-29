@@ -40,6 +40,9 @@
     <Filter Include="Archivos de origen\BaseInput">
       <UniqueIdentifier>{692e0cf9-3c72-4d56-acd7-df3767280627}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\BasePhysics">
+      <UniqueIdentifier>{d23d93be-55ad-4c64-ad3b-ce2b1dc09c8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gaConstantBuffer.h">
@@ -139,6 +142,9 @@
     <ClInclude Include="include\gaBaseInputs.h">
       <Filter>Archivos de origen\BaseInput</Filter>
     </ClInclude>
+    <ClInclude Include="include\gaBasePhysics.h">
+      <Filter>Archivos de origen\BasePhysics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gaBaseApp.cpp">
@@ -194,6 +200,9 @@
     </ClCompile>
     <ClCompile Include="src\gaBaseInputs.cpp">
       <Filter>Archivos de origen\BaseInput</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaBasePhysics.cpp">
+      <Filter>Archivos de origen\BasePhysics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

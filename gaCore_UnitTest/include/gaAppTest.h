@@ -105,6 +105,6 @@ class AppTest : public BaseApp
   * @brief .
   */
   void
-  createCube();
+  createScene();
 
 };

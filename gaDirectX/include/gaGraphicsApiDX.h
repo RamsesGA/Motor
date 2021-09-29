@@ -229,7 +229,8 @@ namespace gaEngineSDK {
                  const uint32 numViewports = 1) override;
 
     void
-    setPrimitiveTopology(const uint32 topology = PRIMITIVE_TOPOLOGY::kTriangleList) override;
+    setPrimitiveTopology(PRIMITIVE_TOPOLOGY::E topology = 
+                         PRIMITIVE_TOPOLOGY::kTriangleList) override;
 
     void
     setYourVS(WeakSPtr<Shaders> vertexShader) override;

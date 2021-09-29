@@ -5,6 +5,7 @@
 #include "gaGraphicsApi.h"
 #include "gaBaseRenderer.h"
 #include "gaBaseInterface.h"
+#include "gaBasePhysics.h"
 #include "gaResourceManager.h"
 
 namespace gaEngineSDK {
@@ -191,6 +192,29 @@ namespace gaEngineSDK {
     BaseInputs::startUp();
     BaseInputs* newBInputs = baseInputs();
     g_baseInputs().setObject(newBInputs);
+
+    /*
+    * B A S E
+    * P H Y S I C S
+    */
+    hInstance = LoadLibraryExA("gaPhysics_d.dll", nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
+
+    //In case of error
+    if (!(hInstance)) {
+      return -1;
+    }
+
+    using fnBPhys = BasePhysics * (*)();
+    fnBPhys basePhys = reinterpret_cast<fnBPhys>(GetProcAddress(hInstance, "newPhysics"));
+
+    //In case of error
+    if (!(basePhys)) {
+      return -1;
+    }
+
+    BasePhysics::startUp();
+    BasePhysics* newBPhys = basePhys();
+    g_basePhysics().setObject(newBPhys);
 
     /*
     * M O D U L E

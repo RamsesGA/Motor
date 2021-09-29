@@ -561,7 +561,7 @@ namespace gaEngineSDK {
     * @param .
     */
     virtual void
-    setPrimitiveTopology(const uint32 topology = PRIMITIVE_TOPOLOGY::kTriangleList) {
+    setPrimitiveTopology(PRIMITIVE_TOPOLOGY::E topology = PRIMITIVE_TOPOLOGY::kTriangleList) {
       GA_UNREFERENCED_PARAMETER(topology);
     };
 

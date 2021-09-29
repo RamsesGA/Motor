@@ -304,6 +304,12 @@ namespace gaEngineSDK {
     m_mainCamera.setOriginalMousePos(position.x, position.y);
   }
 
+  /***************************************************************************/
+  /**
+  * Cameras.
+  */
+  /***************************************************************************/
+
   void
   DeferredRendering::defaultCamera() {
     m_mainCamera.setLookAt(Vector3(8.0f, 1.0f, 0.0f));
@@ -316,7 +322,7 @@ namespace gaEngineSDK {
     m_mainCamera.setHeight(m_height);
     m_mainCamera.startCamera();
 
-    //Defining shadow camera's value  Vector3(0.0f, 50.0f, 50.0f)
+    //Defining shadow camera's value
     m_shadowCamera.setLookAt(Vector3(-100.0f, 100.0f, -100.0f));
     m_shadowCamera.setEye();
     m_shadowCamera.setUp();
@@ -367,6 +373,7 @@ namespace gaEngineSDK {
     //PS CB
     //myGraphicsApi->setYourPSConstantBuffers(m_pCB_BufferWorld, 1);
 
+    //Clear
     myGraphicsApi->clearYourRenderTarget(m_pGbuffer_RT, m_rgbaBlue);
     myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
 
@@ -402,6 +409,7 @@ namespace gaEngineSDK {
 
     //Clear
     myGraphicsApi->clearYourRenderTarget(m_pSSAO_RT, m_rgbaBlue);
+    myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
 
     //Update CB
     cbSSAO ssaoData;
@@ -438,6 +446,7 @@ namespace gaEngineSDK {
 
     //Clear RT
     myGraphicsApi->clearYourRenderTarget(m_pBlurH_RT, m_rgbaBlue);
+    myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
 
     //Update CB
     cbViewportDimension viewportDimenData;
@@ -468,6 +477,7 @@ namespace gaEngineSDK {
 
     //Clear RT
     myGraphicsApi->clearYourRenderTarget(m_pBlurV_RT, m_rgbaBlue);
+    myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
 
     //Update CB
     cbViewportDimension viewportDimenData;
@@ -496,8 +506,9 @@ namespace gaEngineSDK {
     //PS CB
     myGraphicsApi->setYourPSConstantBuffers(m_pCB_MipLevels, 2);
 
-    //Clean RT
+    //Clean
     myGraphicsApi->clearYourRenderTarget(m_pAddition_RT, m_rgbaBlue);
+    myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
 
     //Update CB
     cbMipLevels mipLevelsData;
@@ -529,8 +540,9 @@ namespace gaEngineSDK {
     //PS CB
     myGraphicsApi->setYourPSConstantBuffers(m_pCB_MipLevels, 2);
 
-    //Clean RT
+    //Clear
     myGraphicsApi->clearYourRenderTarget(m_pAdditionShadow_RT, m_rgbaBlue);
+    myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
 
     //Update CB
     cbMipLevels mipLevelsData;
@@ -566,13 +578,14 @@ namespace gaEngineSDK {
 
     //Clean RT
     myGraphicsApi->clearYourRenderTargetView(m_pRenderTargetView, m_rgbaBlue);
+    myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
 
     //Update CB
     cbLightning lightningData;
-    lightningData.emissiveIntensity = 1.0f;
-    lightningData.lightIntensity0 = 2.0f;
-    lightningData.lightPos0 = { 0.0f, 0.0f, 0.0f };
-    lightningData.vViewPosition = m_mainCamera.getCamEye();
+    lightningData.emissiveIntensity = m_pLight->getEmissiveIntensity();
+    lightningData.lightIntensity0 = m_pLight->getIntensity();
+    lightningData.lightPos0 = m_pLight->getPosition();
+    lightningData.vViewPosition = m_shadowCamera.getCamEye();
 
     myGraphicsApi->updateConstantBuffer(&lightningData, m_pCB_Lightning);
 
@@ -606,7 +619,7 @@ namespace gaEngineSDK {
     myGraphicsApi->clearYourDepthStencilView(m_pDepth_RT);
 
     //Update CB
-    static cbMatrixBuffer matrixData;
+    cbMatrixBuffer matrixData;
     matrixData.mProjection = myGraphicsApi->matrixPolicy(m_shadowCamera.getProjection());
     matrixData.mView = myGraphicsApi->matrixPolicy(m_shadowCamera.getView());
     matrixData.mWorld = m_world;
@@ -631,6 +644,8 @@ namespace gaEngineSDK {
     m_pLight->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
     m_pLight->setLookAt(-100.0f, 100.0f, -100.0f);
     m_pLight->setPosition(0.0f, 0.0f, -500.0f);
+    m_pLight->setIntensity(2.0f);
+    m_pLight->setEmissiveIntensity(1.5f);
 
     Matrix4x4 lightVM;
     Matrix4x4 lightPM;
@@ -674,8 +689,8 @@ namespace gaEngineSDK {
     myGraphicsApi->updateConstantBuffer(&light2Data, m_pCB_Light2);
 
     //Set textures
-    myGraphicsApi->setShaderResourceView(m_pGbuffer_RT->getRenderTexture(0), 0);//shaderTexture
-    myGraphicsApi->setShaderResourceView(m_pDepth_RT->getRenderTexture(0), 1);//depthMapTexture
+    myGraphicsApi->setShaderResourceView(m_pGbuffer_RT->getRenderTexture(2), 0);//shaderTexture
+    myGraphicsApi->setShaderResourceView(m_pDepth_RT->getRenderTexture(0), 1);  //depthMapTexture
 
     //Render model
     mySceneGraph->render();

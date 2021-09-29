@@ -100,6 +100,8 @@ float4 ps_main(PS_INPUT input) : SV_Target0
    diffuse.xyz = pow(diffuse.xyz, gamma);
 
    float metallic = diffuse.w;
+   
+   float4 shadows = shadowTexture.Sample(simpleSampler, input.texCoord);
 
    diffuse.w = 1;
    float4 emissive = pow(emissiveTex.Sample(simpleSampler, input.texCoord), gamma);
@@ -107,6 +109,7 @@ float4 ps_main(PS_INPUT input) : SV_Target0
 
    float3 specular_F0 = lerp(0.04f, diffuse.xyz, metallic);
 
+   //lightPos0
    float3 wvLightPos_0 = mul(float3(-100,100,-100), matWV);
    float4 wvViewPosition = mul(vViewPosition, matWV);
 
@@ -151,7 +154,7 @@ float4 ps_main(PS_INPUT input) : SV_Target0
 								  (specular) + 
 								  (ambientLighting), 
 								  1.0f / gamma),
-							      1);                                        //Float 4 (w)
+							      1);
 							
    finalColor = finalColor * ao;
    return finalColor;
