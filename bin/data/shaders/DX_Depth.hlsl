@@ -28,7 +28,7 @@ struct VS_INPUT
 struct PS_INPUT
 {
   float4 position      : SV_POSITION;
-  float4 depthPosition : TEXCOORD0;
+  float depthPosition : TEXCOORD0;
 };
 
 
@@ -45,11 +45,12 @@ PS_INPUT DepthVS(VS_INPUT input)
   // Calculate the position of the vertex against the world, view, and projection matrices.
   output.position = mul(input.position, worldMatrix);
   output.position = mul(output.position, viewMatrix);
-  output.position = mul(output.position, projectionMatrix);
   
   // Store the position value in a second input value for depth value calculations.
-  output.depthPosition = output.position;
+  output.depthPosition = output.position.z;
   
+  output.position = mul(output.position, projectionMatrix);
+
   return output;
 }
 
@@ -59,13 +60,5 @@ PS_INPUT DepthVS(VS_INPUT input)
 //----------------------------------------------------------------------------
 float4 DepthPS(PS_INPUT input) : SV_TARGET
 {
-  float depthValue;
-  float4 color;
-  
-  // Get the depth value of the pixel by dividing the Z pixel depth by the homogeneous W coordinate.
-  depthValue = input.depthPosition.z / input.depthPosition.w;
-  
-  color = float4(depthValue, depthValue, depthValue, 1.0f);
-  
-  return color;
+  return float4(input.depthPosition, input.depthPosition, input.depthPosition, 1.0f);;
 }

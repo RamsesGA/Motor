@@ -150,8 +150,8 @@ namespace gaEngineSDK {
     /**
     * @brief .
     */
-    Matrix4x4&
-    invert(Matrix4x4 matrix);
+    Matrix4x4
+    invert();
     
     void
     adjoint(float tempMatrix[4][4], float adj[4][4]);

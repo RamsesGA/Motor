@@ -334,32 +334,33 @@ namespace gaEngineSDK {
     return *this;
   }
   
-  Matrix4x4&
-  Matrix4x4::invert(Matrix4x4 matrix) {
+  Matrix4x4
+  Matrix4x4::invert() {
     float tempParamMatrix[4][4];
     float inverseMatrix[4][4];
+    Matrix4x4 matrix;
   
-    tempParamMatrix[0][0] = matrix.m_mat4x4[0][0];
-    tempParamMatrix[1][0] = matrix.m_mat4x4[1][0];
-    tempParamMatrix[2][0] = matrix.m_mat4x4[2][0];
-    tempParamMatrix[3][0] = matrix.m_mat4x4[3][0];
+    matrix.m_mat4x4[0][0] = m_mat4x4[0][0];
+    matrix.m_mat4x4[1][0] = m_mat4x4[1][0];
+    matrix.m_mat4x4[2][0] = m_mat4x4[2][0];
+    matrix.m_mat4x4[3][0] = m_mat4x4[3][0];
+
+    matrix.m_mat4x4[0][1] = m_mat4x4[0][1];
+    matrix.m_mat4x4[1][1] = m_mat4x4[1][1];
+    matrix.m_mat4x4[2][1] = m_mat4x4[2][1];
+    matrix.m_mat4x4[3][1] = m_mat4x4[3][1];
+
+    matrix.m_mat4x4[0][2] = m_mat4x4[0][2];
+    matrix.m_mat4x4[1][2] = m_mat4x4[1][2];
+    matrix.m_mat4x4[2][2] = m_mat4x4[2][2];
+    matrix.m_mat4x4[3][2] = m_mat4x4[3][2];
+
+    matrix.m_mat4x4[0][3] = m_mat4x4[0][3];
+    matrix.m_mat4x4[1][3] = m_mat4x4[1][3];
+    matrix.m_mat4x4[2][3] = m_mat4x4[2][3];
+    matrix.m_mat4x4[3][3] = m_mat4x4[3][3];
   
-    tempParamMatrix[0][1] = matrix.m_mat4x4[0][1];
-    tempParamMatrix[1][1] = matrix.m_mat4x4[1][1];
-    tempParamMatrix[2][1] = matrix.m_mat4x4[2][1];
-    tempParamMatrix[3][1] = matrix.m_mat4x4[3][1];
-  
-    tempParamMatrix[0][2] = matrix.m_mat4x4[0][2];
-    tempParamMatrix[1][2] = matrix.m_mat4x4[1][2];
-    tempParamMatrix[2][2] = matrix.m_mat4x4[2][2];
-    tempParamMatrix[3][2] = matrix.m_mat4x4[3][2];
-  
-    tempParamMatrix[0][3] = matrix.m_mat4x4[0][3];
-    tempParamMatrix[1][3] = matrix.m_mat4x4[1][3];
-    tempParamMatrix[2][3] = matrix.m_mat4x4[2][3];
-    tempParamMatrix[3][3] = matrix.m_mat4x4[3][3];
-  
-    float det = getDeterminant(tempParamMatrix);
+    float det = getDeterminant(matrix.m_mat4x4);
   
     if (0.0f == det) {
       return matrix;
@@ -367,7 +368,7 @@ namespace gaEngineSDK {
   
     // Find adjoint
     float adj[4][4];
-    adjoint(tempParamMatrix, adj);
+    adjoint(matrix.m_mat4x4, adj);
   
     // Find Inverse using formula "inverse(A) = adj(A)/det(A)"
     for (uint32 i = 0; i < 4; ++i) {
@@ -395,6 +396,7 @@ namespace gaEngineSDK {
     matrix.m_mat4x4[1][3] = inverseMatrix[1][3];
     matrix.m_mat4x4[2][3] = inverseMatrix[2][3];
     matrix.m_mat4x4[3][3] = inverseMatrix[3][3];
+
     return matrix;
   }
   

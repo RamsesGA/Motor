@@ -112,6 +112,9 @@ namespace gaEngineSDK {
 
     m_pCB_Light2.reset(myGraphicsApi->createConstantBuffer(sizeof(cbLight2)));
 
+    //Inverse
+    m_pCB_InverseMat.reset(myGraphicsApi->createConstantBuffer(sizeof(cbInverseView)));
+
     /*
     * C R E A T E
     * R E N D E R
@@ -575,6 +578,8 @@ namespace gaEngineSDK {
     myGraphicsApi->setYourPSConstantBuffers(m_pCB_BufferCamera, 0);
     myGraphicsApi->setYourPSConstantBuffers(m_pCB_BufferWorld, 1);
     myGraphicsApi->setYourPSConstantBuffers(m_pCB_Lightning, 2);
+    myGraphicsApi->setYourPSConstantBuffers(m_pCB_InverseMat, 3);
+    myGraphicsApi->setYourPSConstantBuffers(m_pCB_Shadows, 4);
 
     //Clean RT
     myGraphicsApi->clearYourRenderTargetView(m_pRenderTargetView, m_rgbaBlue);
@@ -587,7 +592,11 @@ namespace gaEngineSDK {
     lightningData.lightPos0 = m_pLight->getPosition();
     lightningData.vViewPosition = m_shadowCamera.getCamEye();
 
+    cbInverseView inverseData;
+    inverseData.mInverseViewCam = myGraphicsApi->matrixPolicy(m_mainCamera.getView().invert());
+
     myGraphicsApi->updateConstantBuffer(&lightningData, m_pCB_Lightning);
+    myGraphicsApi->updateConstantBuffer(&inverseData, m_pCB_InverseMat);
 
     //Set textures
     myGraphicsApi->setShaderResourceView(m_pGbuffer_RT->getRenderTexture(0), 0);
@@ -596,6 +605,7 @@ namespace gaEngineSDK {
     myGraphicsApi->setShaderResourceView(m_pAddition_RT->getRenderTexture(0), 3);
     myGraphicsApi->setShaderResourceView(m_pGbuffer_RT->getRenderTexture(2), 4);
     myGraphicsApi->setShaderResourceView(m_pAdditionShadow_RT->getRenderTexture(0), 5);
+    //myGraphicsApi->setShaderResourceView(m_pDepth_RT->getRenderTexture(0), 5);
 
     m_mySAQ->setSAQ();
   }
@@ -639,18 +649,19 @@ namespace gaEngineSDK {
     m_pLight = make_shared<Lights>();
 
     //Light info
-    m_pLight->generateViewMatrix();
     m_pLight->setAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
     m_pLight->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
     m_pLight->setLookAt(-100.0f, 100.0f, -100.0f);
     m_pLight->setPosition(0.0f, 0.0f, -500.0f);
     m_pLight->setIntensity(2.0f);
     m_pLight->setEmissiveIntensity(1.5f);
+    
+    m_pLight->generateViewMatrix();
 
     Matrix4x4 lightVM;
-    Matrix4x4 lightPM;
+    Matrix4x4 lightPM = myGraphicsApi->matrixPolicy(m_shadowCamera.getProjection());
     m_pLight->getViewMatrix(lightVM);
-    m_pLight->getProjectionMatrix(lightPM);
+    //m_pLight->getProjectionMatrix(lightPM);
 
     //
     myGraphicsApi->setRenderTarget(m_pShadowMap_RT);

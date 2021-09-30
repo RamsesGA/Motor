@@ -230,6 +230,8 @@ namespace gaEngineSDK {
     SPtr<ConstantBuffer> m_pCB_Light;
     SPtr<ConstantBuffer> m_pCB_Light2;
 
+    SPtr<ConstantBuffer> m_pCB_InverseMat;
+
     /*
     * @brief .
     */
