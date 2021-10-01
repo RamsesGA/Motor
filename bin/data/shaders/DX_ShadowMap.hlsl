@@ -5,11 +5,11 @@
 */
 
 //----------------------------------------------------------------------------PS
-Texture2D shaderTexture   : register(t0);
+Texture2D shaderTexture : register(t0);
 Texture2D depthMapTexture : register(t1);
 
 SamplerState SampleTypeClamp : register(s1);
-SamplerState SampleTypeWrap  : register(s2);
+SamplerState SampleTypeWrap : register(s2);
 
 
 //----------------------------------------------------------------------------VS

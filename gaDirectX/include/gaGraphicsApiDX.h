@@ -150,7 +150,9 @@ namespace gaEngineSDK {
                        uint32 mipLevels = 1,
                        uint32 numRenderTargets = 1, 
                        float scale = 1.0f,
-                       bool depth = false) override;
+                       bool depth = false,
+                       TEXTURE_FORMAT::E typeTexture =
+                       TEXTURE_FORMAT::E::kR16G16B16A16Float) override;
     void
     createMipMaps(WeakSPtr<RenderTarget> renderTarg) override;
 

@@ -5,7 +5,7 @@
 */
 
 //----------------------------------------------------------------------------VS
-cbuffer linkToBufferMatrixBuffer : register(b0)
+cbuffer linkToBufferMatrixB : register(b0)
 {
   matrix worldMatrix;
   matrix viewMatrix;
@@ -60,5 +60,5 @@ PS_INPUT DepthVS(VS_INPUT input)
 //----------------------------------------------------------------------------
 float4 DepthPS(PS_INPUT input) : SV_TARGET
 {
-  return float4(input.depthPosition, input.depthPosition, input.depthPosition, 1.0f);;
+  return float4(input.depthPosition, input.depthPosition, input.depthPosition, 1.0f);
 }

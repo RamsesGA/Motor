@@ -94,8 +94,10 @@ namespace gaEngineSDK {
     const aiScene* pAScene = nullptr;
 
     //Read _file via assimp
-    pAScene = aImporter.ReadFile(file, aiProcessPreset_TargetRealtime_MaxQuality |
-                                 aiProcess_ConvertToLeftHanded | aiProcess_Triangulate);
+    pAScene = aImporter.ReadFile(file, 
+                                 aiProcessPreset_TargetRealtime_MaxQuality |
+                                 aiProcess_ConvertToLeftHanded | 
+                                 aiProcess_Triangulate);
 
     //Check for errors
     if (!pAScene || pAScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !pAScene->mRootNode) {
@@ -104,6 +106,13 @@ namespace gaEngineSDK {
 
     //We create the directory of the model and its texture
     createDirectories(file);
+
+    g_animInfo = m_animInfo;
+    g_vAnimationData =m_vAnimationData;
+    g_vMeshes.resize(m_vMeshBones.size());
+    g_vMeshes = m_vMeshes;
+    g_mMaterials = m_mMaterials;
+    g_vMeshName = m_vMeshName;
 
     //Process assimp's root pNode recursively
     processNode(pAScene->mRootNode, pAScene);

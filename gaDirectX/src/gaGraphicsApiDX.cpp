@@ -1108,7 +1108,8 @@ namespace gaEngineSDK {
                                     uint32 mipLevels,
                                     uint32 numRenderTargets, 
                                     float scale, 
-                                    bool depth) {
+                                    bool depth,
+                                    TEXTURE_FORMAT::E typeTexture) {
     if (0 >= numRenderTargets) {
       numRenderTargets = 1;
     }
@@ -1136,7 +1137,408 @@ namespace gaEngineSDK {
       textureDesc.Height = (uint32)(height * scale);
       textureDesc.MipLevels = mipLevels;
       textureDesc.ArraySize = 1;
-      textureDesc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
+      switch (typeTexture) {
+        case TEXTURE_FORMAT::E::kUnknown:
+          textureDesc.Format = DXGI_FORMAT_UNKNOWN;
+          break;
+
+        case TEXTURE_FORMAT::E::kR32G32B32A32Typeless:
+          textureDesc.Format = DXGI_FORMAT_R32G32B32A32_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kR32G32B32A32Float:
+          textureDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR32G32B32A32UInt:
+          textureDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR32G32B32A32SInt:
+          textureDesc.Format = DXGI_FORMAT_R32G32B32A32_SINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR32G32B32Typeless:
+          textureDesc.Format = DXGI_FORMAT_R32G32B32_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kR32G32B32Float:
+          textureDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR32G32B32UInt:
+          textureDesc.Format = DXGI_FORMAT_R32G32B32_UINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR32G32B32SInt:
+          textureDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR16G16B16A16Typeless:
+          textureDesc.Format = DXGI_FORMAT_R16G16B16A16_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kR16G16B16A16Float:
+          textureDesc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR16G16B16A16UNorm:
+          textureDesc.Format = DXGI_FORMAT_R16G16B16A16_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kR16G16B16A16UInt:
+          textureDesc.Format = DXGI_FORMAT_R16G16B16A16_UINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR16G16B16A16SNorm:
+          textureDesc.Format = DXGI_FORMAT_R16G16B16A16_SNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kR16G16B16A16SInt:
+          textureDesc.Format = DXGI_FORMAT_R16G16B16A16_SINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR32G32Typeless:
+          textureDesc.Format = DXGI_FORMAT_R32G32_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kR32G32Float:
+          textureDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR32G32UInt:
+          textureDesc.Format = DXGI_FORMAT_R32G32_UINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR32G32SInt:
+          textureDesc.Format = DXGI_FORMAT_R32G32_SINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR32G8X24Typeless:
+          textureDesc.Format = DXGI_FORMAT_R32G8X24_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kD32FloatS8X24UInt:
+          textureDesc.Format = DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR32FloatX8X24Typeless:
+          textureDesc.Format = DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kX32TypelessG8X24UInt:
+          textureDesc.Format = DXGI_FORMAT_X32_TYPELESS_G8X24_UINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR10G10B10A2Typeless:
+          textureDesc.Format = DXGI_FORMAT_R10G10B10A2_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kR10G10B10A2UNorm:
+          textureDesc.Format = DXGI_FORMAT_R10G10B10A2_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kR10G10B10A2UInt:
+          textureDesc.Format = DXGI_FORMAT_R10G10B10A2_UINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR11G11B10Float:
+          textureDesc.Format = DXGI_FORMAT_R11G11B10_FLOAT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR8G8B8A8Typeless:
+          textureDesc.Format = DXGI_FORMAT_R8G8B8A8_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kR8G8B8A8UNorm:
+          textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kR8G8B8A8UNorm_SRGB:
+          textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+          break;
+
+        case TEXTURE_FORMAT::E::kR8G8B8A8UInt:
+          textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR8G8B8A8SNorm:
+          textureDesc.Format = DXGI_FORMAT_R8G8B8A8_SNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kR8G8B8A8SInt:
+          textureDesc.Format = DXGI_FORMAT_R8G8B8A8_SINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR16G16Typeless:
+          textureDesc.Format = DXGI_FORMAT_R16G16_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kR16G16Float:
+          textureDesc.Format = DXGI_FORMAT_R16G16_FLOAT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR16G16UNorm:
+          textureDesc.Format = DXGI_FORMAT_R16G16_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kR16G16UInt:
+          textureDesc.Format = DXGI_FORMAT_R16G16_UINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR16G16SNorm:
+          textureDesc.Format = DXGI_FORMAT_R16G16_SNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kR16G16SInt:
+          textureDesc.Format = DXGI_FORMAT_R16G16_SINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR32Typeless:
+          textureDesc.Format = DXGI_FORMAT_R32_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kD32Float:
+          textureDesc.Format = DXGI_FORMAT_D32_FLOAT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR32Float:
+          textureDesc.Format = DXGI_FORMAT_R32_FLOAT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR32UInt:
+          textureDesc.Format = DXGI_FORMAT_R32_UINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR32SInt:
+          textureDesc.Format = DXGI_FORMAT_R32_SINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR24G8Typeless:
+          textureDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kD24UNormS8UInt:
+          textureDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR24UNormX8Typeless:
+          textureDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kX24TypelessG8UInt:
+          textureDesc.Format = DXGI_FORMAT_X24_TYPELESS_G8_UINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR8G8Typeless:
+          textureDesc.Format = DXGI_FORMAT_R8G8B8A8_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kR8G8UNorm:
+          textureDesc.Format = DXGI_FORMAT_R8G8_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kR8G8UInt:
+          textureDesc.Format = DXGI_FORMAT_R8G8_UINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR8G8SNorm:
+          textureDesc.Format = DXGI_FORMAT_R8G8_SNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kR8G8SInt:
+          textureDesc.Format = DXGI_FORMAT_R8G8_SINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR16Typeless:
+          textureDesc.Format = DXGI_FORMAT_R16_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kR16Float:
+          textureDesc.Format = DXGI_FORMAT_R16_FLOAT;
+          break;
+
+        case TEXTURE_FORMAT::E::kD16UNorm:
+          textureDesc.Format = DXGI_FORMAT_D16_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kR16UNorm:
+          textureDesc.Format = DXGI_FORMAT_R16G16_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kR16UInt:
+          textureDesc.Format = DXGI_FORMAT_R16_UINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR16SNorm:
+          textureDesc.Format = DXGI_FORMAT_R16G16_SNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kR16SInt:
+          textureDesc.Format = DXGI_FORMAT_R16_SINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR8Typeless:
+          textureDesc.Format = DXGI_FORMAT_R8_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kR8UNorm:
+          textureDesc.Format = DXGI_FORMAT_R8_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kR8UInt:
+          textureDesc.Format = DXGI_FORMAT_R8_UINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kR8SNorm:
+          textureDesc.Format = DXGI_FORMAT_R8_SNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kR8SInt:
+          textureDesc.Format = DXGI_FORMAT_R8_SINT;
+          break;
+
+        case TEXTURE_FORMAT::E::kA8UNorm:
+          textureDesc.Format = DXGI_FORMAT_R8_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kR1UNorm:
+          textureDesc.Format = DXGI_FORMAT_R1_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kR9G9B9E5SHAREDEXP:
+          textureDesc.Format = DXGI_FORMAT_R9G9B9E5_SHAREDEXP;
+          break;
+
+        case TEXTURE_FORMAT::E::kR8G8B8G8UNorm:
+          textureDesc.Format = DXGI_FORMAT_R8G8_B8G8_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kG8R8G8B8UNorm:
+          textureDesc.Format = DXGI_FORMAT_G8R8_G8B8_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kBC1Typeless:
+          textureDesc.Format = DXGI_FORMAT_BC1_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kBC1UNorm:
+          textureDesc.Format = DXGI_FORMAT_BC1_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kBC1UNorm_SRGB:
+          textureDesc.Format = DXGI_FORMAT_BC1_UNORM_SRGB;
+          break;
+
+        case TEXTURE_FORMAT::E::kBC2Typeless:
+          textureDesc.Format = DXGI_FORMAT_BC2_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kBC2UNorm:
+          textureDesc.Format = DXGI_FORMAT_BC2_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kBC2UNorm_SRGB:
+          textureDesc.Format = DXGI_FORMAT_BC2_UNORM_SRGB;
+          break;
+
+        case TEXTURE_FORMAT::E::kBC3Typeless:
+          textureDesc.Format = DXGI_FORMAT_BC3_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kBC3UNorm:
+          textureDesc.Format = DXGI_FORMAT_BC3_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kBC3UNormSRGB:
+          textureDesc.Format = DXGI_FORMAT_BC3_UNORM_SRGB;
+          break;
+
+        case TEXTURE_FORMAT::E::kBC4Typeless:
+          textureDesc.Format = DXGI_FORMAT_BC4_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kBC4UNorm:
+          textureDesc.Format = DXGI_FORMAT_BC4_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kBC4SNorm:
+          textureDesc.Format = DXGI_FORMAT_BC4_SNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kBC5Typeless:
+          textureDesc.Format = DXGI_FORMAT_BC5_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kBC5UNorm:
+          textureDesc.Format = DXGI_FORMAT_BC5_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kBC5SNorm:
+          textureDesc.Format = DXGI_FORMAT_BC5_SNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kB5G6R5UNorm:
+          textureDesc.Format = DXGI_FORMAT_B5G6R5_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kB5G5R5A1UNorm:
+          textureDesc.Format = DXGI_FORMAT_B5G5R5A1_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kB8G8R8A8UNorm:
+          textureDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kB8G8R8X8UNorm:
+          textureDesc.Format = DXGI_FORMAT_B8G8R8X8_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kR10G10B10XRBiasA2UNorm:
+          textureDesc.Format = DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kB8G8R8A8Typeless:
+          textureDesc.Format = DXGI_FORMAT_B8G8R8A8_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kB8G8R8A8UNormSRGB:
+          textureDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB;
+          break;
+
+        case TEXTURE_FORMAT::E::kB8G8R8X8Typeless:
+          textureDesc.Format = DXGI_FORMAT_B8G8R8X8_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kB8G8R8X8UNormSRGB:
+          textureDesc.Format = DXGI_FORMAT_B8G8R8X8_UNORM_SRGB;
+          break;
+
+        case TEXTURE_FORMAT::E::kBC6HTypeless:
+          textureDesc.Format = DXGI_FORMAT_BC6H_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kBC6HUF16:
+          textureDesc.Format = DXGI_FORMAT_BC6H_UF16;
+          break;
+
+        case TEXTURE_FORMAT::E::kBC6HSF16:
+          textureDesc.Format = DXGI_FORMAT_BC6H_SF16;
+          break;
+
+        case TEXTURE_FORMAT::E::kBC7Typeless:
+          textureDesc.Format = DXGI_FORMAT_BC7_TYPELESS;
+          break;
+
+        case TEXTURE_FORMAT::E::kBC7UNorm:
+          textureDesc.Format = DXGI_FORMAT_BC7_UNORM;
+          break;
+
+        case TEXTURE_FORMAT::E::kBC7UNormSRGB:
+          textureDesc.Format = DXGI_FORMAT_BC7_UNORM_SRGB;
+          break;
+      }
+      
       textureDesc.SampleDesc.Count = 1;
       textureDesc.Usage = D3D11_USAGE_DEFAULT;
       textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
@@ -1335,6 +1737,10 @@ namespace gaEngineSDK {
     for (uint32 i = 0; i < tempSize; ++i) {
       TexturesDX* shaderResource = reinterpret_cast<TexturesDX*>(texture[i]);
 
+      if (!shaderResource) {
+        ID3D11ShaderResourceView* temp = nullptr;
+        m_pDeviceContext->PSSetShaderResources(i, numViews, &temp);
+      }
       if (nullptr != shaderResource) {
         m_pDeviceContext->PSSetShaderResources(i, 
                                                numViews, 
@@ -1466,23 +1872,23 @@ namespace gaEngineSDK {
   void
   GraphicsApiDX::setPrimitiveTopology(PRIMITIVE_TOPOLOGY::E topology) {
     switch (topology) {
-      case gaEngineSDK::PRIMITIVE_TOPOLOGY::kPointList:
+      case PRIMITIVE_TOPOLOGY::kPointList:
         m_pDeviceContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
         break;
 
-      case gaEngineSDK::PRIMITIVE_TOPOLOGY::kLineList:
+      case PRIMITIVE_TOPOLOGY::kLineList:
         m_pDeviceContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
         break;
 
-      case gaEngineSDK::PRIMITIVE_TOPOLOGY::kLineStrip:
+      case PRIMITIVE_TOPOLOGY::kLineStrip:
         m_pDeviceContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINESTRIP);
         break;
 
-      case gaEngineSDK::PRIMITIVE_TOPOLOGY::kTriangleList:
+      case PRIMITIVE_TOPOLOGY::kTriangleList:
         m_pDeviceContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
         break;
 
-      case gaEngineSDK::PRIMITIVE_TOPOLOGY::kTriangleStrip:
+      case PRIMITIVE_TOPOLOGY::kTriangleStrip:
         m_pDeviceContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
         break;
 

@@ -1,26 +1,27 @@
 /*
 * Shader for DirectX 11.
+* Geometry buffer.
 * Made by: Ramses Guerrero Ambriz.
 */
 
 //----------------------------------------------------------------------------
 Texture2D baseColor : register(t0);
-Texture2D metallic  : register(t1);
+Texture2D metallic : register(t1);
 Texture2D roughness : register(t2);
-Texture2D normal    : register(t3);
-Texture2D emissive  : register(t4);
-Texture2D opacity   : register(t5);
+Texture2D normal : register(t3);
+Texture2D emissive : register(t4);
+Texture2D opacity : register(t5);
 
 SamplerState simpleSampler : register(s0);
 
 //----------------------------------------------------------------------------
-cbuffer linkToBuffer1 : register(b0)
+cbuffer linkToBufferCamera : register(b0)
 {
   matrix mView;
   matrix mProjection;
 }
 
-cbuffer linkToBuffer2 : register(b1)
+cbuffer linkToBufferWorld : register(b1)
 {
   matrix mWorld;
   float4 objectPosition;

@@ -42,7 +42,7 @@ AppTest::onCreate() {
   */
   /***************************************************************************/
   
-  //createScene();
+  createScene();
   //createNodePod();
   createNodeVela();
   //createNodeTwoB();
@@ -307,7 +307,8 @@ AppTest::createScene() {
   auto mySceneGraph = SceneGraph::instancePtr();
   auto myRSRCMG = ResourceManager::instancePtr();
 
-  SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/scene/House_scene_01.fbx");
+  SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/basicModels/plano.fbx");
+  //SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/basicModels/cubo.obj");
 
   SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
   myStaticMesh->m_pModel = myModel;
@@ -316,7 +317,7 @@ AppTest::createScene() {
   SPtr<Component> newComponent(myStaticMesh);
 
   //Creating actor
-  SPtr<Actor> actor(new Actor("Scene"));
+  SPtr<Actor> actor(new Actor("basicModel"));
   actor->setIsSelected(true);
   actor->setComponent(newComponent);
 

@@ -1,16 +1,17 @@
 /*
 * Shader for DirectX 11.
+* Screeb aligned quad.
 * Made by: Ramses Guerrero Ambriz.
 */
 
 //----------------------------------------------------------------------------
-cbuffer linkToBuffer1 : register(b0)
+cbuffer linkToBufferCamera : register(b0)
 {
   matrix mView;
   matrix mProjection;
 }
 
-cbuffer linkToBuffer2 : register(b1)
+cbuffer linkToBufferWorld : register(b1)
 {
   matrix mWorld;
   float4 objectPosition;

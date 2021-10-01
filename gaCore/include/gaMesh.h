@@ -54,17 +54,17 @@ namespace gaEngineSDK {
     setUpMesh(Vector<Vertex> pVertices, Vector<uint32> pIndices, Vector<Textures*> textures);
 
     void
-    animated(const float& animationTime, 
+    animated(const float& animationTime,
              SPtr<AnimationData> animation,
              WeakSPtr<ModelNodes> structModelNode);
 
     void
-    boneTransform(const float& deltaTime, 
+    boneTransform(const float& deltaTime,
                   SPtr<AnimationData> animation,
                   WeakSPtr<ModelNodes> structModelNode);
 
     void
-    readNodeHierarchy(const float& animationTime, 
+    readNodeHierarchy(const float& animationTime,
                       WeakSPtr<ModelNodes> structModelNode,
                       const Matrix4x4& parentTransform,
                       SPtr<AnimationData> animation);
@@ -176,7 +176,7 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    ConstBuffBonesTransform* m_cbBonesTrans;
+    cbBonesTransform* m_cbBonesTrans;
 
     /*
     * @brief Member to store the texture information.
@@ -198,7 +198,7 @@ namespace gaEngineSDK {
     */
     SPtr<SkeletalMesh> m_skeletalMesh;
 
-  private:
+   private:
     /*
     * @brief .
     */

@@ -206,6 +206,9 @@ namespace gaEngineSDK {
     Matrix4x4
     getProjection();
 
+    Matrix4x4
+    getProjectionPerspective();
+
     /**
     * @brief Function to get the original position of the mouse.
     * @return Pointer position (x, y).
@@ -218,6 +221,12 @@ namespace gaEngineSDK {
     */
     Vector3
     getCamEye();
+
+    /*
+    * @brief .
+    */
+    Vector3
+    getLookAt();
 
    private:
     /*************************************************************************/

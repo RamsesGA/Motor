@@ -94,9 +94,9 @@ namespace gaEngineSDK {
     * B U F F E R S
     * Z O N E
     */
-    m_pCB_BufferCamera.reset(myGraphicsApi->createConstantBuffer(sizeof(ConstantBuffer1)));
-    m_pCB_BufferWorld.reset(myGraphicsApi->createConstantBuffer(sizeof(ConstantBuffer2)));
-    m_pCB_BufferBones.reset(myGraphicsApi->createConstantBuffer(sizeof(ConstBuffBonesTransform)));
+    m_pCB_BufferCamera.reset(myGraphicsApi->createConstantBuffer(sizeof(cbCamera)));
+    m_pCB_BufferWorld.reset(myGraphicsApi->createConstantBuffer(sizeof(cbWorld)));
+    m_pCB_BufferBones.reset(myGraphicsApi->createConstantBuffer(sizeof(cbBonesTransform)));
     m_pCB_SSAO.reset(myGraphicsApi->createConstantBuffer(sizeof(cbSSAO)));
     m_pCB_ViewPortDimension.reset(myGraphicsApi->createConstantBuffer(sizeof(cbViewportDimension)));
     m_pCB_Lightning.reset(myGraphicsApi->createConstantBuffer(sizeof(cbLightning)));
@@ -144,7 +144,13 @@ namespace gaEngineSDK {
     m_pLightning_RT      = myGraphicsApi->createRenderTarget(m_width, m_height);
 
     //Depth
-    m_pDepth_RT = myGraphicsApi->createRenderTarget(m_width, m_height, 1, 1, 1.0f, true);
+    m_pDepth_RT = myGraphicsApi->createRenderTarget(m_width,
+                                                    m_height, 
+                                                    1,
+                                                    1,
+                                                    1.0f,
+                                                    true,
+                                                    TEXTURE_FORMAT::E::kR16Float);
 
     //Shadow map
     m_pShadowMap_RT = myGraphicsApi->createRenderTarget(m_width, m_height, 1, 1, 1.0f, true);
@@ -161,10 +167,7 @@ namespace gaEngineSDK {
                                          TEXTURE_ADDRESS::kTextureAddressClamp,
                                          COMPARISON::kComparisonAlways);
 
-    m_pSampleStateWrap = myGraphicsApi->createSamplerState(
-                                        FILTER::kFilterMinMagMipLinear,
-                                        TEXTURE_ADDRESS::kTextureAddressWrap,
-                                        COMPARISON::kComparisonAlways);
+    m_pSampleStateWrap = myGraphicsApi->createSamplerState();
 
     myGraphicsApi->setSamplerState(m_pSampler, 0);
     myGraphicsApi->setSamplerState(m_pSampleStateClamp, 1);
@@ -189,28 +192,18 @@ namespace gaEngineSDK {
     depthPass();
     shadowMapPass();
 
-    rtGbufferPass();
-    rtSSAO_Pass();
+    gbufferPass();
+    SSAO_Pass();
 
     //Blur AO
     blurH_Pass(m_pSSAO_RT->getRenderTexture(0));
     blurV_Pass(m_pSSAO_RT->getRenderTexture(0));
     additionPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
-    for (uint32 i = 0; i < 2; ++i) {
-      blurH_Pass(m_pAddition_RT->getRenderTexture(0));
-      blurV_Pass(m_pAddition_RT->getRenderTexture(0));
-      additionPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
-    }
 
     //Blur Shadow
     blurH_Pass(m_pShadowMap_RT->getRenderTexture(0));
     blurV_Pass(m_pShadowMap_RT->getRenderTexture(0));
     additionShadowPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
-    for (uint32 i = 0; i < 2; ++i) {
-      blurH_Pass(m_pAddition_RT->getRenderTexture(0));
-      blurV_Pass(m_pAddition_RT->getRenderTexture(0));
-      additionShadowPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
-    }
 
     //Final pass
     lightningPass();
@@ -279,10 +272,10 @@ namespace gaEngineSDK {
       m_mainCamera.inputDetection(KEYBOARD::kC, deltaTime);
     }
 
-    ConstantBuffer1 cb;
-    cb.mView = myGraphicsApi->matrixPolicy(m_mainCamera.getView());
+    cbCamera cameraInfo;
+    cameraInfo.mView = myGraphicsApi->matrixPolicy(m_mainCamera.getView());
 
-    myGraphicsApi->updateConstantBuffer(&cb, m_pCB_BufferCamera);
+    myGraphicsApi->updateConstantBuffer(&cameraInfo, m_pCB_BufferCamera);
   }
 
   void
@@ -295,9 +288,9 @@ namespace gaEngineSDK {
       m_mainCamera.mouseRotation(deltaTime);
     }
 
-    ConstantBuffer1 camera;
-    camera.mView = myGraphicsApi->matrixPolicy(m_mainCamera.getView());
-    myGraphicsApi->updateConstantBuffer(&camera, m_pCB_BufferCamera);
+    cbCamera cameraInfo;
+    cameraInfo.mView = myGraphicsApi->matrixPolicy(m_mainCamera.getView());
+    myGraphicsApi->updateConstantBuffer(&cameraInfo, m_pCB_BufferCamera);
   }
 
   void
@@ -315,7 +308,9 @@ namespace gaEngineSDK {
 
   void
   DeferredRendering::defaultCamera() {
-    m_mainCamera.setLookAt(Vector3(8.0f, 1.0f, 0.0f));
+    //Vector3(8.0f, 1.0f, 0.0f)
+    m_mainCamera.setLookAt(Vector3(0.0f, 0.0f, 0.0f));
+    //
     m_mainCamera.setEye(Vector3(0.0f, 0.0f, -50.0f));
     m_mainCamera.setUp();
     m_mainCamera.setFar();
@@ -326,8 +321,8 @@ namespace gaEngineSDK {
     m_mainCamera.startCamera();
 
     //Defining shadow camera's value
-    m_shadowCamera.setLookAt(Vector3(-100.0f, 100.0f, -100.0f));
-    m_shadowCamera.setEye();
+    m_shadowCamera.setLookAt(Vector3(0.0f, 0.0f, 0.0f));
+    m_shadowCamera.setEye(Vector3(100.0f, 350.0f, -100.0f));
     m_shadowCamera.setUp();
     m_shadowCamera.setFar();
     m_shadowCamera.setNear();
@@ -344,7 +339,7 @@ namespace gaEngineSDK {
   /***************************************************************************/
 
   void
-  DeferredRendering::rtGbufferPass() {
+  DeferredRendering::gbufferPass() {
     auto myGraphicsApi = g_graphicApi().instancePtr();
     auto mySceneGraph = SceneGraph::instancePtr();
 
@@ -380,24 +375,24 @@ namespace gaEngineSDK {
     myGraphicsApi->clearYourRenderTarget(m_pGbuffer_RT, m_rgbaBlue);
     myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
 
-    ConstantBuffer1 meshData;
-    meshData.mProjection = myGraphicsApi->matrixPolicy(m_mainCamera.getProjection());
-    meshData.mView = myGraphicsApi->matrixPolicy(m_mainCamera.getView());
+    cbCamera cameraInfo;
+    cameraInfo.mProjection = myGraphicsApi->matrixPolicy(m_mainCamera.getProjection());
+    cameraInfo.mView = myGraphicsApi->matrixPolicy(m_mainCamera.getView());
 
-    ConstantBuffer2 cb;
-    cb.mWorld = m_world;
-    cb.objectPosition = { 0.0f, 0.0f, 0.0f };
+    cbWorld worldInfo;
+    worldInfo.mWorld = m_world.identity();
+    worldInfo.objectPosition = { 0.0f, 0.0f, 0.0f };
 
     //Update CB.
-    myGraphicsApi->updateConstantBuffer(&meshData, m_pCB_BufferCamera);
-    myGraphicsApi->updateConstantBuffer(&cb, m_pCB_BufferWorld);
+    myGraphicsApi->updateConstantBuffer(&cameraInfo, m_pCB_BufferCamera);
+    myGraphicsApi->updateConstantBuffer(&worldInfo, m_pCB_BufferWorld);
 
     //Render model
     mySceneGraph->render();
   }
 
   void 
-  DeferredRendering::rtSSAO_Pass() {
+  DeferredRendering::SSAO_Pass() {
     auto myGraphicsApi = g_graphicApi().instancePtr();
 
     myGraphicsApi->setRenderTarget(m_pSSAO_RT);
@@ -588,9 +583,13 @@ namespace gaEngineSDK {
     //Update CB
     cbLightning lightningData;
     lightningData.emissiveIntensity = m_pLight->getEmissiveIntensity();
-    lightningData.lightIntensity0 = m_pLight->getIntensity();
-    lightningData.lightPos0 = m_pLight->getPosition();
-    lightningData.vViewPosition = m_shadowCamera.getCamEye();
+    lightningData.lightIntensity = m_pLight->getIntensity();
+    lightningData.lightPosX = m_pLight->getPosition().x;
+    lightningData.lightPosY = m_pLight->getPosition().y;
+    lightningData.lightPosZ = m_pLight->getPosition().z;
+    lightningData.vViewPositionX = m_mainCamera.getCamEye().x;
+    lightningData.vViewPositionY = m_mainCamera.getCamEye().y;
+    lightningData.vViewPositionZ = m_mainCamera.getCamEye().z;
 
     cbInverseView inverseData;
     inverseData.mInverseViewCam = myGraphicsApi->matrixPolicy(m_mainCamera.getView().invert());
@@ -605,7 +604,6 @@ namespace gaEngineSDK {
     myGraphicsApi->setShaderResourceView(m_pAddition_RT->getRenderTexture(0), 3);
     myGraphicsApi->setShaderResourceView(m_pGbuffer_RT->getRenderTexture(2), 4);
     myGraphicsApi->setShaderResourceView(m_pAdditionShadow_RT->getRenderTexture(0), 5);
-    //myGraphicsApi->setShaderResourceView(m_pDepth_RT->getRenderTexture(0), 5);
 
     m_mySAQ->setSAQ();
   }
@@ -651,17 +649,28 @@ namespace gaEngineSDK {
     //Light info
     m_pLight->setAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
     m_pLight->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
-    m_pLight->setLookAt(-100.0f, 100.0f, -100.0f);
-    m_pLight->setPosition(0.0f, 0.0f, -500.0f);
+
+    m_pLight->setLookAt(m_shadowCamera.getLookAt().x,
+                        m_shadowCamera.getLookAt().y,
+                        m_shadowCamera.getLookAt().z);
+
+    m_pLight->setPosition(m_shadowCamera.getCamEye().x, 
+                          m_shadowCamera.getCamEye().y, 
+                          m_shadowCamera.getCamEye().z);
+
     m_pLight->setIntensity(2.0f);
     m_pLight->setEmissiveIntensity(1.5f);
-    
     m_pLight->generateViewMatrix();
+    m_pLight->generateProjectionMatrix(Math::FOV, 0.01f);
 
     Matrix4x4 lightVM;
-    Matrix4x4 lightPM = myGraphicsApi->matrixPolicy(m_shadowCamera.getProjection());
-    m_pLight->getViewMatrix(lightVM);
-    //m_pLight->getProjectionMatrix(lightPM);
+    Matrix4x4 lightPM;
+
+    //m_pLight->getViewMatrix(lightVM);
+    //lightVM = myGraphicsApi->matrixPolicy(lightVM);
+
+    lightVM = myGraphicsApi->matrixPolicy(m_shadowCamera.getView());
+    lightPM = myGraphicsApi->matrixPolicy(m_shadowCamera.getProjection());
 
     //
     myGraphicsApi->setRenderTarget(m_pShadowMap_RT);
@@ -680,12 +689,12 @@ namespace gaEngineSDK {
 
     //Update CB
     cbShadows shadowsData;
-    shadowsData.mLightProjection = lightPM;
-    shadowsData.mLightView = lightVM;
-    shadowsData.mProjection = myGraphicsApi->matrixPolicy(m_shadowCamera.getProjection());
+    shadowsData.mWorld = m_world.identity();
     shadowsData.mView = myGraphicsApi->matrixPolicy(m_shadowCamera.getView());
-    shadowsData.mWorld = m_world;
-
+    shadowsData.mProjection = myGraphicsApi->matrixPolicy(m_shadowCamera.getProjection());
+    shadowsData.mLightView = lightVM;
+    shadowsData.mLightProjection = lightPM;
+    
     cbLight lightData;
     lightData.lightPosition = m_pLight->getPosition();
     lightData.padding = 0.0f;

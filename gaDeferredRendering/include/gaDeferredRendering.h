@@ -84,13 +84,13 @@ namespace gaEngineSDK {
     * @brief .
     */
     void
-    rtGbufferPass();
+    gbufferPass();
 
     /*
     * @brief .
     */
     void
-    rtSSAO_Pass();
+    SSAO_Pass();
 
     /*
     * @brief .

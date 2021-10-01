@@ -291,6 +291,17 @@ namespace gaEngineSDK {
     return m_projection;
   }
 
+  Matrix4x4 
+  Camera::getProjectionPerspective() {
+    Matrix4x4 newProjection;
+    newProjection = m_projection.perspectiveFovLH(m_cameraDesc.camFoV,
+                                                 (float)m_cameraDesc.camWidth,
+                                                 (float)m_cameraDesc.camHeight,
+                                                 m_cameraDesc.camNear,
+                                                 m_cameraDesc.camFar);
+    return newProjection;
+  }
+
   Vector2
   Camera::getOriginalMousePos() {
     return m_originalMousePos;
@@ -300,4 +311,10 @@ namespace gaEngineSDK {
   Camera::getCamEye() {
     return m_cameraDesc.camEye;
   }
+
+  Vector3 
+  Camera::getLookAt() {
+    return m_cameraDesc.camLookAt;
+  }
+
 }

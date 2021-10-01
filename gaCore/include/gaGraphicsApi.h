@@ -345,13 +345,15 @@ namespace gaEngineSDK {
                        uint32 mipLevels = 1,
                        uint32 numRenderTargets = 1, 
                        float scale = 1.0f,
-                       bool depth = false) {
+                       bool depth = false,
+                       TEXTURE_FORMAT::E typeTexture = TEXTURE_FORMAT::E::kR16G16B16A16Float) {
       GA_UNREFERENCED_PARAMETER(width);     
       GA_UNREFERENCED_PARAMETER(height);
       GA_UNREFERENCED_PARAMETER(mipLevels); 
       GA_UNREFERENCED_PARAMETER(numRenderTargets);
       GA_UNREFERENCED_PARAMETER(scale);     
       GA_UNREFERENCED_PARAMETER(depth);
+      GA_UNREFERENCED_PARAMETER(typeTexture);
       return nullptr;
     };
 

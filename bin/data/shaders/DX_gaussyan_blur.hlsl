@@ -1,5 +1,6 @@
 /*
 * Shader for DirectX 11.
+* Blur (gaussyan)
 * Made by: Ramses Guerrero Ambriz.
 */
 
@@ -8,7 +9,7 @@ Texture2D inputImage : register(t0);
 
 SamplerState simpleSampler : register(s0);
 //----------------------------------------------------------------------------
-cbuffer linkToCBViewportDimension: register(b2)
+cbuffer linkToBufferViewportDimension: register(b2)
 {
   float2 viewportDimensions;
   float2 mNothing;

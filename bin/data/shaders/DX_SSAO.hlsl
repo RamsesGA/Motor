@@ -1,5 +1,6 @@
 /*
 * Shader for DirectX 11.
+* SSAO
 * Made by: Ramses Guerrero Ambriz.
 */
 
@@ -9,7 +10,7 @@ Texture2D normalSampler : register(t1);
 SamplerState simpleSampler : register(s0);
 
 //----------------------------------------------------------------------------
-cbuffer linkTocbSSAO : register(b2)
+cbuffer linkToBufferSSAO : register(b2)
 {
   float2 mViewportDimensions;
   float2 mNothing;

@@ -24,12 +24,12 @@ const int32 maxBones = 200;
 * C O N S T A N T
 * B U F F E R S
 */
-struct ConstantBuffer1 {
+struct cbCamera {
   Matrix4x4 mView;
   Matrix4x4 mProjection;
 };
 
-struct ConstantBuffer2 {
+struct cbWorld {
   Matrix4x4 mWorld;
   Vector4 objectPosition;
 };
@@ -51,9 +51,15 @@ struct cbViewportDimension {
 
 struct cbLightning {
   float emissiveIntensity;
-  float lightIntensity0;
-  Vector3 lightPos0;
-  Vector3 vViewPosition;
+  float lightIntensity;
+
+  float lightPosX;
+  float lightPosY;
+  float lightPosZ;
+
+  float vViewPositionX;
+  float vViewPositionY;
+  float vViewPositionZ;
 };
 
 struct cbMipLevels {
@@ -63,7 +69,7 @@ struct cbMipLevels {
   int32 mipLevel3;
 };
 
-struct ConstBuffBonesTransform {
+struct cbBonesTransform {
   Matrix4x4 bonesTransform[maxBones];
 };
 
@@ -124,9 +130,6 @@ struct Vertex {
 struct ssoaInput {
   Vector2 texCoord;
 };
-
-//Shadow map
-
 
 //-----------------------------------------------------------------------------
 namespace FILTER {
