@@ -6,6 +6,7 @@
 
 #define M_PI 3.14159265383
 #define EPSILON 0.00001
+#define SHADOW_BIAS 0.1
 
 Texture2D baseColor : register(t0);
 Texture2D normalTex : register(t1);
@@ -18,6 +19,7 @@ Texture2D shadowTexture : register(t5);
 //TextureCube IBL_diffuse;
 
 SamplerState simpleSampler : register(s0);
+SamplerState sampleTypeClamp : register(s1);
 
 //----------------------------------------------------------------------------
 cbuffer linkToBufferCamera : register(b0)
@@ -66,7 +68,6 @@ struct PS_INPUT
   float4 position : SV_POSITION;
   float2 texCoord : TEXCOORD0;
 };
-
 
 //----------------------------------------------------------------------------
 float3 fresnelSchlick(float3 F0, float cosTheta)
@@ -169,27 +170,25 @@ float4 ps_main(PS_INPUT input) : SV_Target0
   //}
   
   //Shadow
-  float4 inverseWorld = mul(posWorld, mInverseView);
-  float4 shadowPos = mul(inverseWorld, lightViewMatrix);
-  float4 shadowClipPos = mul(shadowPos, lightProjectionMatrix);
+  float localShadow = 1.0f;
+  float4 shadowPos = mul(posWorld, mInverseView);
+  float4 shadowWPos = mul(float4(shadowPos.xyz, 1.0f), lightViewMatrix);
+  float4 shadowClipPos = mul(shadowWPos, lightProjectionMatrix);
   shadowClipPos /= shadowClipPos.w;
 
-  float2 shadowTexCoords = 0.5f + (shadowClipPos.xy * 0.5f);
+  float3 shadowTexCoords = 0.5f + (shadowClipPos.xyz * 0.5f);
   shadowTexCoords.y = 1 - shadowTexCoords.y;
 
-  float finalShadow = shadowTexture.Sample(simpleSampler, shadowTexCoords).x;
-  float localShadow = 1.0f;
-  
-  if ((shadowPos.z - 0.1f) > finalShadow) {
-    localShadow = 0.0f;
-  }
+  float finalShadow = shadowTexture.Sample(sampleTypeClamp, shadowTexCoords.xy).x;
+
+  float currentDepth = shadowTexCoords.z;
+  localShadow = currentDepth + SHADOW_BIAS > finalShadow ? 0.0f : 1.0f;
   
   //return float4(localShadow.xxx, 1.0f);
 
-  float4 finalColor = float4(pow((1 - localShadow) * (diffuse.xyz * NdL * lightIntensity) + 
-                                  (emissive.xyz * emissiveIntensity) + 
-  							      (specular),
-  							      1.0f / gamma), 1);
+  float4 finalColor = float4(pow((1.0f - localShadow) * (diffuse.xyz * NdL * lightIntensity) + 
+                                 (emissive.xyz * emissiveIntensity) + (specular), 1.0f / gamma), 1.0f);
+								 
   finalColor = finalColor * ao;
   return finalColor;
 }

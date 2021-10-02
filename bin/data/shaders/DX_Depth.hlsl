@@ -38,18 +38,33 @@ struct PS_INPUT
 PS_INPUT DepthVS(VS_INPUT input)
 {
   PS_INPUT output = (PS_INPUT)0;
+
+  matrix newMatWorld;
+  newMatWorld[0] = float4(1, 0, 0, 0);
+  newMatWorld[1] = float4(0, 1, 0, 0);
+  newMatWorld[2] = float4(0, 0, 1, 0);
+  newMatWorld[3] = float4(0, 0, 0, 1);
+
+  matrix matWV = mul(newMatWorld, viewMatrix);
+  
+  output.depthPosition = mul(float4(input.position.xyz, 1.0f), matWV).z;
+  
+  matrix matClip = mul(matWV, projectionMatrix);
+
+  //output.position = mul(input.position, matWV);
+  output.position = mul(float4(input.position.xyz, 1.0f), matClip);
   
   // Change the position vector to be 4 units for proper matrix calculations.
-  input.position.w = 1.0f;
+  //input.position.w = 1.0f;
   
   // Calculate the position of the vertex against the world, view, and projection matrices.
-  output.position = mul(input.position, worldMatrix);
-  output.position = mul(output.position, viewMatrix);
+  //output.position = mul(input.position, worldMatrix);
+  //output.position = mul(output.position, viewMatrix);
   
   // Store the position value in a second input value for depth value calculations.
-  output.depthPosition = output.position.z;
+  //output.depthPosition = output.position.z;
   
-  output.position = mul(output.position, projectionMatrix);
+  //output.position = mul(output.position, projectionMatrix);
 
   return output;
 }
