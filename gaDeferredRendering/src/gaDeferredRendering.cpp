@@ -113,7 +113,7 @@ namespace gaEngineSDK {
     m_pCB_Light2.reset(myGraphicsApi->createConstantBuffer(sizeof(cbLight2)));
 
     //Inverse
-    m_pCB_InverseMat.reset(myGraphicsApi->createConstantBuffer(sizeof(cbInverseView)));
+    m_pCB_InverseMat.reset(myGraphicsApi->createConstantBuffer(sizeof(cbInverse)));
 
     /*
     * C R E A T E
@@ -178,6 +178,13 @@ namespace gaEngineSDK {
     m_mySAQ->createSAQ();
 
     /*
+    * S E T
+    * P A S S
+    * I N F O
+    */
+    setGBuffer();
+
+    /*
     * C R E A T E
     * L I G H T
     */
@@ -203,6 +210,9 @@ namespace gaEngineSDK {
   DeferredRendering::update(const float& deltaTime) {
     auto myGraphicsApi = g_graphicApi().instancePtr();
 
+    /*
+    * I N P U T S
+    */
     keyboardButtons(deltaTime);
     mouseRotation(deltaTime);
 
@@ -211,30 +221,17 @@ namespace gaEngineSDK {
     * Z O N E
     */
     depthPass();
-    //shadowMapPass();
+
+    shadowMapPass();
 
     gbufferPass();
     SSAO_Pass();
 
     //Blur AO
-    blurH_Pass(m_pSSAO_RT->getRenderTexture(0));
-    blurV_Pass(m_pSSAO_RT->getRenderTexture(0));
-    additionPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
-    for (uint32 i = 0; i < 2; ++i) {
-      blurH_Pass(m_pAddition_RT->getRenderTexture(0));
-      blurV_Pass(m_pAddition_RT->getRenderTexture(0));
-      additionPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
-    }
-
+    createBlurSSAO();
+    
     //Blur Shadow
-    //blurH_Pass(m_pShadowMap_RT->getRenderTexture(0));
-    //blurV_Pass(m_pShadowMap_RT->getRenderTexture(0));
-    //additionShadowPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
-    //for (uint32 i = 0; i < 2; ++i) {
-    //  blurH_Pass(m_pAddition_RT->getRenderTexture(0));
-    //  blurV_Pass(m_pAddition_RT->getRenderTexture(0));
-    //  additionShadowPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
-    //}
+    createBlurShadow();
 
     //Final pass
     lightningPass();
@@ -263,44 +260,47 @@ namespace gaEngineSDK {
   DeferredRendering::keyboardButtons(const float& deltaTime) {
     auto myInputs = g_baseInputs().instancePtr();
     auto myGraphicsApi = g_graphicApi().instancePtr();
+    auto myInterface = g_baseInterface().instancePtr();
 
-    //Normal movement
-    if (myInputs->getKey(KEYBOARD::kW)) {
-      m_mainCamera.move(KEYBOARD::kW, deltaTime);
-    }
-    else if (myInputs->getKey(KEYBOARD::kS)) {
-      m_mainCamera.move(KEYBOARD::kS, deltaTime);
-    }
-    else if (myInputs->getKey(KEYBOARD::kA)) {
-      m_mainCamera.move(KEYBOARD::kA, deltaTime);
-    }
-    else if (myInputs->getKey(KEYBOARD::kD)) {
-      m_mainCamera.move(KEYBOARD::kD, deltaTime);
-    }
-    else if (myInputs->getKey(KEYBOARD::kQ)) {
-      m_mainCamera.move(KEYBOARD::kQ, deltaTime);
-    }
-    else if (myInputs->getKey(KEYBOARD::kE)) {
-      m_mainCamera.move(KEYBOARD::kE, deltaTime);
-    }
-    //Roll, Yaw, Pitch
-    else if (myInputs->getKey(KEYBOARD::kUP)) {
-      m_mainCamera.inputDetection(KEYBOARD::kUP, deltaTime);
-    }
-    else if (myInputs->getKey(KEYBOARD::kDOWN)) {
-      m_mainCamera.inputDetection(KEYBOARD::kDOWN, deltaTime);
-    }
-    else if (myInputs->getKey(KEYBOARD::kLEFT)) {
-      m_mainCamera.inputDetection(KEYBOARD::kLEFT, deltaTime);
-    }
-    else if (myInputs->getKey(KEYBOARD::kRIGHT)) {
-      m_mainCamera.inputDetection(KEYBOARD::kRIGHT, deltaTime);
-    }
-    else if (myInputs->getKey(KEYBOARD::kZ)) {
-      m_mainCamera.inputDetection(KEYBOARD::kZ, deltaTime);
-    }
-    else if (myInputs->getKey(KEYBOARD::kC)) {
-      m_mainCamera.inputDetection(KEYBOARD::kC, deltaTime);
+    if (!(myInterface->m_touchingImGui)) {
+      //Normal movement
+      if (myInputs->getKey(KEYBOARD::kW)) {
+        m_mainCamera.move(KEYBOARD::kW, deltaTime);
+      }
+      else if (myInputs->getKey(KEYBOARD::kS)) {
+        m_mainCamera.move(KEYBOARD::kS, deltaTime);
+      }
+      else if (myInputs->getKey(KEYBOARD::kA)) {
+        m_mainCamera.move(KEYBOARD::kA, deltaTime);
+      }
+      else if (myInputs->getKey(KEYBOARD::kD)) {
+        m_mainCamera.move(KEYBOARD::kD, deltaTime);
+      }
+      else if (myInputs->getKey(KEYBOARD::kQ)) {
+        m_mainCamera.move(KEYBOARD::kQ, deltaTime);
+      }
+      else if (myInputs->getKey(KEYBOARD::kE)) {
+        m_mainCamera.move(KEYBOARD::kE, deltaTime);
+      }
+      //Roll, Yaw, Pitch
+      else if (myInputs->getKey(KEYBOARD::kUP)) {
+        m_mainCamera.inputDetection(KEYBOARD::kUP, deltaTime);
+      }
+      else if (myInputs->getKey(KEYBOARD::kDOWN)) {
+        m_mainCamera.inputDetection(KEYBOARD::kDOWN, deltaTime);
+      }
+      else if (myInputs->getKey(KEYBOARD::kLEFT)) {
+        m_mainCamera.inputDetection(KEYBOARD::kLEFT, deltaTime);
+      }
+      else if (myInputs->getKey(KEYBOARD::kRIGHT)) {
+        m_mainCamera.inputDetection(KEYBOARD::kRIGHT, deltaTime);
+      }
+      else if (myInputs->getKey(KEYBOARD::kZ)) {
+        m_mainCamera.inputDetection(KEYBOARD::kZ, deltaTime);
+      }
+      else if (myInputs->getKey(KEYBOARD::kC)) {
+        m_mainCamera.inputDetection(KEYBOARD::kC, deltaTime);
+      }
     }
 
     cbCamera cameraInfo;
@@ -339,9 +339,12 @@ namespace gaEngineSDK {
 
   void
   DeferredRendering::defaultCamera() {
-    //Vector3(8.0f, 1.0f, 0.0f)
+    /*
+    * M A I N
+    * C A M E R A
+    * I N F O
+    */
     m_mainCamera.setLookAt(Vector3(0.0f, 0.0f, 0.0f));
-    //
     m_mainCamera.setEye(Vector3(0.0f, 0.0f, -50.0f));
     m_mainCamera.setUp();
     m_mainCamera.setFar();
@@ -351,9 +354,22 @@ namespace gaEngineSDK {
     m_mainCamera.setHeight(m_height);
     m_mainCamera.startCamera();
 
-    //Defining shadow camera's value
+    /*
+    * C A M E R A
+    * S H A D O W
+    * I N F O
+    */
+    Vector4 eye    = Vector4(1.78f, -115.56f, 206.12f, 1.0f);
+    Vector4 lookAt = Vector4(0.0f,   0.0f,  0.0f,   0.0f);
+    Vector4 up     = Vector4(0.0f,   1.0f,  0.0f,   0.0f);
+
+    Matrix4x4 mView = { -1.0f, -0.01f, 0.01f, 0.0f, 
+                        -0.0f, -0.16f, -0.99f, 0.0f,
+                        0.01f, -0.99f, 0.16f, 0.0f,
+                        -19.41f, -81.41f, 330.27f, 1.0f, };
+
     m_shadowCamera.setLookAt(Vector3(0.0f, 0.0f, 0.0f));
-    m_shadowCamera.setEye(Vector3(100.0f, 0.0f, -250.0f));
+    m_shadowCamera.setEye(Vector3(1.78f, -115.56f, 206.12f));
     m_shadowCamera.setUp();
     m_shadowCamera.setFar();
     m_shadowCamera.setNear();
@@ -361,18 +377,25 @@ namespace gaEngineSDK {
     m_shadowCamera.setWidth(m_width);
     m_shadowCamera.setHeight(m_height);
     m_shadowCamera.startCamera();
+
+    m_shadowCamera.setView(mView);
+    m_shadowCamera.setProjection(createOrtographicProyectionLH(-500.0f,
+                                                               500.0f,
+                                                               -500.0f,
+                                                               500.0f,
+                                                               0.1f,
+                                                               2000.0f));
   }
 
   /***************************************************************************/
   /**
-  * Passes.
+  * Info passes.
   */
   /***************************************************************************/
 
-  void
-  DeferredRendering::gbufferPass() {
+  void 
+  DeferredRendering::setGBuffer() {
     auto myGraphicsApi = g_graphicApi().instancePtr();
-    auto mySceneGraph = SceneGraph::instancePtr();
 
     //We save the input layout.
     myGraphicsApi->setInputLayout(m_pVertexLayout);
@@ -388,6 +411,46 @@ namespace gaEngineSDK {
 
     //We keep the cb of the bones.
     myGraphicsApi->setConstBufferBones(m_pCB_BufferBones);
+  }
+
+  void
+  DeferredRendering::createBlurSSAO() {
+    blurH_Pass(m_pSSAO_RT->getRenderTexture(0));
+    blurV_Pass(m_pSSAO_RT->getRenderTexture(0));
+
+    additionPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
+
+    for (uint32 i = 0; i < 2; ++i) {
+      blurH_Pass(m_pAddition_RT->getRenderTexture(0));
+      blurV_Pass(m_pAddition_RT->getRenderTexture(0));
+      additionPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
+    }
+  }
+
+  void
+  DeferredRendering::createBlurShadow() {
+    blurH_Pass(m_pDepth_RT->getRenderTexture(0));
+    blurV_Pass(m_pDepth_RT->getRenderTexture(0));
+
+    additionShadowPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
+
+    for (uint32 i = 0; i < 2; ++i) {
+      blurH_Pass(m_pAdditionShadow_RT->getRenderTexture(0));
+      blurV_Pass(m_pAdditionShadow_RT->getRenderTexture(0));
+      additionShadowPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
+    }
+  }
+
+  /***************************************************************************/
+  /**
+  * Passes.
+  */
+  /***************************************************************************/
+
+  void
+  DeferredRendering::gbufferPass() {
+    auto myGraphicsApi = g_graphicApi().instancePtr();
+    auto mySceneGraph = SceneGraph::instancePtr();
 
     //Here starts the TOTSUGEKI
     myGraphicsApi->setRenderTarget(m_pGbuffer_RT, m_pDepthStencil);
@@ -624,8 +687,9 @@ namespace gaEngineSDK {
     lightningData.vViewPositionY = m_shadowCamera.getLookAt().y;
     lightningData.vViewPositionZ = m_shadowCamera.getLookAt().z;
 
-    cbInverseView inverseData;
-    inverseData.mInverseViewCam = myGraphicsApi->matrixPolicy(m_shadowCamera.getView().invert());
+    cbInverse inverseData;
+    inverseData.mInverseViewCam = myGraphicsApi->matrixPolicy(m_mainCamera.getView().invert());
+    inverseData.mInverseProjectionCam = myGraphicsApi->matrixPolicy(m_mainCamera.getProjection().invert());
 
     cbShadows shadowsData;
     shadowsData.mWorld = m_world.identity();
@@ -644,7 +708,6 @@ namespace gaEngineSDK {
     myGraphicsApi->setShaderResourceView(m_pGbuffer_RT->getRenderTexture(3), 2);
     myGraphicsApi->setShaderResourceView(m_pAddition_RT->getRenderTexture(0), 3);
     myGraphicsApi->setShaderResourceView(m_pGbuffer_RT->getRenderTexture(2), 4);
-    //myGraphicsApi->setShaderResourceView(m_pAdditionShadow_RT->getRenderTexture(0), 5);
     myGraphicsApi->setShaderResourceView(m_pDepth_RT->getRenderTexture(0), 5);
 
     m_mySAQ->setSAQ();
@@ -654,7 +717,7 @@ namespace gaEngineSDK {
   DeferredRendering::depthPass() {
     auto myGraphicsApi = g_graphicApi().instancePtr();
     auto mySceneGraph = SceneGraph::instancePtr();
-    
+
     //We save the input layout.
     myGraphicsApi->setInputLayout(m_pDepthLayout);
 
@@ -679,6 +742,7 @@ namespace gaEngineSDK {
 
     //Render model
     mySceneGraph->render();
+    m_mySAQ->setSAQ();
   }
 
   void
@@ -702,8 +766,6 @@ namespace gaEngineSDK {
     myGraphicsApi->clearYourDepthStencilView(m_pShadowMap_RT);
 
     //Update CB
-    
-    
     cbLight lightData;
     lightData.lightPosition = m_pLight->getPosition();
     lightData.padding = 0.0f;

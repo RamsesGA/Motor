@@ -35,6 +35,15 @@ Vector4::Vector4(float X, float Y, float Z, float W) {
     return (x * vector.x) + (y * vector.y) + (z * vector.z) + (w * vector.w);
   }
   
+  Vector4
+  Vector4::crossProduct(const Vector4& vector) const {
+    Vector4 temp(y * vector.z - z * vector.y,
+                 x * vector.z - z * vector.x, 
+                 x * vector.y - y * vector.x,
+                 0.0f);
+    return temp;
+  }
+
   /***************************************************************************/
   /**
   * Operator overload.

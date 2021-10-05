@@ -275,6 +275,16 @@ namespace gaEngineSDK {
     m_cameraDesc.camWidth = width;
   }
 
+  void
+  Camera::setView(Matrix4x4 mView) {
+    m_view = mView;
+  }
+
+  void
+  Camera::setProjection(Matrix4x4 mProjection) {
+    m_projection = mProjection;
+  }
+
   /***************************************************************************/
   /**
   * Gets

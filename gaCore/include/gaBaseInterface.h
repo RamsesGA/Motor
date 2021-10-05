@@ -44,7 +44,31 @@ namespace gaEngineSDK {
     virtual void
     render() {};
 
+    /*
+    * @brief .
+    */
+    virtual void
+    mouseButtonDown(uint32 button) {};
+
+    /*
+    * @brief .
+    */
+    virtual void
+    mouseButtonReleased(uint32 button) {};
+
+    /*
+    * @brief .
+    */
+    virtual void
+    textEnter(wchar_t unicode) {};
+
+
+
+
+
     bool m_touchingImGui = false;
+
+    void* m_windowsHandle = nullptr;
   };
 
   /***************************************************************************/

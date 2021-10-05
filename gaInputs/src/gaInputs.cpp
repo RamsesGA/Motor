@@ -15,10 +15,10 @@ namespace gaEngineSDK {
     m_manager.SetDisplaySize(width, height);
 
     //Init own members
-    m_mouseBtnMap    = new gainput::InputMap(m_manager);
-    m_mouseAxisMap   = new gainput::InputMap(m_manager);
-    m_keyMap         = new gainput::InputMap(m_manager);
-    m_gamepadBtnMap  = new gainput::InputMap(m_manager);
+    m_mouseBtnMap = new gainput::InputMap(m_manager);
+    m_mouseAxisMap = new gainput::InputMap(m_manager);
+    m_keyMap = new gainput::InputMap(m_manager);
+    m_gamepadBtnMap = new gainput::InputMap(m_manager);
     m_gamepadAxisMap = new gainput::InputMap(m_manager);
 
     //Mapping keyboard

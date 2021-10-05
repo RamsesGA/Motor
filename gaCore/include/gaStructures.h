@@ -99,8 +99,9 @@ struct cbLight2 {
   Vector4 diffuseColor;
 };
 
-struct cbInverseView {
+struct cbInverse {
   Matrix4x4 mInverseViewCam;
+  Matrix4x4 mInverseProjectionCam;
 };
 
 //-----------------------------------------------------------------------------

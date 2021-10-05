@@ -6,7 +6,7 @@
 
 #define M_PI 3.14159265383
 #define EPSILON 0.00001
-#define SHADOW_BIAS 0.1
+#define SHADOW_BIAS 0.001
 
 Texture2D baseColor : register(t0);
 Texture2D normalTex : register(t1);
@@ -48,9 +48,10 @@ cbuffer linkToBufferLightning : register(b2)
   float vViewPositionZ;
 }
 
-cbuffer linkToBufferInverseCam : register(b3)
+cbuffer linkToBufferInverse : register(b3)
 {
   matrix mInverseView;
+  matrix mInverseProjection;
 }
 
 cbuffer linkToBufferShadows : register(b4)
@@ -108,7 +109,8 @@ float4 ps_main(PS_INPUT input) : SV_Target0
   float gamma = 2.2f;
   
   float4 posWorld = float4(posTexture.Sample(simpleSampler, input.texCoord).xyz, 1.0f);
-  
+  float4 posWorldView = mul(posWorld, mView);  
+
   float4x4 matWV = mul(mWorld, mView);
   
   float4 normal = normalTex.Sample(simpleSampler, input.texCoord);
@@ -128,10 +130,10 @@ float4 ps_main(PS_INPUT input) : SV_Target0
   float3 specular_F0 = lerp(0.04f, diffuse.xyz, metallic);
   
   //Light
-  float3 wvLightPos = mul(float4(lightPosX, lightPosY, lightPosZ, 1.0f), matWV);
-  float4 wvViewPosition = mul(float3(vViewPositionX, vViewPositionY, vViewPositionZ), matWV);
+  float4 wvLightPos = mul(float4(lightPosX, lightPosY, lightPosZ, 1.0f), matWV);
+  float4 wvViewPosition = mul(float4(vViewPositionX, vViewPositionY, vViewPositionZ, 1.0f), matWV);
   
-  float3 LightDir = normalize(wvLightPos.xyz - posWorld.xyz);
+  float3 LightDir = -normalize(wvLightPos.xyz - posWorld.xyz);
   float3 ViewDir = normalize(wvViewPosition.xyz - posWorld.xyz);
   
   float NdL = max(0.0f, dot(normal.xyz, LightDir));
@@ -171,20 +173,33 @@ float4 ps_main(PS_INPUT input) : SV_Target0
   
   //Shadow
   float localShadow = 1.0f;
+  posWorld.w = 1.0f;
+
+  float4 vertexPos = mul(posWorld, mView);
+  vertexPos = mul(vertexPos, mProjection);
+
   float4 shadowPos = mul(posWorld, mInverseView);
-  float4 shadowWPos = mul(float4(shadowPos.xyz, 1.0f), lightViewMatrix);
+  shadowPos = mul(shadowPos, lightViewMatrix);
+
+  float4 shadowWPos = shadowPos;
   float4 shadowClipPos = mul(shadowWPos, lightProjectionMatrix);
+  
   shadowClipPos /= shadowClipPos.w;
 
-  float3 shadowTexCoords = 0.5f + (shadowClipPos.xyz * 0.5f);
-  shadowTexCoords.y = 1 - shadowTexCoords.y;
+  float2 shadowTexCoords = 0.5f + (shadowClipPos.xyz * 0.5f);
+  shadowTexCoords.x = shadowClipPos.x / 2.0f + 0.5f;
+  shadowTexCoords.y = -shadowClipPos.y / 2.0f + 0.5f;
 
   float finalShadow = shadowTexture.Sample(sampleTypeClamp, shadowTexCoords.xy).x;
 
-  float currentDepth = shadowTexCoords.z;
-  localShadow = currentDepth + SHADOW_BIAS > finalShadow ? 0.0f : 1.0f;
-  
-  //return float4(localShadow.xxx, 1.0f);
+  float currentDepth = shadowClipPos.z - SHADOW_BIAS;
+  //currentDepth = vertexPos.z / vertexPos.w;
+
+  localShadow = currentDepth < finalShadow ? 0.0f : 1.0f;
+
+  if (currentDepth < finalShadow) { 
+    //localShadow = 0.0f;
+  }
 
   float4 finalColor = float4(pow((1.0f - localShadow) * (diffuse.xyz * NdL * lightIntensity) + 
                                  (emissive.xyz * emissiveIntensity) + (specular), 1.0f / gamma), 1.0f);

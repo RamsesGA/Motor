@@ -18,19 +18,22 @@ namespace gaEngineSDK {
 
     m_width = width;
     m_height = height;
-    m_hwndHandle = hwndHandle;
+    m_windowsHandle = hwndHandle;
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
 
-    ImGui_ImplWin32_Init(m_hwndHandle);
+    ImGui_ImplWin32_Init(m_windowsHandle);
     ImGui_ImplDX11_Init((ID3D11Device*)myGraphicsApi->getDevice(), 
                         (ID3D11DeviceContext*)myGraphicsApi->getDeviceContext());
+
     ImGui::StyleColorsDark();
 
     io.Fonts->AddFontFromFileTTF("data/misc/fonts/CoD.otf", 16.0f);
 
+    m_text.resize(500);
+    m_size = 100.0f;
   }
 
   void 
@@ -46,22 +49,23 @@ namespace gaEngineSDK {
     ImGuiIO& io = ImGui::GetIO();
 
     //No Touching
-    if (io.WantCaptureMouse == 0) {
+    if (0 == io.WantCaptureMouse) {
       m_touchingImGui = false;
     }
     else {
       m_touchingImGui = true;
     }
 
+    /*
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(ImVec2(m_width, 22));
-    if (ImGui::Begin("Menu bar", nullptr, ImGuiWindowFlags_NoResize | 
-                                          ImGuiWindowFlags_NoCollapse | 
-                                          ImGuiWindowFlags_NoMove | 
-                                          ImGuiWindowFlags_NoBringToFrontOnFocus | 
-                                          ImGuiWindowFlags_NoTitleBar | 
-                                          ImGuiWindowFlags_MenuBar |
-                                          ImGuiWindowFlags_NoScrollWithMouse)) {
+    if (ImGui::Begin("Main menu bar", nullptr, ImGuiWindowFlags_NoResize              |
+                                               ImGuiWindowFlags_NoCollapse            |
+                                               ImGuiWindowFlags_NoMove                |
+                                               ImGuiWindowFlags_NoBringToFrontOnFocus |
+                                               ImGuiWindowFlags_NoTitleBar            |
+                                               ImGuiWindowFlags_MenuBar               |
+                                               ImGuiWindowFlags_NoScrollWithMouse)) {
       if (ImGui::BeginMenuBar()) {
         const char* tabs[] = { "File", "Edit", "Window", "Help" };
         static int32 page = 0;
@@ -88,12 +92,78 @@ namespace gaEngineSDK {
 
     }
     ImGui::End();
+    */
     
+    ImGui::SetNextWindowPos(ImVec2(0, 0));
+    ImGui::SetNextWindowSize(ImVec2(m_width, 22));
+    if (ImGui::Begin("Menu title bar", nullptr, ImGuiWindowFlags_NoResize |
+                                                ImGuiWindowFlags_NoCollapse |
+                                                ImGuiWindowFlags_NoMove |
+                                                ImGuiWindowFlags_NoBringToFrontOnFocus |
+                                                ImGuiWindowFlags_NoTitleBar |
+                                                ImGuiWindowFlags_MenuBar |
+                                                ImGuiWindowFlags_NoScrollWithMouse)) {
+      if (ImGui::BeginMenu("Menu")) {
 
+      }
+    }
+    ImGui::End();
+
+    ImGui::Begin("Test window");
+    ImGui::InputText("Test text", m_text.data(), 500);
+    ImGui::DragFloat("Test Drag", &m_size);
+    ImGui::End();
 
 
 
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
   }
+
+  /***************************************************************************/
+  /**
+  * Inputs for ImGui.
+  */
+  /***************************************************************************/
+
+  void 
+  Interface::mouseButtonDown(uint32 button) {
+    ImGuiIO& io = ImGui::GetIO();
+
+    if (!(ImGui::IsAnyMouseDown()) && (nullptr == ::GetCapture())) {
+      ::SetCapture((HWND)m_windowsHandle);
+    }
+
+    io.MouseDown[button] = true;
+  }
+
+  void
+  Interface::mouseButtonReleased(uint32 button) {
+    ImGuiIO& io = ImGui::GetIO();
+
+    if (!(ImGui::IsAnyMouseDown()) && (m_windowsHandle == ::GetCapture())) {
+      ::ReleaseCapture();
+    }
+
+    io.MouseDown[button] = false;
+  }
+
+  void 
+  Interface::textEnter(wchar_t unicode) {
+    ImGuiIO& io = ImGui::GetIO();
+
+    io.AddInputCharacterUTF16((USHORT)unicode);
+  }
+
+  /***************************************************************************/
+  /**
+  * Methods for ImGui.
+  */
+  /***************************************************************************/
+
+  void 
+  Interface::menuBarFiles() {
+
+  }
+
 }

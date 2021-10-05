@@ -611,4 +611,66 @@ namespace gaEngineSDK {
       }
     }
   }
+
+  GA_UTILITY_EXPORT Matrix4x4 
+  createViewMatrix(const Vector4& eye, const Vector4& lookAt, const Vector4& up) {
+    Matrix4x4 viewMatrix;
+
+    Vector4 front = lookAt - eye;
+    front.normalize();
+
+    Vector4 right = up.crossProduct(front);
+    right.normalize();
+
+    Vector4 realUp = front.crossProduct(right);
+
+    viewMatrix = { right.x, realUp.x, front.x, 0.0f,
+                   right.y, realUp.y, front.y, 0.0f,
+                   right.z, realUp.z, front.z, 0.0f,
+                   0.0f,    0.0f,     0.0f,    1.0f };
+
+    Matrix4x4 position;
+
+    position.m_mat4x4[3][0] = eye.x;
+    position.m_mat4x4[3][1] = eye.y;
+    position.m_mat4x4[3][2] = eye.z;
+
+    viewMatrix *= position;
+
+    return viewMatrix;
+  }
+
+  GA_UTILITY_EXPORT Matrix4x4
+  createOrtographicProyectionLH(const float& bottom, 
+                                const float& top, 
+                                const float& left, 
+                                const float& right, 
+                                const float& _near, 
+                                const float& _far) {
+    Matrix4x4 ortographic;
+    float range = 1.0f / (_far - _near);
+
+    ortographic.m_mat4x4[0][0] = 2.0f / (right - left);
+    ortographic.m_mat4x4[0][1] = 0.0f;
+    ortographic.m_mat4x4[0][2] = 0.0f;
+    ortographic.m_mat4x4[0][3] = 0.0f;
+
+    ortographic.m_mat4x4[1][0] = 0.0f;
+    ortographic.m_mat4x4[1][1] = 2.0f / (top - bottom);
+    ortographic.m_mat4x4[1][2] = 0.0f;
+    ortographic.m_mat4x4[1][3] = 0.0f;
+
+    ortographic.m_mat4x4[2][0] = 0.0f;
+    ortographic.m_mat4x4[2][1] = 0.0f;
+    ortographic.m_mat4x4[2][2] = range;
+    ortographic.m_mat4x4[2][3] = 0.0f;
+
+    ortographic.m_mat4x4[3][0] = 0.0f;
+    ortographic.m_mat4x4[3][1] = 0.0f;
+    ortographic.m_mat4x4[3][2] = -range * _near;
+    ortographic.m_mat4x4[3][3] = 1.0f;
+
+    return ortographic;
+  }
+
 }

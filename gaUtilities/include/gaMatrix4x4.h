@@ -260,4 +260,15 @@ namespace gaEngineSDK {
     
     float m_mat4x4[4][4];
   };
+
+  GA_UTILITY_EXPORT extern Matrix4x4
+  createViewMatrix(const Vector4& eye, const Vector4& lookAt, const Vector4& up);
+
+  GA_UTILITY_EXPORT extern Matrix4x4
+  createOrtographicProyectionLH(const float& bottom, 
+                                const float& top,
+                                const float& left,
+                                const float& right, 
+                                const float& _near,
+                                const float& _far);
 }

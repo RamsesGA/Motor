@@ -186,6 +186,18 @@ namespace gaEngineSDK {
     void
     setWidth(float width);
 
+    /*
+    * @brief .
+    */
+    void
+    setView(Matrix4x4 vView);
+
+    /*
+    * @brief .
+    */
+    void
+    setProjection(Matrix4x4 mProjection);
+
     /*************************************************************************/
     /**
     * Gets

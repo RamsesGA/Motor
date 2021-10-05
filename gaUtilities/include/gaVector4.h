@@ -43,7 +43,16 @@ namespace gaEngineSDK {
     * @return Determine the angle between vectors.
     */
     float
-    dotProduct(const Vector4& vector)const;
+    dotProduct(const Vector4& vector) const;
+
+    /*
+    * @brief This function do cross product between this vector and another.
+    * @param Vector with do the cross product.
+    * @return Vector with the cross result.
+    * @note This function not modify any vector.
+    */
+    Vector4
+    crossProduct(const Vector4& vector) const;
     
     /*************************************************************************/
     /**

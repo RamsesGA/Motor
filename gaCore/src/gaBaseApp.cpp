@@ -236,6 +236,16 @@ namespace gaEngineSDK {
         if ((Mouse::Left == windowEvent.key.code) && (!myInterface->m_touchingImGui)) {
           myRenderer->onLeftMouseBtnDown();
         }
+
+        myInterface->mouseButtonDown(windowEvent.mouseButton.button);
+        break;
+
+      case Event::MouseButtonReleased:
+        myInterface->mouseButtonReleased(windowEvent.mouseButton.button);
+        break;
+
+      case Event::TextEntered:
+        myInterface->textEnter(windowEvent.text.unicode);
         break;
 
       default:
