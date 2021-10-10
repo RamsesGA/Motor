@@ -27,6 +27,13 @@ cbuffer linkToBufferWorld : register(b1)
   float4 objectPosition;
 }
 
+cbuffer linkToBufferModelData : register(b2)
+{
+  matrix modelMatrix;
+  matrix bonesTransform[200];
+}
+
+
 //----------------------------------------------------------------------------
 struct VS_INPUT
 {

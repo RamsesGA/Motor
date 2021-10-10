@@ -176,7 +176,7 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    cbBonesTransform* m_cbBonesTrans;
+    cbModelData* m_cbModelData;
 
     /*
     * @brief Member to store the texture information.

@@ -1,34 +1,42 @@
+#include <gaGraphicsApi.h>
+
 #include "gaLights.h"
 
+
 namespace gaEngineSDK {
-  void 
-  Lights::generateViewMatrix() {
-    Vector3 up;
 
-    // Setup the vector that points upwards.
-    up.x = 0.0f;
-    up.y = 1.0f;
-    up.z = 0.0f;
+  Lights::Lights(Vector3 position, Vector3 lookAt) {
+    auto myGraphicsApi = g_graphicApi().instancePtr();
+    
+    m_pLightCamera = make_shared<Camera>();
+    m_pLightCamera->setEye(position);
+    m_pLightCamera->setLookAt(lookAt);
+    m_pLightCamera->setUp();
+    m_pLightCamera->setFar();
+    m_pLightCamera->setNear();
+    m_pLightCamera->setFoV();
+    m_pLightCamera->setWidth(myGraphicsApi->m_width);
+    m_pLightCamera->setHeight(myGraphicsApi->m_height);
 
-    // Create the view matrix from the three vectors.
-    m_viewMatrix = m_viewMatrix.matrixLookAtLH(&m_position, &m_lookAt, &up);
-  }
+    m_pLightCamera->startCamera();
 
-  void 
-  Lights::generateProjectionMatrix(float screenDepth, float screenNear) {
-    float fieldOfView;
-    float screenAspect;
+    Matrix4x4 mView = {-1.0f,   -0.01f,  0.01f,   0.0f,
+                       -0.0f,   -0.16f, -0.99f,   0.0f,
+                        0.01f,  -0.99f,  0.16f,   0.0f,
+                       -19.41f, -81.41f, 330.27f, 1.0f };
 
-    // Setup field of view and screen aspect for a square light source.
-    fieldOfView = Math::PI / 2.0f;
-    screenAspect = 1.0f;
+    m_pLightCamera->setView(mView);
 
-    // Create the projection matrix for the light.
-    m_projectionMatrix = m_projectionMatrix.perspectiveFovLH(fieldOfView, 
-                                                             screenAspect, 
-                                                             screenAspect,
-                                                             screenNear,
-                                                             screenDepth);
+    //m_pLightCamera->setView(createViewMatrix(m_pLightCamera->getCamEye(),
+    //                                         m_pLightCamera->getLookAt(), 
+    //                                         m_pLightCamera->getCamUp()));
+
+    m_pLightCamera->setProjection(createOrtographicProyectionLH(-500.0f,
+                                                                500.0f,
+                                                                -500.0f,
+                                                                500.0f,
+                                                                0.1f,
+                                                                2000.0f));
   }
 
   /***************************************************************************/
@@ -48,14 +56,12 @@ namespace gaEngineSDK {
 
   void 
   Lights::setPosition(float x, float y, float z) {
-    m_position = Vector3(x, y, z);
+    m_pLightCamera->setEye(Vector3(x, y, z));
   }
 
   void
   Lights::setLookAt(float x, float y, float z) {
-    m_lookAt.x = x;
-    m_lookAt.y = y;
-    m_lookAt.z = z;
+    m_pLightCamera->setLookAt(Vector3(x, y, z));
   }
 
   void
@@ -85,17 +91,22 @@ namespace gaEngineSDK {
 
   Vector3 
   Lights::getPosition() {
-    return m_position;
+    return m_pLightCamera->getCamEye();
   }
 
-  void
-  Lights::getViewMatrix(Matrix4x4& mView) {
-    mView = m_viewMatrix;
+  Vector3 
+  Lights::getLookAt() {
+    return m_pLightCamera->getLookAt();
   }
 
-  void 
-  Lights::getProjectionMatrix(Matrix4x4& mProjection) {
-    mProjection = m_projectionMatrix;
+  Matrix4x4
+  Lights::getViewMatrix() {
+    return m_pLightCamera->getView();
+  }
+
+  Matrix4x4
+  Lights::getProjectionMatrix() {
+    return m_pLightCamera->getProjection();
   }
 
   float

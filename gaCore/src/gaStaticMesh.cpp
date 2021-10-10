@@ -2,6 +2,8 @@
 #include "gaGraphicsApi.h"
 #include "gaModels.h"
 #include "gaMesh.h"
+#include "gaActor.h"
+#include "gaTransform.h"
 
 using std::make_shared;
 
@@ -27,7 +29,7 @@ namespace gaEngineSDK {
       uint32 meshNum = 0;
 
       for (auto& mesh : m_pModel->m_vMeshes) {
-        mesh.m_cbBonesTrans = &m_pModel->m_vMeshBones[meshNum];
+        mesh.m_cbModelData = &m_pModel->m_vModelData[meshNum];
         mesh.animated(m_timeOfAnimation, currentAnimation, m_pModel->m_animInfo.m_pStrModelNodes);
         ++meshNum;
       }
@@ -41,7 +43,10 @@ namespace gaEngineSDK {
     uint32 meshNum = 0;
 
     for (auto& mesh : m_pModel->m_vMeshes) {
-      myGraphicApi->updateConstantBuffer(&m_pModel->m_vMeshBones[meshNum],
+      m_pModel->m_vModelData[meshNum].modelMatrix = m_pMyActor->getComponent<Transform>()->getTransform();
+      //auto temp = m_pMyActor->getComponent<Transform>();
+
+      myGraphicApi->updateConstantBuffer(&m_pModel->m_vModelData[meshNum],
                                          myGraphicApi->getConstBufferBones());
 
       if (!(m_pModel->m_vMeshes[meshNum].m_vTextures.empty())) {

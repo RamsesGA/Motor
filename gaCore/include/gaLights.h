@@ -3,11 +3,15 @@
 #include <gaVector3.h>
 #include <gaVector4.h>
 #include <gaMatrix4x4.h>
+#include <gaCamera.h>
 
 #include "gaPrerequisitesCore.h"
+#include "gaComponent.h"
+
+using std::make_shared;
 
 namespace gaEngineSDK {
-  class GA_CORE_EXPORT Lights
+  class GA_CORE_EXPORT Lights : public Component
   {
    public:
     /*************************************************************************/
@@ -15,21 +19,9 @@ namespace gaEngineSDK {
     * Constructor and destructor.
     */
     /*************************************************************************/
-    Lights() = default;
+    Lights(Vector3 position, Vector3 lookAt);
 
     ~Lights() = default;
-
-    /*************************************************************************/
-    /**
-    * Methods.
-    */
-    /*************************************************************************/
-
-    void
-    generateViewMatrix();
-
-    void
-    generateProjectionMatrix(float screenDepth, float screenNear);
 
     /*************************************************************************/
     /**
@@ -70,11 +62,14 @@ namespace gaEngineSDK {
     Vector3
     getPosition();
 
-    void
-    getViewMatrix(Matrix4x4& mView);
+    Vector3
+    getLookAt();
 
-    void
-    getProjectionMatrix(Matrix4x4& mProjection);
+    Matrix4x4
+    getViewMatrix();
+
+    Matrix4x4
+    getProjectionMatrix();
 
     float
     getIntensity();
@@ -94,9 +89,7 @@ namespace gaEngineSDK {
 
     Vector4 m_ambientColor;
     Vector4 m_diffuseColor;
-    Vector3 m_position;
-    Vector3 m_lookAt;
-    Matrix4x4 m_viewMatrix;
-    Matrix4x4 m_projectionMatrix;
+
+    SPtr<Camera> m_pLightCamera;
   };
 }

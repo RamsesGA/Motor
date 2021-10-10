@@ -200,6 +200,7 @@
     <ClInclude Include="include\gaStaticMesh.h" />
     <ClInclude Include="include\gaStructures.h" />
     <ClInclude Include="include\gaTextures.h" />
+    <ClInclude Include="include\gaTransform.h" />
     <ClInclude Include="include\gaVertexBuffer.h" />
     <ClInclude Include="include\gaVertexShader.h" />
     <ClInclude Include="include\stb_image.h" />
@@ -224,6 +225,7 @@
     <ClCompile Include="src\gaSceneGraph.cpp" />
     <ClCompile Include="src\gaSceneNode.cpp" />
     <ClCompile Include="src\gaStaticMesh.cpp" />
+    <ClCompile Include="src\gaTransform.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

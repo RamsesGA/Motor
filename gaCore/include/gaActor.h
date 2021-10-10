@@ -3,11 +3,12 @@
 #include <gaTransform.h>
 
 #include "gaPrerequisitesCore.h"
-#include "gaGameObject.h"
 #include "gaComponent.h"
 
 namespace gaEngineSDK {
-  class GA_CORE_EXPORT Actor final : public GameObject
+  using std::dynamic_pointer_cast;
+
+  class GA_CORE_EXPORT Actor
   {
    public:
     /*************************************************************************/
@@ -27,7 +28,7 @@ namespace gaEngineSDK {
     /*************************************************************************/
     
     void
-    removeComponent() override;
+    removeComponent();
     
     /*
     * @brief Actor information update.
@@ -37,7 +38,7 @@ namespace gaEngineSDK {
     actorUpdate(const float& deltaTime);
     
     void
-    actorRender() override;
+    actorRender();
     
     /*************************************************************************/
     /**
@@ -46,10 +47,25 @@ namespace gaEngineSDK {
     /*************************************************************************/
     
     bool
-    getIsSelected() override;
+    getIsSelected();
     
     String
-    getActorName() override;
+    getActorName();
+
+    template<typename T> 
+    SPtr<T>
+    getComponent(){
+      for (auto component : m_vComponents) {
+        auto ptr = component.get();
+        auto result = dynamic_cast<T*>(ptr);
+
+        if (result) {
+          return SPtr<T>(result);
+        }
+      }
+
+      return nullptr;
+    };
     
     /*************************************************************************/
     /**
@@ -58,13 +74,13 @@ namespace gaEngineSDK {
     /*************************************************************************/
     
     void
-    setIsSelected(bool isSelect) override;
+    setIsSelected(bool isSelect);
     
     void
-    setActorName(String name) override;
+    setActorName(String name);
     
     void
-    setComponent(WeakSPtr<Component> compoInfo) override;
+    setComponent(WeakSPtr<Component> compoInfo);
     
    protected:
     /*************************************************************************/
@@ -93,4 +109,5 @@ namespace gaEngineSDK {
     */
     Vector<SPtr<Component>> m_vComponents;
   };
+
 }

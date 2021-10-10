@@ -7,6 +7,8 @@ namespace gaEngineSDK {
   Actor::Actor(String actorName) {
     m_actorName = actorName;
     m_actorTransform.reset(new Transform());
+
+    setComponent(m_actorTransform);
   }
 
   void 
@@ -60,6 +62,9 @@ namespace gaEngineSDK {
 
   void
   Actor::setComponent(WeakSPtr<Component> compoInfo) {
-    m_vComponents.push_back(compoInfo.lock());
+    SPtr<Component> comp(compoInfo.lock());
+    comp->m_pMyActor.reset(this);
+
+    m_vComponents.push_back(comp);
   }
 }

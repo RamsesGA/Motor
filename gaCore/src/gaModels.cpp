@@ -109,7 +109,7 @@ namespace gaEngineSDK {
 
     g_animInfo = m_animInfo;
     g_vAnimationData =m_vAnimationData;
-    g_vMeshes.resize(m_vMeshBones.size());
+    g_vMeshes.resize(m_vModelData.size());
     g_vMeshes = m_vMeshes;
     g_mMaterials = m_mMaterials;
     g_vMeshName = m_vMeshName;
@@ -121,7 +121,7 @@ namespace gaEngineSDK {
 
     m_animInfo = g_animInfo;
     m_vAnimationData = g_vAnimationData;
-    m_vMeshBones.resize(g_vMeshes.size());
+    m_vModelData.resize(g_vMeshes.size());
     m_vMeshes = g_vMeshes;
     m_mMaterials = g_mMaterials;
     m_vMeshName = g_vMeshName;

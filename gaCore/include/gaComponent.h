@@ -3,6 +3,8 @@
 #include "gaPrerequisitesCore.h"
 
 namespace gaEngineSDK {
+  class Actor;
+
   class GA_CORE_EXPORT Component
   {
    public:
@@ -34,5 +36,7 @@ namespace gaEngineSDK {
     */
     virtual void
     render() { };
+
+    SPtr<Actor> m_pMyActor;
   };
 }

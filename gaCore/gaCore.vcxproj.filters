@@ -145,6 +145,9 @@
     <ClInclude Include="include\gaBasePhysics.h">
       <Filter>Archivos de origen\BasePhysics</Filter>
     </ClInclude>
+    <ClInclude Include="include\gaTransform.h">
+      <Filter>Archivos de origen</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gaBaseApp.cpp">
@@ -203,6 +206,9 @@
     </ClCompile>
     <ClCompile Include="src\gaBasePhysics.cpp">
       <Filter>Archivos de origen\BasePhysics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaTransform.cpp">
+      <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -12,6 +12,12 @@ cbuffer linkToBufferMatrixB : register(b0)
   matrix projectionMatrix;
 };
 
+cbuffer linkToBufferModelData : register(b1)
+{
+  matrix modelMatrix;
+  matrix bonesTransform[200];
+}
+
 
 //----------------------------------------------------------------------------VS
 struct VS_INPUT

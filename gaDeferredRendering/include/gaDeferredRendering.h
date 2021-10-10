@@ -87,7 +87,7 @@ namespace gaEngineSDK {
     createBlurSSAO();
 
     void
-    createBlurShadow();
+    createBlurDepth();
 
     /*************************************************************************/
     /*
@@ -129,7 +129,7 @@ namespace gaEngineSDK {
     * @brief .
     */
     void
-    additionShadowPass(void* texture1, void* texture2);
+    additionDepthPass(void* texture1, void* texture2);
 
     /*
     * @brief .
@@ -142,12 +142,6 @@ namespace gaEngineSDK {
     */
     void
     depthPass();
-
-    /*
-    * @brief .
-    */
-    void
-    shadowMapPass();
 
    protected:
     /*************************************************************************/
@@ -166,8 +160,6 @@ namespace gaEngineSDK {
     * @brief Variable with camera information.
     */
     Camera m_mainCamera;
-
-    Camera m_shadowCamera;
 
     /*
     * @brief 4x4 matrix of the world.
@@ -205,9 +197,8 @@ namespace gaEngineSDK {
     SPtr<Shaders> m_pBlurV_Shader;
     SPtr<Shaders> m_pLightning_Shader;
     SPtr<Shaders> m_pAddition_Shader;
-    SPtr<Shaders> m_pAdditionShadow_Shader;
+    SPtr<Shaders> m_pAdditionDepth_Shader;
     SPtr<Shaders> m_pDepth_Shader;
-    SPtr<Shaders> m_pShadowMap_Shader;
 
     /*
     * @brief Members for renter targets.
@@ -223,9 +214,6 @@ namespace gaEngineSDK {
     //Depth map
     SPtr<RenderTarget> m_pDepth_RT;
 
-    //Shader Map
-    SPtr<RenderTarget> m_pShadowMap_RT;
-
     /*
     * @brief Variable that stores the CB data.
     */
@@ -239,20 +227,16 @@ namespace gaEngineSDK {
 
     //Depth map
     SPtr<ConstantBuffer> m_pCB_Depth;
-
-    //Shader Map
-    SPtr<ConstantBuffer> m_pCB_Shadows;
     SPtr<ConstantBuffer> m_pCB_Light;
     SPtr<ConstantBuffer> m_pCB_Light2;
-
     SPtr<ConstantBuffer> m_pCB_InverseMat;
+    SPtr<ConstantBuffer> m_pCB_Shadows;
 
     /*
     * @brief .
     */
     SPtr<SamplerState> m_pSampler;
     SPtr<SamplerState> m_pSampleStateClamp;
-    SPtr<SamplerState> m_pSampleStateWrap;
 
     /*
     * @brief Variable that stores the vertex layout data.

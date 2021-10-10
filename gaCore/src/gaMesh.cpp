@@ -77,7 +77,7 @@ namespace gaEngineSDK {
       uint32 bonesIndex = m_skeletalMesh->bonesMap[nodeName];
       Matrix4x4 globalInverseTransform;
 
-      m_cbBonesTrans->bonesTransform[bonesIndex] = globalInverseTransform * globalTransform * 
+      m_cbModelData->bonesTransform[bonesIndex] = globalInverseTransform * globalTransform * 
                                                    m_skeletalMesh->vBones[bonesIndex].offSet;
     }
 

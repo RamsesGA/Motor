@@ -69,7 +69,8 @@ struct cbMipLevels {
   int32 mipLevel3;
 };
 
-struct cbBonesTransform {
+struct cbModelData {
+  Matrix4x4 modelMatrix;
   Matrix4x4 bonesTransform[maxBones];
 };
 

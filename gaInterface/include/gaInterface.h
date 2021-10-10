@@ -1,6 +1,7 @@
 #pragma once
 
 #include <gaBaseInterface.h>
+#include <gaSceneGraph.h>
 
 #include "gaPrerequisitesInterface.h"
 
@@ -43,6 +44,9 @@ namespace gaEngineSDK {
     /*************************************************************************/
 
     void
+    isMouseTouchingImGui();
+
+    void
     mouseButtonDown(uint32 button) override;
 
     void
@@ -57,8 +61,17 @@ namespace gaEngineSDK {
     */
     /*************************************************************************/
 
-    void 
-    menuBarFiles();
+    void
+    imguiFile();
+
+    void
+    imguiScenegraph();
+
+    void
+    imguiShowTreeNodes(String childName, WeakSPtr<SceneNode> childNode);
+
+    void
+    imguiModelsInfo();
 
     /*************************************************************************/
     /**

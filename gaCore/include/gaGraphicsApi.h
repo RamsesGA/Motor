@@ -682,7 +682,6 @@ namespace gaEngineSDK {
     virtual void*
     getDeviceContext() { return nullptr; };
 
-   protected:
     /*************************************************************************/
     /**
     * Members.

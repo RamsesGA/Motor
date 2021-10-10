@@ -14,11 +14,11 @@ namespace gaEngineSDK {
   Camera::updateViewMatrix() {
     m_right = m_view.getColumnMatrixInfo(0);
 
-    m_up = m_view.getColumnMatrixInfo(1);
+    m_camUp = m_view.getColumnMatrixInfo(1);
 
     m_front = m_view.getColumnMatrixInfo(2);
 
-    m_cameraDesc.camLookAt = m_cameraDesc.camEye + m_front;
+    m_camLookAt = m_camEye + m_front;
   }
 
   void
@@ -93,27 +93,27 @@ namespace gaEngineSDK {
     float speedMove = 450.0f * deltaTime;
 
     if (KEYBOARD::kW == input) {
-      m_cameraDesc.camEye += m_front * speedMove;
+      m_camEye += m_front * speedMove;
     }
     else if (KEYBOARD::kS == input) {
-      m_cameraDesc.camEye -= m_front * speedMove;
+      m_camEye -= m_front * speedMove;
     }
     else if (KEYBOARD::kA == input) {
-      m_cameraDesc.camEye -= m_right * speedMove;
+      m_camEye -= m_right * speedMove;
     }
     else if (KEYBOARD::kD == input) {
-      m_cameraDesc.camEye += m_right * speedMove;
+      m_camEye += m_right * speedMove;
     }
     else if (KEYBOARD::kQ == input) {
-      m_cameraDesc.camEye += m_up * speedMove;
+      m_camEye += m_camUp * speedMove;
     }
     else if (KEYBOARD::kE == input) {
-      m_cameraDesc.camEye -= m_up * speedMove;
+      m_camEye -= m_camUp * speedMove;
     }
 
-    m_axis.calculateAxis(m_right, m_up, m_front);
+    m_axis.calculateAxis(m_right, m_camUp, m_front);
 
-    m_position.calculatePosition(m_cameraDesc.camEye);
+    m_position.calculatePosition(m_camEye);
     m_position = m_position * m_axis;
 
     m_view = m_position;
@@ -135,15 +135,15 @@ namespace gaEngineSDK {
     secondPos.y = (float)Temp.y;
 
     if (firstPos.x < m_originalMousePos.x) {
-      m_cameraDesc.camLookAt -= m_right * speedRot;
-      m_cameraDesc.camUp = m_up;
+      m_camLookAt -= m_right * speedRot;
+      m_camUp = m_camUp;
       createView();
       updateViewMatrix();
     }
 
     if (firstPos.x > m_originalMousePos.x) {
-      m_cameraDesc.camLookAt += m_right * speedRot;
-      m_cameraDesc.camUp = m_up;
+      m_camLookAt += m_right * speedRot;
+      m_camUp = m_camUp;
       createView();
       updateViewMatrix();
     }
@@ -199,29 +199,29 @@ namespace gaEngineSDK {
 
   void
   Camera::createView() {
-    m_front = m_cameraDesc.camLookAt - m_cameraDesc.camEye;
+    m_front = m_camLookAt - m_camEye;
     m_front.normalize();
 
-    m_right = m_cameraDesc.camUp.crossProduct(m_front);
+    m_right = m_camUp.crossProduct(m_front);
     m_right.normalize();
 
-    m_up = m_front.crossProduct(m_right);
-    m_up.normalize();
+    m_camUp = m_front.crossProduct(m_right);
+    m_camUp.normalize();
 
-    m_axis.calculateAxis(m_right, m_up, m_front);
+    m_axis.calculateAxis(m_right, m_camUp, m_front);
 
-    m_position.calculatePosition(m_cameraDesc.camEye);
+    m_position.calculatePosition(m_camEye);
 
     m_view = m_position * m_axis;
   }
 
   void
   Camera::createProjectionMatrix() {
-    m_projection = m_projection.perspectiveFovLH(m_cameraDesc.camFoV,
-                                                 (float)m_cameraDesc.camWidth,
-                                                 (float)m_cameraDesc.camHeight,
-                                                 m_cameraDesc.camNear,
-                                                 m_cameraDesc.camFar);
+    m_projection = m_projection.perspectiveFovLH(m_camFoV,
+                                                 (float)m_camWidth,
+                                                 (float)m_camHeight,
+                                                 m_camNear,
+                                                 m_camFar);
   }
 
   /***************************************************************************/
@@ -237,42 +237,42 @@ namespace gaEngineSDK {
 
   void
   Camera::setLookAt(Vector3 lookAt) {
-    m_cameraDesc.camLookAt = lookAt;
+    m_camLookAt = lookAt;
   }
 
   void
   Camera::setEye(Vector3 eye) {
-    m_cameraDesc.camEye = eye;
+    m_camEye = eye;
   }
 
   void
   Camera::setUp(Vector3 up) {
-    m_cameraDesc.camUp = up;
+    m_camUp = up;
   }
 
   void
   Camera::setFar(float farCam) {
-    m_cameraDesc.camFar = farCam;
+    m_camFar = farCam;
   }
 
   void
   Camera::setNear(float nearCam) {
-    m_cameraDesc.camNear = nearCam;
+    m_camNear = nearCam;
   }
 
   void
   Camera::setFoV(float fieldOfView) {
-    m_cameraDesc.camFoV = fieldOfView;
+    m_camFoV = fieldOfView;
   }
 
   void
   Camera::setHeight(float height) {
-    m_cameraDesc.camHeight = height;
+    m_camHeight = height;
   }
 
   void
   Camera::setWidth(float width) {
-    m_cameraDesc.camWidth = width;
+    m_camWidth = width;
   }
 
   void
@@ -301,17 +301,6 @@ namespace gaEngineSDK {
     return m_projection;
   }
 
-  Matrix4x4 
-  Camera::getProjectionPerspective() {
-    Matrix4x4 newProjection;
-    newProjection = m_projection.perspectiveFovLH(m_cameraDesc.camFoV,
-                                                 (float)m_cameraDesc.camWidth,
-                                                 (float)m_cameraDesc.camHeight,
-                                                 m_cameraDesc.camNear,
-                                                 m_cameraDesc.camFar);
-    return newProjection;
-  }
-
   Vector2
   Camera::getOriginalMousePos() {
     return m_originalMousePos;
@@ -319,12 +308,17 @@ namespace gaEngineSDK {
 
   Vector3
   Camera::getCamEye() {
-    return m_cameraDesc.camEye;
+    return m_camEye;
   }
 
   Vector3 
   Camera::getLookAt() {
-    return m_cameraDesc.camLookAt;
+    return m_camLookAt;
+  }
+
+  Vector3 
+  Camera::getCamUp() {
+    return m_camUp;
   }
 
 }

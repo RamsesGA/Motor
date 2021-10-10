@@ -4,7 +4,7 @@
 #include "gaActor.h"
 
 namespace gaEngineSDK {
-  class SceneNode
+  class GA_CORE_EXPORT SceneNode
   {
    public:
     /*************************************************************************/
@@ -95,6 +95,11 @@ namespace gaEngineSDK {
     */
     Vector<SPtr<SceneNode>>
     getChildNodes();
+
+    /*
+    * @brief Bool to indicate if the actor is selected.
+    */
+    bool m_isSelected = false;
 
    private:
     /*************************************************************************/

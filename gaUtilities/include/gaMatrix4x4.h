@@ -265,6 +265,9 @@ namespace gaEngineSDK {
   createViewMatrix(const Vector4& eye, const Vector4& lookAt, const Vector4& up);
 
   GA_UTILITY_EXPORT extern Matrix4x4
+  createViewMatrix(const Vector3& eye, const Vector3& lookAt, const Vector3& up);
+
+  GA_UTILITY_EXPORT extern Matrix4x4
   createOrtographicProyectionLH(const float& bottom, 
                                 const float& top,
                                 const float& left,

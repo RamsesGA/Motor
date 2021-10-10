@@ -107,4 +107,6 @@ class AppTest : public BaseApp
   void
   createScene();
 
+  void
+  createLight();
 };

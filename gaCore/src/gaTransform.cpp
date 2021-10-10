@@ -13,22 +13,93 @@ namespace gaEngineSDK {
   Transform::Transform(const Quaternions& rotation, 
                        const Vector3& position,
                        const Vector3& scale) {
-    m_rotation = (rotation); m_position = (position); m_scale = (scale);
+    m_rotation = (rotation); 
+    m_position = (position); 
+    m_scale = (scale);
+  }
+
+  /***************************************************************************/
+  /**
+  * Inheritance.
+  */
+  /***************************************************************************/
+
+  void 
+  Transform::update(const float& deltaTime) {
+
+  }
+
+  void 
+  Transform::render() {
+
+  }
+
+  /***************************************************************************/
+  /**
+  * Sets.
+  */
+  /***************************************************************************/
+
+  void
+  Transform::setPosition(Vector3 pos) {
+    m_position = pos;
   }
 
   void
-  Transform::editRotation(float x, float y, float z) {
-    m_rotation.x = x; m_rotation.y = y; m_rotation.z = z;
+  Transform::setPosition(float x, float y, float z) {
+    m_position.x = x;
+    m_position.y = y; 
+    m_position.z = z;
+  }
+
+  void 
+  Transform::setRotation(Quaternions rotation) {
+    m_rotation = rotation;
   }
 
   void
-  Transform::editPosition(float x, float y, float z) {
-    m_position.x = x; m_position.y = y; m_position.z = z;
+  Transform::setRotation(float x, float y, float z) {
+    m_rotation.x = x;
+    m_rotation.y = y;
+    m_rotation.z = z;
+  }
+
+  void 
+  Transform::setScale(Vector3 scale) {
+    m_scale = scale;
   }
 
   void
-  Transform::editScale(float x, float y, float z) {
-    m_scale.x = x; m_scale.y = y; m_scale.z = z;
+  Transform::setScale(float x, float y, float z) {
+    m_scale.x = x; 
+    m_scale.y = y; 
+    m_scale.z = z;
+  }
+  
+  /***************************************************************************/
+  /**
+  * Gets.
+  */
+  /***************************************************************************/
+
+  Vector3
+  Transform::getPosition() {
+    return m_position;
+  }
+
+  Vector3 
+  Transform::getScale() {
+    return m_scale;
+  }
+
+  Matrix4x4
+  Transform::getTransform() {
+    return m_mTransform;
+  }
+
+  Quaternions 
+  Transform::getRotation() {
+    return m_rotation;
   }
 
   /***************************************************************************/

@@ -86,5 +86,7 @@ namespace gaEngineSDK {
     */
     virtual void
     setComponent(WeakSPtr<Component> compoInfo) { };
+
+    
   };
 }

@@ -6,6 +6,7 @@
 #include <gaSceneGraph.h>
 #include <gaStaticMesh.h>
 #include <gaResourceManager.h>
+#include <gaLights.h>
 
 #include "gaAppTest.h"
 
@@ -276,12 +277,6 @@ AppTest::createNodeRamlethalSwords() {
         myModel->getMesh(i).m_vTextures[j] = vTextures[j];
       }
     }
-    /*myModel->m_mMaterials["03 - Default"]->m_vTextures[i] = vTextures[i];
-    myModel->m_mMaterials["02 - Default"]->m_vTextures[i] = vTextures[i];
-    myModel->m_mMaterials["08 - Default"]->m_vTextures[i] = vTextures[i];
-    myModel->m_mMaterials["09 - Default"]->m_vTextures[i] = vTextures[i];
-    myModel->m_mMaterials["13 - Default"]->m_vTextures[i] = vTextures[i];
-    myModel->m_mMaterials["07 - Default"]->m_vTextures[i] = vTextures[i];*/
   }
 
   /*
@@ -323,4 +318,15 @@ AppTest::createScene() {
 
   //Adding the actor to node root
   mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+}
+
+void
+AppTest::createLight() {
+  Lights newLigth(Vector3(1.78f, -115.56f, 206.12f), Vector3(0.0f, 0.0f, 0.0f));
+
+  //Light info
+  newLigth.setAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
+  newLigth.setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
+  newLigth.setIntensity(2.0f);
+  newLigth.setEmissiveIntensity(1.5f);
 }

@@ -641,6 +641,34 @@ namespace gaEngineSDK {
   }
 
   GA_UTILITY_EXPORT Matrix4x4
+  createViewMatrix(const Vector3& eye, const Vector3& lookAt, const Vector3& up) {
+    Matrix4x4 viewMatrix;
+
+    Vector3 front = lookAt - eye;
+    front.normalize();
+
+    Vector3 right = up.crossProduct(front);
+    right.normalize();
+
+    Vector3 realUp = front.crossProduct(right);
+
+    viewMatrix = { right.x, realUp.x, front.x, 0.0f,
+                   right.y, realUp.y, front.y, 0.0f,
+                   right.z, realUp.z, front.z, 0.0f,
+                   0.0f,    0.0f,     0.0f,    1.0f };
+
+    Matrix4x4 position;
+
+    position.m_mat4x4[3][0] = eye.x;
+    position.m_mat4x4[3][1] = eye.y;
+    position.m_mat4x4[3][2] = eye.z;
+
+    viewMatrix *= position;
+
+    return viewMatrix;
+  }
+
+  GA_UTILITY_EXPORT Matrix4x4
   createOrtographicProyectionLH(const float& bottom, 
                                 const float& top, 
                                 const float& left, 

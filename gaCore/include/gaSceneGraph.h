@@ -46,17 +46,20 @@ namespace gaEngineSDK {
     void
     createNewActor(WeakSPtr<Actor> actor, WeakSPtr<SceneNode> parent);
 
-   private:
     /*************************************************************************/
     /**
     * Members.
     */
     /*************************************************************************/
 
+    SPtr<SceneNode> m_nodeSelected;
+
     /*
     * @brief .
     */
     SPtr<SceneNode> m_root;
+
+   private:
 
     /*
     * @brief .

@@ -12,22 +12,9 @@
 using sf::Event;
 
 namespace gaEngineSDK {
-  struct CameraDescriptor {
-    uint32 camWidth = 0;
-    uint32 camHeight = 0;
-
-    float camNear = 0.0f;
-    float camFar = 0.0f;
-    float camFoV = 0.0f;
-
-    Vector3 camEye;
-    Vector3 camLookAt;
-    Vector3 camUp;
-  };
-
   class GA_CORE_EXPORT Camera : public Component
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor
@@ -135,7 +122,7 @@ namespace gaEngineSDK {
     * @param lookAt, vector 3 to save position to member.
     */
     void
-    setLookAt(Vector3 lookAt = { 0.0f, 1.0f, 0.0f });
+    setLookAt(Vector3 lookAt = { 0.0f, 0.0f, 0.0f });
 
     /**
     * @brief Save the values for the corresponding member.
@@ -218,9 +205,6 @@ namespace gaEngineSDK {
     Matrix4x4
     getProjection();
 
-    Matrix4x4
-    getProjectionPerspective();
-
     /**
     * @brief Function to get the original position of the mouse.
     * @return Pointer position (x, y).
@@ -240,22 +224,31 @@ namespace gaEngineSDK {
     Vector3
     getLookAt();
 
-   private:
+    Vector3
+    getCamUp();
+
+  private:
     /*************************************************************************/
     /**
     * Members
     */
     /*************************************************************************/
 
+    uint32 m_camWidth = 0;
+    uint32 m_camHeight = 0;
+
+    float m_camNear = 0.0f;
+    float m_camFar = 0.0f;
+    float m_camFoV = 0.0f;
+
+    Vector3 m_camEye;
+    Vector3 m_camLookAt;
+    Vector3 m_camUp;
+
     /**
     * @brief Member to save original mouse position.
     */
     Vector2 m_originalMousePos;
-
-    /**
-    * @brief Member to save the vectors above.
-    */
-    Vector3 m_up;
 
     /**
     * @brief Member to save the front vectors.
@@ -286,10 +279,5 @@ namespace gaEngineSDK {
     * @brief Member to store a view array.
     */
     Matrix4x4 m_view;
-
-    /**
-    * @brief Member to connect to the structure and define its values.
-    */
-    CameraDescriptor m_cameraDesc;
   };
 }

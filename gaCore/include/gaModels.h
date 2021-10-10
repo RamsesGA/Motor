@@ -77,7 +77,7 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    Vector<cbBonesTransform> m_vMeshBones;
+    Vector<cbModelData> m_vModelData;
 
     /*
     * @brief Member to store a string of Meshes.
