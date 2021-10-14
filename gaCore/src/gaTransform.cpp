@@ -1,4 +1,7 @@
+#include <gaDegrees.h>
+
 #include "gaTransform.h"
+#include "gaActor.h"
 
 namespace gaEngineSDK {
   Transform::Transform() {
@@ -6,8 +9,8 @@ namespace gaEngineSDK {
     m_rotation.y = 0.0f; 
     m_rotation.z = 0.0f; 
     m_rotation.w = 1.0f;
-    m_position = (0.0f, 0.0f, 0.0f);
-    m_scale = (1.0f, 1.0f, 1.0f);
+    m_position = Vector3(0.0f, 0.0f, 0.0f);
+    m_scale = Vector3(1.0f, 1.0f, 1.0f);
   }
 
   Transform::Transform(const Quaternions& rotation, 
@@ -26,7 +29,60 @@ namespace gaEngineSDK {
 
   void 
   Transform::update(const float& deltaTime) {
+    Matrix4x4 mTemp;
 
+    if (nullptr != m_pMyActor->m_pParent) {
+      auto myParent = m_pMyActor->m_pParent;
+      auto parentTransform = m_pMyActor->getComponent<Transform>();
+
+      mTemp = parentTransform->m_mTransform;
+    }
+
+    //We avoid the value 0
+    if (0 == m_scale.x) {
+      m_scale.x = 0.00001f;
+    }
+    if (0 == m_scale.y) {
+      m_scale.y = 0.00001f;
+    }
+    if (0 == m_scale.z) {
+      m_scale.z = 0.00001f;
+    }
+
+    Matrix4x4 mScale = { m_scale.x,  0.0f,      0.0f,      0.0f,
+                         0.0f,       m_scale.y, 0.0f,      0.0f,
+                         0.0f,       0.0f,      m_scale.z, 0.0f,
+                         0.0f,       0.0f,      0.0f,      1.0f };
+
+    Matrix4x4 mPosition = {1.0f,0.0f,0.0f,0.0f,
+                           0.0f,1.0f,0.0f,0.0f,
+                           0.0f,0.0f,1.0f,0.0f,
+                           m_position.x, m_position.y, m_position.z, 1.0f };
+
+    Matrix4x4 mMultiplication = mPosition * mScale;
+
+    m_rotation = Quaternions(Degrees(m_eulerRot.x), 
+                             Degrees(m_eulerRot.y),
+                             Degrees(m_eulerRot.z),
+                             Degrees(0));
+
+    mMultiplication *= m_rotation.getMatrix();
+
+    m_mTransform = mTemp * mMultiplication;
+
+    m_mLocalTrans = mMultiplication;
+
+    m_worldPosition = { m_mTransform(3, 0), m_mTransform(3, 1), m_mTransform(3, 2) };
+
+    //
+    m_front = { m_mTransform(0, 2), m_mTransform(1, 2), m_mTransform(2, 2) };
+    m_front.normalize();
+
+    m_right = { m_mTransform(0, 0), m_mTransform(1, 0), m_mTransform(2, 0) };
+    m_right.normalize();
+
+    m_up = { m_mTransform(0, 1), m_mTransform(1, 1), m_mTransform(2, 1) };
+    m_up.normalize();
   }
 
   void 
@@ -41,36 +97,60 @@ namespace gaEngineSDK {
   /***************************************************************************/
 
   void
-  Transform::setPosition(Vector3 pos) {
+  Transform::setPosition(const Vector3& pos) {
     m_position = pos;
   }
 
   void
-  Transform::setPosition(float x, float y, float z) {
+  Transform::setPosition(const float& x, const float& y, const float& z) {
     m_position.x = x;
     m_position.y = y; 
     m_position.z = z;
   }
 
   void 
-  Transform::setRotation(Quaternions rotation) {
+  Transform::setRotation(const Quaternions& rotation) {
     m_rotation = rotation;
+    m_eulerRot = m_rotation.getEuler();
   }
 
   void
-  Transform::setRotation(float x, float y, float z) {
+  Transform::setRotation(const float& x, const float& y, const float& z) {
     m_rotation.x = x;
     m_rotation.y = y;
     m_rotation.z = z;
   }
 
   void 
-  Transform::setScale(Vector3 scale) {
+  Transform::setEulerRotation(const Vector3& rot) {
+    m_eulerRot = rot;
+    if (m_eulerRot.x < 0) {
+      m_eulerRot.x = 360.0f;
+    }
+    else if (m_eulerRot.x > 360.0f) {
+      m_eulerRot.x = 0.0f;
+    }
+    if (m_eulerRot.y < 0) {
+      m_eulerRot.y = 360.0f;
+    }
+    else if (m_eulerRot.y > 360.0f) {
+      m_eulerRot.y = 0.0f;
+    }
+    if (m_eulerRot.z < 0) {
+      m_eulerRot.z = 360.0f;
+    }
+    else if (m_eulerRot.z > 360.0f) {
+      m_eulerRot.z = 0.0f;
+    }
+  }
+
+  void
+  Transform::setScale(const Vector3& scale) {
     m_scale = scale;
   }
 
   void
-  Transform::setScale(float x, float y, float z) {
+  Transform::setScale(const float& x, const float& y, const float& z) {
     m_scale.x = x; 
     m_scale.y = y; 
     m_scale.z = z;
@@ -100,6 +180,11 @@ namespace gaEngineSDK {
   Quaternions 
   Transform::getRotation() {
     return m_rotation;
+  }
+
+  Vector3 
+  Transform::getEulerRotation() {
+    return m_eulerRot;
   }
 
   /***************************************************************************/

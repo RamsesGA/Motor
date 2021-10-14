@@ -51,8 +51,9 @@ PS_INPUT DepthVS(VS_INPUT input)
   newMatWorld[2] = float4(0, 0, 1, 0);
   newMatWorld[3] = float4(0, 0, 0, 1);
 
-  matrix matWV = mul(newMatWorld, viewMatrix);
-  
+  matrix matWV = mul(newMatWorld, modelMatrix);
+  matWV = mul(matWV, viewMatrix);
+
   input.position.w = 1.0f;
   
   matrix matClip = mul(matWV, projectionMatrix);

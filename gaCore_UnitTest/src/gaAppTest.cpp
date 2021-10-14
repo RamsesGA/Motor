@@ -45,12 +45,12 @@ AppTest::onCreate() {
   
   createScene();
   //createNodePod();
-  createNodeVela();
+  //createNodeVela();
   //createNodeTwoB();
   //createNodeSpartan();
   //createNodeUgandan();
   //createNodeGrimoires();
-  //createNodeRamlethalSwords();
+  createNodeRamlethalSwords();
 }
 
 /*****************************************************************************/

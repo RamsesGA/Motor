@@ -181,7 +181,7 @@ namespace gaEngineSDK {
     * @brief Let us multiply the data of one matrix with another one.
     */
     Matrix4x4
-    operator*(Matrix4x4& matrix)const;
+    operator*(const Matrix4x4& matrix)const;
     
     /**
     * @brief Let us add the data of one matrix with one data.
@@ -205,7 +205,7 @@ namespace gaEngineSDK {
     * @brief .
     */
     Matrix4x4&
-    operator*=(Matrix4x4& mat);
+    operator*=(const Matrix4x4& mat);
     
     /**
     * @brief .

@@ -53,8 +53,8 @@ namespace gaEngineSDK {
     * I M G U I
     */
     imguiFile();
-    imguiModelsInfo();
     imguiScenegraph();
+    imguiModelsInfo();
 
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -207,7 +207,7 @@ namespace gaEngineSDK {
     isOpen = ImGui::TreeNodeEx(actorName.c_str(), flags);
 
     if (ImGui::IsItemClicked()) {
-      node->getActorNode().get()->m_isSelected = true;
+      node->getActorNode().get()->setIsSelected(true);
 
       if (node != mySceneGraph->m_nodeSelected) {
         if (nullptr != mySceneGraph->m_nodeSelected) {
@@ -241,11 +241,6 @@ namespace gaEngineSDK {
     
     auto object = mySceneGraph->m_nodeSelected->getActorNode().get();
 
-
-    static float valuePos[3] = { 0.0f, 0.0f, 0.0f };
-    static float valueRot[3] = { 0.0f, 0.0f, 0.0f };
-    static float valueScale[3] = { 0.0f, 0.0f, 0.0f };
-
     if (ImGui::Begin("Model information", nullptr, ImGuiWindowFlags_NoTitleBar |
                                                    ImGuiWindowFlags_AlwaysVerticalScrollbar |
                                                    ImGuiWindowFlags_NoMove)) {
@@ -255,16 +250,23 @@ namespace gaEngineSDK {
       ImGui::Text("Transform");
       ImGui::Separator();
 
-      ImGui::SliderFloat3("Position", valuePos, 0.0f, 360.0f);
-      ImGui::SliderFloat3("Rotation", valueRot, 0.0f, 360.0f);
-      ImGui::SliderFloat3("Scale", valueScale,  0.0f, 360.0f);
+      auto transform = object->getComponent<Transform>();
+
+      auto position = transform->getPosition();
+      auto rotation = transform->getEulerRotation();
+      auto scale = transform->getScale();
+
+      ImGui::DragFloat3("Position", &position.x);
+      ImGui::Separator();
+      ImGui::DragFloat3("Rotation", &rotation.x);
+      ImGui::Separator();
+      ImGui::DragFloat3("Scale", &scale.x);
       ImGui::Separator();
 
-
-
-
-
-
+      //Sets
+      transform->setPosition(position);
+      transform->setEulerRotation(rotation);
+      transform->setScale(scale);
 
       ImGui::Text("Materials");
       ImGui::Separator();
@@ -292,6 +294,4 @@ namespace gaEngineSDK {
       ImGui::End();
     }
   }
-
-
 }

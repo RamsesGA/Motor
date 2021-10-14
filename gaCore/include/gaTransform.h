@@ -41,22 +41,25 @@ namespace gaEngineSDK {
     /*************************************************************************/
 
     void
-    setPosition(Vector3 pos);
+    setPosition(const Vector3& pos);
 
     void
-    setPosition(float x, float y, float z);
+    setPosition(const float& x, const float& y, const float& z);
 
     void
-    setScale(Vector3 scale);
+    setScale(const Vector3& scale);
 
     void
-    setScale(float x, float y, float z);
+    setScale(const float& x, const float& y, const float& z);
 
     void
-    setRotation(Quaternions rotation);
+    setRotation(const Quaternions& rotation);
 
     void
-    setRotation(float x, float y, float z);
+    setRotation(const float& x, const float& y, const float& z);
+
+    void
+    setEulerRotation(const Vector3& rot);
 
     /*************************************************************************/
     /**
@@ -75,6 +78,9 @@ namespace gaEngineSDK {
 
     Quaternions
     getRotation();
+
+    Vector3
+    getEulerRotation();
     
     /*************************************************************************/
     /**
@@ -136,7 +142,37 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
+    Vector3 m_eulerRot;
+
+    /*
+    * @brief .
+    */
+    Vector3 m_worldPosition;
+
+    /*
+    * @brief .
+    */
+    Vector3 m_front;
+    
+    /*
+    * @brief .
+    */
+    Vector3 m_up;
+    
+    /*
+    * @brief .
+    */
+    Vector3 m_right;
+
+    /*
+    * @brief .
+    */
     Matrix4x4 m_mTransform;
+
+    /*
+    * @brief .
+    */
+    Matrix4x4 m_mLocalTrans;
 
     /*
     * @brief .

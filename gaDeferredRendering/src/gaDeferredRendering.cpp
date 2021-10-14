@@ -173,7 +173,7 @@ namespace gaEngineSDK {
     * C R E A T E
     * L I G H T
     */
-    m_pLight = make_shared<Lights>(Vector3(-19.41f, -60.0f, 400.0f), 
+    m_pLight = make_shared<Lights>(Vector3(1.78f, -115.56f, 206.12f),
                                    Vector3(0.0f, 0.0f, 0.0f));
 
     //Light info
@@ -405,9 +405,10 @@ namespace gaEngineSDK {
     myGraphicsApi->setYourVSConstantBuffers(m_pCB_BufferWorld, 1);
 
     //Animation
-    //myGraphicsApi->setYourVSConstantBuffers(m_pCBufferBones, 2);
+    myGraphicsApi->setYourVSConstantBuffers(m_pCB_BufferBones, 2);
+
     //PS CB
-    //myGraphicsApi->setYourPSConstantBuffers(m_pCB_BufferWorld, 1);
+    myGraphicsApi->setYourPSConstantBuffers(m_pCB_BufferWorld, 1);
 
     //Clear
     myGraphicsApi->clearYourRenderTarget(m_pGbuffer_RT, m_rgbaBlue);
@@ -596,7 +597,7 @@ namespace gaEngineSDK {
     m_mySAQ->setSAQ();
   }
 
-  void 
+  void
   DeferredRendering::lightningPass() {
     auto myGraphicsApi = g_graphicApi().instancePtr();
 
@@ -672,6 +673,9 @@ namespace gaEngineSDK {
     //VS CB
     myGraphicsApi->setYourVSConstantBuffers(m_pCB_Depth, 0);
 
+    //Animation
+    myGraphicsApi->setYourVSConstantBuffers(m_pCB_BufferBones, 1);
+
     //Clear m_rgbaGray
     myGraphicsApi->clearYourRenderTarget(m_pDepth_RT, m_rgbaGray);
     myGraphicsApi->clearYourDepthStencilView(m_pDepth_RT);
@@ -687,6 +691,5 @@ namespace gaEngineSDK {
 
     //Render model
     mySceneGraph->render();
-    m_mySAQ->setSAQ();
   }
 }

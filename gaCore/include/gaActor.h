@@ -7,6 +7,7 @@
 
 namespace gaEngineSDK {
   using std::dynamic_pointer_cast;
+  using std::make_shared;
 
   class GA_CORE_EXPORT Actor
   {
@@ -56,8 +57,7 @@ namespace gaEngineSDK {
     SPtr<T>
     getComponent(){
       for (auto component : m_vComponents) {
-        auto ptr = component.get();
-        auto result = dynamic_cast<T*>(ptr);
+        auto result = dynamic_pointer_cast<T>(component);
 
         if (result) {
           return SPtr<T>(result);
@@ -100,14 +100,16 @@ namespace gaEngineSDK {
     String m_actorName;
 
     /*
-    * @brief Transformation component.
+    * @brief .
     */
-    SPtr<Transform> m_actorTransform;
+    SPtr<Actor> m_pParent;
 
     /*
     * @brief Vector of pointers to received component.
     */
     Vector<SPtr<Component>> m_vComponents;
+
+    friend class Transform;
   };
 
 }

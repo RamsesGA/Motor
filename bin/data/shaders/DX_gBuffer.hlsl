@@ -75,7 +75,8 @@ PS_INPUT vs_gBuffer(VS_INPUT input)
   newMatWorld[2] = float4(0, 0, 1, 0);
   newMatWorld[3] = objectPosition;
 
-  matrix matWV = mul(newMatWorld, mView);
+  matrix matWV = mul(newMatWorld, modelMatrix);
+  matWV = mul(matWV, mView);
 
   output.position = mul(input.position, matWV);
   output.posView = output.position.xyz;

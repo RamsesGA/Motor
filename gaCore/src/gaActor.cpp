@@ -6,9 +6,10 @@
 namespace gaEngineSDK {
   Actor::Actor(String actorName) {
     m_actorName = actorName;
-    m_actorTransform.reset(new Transform());
 
-    setComponent(m_actorTransform);
+    SPtr<Transform> newTransform = make_shared<Transform>();
+
+    setComponent(newTransform);
   }
 
   void 

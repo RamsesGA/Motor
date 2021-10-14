@@ -463,17 +463,19 @@ namespace gaEngineSDK {
   }
   
   Matrix4x4
-  Matrix4x4::operator*(Matrix4x4& matrix)const {
+  Matrix4x4::operator*(const Matrix4x4& matrix)const {
     Matrix4x4 multip;
 
     float temp = 0.0f;
   
+    auto tempMatrix = matrix.m_mat4x4;
+
     for (uint32 i = 0; i < 4; ++i) {
       for (uint32 j = 0; j < 4; ++j) {
         temp = 0.0f;
   
         for (uint32 k = 0; k < 4; ++k) {
-          temp += m_mat4x4[i][k] * matrix(k, j);
+          temp += m_mat4x4[i][k] * tempMatrix[k][j];
         }
   
         multip(i, j) = temp;
@@ -519,7 +521,7 @@ namespace gaEngineSDK {
   }
   
   Matrix4x4&
-  Matrix4x4::operator*=(Matrix4x4& mat) {
+  Matrix4x4::operator*=(const Matrix4x4& mat) {
     *this = *this * mat;
     return *this;
   }

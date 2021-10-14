@@ -43,8 +43,12 @@ namespace gaEngineSDK {
     uint32 meshNum = 0;
 
     for (auto& mesh : m_pModel->m_vMeshes) {
-      m_pModel->m_vModelData[meshNum].modelMatrix = m_pMyActor->getComponent<Transform>()->getTransform();
-      //auto temp = m_pMyActor->getComponent<Transform>();
+      auto temp = m_pMyActor->getComponent<Transform>();
+      
+      if (nullptr != temp) {
+        auto transform = myGraphicApi->matrixPolicy(temp->getTransform());
+        m_pModel->m_vModelData[meshNum].modelMatrix = transform;
+      }
 
       myGraphicApi->updateConstantBuffer(&m_pModel->m_vModelData[meshNum],
                                          myGraphicApi->getConstBufferBones());

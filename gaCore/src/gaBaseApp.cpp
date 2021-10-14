@@ -79,12 +79,12 @@ namespace gaEngineSDK {
       deltaTime.restart();
 
       myInputs->update(trueDeltaTime);
-      myInterface->update(trueDeltaTime);
       myRenderer->update(trueDeltaTime);
+      myInterface->update(trueDeltaTime);
       onUpdate(trueDeltaTime);
 
-      myInterface->render();
       myRenderer->render();
+      myInterface->render();
       onRender();
     }
 
