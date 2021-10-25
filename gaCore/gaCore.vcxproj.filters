@@ -43,6 +43,12 @@
     <Filter Include="Archivos de origen\BasePhysics">
       <UniqueIdentifier>{d23d93be-55ad-4c64-ad3b-ce2b1dc09c8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Transform">
+      <UniqueIdentifier>{be25cc86-c4c0-4566-acf6-2c611ba9b317}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\ComputeShader">
+      <UniqueIdentifier>{198e55a5-1228-4f0f-8434-43093913ff93}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gaConstantBuffer.h">
@@ -103,9 +109,6 @@
     <ClInclude Include="include\gaPixelShader.h">
       <Filter>Archivos de origen\GraphicApi</Filter>
     </ClInclude>
-    <ClInclude Include="include\gaGameObject.h">
-      <Filter>Archivos de origen\GO/Actor/Componente</Filter>
-    </ClInclude>
     <ClInclude Include="include\gaComponent.h">
       <Filter>Archivos de origen\GO/Actor/Componente</Filter>
     </ClInclude>
@@ -146,7 +149,10 @@
       <Filter>Archivos de origen\BasePhysics</Filter>
     </ClInclude>
     <ClInclude Include="include\gaTransform.h">
-      <Filter>Archivos de origen</Filter>
+      <Filter>Archivos de origen\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaComputeShader.h">
+      <Filter>Archivos de origen\ComputeShader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -177,9 +183,6 @@
     <ClCompile Include="src\gaAnimations.cpp">
       <Filter>Archivos de origen\Models</Filter>
     </ClCompile>
-    <ClCompile Include="src\gaGameObject.cpp">
-      <Filter>Archivos de origen\GO/Actor/Componente</Filter>
-    </ClCompile>
     <ClCompile Include="src\gaActor.cpp">
       <Filter>Archivos de origen\GO/Actor/Componente</Filter>
     </ClCompile>
@@ -208,7 +211,7 @@
       <Filter>Archivos de origen\BasePhysics</Filter>
     </ClCompile>
     <ClCompile Include="src\gaTransform.cpp">
-      <Filter>Archivos de origen</Filter>
+      <Filter>Archivos de origen\Transform</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

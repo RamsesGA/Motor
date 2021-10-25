@@ -6,6 +6,8 @@
 #include "gaPrerequisitesInterface.h"
 
 namespace gaEngineSDK {
+  using std::to_string;
+
   class Interface final : public BaseInterface
   {
    public:
@@ -36,6 +38,27 @@ namespace gaEngineSDK {
     */
     void
     render() override;
+
+    /*
+    * @brief .
+    */
+    void
+    textCentered(String text);
+
+    /*
+    * @brief .
+    */
+    void
+    textColoredCentered(String text, Vector3 rgb);
+
+    /*
+    * @brief .
+    */
+    void
+    materialsInterface();
+
+    void
+    transformInterface();
 
     /*************************************************************************/
     /**

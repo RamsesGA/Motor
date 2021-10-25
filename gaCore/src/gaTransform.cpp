@@ -54,23 +54,23 @@ namespace gaEngineSDK {
                          0.0f,       0.0f,      m_scale.z, 0.0f,
                          0.0f,       0.0f,      0.0f,      1.0f };
 
-    Matrix4x4 mPosition = {1.0f,0.0f,0.0f,0.0f,
-                           0.0f,1.0f,0.0f,0.0f,
-                           0.0f,0.0f,1.0f,0.0f,
-                           m_position.x, m_position.y, m_position.z, 1.0f };
-
-    Matrix4x4 mMultiplication = mPosition * mScale;
+    Matrix4x4 mPosition = {1.0f, 0.0f, 0.0f, m_position.x,
+                           0.0f, 1.0f, 0.0f, m_position.y,
+                           0.0f, 0.0f, 1.0f, m_position.z,
+                           0.0f, 0.0f, 0.0f, 1.0f };
 
     m_rotation = Quaternions(Degrees(m_eulerRot.x), 
                              Degrees(m_eulerRot.y),
                              Degrees(m_eulerRot.z),
                              Degrees(0));
 
-    mMultiplication *= m_rotation.getMatrix();
+    Matrix4x4 mMultiplication = mPosition * mScale;
 
-    m_mTransform = mTemp * mMultiplication;
+    mMultiplication *= m_rotation.getMatrix().transpose();
 
-    m_mLocalTrans = mMultiplication;
+    m_mTransform = mMultiplication.transpose() * mTemp;
+
+    m_mLocalTrans = mMultiplication.transpose();
 
     m_worldPosition = { m_mTransform(3, 0), m_mTransform(3, 1), m_mTransform(3, 2) };
 
@@ -185,6 +185,26 @@ namespace gaEngineSDK {
   Vector3 
   Transform::getEulerRotation() {
     return m_eulerRot;
+  }
+
+  Vector3 
+  Transform::getFront() {
+    return m_front;
+  }
+
+  Vector3 
+  Transform::getRight() {
+    return m_right;
+  }
+
+  Vector3 
+  Transform::getUp() {
+    return m_up;
+  }
+
+  Vector3 
+  Transform::getLookAt() {
+    return (m_position + m_front);
   }
 
   /***************************************************************************/

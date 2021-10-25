@@ -44,13 +44,13 @@ AppTest::onCreate() {
   /***************************************************************************/
   
   createScene();
-  //createNodePod();
+  createNodePod();
   //createNodeVela();
   //createNodeTwoB();
-  //createNodeSpartan();
   //createNodeUgandan();
   //createNodeGrimoires();
-  createNodeRamlethalSwords();
+  //createNodeRamlethalSwords();
+  //createNodeStranger();
 }
 
 /*****************************************************************************/
@@ -63,7 +63,7 @@ AppTest::createNodePod() {
   auto mySceneGraph = SceneGraph::instancePtr();
   auto myRSRCMG = ResourceManager::instancePtr();
 
-  SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/pod/POD.obj");
+  SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/pod/Pod.fbx");
 
   SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
   myStaticMesh->m_pModel = myModel;
@@ -117,62 +117,6 @@ AppTest::createNodeTwoB() {
 
   //Creating actor
   SPtr<Actor> actor(new Actor("2B"));
-  actor->setIsSelected(true);
-  actor->setComponent(newComponent);
-
-  //Adding the actor to node root
-  mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
-}
-
-void
-AppTest::createNodeSpartan() {
-  auto mySceneGraph = SceneGraph::instancePtr();
-  auto myRSRCMG = ResourceManager::instancePtr();
-
-  SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/spartan/Spartan.fbx");
-
-  /*
-  * M A T E R I A L
-  * Z O N E
-  */
-  Vector<Textures*> vTextures;
-  SPtr<Materials> myMaterial = myRSRCMG->load<Materials>
-                                         ("data/textures/spartan/Spartan_Chest_Mat_BaseColor.png", 
-                                          TYPE_TEXTURES::kAlbedo);
-  vTextures.push_back(myMaterial->m_pTexture);
-
-  myMaterial = myRSRCMG->load<Materials>("data/textures/spartan/Spartan_Helmet_Mat_Metallic.png", 
-                                         TYPE_TEXTURES::kMetallic);
-  vTextures.push_back(myMaterial->m_pTexture);
-
-  myMaterial = myRSRCMG->load<Materials>("data/textures/spartan/Spartan_Helmet_Mat_Roughness.png", 
-                                         TYPE_TEXTURES::kRoughness);
-  vTextures.push_back(myMaterial->m_pTexture);
-
-  myMaterial = myRSRCMG->load<Materials>("data/textures/spartan/Spartan_Helmet_Mat_Normal.png", 
-                                         TYPE_TEXTURES::kNormal);
-  vTextures.push_back(myMaterial->m_pTexture);
-
-  /*myMaterial = myRSRCMG->load<Materials>("data/textures/spartan/.png", 
-                                         TYPE_TEXTURES::kEmissive);*/
-
-  myMaterial = myRSRCMG->load<Materials>("data/textures/spartan/Spartan_Helmet_Mat_AO.png", 
-                                         TYPE_TEXTURES::kAO);
-  vTextures.push_back(myMaterial->m_pTexture);
-
-
-
-  /*
-  * Z O N E
-  */
-  SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
-  myStaticMesh->m_pModel = myModel;
-
-  //Creating the component
-  SPtr<Component> newComponent(myStaticMesh);
-
-  //Creating actor
-  SPtr<Actor> actor(new Actor("Spartan"));
   actor->setIsSelected(true);
   actor->setComponent(newComponent);
 
@@ -298,13 +242,15 @@ AppTest::createNodeRamlethalSwords() {
 }
 
 void
-AppTest::createScene() {
+AppTest::createNodeStranger() {
   auto mySceneGraph = SceneGraph::instancePtr();
   auto myRSRCMG = ResourceManager::instancePtr();
 
-  SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/basicModels/plano.fbx");
-  //SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/basicModels/cubo.obj");
+  SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/stranger/The Stranger.fbx");
 
+  /*
+  * Z O N E
+  */
   SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
   myStaticMesh->m_pModel = myModel;
 
@@ -312,7 +258,7 @@ AppTest::createScene() {
   SPtr<Component> newComponent(myStaticMesh);
 
   //Creating actor
-  SPtr<Actor> actor(new Actor("basicModel"));
+  SPtr<Actor> actor(new Actor("The Stranger"));
   actor->setIsSelected(true);
   actor->setComponent(newComponent);
 
@@ -321,12 +267,23 @@ AppTest::createScene() {
 }
 
 void
-AppTest::createLight() {
-  Lights newLigth(Vector3(1.78f, -115.56f, 206.12f), Vector3(0.0f, 0.0f, 0.0f));
+AppTest::createScene() {
+  auto mySceneGraph = SceneGraph::instancePtr();
+  auto myRSRCMG = ResourceManager::instancePtr();
 
-  //Light info
-  newLigth.setAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
-  newLigth.setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
-  newLigth.setIntensity(2.0f);
-  newLigth.setEmissiveIntensity(1.5f);
+  SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/basicModels/plano.fbx");
+
+  SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
+  myStaticMesh->m_pModel = myModel;
+
+  //Creating the component
+  SPtr<Component> newComponent(myStaticMesh);
+
+  //Creating actor
+  SPtr<Actor> actor(new Actor("Plane"));
+  actor->setIsSelected(true);
+  actor->setComponent(newComponent);
+
+  //Adding the actor to node root
+  mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
 }

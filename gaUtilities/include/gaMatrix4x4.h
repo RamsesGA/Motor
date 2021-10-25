@@ -274,4 +274,10 @@ namespace gaEngineSDK {
                                 const float& right, 
                                 const float& _near,
                                 const float& _far);
+
+  GA_UTILITY_EXPORT extern Matrix4x4
+  createOrtographicProyectionLH(const float& width, 
+                                const float& height, 
+                                const float& _near,
+                                const float& _far);
 }

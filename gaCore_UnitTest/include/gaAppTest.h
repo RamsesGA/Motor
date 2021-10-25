@@ -81,12 +81,6 @@ class AppTest : public BaseApp
   * @brief .
   */
   void
-  createNodeSpartan();
-
-  /*
-  * @brief .
-  */
-  void
   createNodeUgandan();
 
   /*
@@ -105,8 +99,11 @@ class AppTest : public BaseApp
   * @brief .
   */
   void
-  createScene();
+  createNodeStranger();
 
+  /*
+  * @brief .
+  */
   void
-  createLight();
+  createScene();
 };

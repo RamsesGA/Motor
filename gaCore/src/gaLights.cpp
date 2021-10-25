@@ -1,13 +1,15 @@
-#include <gaGraphicsApi.h>
-
 #include "gaLights.h"
-
+#include "gaGraphicsApi.h"
+#include "gaActor.h"
+#include "gaModels.h"
+#include "gaResourceManager.h"
+#include "gaStaticMesh.h"
+#include "gaSceneGraph.h"
 
 namespace gaEngineSDK {
-
   Lights::Lights(Vector3 position, Vector3 lookAt) {
     auto myGraphicsApi = g_graphicApi().instancePtr();
-    
+
     m_pLightCamera = make_shared<Camera>();
     m_pLightCamera->setEye(position);
     m_pLightCamera->setLookAt(lookAt);
@@ -20,23 +22,31 @@ namespace gaEngineSDK {
 
     m_pLightCamera->startCamera();
 
-    Matrix4x4 mView = {-1.0f,   -0.01f,  0.01f,   0.0f,
-                       -0.0f,   -0.16f, -0.99f,   0.0f,
-                        0.01f,  -0.99f,  0.16f,   0.0f,
-                       -19.41f, -81.41f, 330.27f, 1.0f };
+    m_pLightCamera->setView(createViewMatrix(m_pLightCamera->getCamEye(),
+                                             m_pLightCamera->getLookAt(), 
+                                             m_pLightCamera->getCamUp()));
 
-    m_pLightCamera->setView(mView);
+    m_pLightCamera->setProjection(createOrtographicProyectionLH(1000.0f,
+                                                                1000.0f,
+                                                                0.01f,
+                                                                5000.0f));
+  }
 
-    //m_pLightCamera->setView(createViewMatrix(m_pLightCamera->getCamEye(),
-    //                                         m_pLightCamera->getLookAt(), 
-    //                                         m_pLightCamera->getCamUp()));
+  void
+  Lights::update(const float& deltaTime) {
+    auto transform = m_pMyActor->getComponent<Transform>();
 
-    m_pLightCamera->setProjection(createOrtographicProyectionLH(-500.0f,
-                                                                500.0f,
-                                                                -500.0f,
-                                                                500.0f,
-                                                                0.1f,
-                                                                2000.0f));
+    Vector3 eye = transform->getPosition();
+    Vector3 lookAt = transform->getLookAt();
+    Vector3 up = transform->getUp();
+
+    m_pLightCamera->setEye(eye);
+    m_pLightCamera->setLookAt(lookAt);
+    m_pLightCamera->setUp(up);
+
+    m_pLightCamera->setView(createViewMatrix(eye, lookAt, up));
+
+    //TODO:someday change projection
   }
 
   /***************************************************************************/

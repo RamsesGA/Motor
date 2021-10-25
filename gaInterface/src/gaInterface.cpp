@@ -2,6 +2,8 @@
 #include <imgui.h>
 #include <imgui_impl_win32.h>
 #include <imgui_impl_dx11.h>
+#include <gaStaticMesh.h>
+#include <gaModels.h>
 
 #include "gaInterface.h"
 
@@ -58,6 +60,92 @@ namespace gaEngineSDK {
 
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+  }
+
+  void
+  Interface::textCentered(String text) {
+    auto windowWidth = ImGui::GetWindowSize().x;
+    auto textWidth = ImGui::CalcTextSize(text.c_str()).x;
+
+    ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
+    ImGui::Text(text.c_str());
+  }
+
+  void 
+  Interface::textColoredCentered(String text, Vector3 rgb) {
+    auto windowWidth = ImGui::GetWindowSize().x;
+    auto textWidth = ImGui::CalcTextSize(text.c_str()).x;
+
+    ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
+    ImGui::TextColored(ImVec4(rgb.x, rgb.y, rgb.z, 1.0f), text.c_str());
+  }
+
+  void 
+  Interface::materialsInterface() {
+    auto mySceneGraph = SceneGraph::instancePtr();
+    auto myGraphicsApi = g_graphicApi().instancePtr();
+
+    auto object = mySceneGraph->m_nodeSelected->getActorNode().get();
+    auto tempStaticMesh = object->getComponent<StaticMesh>();
+
+    textColoredCentered("-Materials and Meshes-", Vector3(255.0f, 165.0f, 0.0f));
+    ImGui::Separator();
+
+    uint32 sizeMeshes = tempStaticMesh->m_pModel->getSizeMeshes();
+    uint32 textureSize = 0;
+    String nameMesh;
+    String nameTexture;
+
+    //Cycle for selected meshes
+    for (uint32 i = 0; i < sizeMeshes; ++i) {
+      textureSize = tempStaticMesh->m_pModel->getMesh(i).m_vTextures.size();
+      auto texturesInfo = tempStaticMesh->m_pModel->getMesh(i).m_vTextures;
+
+      if (0 != textureSize) {
+        nameMesh = "Mesh - ";
+        nameMesh += to_string(i);
+        textColoredCentered(nameMesh, Vector3(255.0f, 165.0f, 0.0f));
+      }
+
+      for (uint32 j = 0; j < textureSize; ++j) {
+        if (nullptr != texturesInfo.at(j)) {
+          nameTexture = texturesInfo.at(j)->m_textureName;
+          ImGui::Text(nameTexture.c_str());
+
+          ImTextureID id = tempStaticMesh->m_pModel->getMesh(i).m_vTextures[j]->getTexture();
+          ImGui::Image(id, ImVec2(120, 120));
+          ImGui::Separator();
+        }
+      }
+      ImGui::Separator();
+    }
+  }
+
+  void 
+  Interface::transformInterface() {
+    auto mySceneGraph = SceneGraph::instancePtr();
+
+    auto object = mySceneGraph->m_nodeSelected->getActorNode().get();
+
+    textColoredCentered("-Transform-", Vector3(255.0f, 165.0f, 0.0f));
+    ImGui::Separator();
+
+    auto transform = object->getComponent<Transform>();
+    auto position = transform->getPosition();
+    auto rotation = transform->getEulerRotation();
+    auto scale = transform->getScale();
+
+    ImGui::DragFloat3("-Position-", &position.x);
+    ImGui::Separator();
+    ImGui::DragFloat3("-Rotation-", &rotation.x);
+    ImGui::Separator();
+    ImGui::DragFloat3("-Scale-", &scale.x);
+    ImGui::Separator();
+
+    //Sets
+    transform->setPosition(position);
+    transform->setEulerRotation(rotation);
+    transform->setScale(scale);
   }
 
   /***************************************************************************/
@@ -169,7 +257,7 @@ namespace gaEngineSDK {
     if (ImGui::Begin("Scene graph", nullptr, ImGuiWindowFlags_NoTitleBar |
                                              ImGuiWindowFlags_AlwaysVerticalScrollbar |
                                              ImGuiWindowFlags_NoMove)) {
-      ImGui::TextColored(ImVec4(255.0f, 165.0f, 0.0f, 1.0f), "--Scene graph--");
+      textColoredCentered("-Scene graph-", Vector3(255.0f, 165.0f, 0.0f));
       ImGui::Separator();
 
       imguiShowTreeNodes("nodeChild", mySceneGraph->m_root);
@@ -242,55 +330,37 @@ namespace gaEngineSDK {
     auto object = mySceneGraph->m_nodeSelected->getActorNode().get();
 
     if (ImGui::Begin("Model information", nullptr, ImGuiWindowFlags_NoTitleBar |
-                                                   ImGuiWindowFlags_AlwaysVerticalScrollbar |
-                                                   ImGuiWindowFlags_NoMove)) {
-      ImGui::TextColored(ImVec4(255.0f, 165.0f, 0.0f, 1.0f), "--Model information--");
+                                                   ImGuiWindowFlags_AlwaysVerticalScrollbar)) {
+      /*
+      * S T A R T
+      * I N F O
+      */
+      textColoredCentered("-Model information-", Vector3(255.0f, 165.0f, 0.0f));
       ImGui::Separator();
 
-      ImGui::Text("Transform");
+      /*
+      * N A M E
+      * M O D E L
+      */
+      String nameObj = object->getActorName();
+      textColoredCentered("-Name-", Vector3(255.0f, 165.0f, 0.0f));
+      textCentered(nameObj);
       ImGui::Separator();
 
-      auto transform = object->getComponent<Transform>();
+      /*
+      * T R A N S F O R M
+      * M A T R I X
+      * I N F O
+      */
+      transformInterface();
 
-      auto position = transform->getPosition();
-      auto rotation = transform->getEulerRotation();
-      auto scale = transform->getScale();
+      /*
+      * M A T E R I A L
+      * Z O N E
+      */
+      materialsInterface();
 
-      ImGui::DragFloat3("Position", &position.x);
-      ImGui::Separator();
-      ImGui::DragFloat3("Rotation", &rotation.x);
-      ImGui::Separator();
-      ImGui::DragFloat3("Scale", &scale.x);
-      ImGui::Separator();
-
-      //Sets
-      transform->setPosition(position);
-      transform->setEulerRotation(rotation);
-      transform->setScale(scale);
-
-      ImGui::Text("Materials");
-      ImGui::Separator();
-
-      ImGui::Text("Base Color / Albedo / Diffuse");
-      //ImTextureID temp = ;
-      //ImGui::Image();
-      ImGui::Separator();
-
-      ImGui::Text("Normals");
-      ImGui::Separator();
-
-      ImGui::Text("Roughness");
-      ImGui::Separator();
-
-      ImGui::Text("Ambient Occlusion");
-      ImGui::Separator();
-
-      ImGui::Text("Metallic");
-      ImGui::Separator();
-
-      ImGui::Text("Emissive");
-      ImGui::Separator();
-
+      
       ImGui::End();
     }
   }

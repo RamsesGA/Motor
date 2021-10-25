@@ -178,8 +178,8 @@
     <ClInclude Include="include\gaBaseRenderer.h" />
     <ClInclude Include="include\gaCamera.h" />
     <ClInclude Include="include\gaComponent.h" />
+    <ClInclude Include="include\gaComputeShader.h" />
     <ClInclude Include="include\gaConstantBuffer.h" />
-    <ClInclude Include="include\gaGameObject.h" />
     <ClInclude Include="include\gaGraphicsApi.h" />
     <ClInclude Include="include\gaIndexBuffer.h" />
     <ClInclude Include="include\gaInputLayout.h" />
@@ -214,7 +214,6 @@
     <ClCompile Include="src\gaBasePhysics.cpp" />
     <ClCompile Include="src\gaBaseRenderer.cpp" />
     <ClCompile Include="src\gaCamera.cpp" />
-    <ClCompile Include="src\gaGameObject.cpp" />
     <ClCompile Include="src\gaGraphicsApi.cpp" />
     <ClCompile Include="src\gaLights.cpp" />
     <ClCompile Include="src\gaMaterials.cpp" />

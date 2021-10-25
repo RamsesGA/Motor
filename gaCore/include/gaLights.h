@@ -8,9 +8,12 @@
 #include "gaPrerequisitesCore.h"
 #include "gaComponent.h"
 
-using std::make_shared;
-
 namespace gaEngineSDK {
+  using std::make_shared;
+  using std::to_string;
+
+  class Actor;
+
   class GA_CORE_EXPORT Lights : public Component
   {
    public:
@@ -22,6 +25,9 @@ namespace gaEngineSDK {
     Lights(Vector3 position, Vector3 lookAt);
 
     ~Lights() = default;
+
+    void
+    update(const float& deltaTime) override;
 
     /*************************************************************************/
     /**

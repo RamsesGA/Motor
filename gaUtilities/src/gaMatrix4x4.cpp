@@ -661,9 +661,9 @@ namespace gaEngineSDK {
 
     Matrix4x4 position;
 
-    position.m_mat4x4[3][0] = eye.x;
-    position.m_mat4x4[3][1] = eye.y;
-    position.m_mat4x4[3][2] = eye.z;
+    position.m_mat4x4[3][0] = -eye.x;
+    position.m_mat4x4[3][1] = -eye.y;
+    position.m_mat4x4[3][2] = -eye.z;
 
     viewMatrix *= position;
 
@@ -703,4 +703,34 @@ namespace gaEngineSDK {
     return ortographic;
   }
 
+  GA_UTILITY_EXPORT Matrix4x4 
+  createOrtographicProyectionLH(const float& width, 
+                                const float& height, 
+                                const float& _near, 
+                                const float& _far) {
+    Matrix4x4 ortographic;
+    float range = 1.0f / (_far - _near);
+
+    ortographic.m_mat4x4[0][0] = 2.0f / (width);
+    ortographic.m_mat4x4[0][1] = 0.0f;
+    ortographic.m_mat4x4[0][2] = 0.0f;
+    ortographic.m_mat4x4[0][3] = 0.0f;
+
+    ortographic.m_mat4x4[1][0] = 0.0f;
+    ortographic.m_mat4x4[1][1] = 2.0f / (height);
+    ortographic.m_mat4x4[1][2] = 0.0f;
+    ortographic.m_mat4x4[1][3] = 0.0f;
+
+    ortographic.m_mat4x4[2][0] = 0.0f;
+    ortographic.m_mat4x4[2][1] = 0.0f;
+    ortographic.m_mat4x4[2][2] = range;
+    ortographic.m_mat4x4[2][3] = 0.0f;
+
+    ortographic.m_mat4x4[3][0] = 0.0f;
+    ortographic.m_mat4x4[3][1] = 0.0f;
+    ortographic.m_mat4x4[3][2] = -range * _near;
+    ortographic.m_mat4x4[3][3] = 1.0f;
+
+    return ortographic;
+  }
 }

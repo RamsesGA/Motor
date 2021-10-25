@@ -217,6 +217,16 @@ namespace gaEngineSDK {
       return nullptr;
     };
 
+    virtual Shaders*
+    createComputeShaderProgram(const WString& fileName,
+                               const String& entryPoint,
+                               const String& versionCS = "cs_4_0") {
+      GA_UNREFERENCED_PARAMETER(fileName);
+      GA_UNREFERENCED_PARAMETER(entryPoint);
+      GA_UNREFERENCED_PARAMETER(versionCS);
+      return nullptr;
+    };
+
     /**
     * @brief Function to load and save vertex shader from file.
     * @param
@@ -280,10 +290,27 @@ namespace gaEngineSDK {
       return nullptr;
     };
 
+    /*
+    * @brief .
+    */
     virtual ConstantBuffer*
     createConstantBuffer(const uint32 bufferSize, CPU_ACCESS::E typeCpu, USAGE::E typeUsage) {
       GA_UNREFERENCED_PARAMETER(bufferSize);
       GA_UNREFERENCED_PARAMETER(typeCpu);
+      GA_UNREFERENCED_PARAMETER(typeUsage);
+      return nullptr;
+    };
+
+    /*
+    * @brief .
+    */
+    virtual Textures*
+    createComputeBuffer(const uint32 bufferSize, 
+                        TEXTURE_BIND_FLAGS::E typeBindFlag = 
+                        TEXTURE_BIND_FLAGS::kBindUnorderedAccess, 
+                        USAGE::E typeUsage = USAGE::kUsageDefault) {
+      GA_UNREFERENCED_PARAMETER(bufferSize);
+      GA_UNREFERENCED_PARAMETER(typeBindFlag);
       GA_UNREFERENCED_PARAMETER(typeUsage);
       return nullptr;
     };
@@ -346,7 +373,8 @@ namespace gaEngineSDK {
                        uint32 numRenderTargets = 1, 
                        float scale = 1.0f,
                        bool depth = false,
-                       TEXTURE_FORMAT::E typeTexture = TEXTURE_FORMAT::E::kR16G16B16A16Float) {
+                       TEXTURE_FORMAT::E typeTexture = TEXTURE_FORMAT::E::kR16G16B16A16Float,
+                       TEXTURE_BIND_FLAGS::E typeBindFlag = TEXTURE_BIND_FLAGS::kDefault) {
       GA_UNREFERENCED_PARAMETER(width);     
       GA_UNREFERENCED_PARAMETER(height);
       GA_UNREFERENCED_PARAMETER(mipLevels); 

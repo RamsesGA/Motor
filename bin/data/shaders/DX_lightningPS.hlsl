@@ -6,20 +6,17 @@
 
 #define M_PI 3.14159265383
 #define EPSILON 0.00001
-#define SHADOW_BIAS 0.001
 
 Texture2D baseColor : register(t0);
 Texture2D normalTex : register(t1);
 Texture2D emissiveTex : register(t2);
 Texture2D AOTexture : register(t3);
 Texture2D posTexture : register(t4);
-Texture2D shadowTexture : register(t5);
 
 //TextureCube IBL_specular;
 //TextureCube IBL_diffuse;
 
 SamplerState simpleSampler : register(s0);
-SamplerState sampleTypeClamp : register(s1);
 
 //----------------------------------------------------------------------------
 cbuffer linkToBufferCamera : register(b0)
@@ -54,14 +51,6 @@ cbuffer linkToBufferInverse : register(b3)
   matrix mInverseProjection;
 }
 
-cbuffer linkToBufferShadows : register(b4)
-{
-  matrix worldMatrix;
-  matrix viewMatrix;
-  matrix projectionMatrix;
-  matrix lightViewMatrix;
-  matrix lightProjectionMatrix;
-}
 
 //----------------------------------------------------------------------------
 struct PS_INPUT
@@ -108,8 +97,9 @@ float4 ps_main(PS_INPUT input) : SV_Target0
 {
   float gamma = 2.2f;
   
-  float4 posWorld = float4(posTexture.Sample(simpleSampler, input.texCoord).xyz, 1.0f);
-  float4 posWorldView = mul(posWorld, mView);  
+  float4 posWorld = posTexture.Sample(simpleSampler, input.texCoord);
+  float shadowValue = posWorld.w;
+  posWorld.w = 1.0f;
 
   float4x4 matWV = mul(mWorld, mView);
   
@@ -133,7 +123,7 @@ float4 ps_main(PS_INPUT input) : SV_Target0
   float4 wvLightPos = mul(float4(lightPosX, lightPosY, lightPosZ, 1.0f), matWV);
   float4 wvViewPosition = mul(float4(vViewPositionX, vViewPositionY, vViewPositionZ, 1.0f), matWV);
   
-  float3 LightDir = -normalize(wvLightPos.xyz - posWorld.xyz);
+  float3 LightDir = normalize(wvLightPos.xyz - posWorld.xyz);
   float3 ViewDir = normalize(wvViewPosition.xyz - posWorld.xyz);
   
   float NdL = max(0.0f, dot(normal.xyz, LightDir));
@@ -170,38 +160,8 @@ float4 ps_main(PS_INPUT input) : SV_Target0
   //
   //  ambientLighting = (siColor * specular_F0) + diffuseAmbient;
   //}
-  
-  //Shadow
-  float localShadow = 1.0f;
-  posWorld.w = 1.0f;
 
-  float4 vertexPos = mul(posWorld, mView);
-  vertexPos = mul(vertexPos, mProjection);
-
-  float4 shadowPos = mul(posWorld, mInverseView);
-  shadowPos = mul(shadowPos, lightViewMatrix);
-
-  float4 shadowWPos = shadowPos;
-  float4 shadowClipPos = mul(shadowWPos, lightProjectionMatrix);
-  
-  shadowClipPos /= shadowClipPos.w;
-
-  float2 shadowTexCoords = 0.5f + (shadowClipPos.xyz * 0.5f);
-  shadowTexCoords.x = shadowClipPos.x / 2.0f + 0.5f;
-  shadowTexCoords.y = -shadowClipPos.y / 2.0f + 0.5f;
-
-  float finalShadow = shadowTexture.Sample(sampleTypeClamp, shadowTexCoords.xy).x;
-
-  float currentDepth = shadowClipPos.z - SHADOW_BIAS;
-  //currentDepth = vertexPos.z / vertexPos.w;
-
-  localShadow = currentDepth < finalShadow ? 0.0f : 1.0f;
-
-  if (currentDepth < finalShadow) { 
-    //localShadow = 0.0f;
-  }
-
-  float4 finalColor = float4(pow((1.0f - localShadow) * (diffuse.xyz * NdL * lightIntensity) + 
+  float4 finalColor = float4(pow((1.0f - shadowValue) * (diffuse.xyz * NdL * lightIntensity) + 
                                  (emissive.xyz * emissiveIntensity) + (specular), 1.0f / gamma), 1.0f);
 								 
   finalColor = finalColor * ao;

@@ -11,6 +11,7 @@
 #include "gaIndexBufferDX.h"
 #include "gaRenderTargetDX.h"
 #include "stb_image.h"
+#include "gaComputeShaderDX.h"
 
 namespace gaEngineSDK {
   HRESULT
@@ -501,6 +502,45 @@ namespace gaEngineSDK {
     return shaders;
   }
 
+  Shaders* 
+  GraphicsApiDX::createComputeShaderProgram(const WString& fileName,
+                                            const String& entryPoint,
+                                            const String& versionCS) {
+    ShadersDX* shaders = new ShadersDX();
+
+    if (!(AnalyzeVertexShaderDX(fileName))) {
+      delete shaders;
+      return nullptr;
+    }
+
+    shaders->m_pComputeShader.reset(new ComputeShaderDX());
+
+    //Assign data to variables.
+    shaders->m_pComputeShader->m_pBlob = nullptr;
+
+    if (!(shaders->m_pComputeShader->compileComputeShaderFromFile(fileName,
+                                                                  entryPoint,
+                                                                  versionCS))) {
+      delete shaders;
+      return nullptr;
+    }
+
+    HRESULT hr = m_pd3dDevice->CreateComputeShader(shaders->m_pComputeShader->
+                                                   m_pBlob->GetBufferPointer(),
+                                                   shaders->m_pComputeShader->
+                                                   m_pBlob->GetBufferSize(),
+                                                   nullptr,
+                                                   &shaders->m_pComputeShader->
+                                                   m_pComputeShaderDX);
+
+    if (FAILED(hr)) {
+      delete shaders;
+      return nullptr;
+    }
+
+    return shaders;
+  }
+
   SPtr<VertexShader>
   GraphicsApiDX::loadVertexShaderFromFile(const char* vertexFilePath,
                                           const char* vertexMainFuntion,
@@ -598,8 +638,8 @@ namespace gaEngineSDK {
         InitData.SysMemSlicePitch = 0;
 
         //Creamos el buffer
-        hr = m_pd3dDevice->CreateBuffer(&bd, &InitData,
-          &IB->m_pIndexBuffer);
+        hr = m_pd3dDevice->CreateBuffer(&bd, &InitData, &IB->m_pIndexBuffer);
+
         if (FAILED(hr)) {
           delete IB;
           return nullptr;
@@ -659,15 +699,12 @@ namespace gaEngineSDK {
     bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     bufferDesc.ByteWidth = bufferSize;
     switch (typeCpu) {
-
       case CPU_ACCESS::kCpuAccessRead:
         bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
         break;
 
       case CPU_ACCESS::kCpuAccessWrite:
         bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-        break;
-      default:
         break;
     }
     bufferDesc.MiscFlags = 0;
@@ -688,8 +725,6 @@ namespace gaEngineSDK {
       case USAGE::kUsageStaging:
         bufferDesc.Usage = D3D11_USAGE_STAGING;
         break;
-      default:
-        break;
     }
 
     //We create the buffer.
@@ -702,6 +737,101 @@ namespace gaEngineSDK {
     }
 
     return constantBuffer;
+  }
+
+  Textures*
+  GraphicsApiDX::createComputeBuffer(const uint32 bufferSize,
+                                     TEXTURE_BIND_FLAGS::E typeBindFlag,
+                                     USAGE::E typeUsage) {
+    ConstantBufferDX* constantBuffer = new ConstantBufferDX();
+    
+    auto* texture = new TexturesDX();
+
+    D3D11_BUFFER_DESC bufferInfo;
+
+    //Bind flag
+    switch (typeBindFlag) {
+      case TEXTURE_BIND_FLAGS::kBindShaderResource:
+        bufferInfo.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+        break;
+
+      case TEXTURE_BIND_FLAGS::kBindRenderTarget:
+        bufferInfo.BindFlags = D3D11_BIND_RENDER_TARGET;
+        break;
+
+      case TEXTURE_BIND_FLAGS::kBindDepthStencil:
+        bufferInfo.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+        break;
+
+      case TEXTURE_BIND_FLAGS::kBindUnorderedAccess:
+        bufferInfo.BindFlags = D3D11_BIND_UNORDERED_ACCESS;
+        break;
+    }
+    bufferInfo.ByteWidth = bufferSize;
+    bufferInfo.CPUAccessFlags = 0;
+    bufferInfo.MiscFlags = 0;
+    bufferInfo.StructureByteStride = 0;
+    switch (typeUsage) {
+      case USAGE::kUsageDefault:
+        bufferInfo.Usage = D3D11_USAGE_DEFAULT;
+        break;
+      
+      case USAGE::kUsageDynamic:
+        bufferInfo.Usage = D3D11_USAGE_DYNAMIC;
+        break;
+      
+      case USAGE::kUsageImmutable:
+        bufferInfo.Usage = D3D11_USAGE_IMMUTABLE;
+        break;
+      
+      case USAGE::kUsageStaging:
+        bufferInfo.Usage = D3D11_USAGE_STAGING;
+        break;
+    }
+
+    HRESULT hr = m_pd3dDevice->CreateBuffer(&bufferInfo,
+                                            nullptr,
+                                            &constantBuffer->m_pConstantBuffer);
+    if (FAILED(hr)) {
+      delete constantBuffer;
+      return nullptr;
+    }
+
+    D3D11_BUFFER_UAV uavInfo;
+    uavInfo.FirstElement = 0;
+    uavInfo.Flags = 0;
+    uavInfo.NumElements = bufferSize;
+
+    D3D11_UNORDERED_ACCESS_VIEW_DESC uavInfo2;
+    uavInfo2.Format = DXGI_FORMAT_R32_FLOAT;
+    uavInfo2.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
+    uavInfo2.Buffer = uavInfo;
+
+    hr = m_pd3dDevice->CreateUnorderedAccessView(constantBuffer->m_pConstantBuffer,
+                                                 &uavInfo2,
+                                                 &texture->m_pUAV);
+    if (FAILED(hr)) {
+      delete constantBuffer;
+      return nullptr;
+    }
+
+    D3D11_BUFFER_SRV srvInfo;
+    srvInfo.ElementOffset = 0;
+    srvInfo.ElementWidth = bufferSize;
+    srvInfo.FirstElement = 0;
+    srvInfo.NumElements = 1;
+
+    D3D11_SHADER_RESOURCE_VIEW_DESC srvInfo2;
+    srvInfo2.Format = DXGI_FORMAT_R32_FLOAT;
+    srvInfo2.ViewDimension = D3D_SRV_DIMENSION_BUFFER;
+    srvInfo2.Buffer = srvInfo;
+
+    texture->m_vShaderResourceView.resize(1);
+
+    hr = m_pd3dDevice->CreateShaderResourceView(constantBuffer->m_pConstantBuffer,
+                                                &srvInfo2,
+                                                &texture->m_vShaderResourceView[0]);
+    return texture;
   }
 
   Textures*
@@ -791,6 +921,13 @@ namespace gaEngineSDK {
 
       return texture;
     }
+    
+    //UAV (Unordered Access View)
+    if (bindFlags & D3D11_BIND_UNORDERED_ACCESS) {
+      CD3D11_UNORDERED_ACCESS_VIEW_DESC uavInfo(D3D11_UAV_DIMENSION_TEXTURE2D);
+
+      m_pd3dDevice->CreateUnorderedAccessView(texture->m_pTexture, &uavInfo, &texture->m_pUAV);
+    }
 
     return texture;
   }
@@ -872,9 +1009,6 @@ namespace gaEngineSDK {
       case FILTER::kFilterComparisionAnisotropic:
         sampDesc.Filter = D3D11_FILTER_COMPARISON_ANISOTROPIC;
         break;
-
-      default:
-        break;
     }
     switch (textureAddress) {
       case TEXTURE_ADDRESS::kTextureAddressWrap:
@@ -905,8 +1039,6 @@ namespace gaEngineSDK {
         sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
         sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
         sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
-        break;
-      default:
         break;
     }
     switch (typeComparison) {
@@ -940,8 +1072,6 @@ namespace gaEngineSDK {
       
       case COMPARISON::kComparisonAlways:
         sampDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-        break;
-      default:
         break;
     }
     sampDesc.MinLOD = 0;
@@ -1109,7 +1239,8 @@ namespace gaEngineSDK {
                                     uint32 numRenderTargets, 
                                     float scale, 
                                     bool depth,
-                                    TEXTURE_FORMAT::E typeTexture) {
+                                    TEXTURE_FORMAT::E typeTexture, 
+                                    TEXTURE_BIND_FLAGS::E typeBindFlag) {
     if (0 >= numRenderTargets) {
       numRenderTargets = 1;
     }
@@ -1538,10 +1669,20 @@ namespace gaEngineSDK {
           textureDesc.Format = DXGI_FORMAT_BC7_UNORM_SRGB;
           break;
       }
-      
       textureDesc.SampleDesc.Count = 1;
       textureDesc.Usage = D3D11_USAGE_DEFAULT;
-      textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+
+      if ((TEXTURE_BIND_FLAGS::kDefault != typeBindFlag) && 
+          (TEXTURE_BIND_FLAGS::kBindUnorderedAccess == typeBindFlag)) {
+
+        textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET |
+                                D3D11_BIND_SHADER_RESOURCE |
+                                D3D11_BIND_UNORDERED_ACCESS;
+      }
+      else {
+        textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+      }
+
       textureDesc.CPUAccessFlags = 0;
       textureDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS | D3D11_RESOURCE_MISC_SHARED;
 
@@ -1562,7 +1703,6 @@ namespace gaEngineSDK {
       m_pd3dDevice->CreateRenderTargetView(newRT->m_renderTarget.m_pTexture,
                                            &renderTargetViewDesc,
                                            &newRT->m_renderTarget.m_vRenderTargetView[i]);
-
       /*
       *  Map's Shader Resource View
       */
@@ -1890,9 +2030,6 @@ namespace gaEngineSDK {
 
       case PRIMITIVE_TOPOLOGY::kTriangleStrip:
         m_pDeviceContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-        break;
-
-      default:
         break;
     }
   }

@@ -2,6 +2,7 @@
 #include <gaPlane.h>
 #include <gaRenderTarget.h>
 #include <gaBaseInterface.h>
+#include <gaStaticMesh.h>
 
 #include "gaDeferredRendering.h"
 
@@ -66,6 +67,13 @@ namespace gaEngineSDK {
                                                               "DepthVS",
                                                               L"data/shaders/DX_Depth.hlsl",
                                                               "DepthPS"));
+
+    /*
+    * C O M P U T E
+    * S H A D E R
+    */
+
+
     /*
     * C R E A T E
     * I N P U T
@@ -173,15 +181,35 @@ namespace gaEngineSDK {
     * C R E A T E
     * L I G H T
     */
-    m_pLight = make_shared<Lights>(Vector3(1.78f, -115.56f, 206.12f),
-                                   Vector3(0.0f, 0.0f, 0.0f));
+    SPtr<Lights> lightCompo = make_shared<Lights>(Vector3(0.0f, 80.0f, -68.0f),
+                                                  Vector3(0.0f, 80.0f, 0.0f));
 
     //Light info
-    m_pLight->setAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
-    m_pLight->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
+    lightCompo->setAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
+    lightCompo->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-    m_pLight->setIntensity(2.0f);
-    m_pLight->setEmissiveIntensity(1.5f);
+    lightCompo->setIntensity(2.0f);
+    lightCompo->setEmissiveIntensity(1.5f);
+
+    auto myRSRCMG = ResourceManager::instancePtr();
+    auto mySceneGraph = SceneGraph::instancePtr();
+
+    SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/basicModels/sphere.fbx");
+
+    SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
+    myStaticMesh->m_pModel = myModel;
+
+    //Creating actor
+    m_pLightActor.reset(new Actor("LightActor"));
+    m_pLightActor->setIsSelected(true);
+    m_pLightActor->setComponent(lightCompo);
+    m_pLightActor->setComponent(myStaticMesh);
+
+    auto transform = m_pLightActor->getComponent<Transform>();
+    transform->setScale(Vector3(5.0f, 5.0f, 5.0f));
+    transform->setPosition(Vector3(0.0f, 80.0f, -68.0f));
+
+    mySceneGraph->createNewActor(m_pLightActor, SPtr<SceneNode>(nullptr));
   }
 
   void
@@ -209,7 +237,9 @@ namespace gaEngineSDK {
     depthPass();
 
     gbufferPass();
-    SSAO_Pass();
+    //SSAO_Pass();
+
+    CS_SSAO();
 
     //Blur AO
     createBlurSSAO();
@@ -403,12 +433,13 @@ namespace gaEngineSDK {
     //VS CB
     myGraphicsApi->setYourVSConstantBuffers(m_pCB_BufferCamera, 0);
     myGraphicsApi->setYourVSConstantBuffers(m_pCB_BufferWorld, 1);
-
     //Animation
     myGraphicsApi->setYourVSConstantBuffers(m_pCB_BufferBones, 2);
+    myGraphicsApi->setYourVSConstantBuffers(m_pCB_Shadows, 3);
 
     //PS CB
     myGraphicsApi->setYourPSConstantBuffers(m_pCB_BufferWorld, 1);
+    myGraphicsApi->setYourPSConstantBuffers(m_pCB_Shadows, 3);
 
     //Clear
     myGraphicsApi->clearYourRenderTarget(m_pGbuffer_RT, m_rgbaBlue);
@@ -422,9 +453,22 @@ namespace gaEngineSDK {
     worldInfo.mWorld = m_world.identity();
     worldInfo.objectPosition = { 0.0f, 0.0f, 0.0f };
 
+    auto light = m_pLightActor->getComponent<Lights>();
+    cbShadows shadowsData;
+    shadowsData.mWorld = m_world.identity();
+    shadowsData.mView = m_world.identity();
+    shadowsData.mProjection = m_world.identity();
+
+    shadowsData.mLightView = myGraphicsApi->matrixPolicy(light->getViewMatrix());
+    shadowsData.mLightProjection = myGraphicsApi->matrixPolicy(light->getProjectionMatrix());
+
     //Update CB.
     myGraphicsApi->updateConstantBuffer(&cameraInfo, m_pCB_BufferCamera);
     myGraphicsApi->updateConstantBuffer(&worldInfo, m_pCB_BufferWorld);
+    myGraphicsApi->updateConstantBuffer(&shadowsData, m_pCB_Shadows);
+
+    //Set textures
+    myGraphicsApi->setShaderResourceView(m_pDepth_RT->getRenderTexture(0), 6);
 
     //Render model
     mySceneGraph->render();
@@ -467,7 +511,12 @@ namespace gaEngineSDK {
     m_mySAQ->setSAQ();
   }
 
-  void 
+  void
+  DeferredRendering::CS_SSAO() {
+
+  }
+
+  void
   DeferredRendering::blurH_Pass(void* texture) {
     auto myGraphicsApi = g_graphicApi().instancePtr();
 
@@ -613,40 +662,36 @@ namespace gaEngineSDK {
     myGraphicsApi->setYourPSConstantBuffers(m_pCB_BufferWorld, 1);
     myGraphicsApi->setYourPSConstantBuffers(m_pCB_Lightning, 2);
     myGraphicsApi->setYourPSConstantBuffers(m_pCB_InverseMat, 3);
-    myGraphicsApi->setYourPSConstantBuffers(m_pCB_Shadows, 4);
 
     //Clean RT
     myGraphicsApi->clearYourRenderTargetView(m_pRenderTargetView, m_rgbaBlue);
     myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
 
+    auto light = m_pLightActor->getComponent<Lights>();
+
     //Update CB
     cbLightning lightningData;
-    lightningData.emissiveIntensity = m_pLight->getEmissiveIntensity();
-    lightningData.lightIntensity = m_pLight->getIntensity();
+    lightningData.emissiveIntensity = light->getEmissiveIntensity();
+    lightningData.lightIntensity = light->getIntensity();
 
-    lightningData.lightPosX = m_pLight->getPosition().x;
-    lightningData.lightPosY = m_pLight->getPosition().y;
-    lightningData.lightPosZ = m_pLight->getPosition().z;
+    lightningData.lightPosX = light->getPosition().x;
+    lightningData.lightPosY = light->getPosition().y;
+    lightningData.lightPosZ = light->getPosition().z;
 
-    lightningData.vViewPositionX = m_pLight->getLookAt().x;
-    lightningData.vViewPositionY = m_pLight->getLookAt().y;
-    lightningData.vViewPositionZ = m_pLight->getLookAt().z;
+    //lightningData.vViewPositionX = m_mainCamera.getCamEye().x;
+    //lightningData.vViewPositionY = m_mainCamera.getCamEye().y;
+    //lightningData.vViewPositionZ = m_mainCamera.getCamEye().z;
+
+    lightningData.vViewPositionX = light->getLookAt().x;
+    lightningData.vViewPositionY = light->getLookAt().y;
+    lightningData.vViewPositionZ = light->getLookAt().z;
 
     cbInverse inverseData;
     inverseData.mInverseViewCam = myGraphicsApi->matrixPolicy(m_mainCamera.getView().invert());
     inverseData.mInverseProjectionCam = myGraphicsApi->matrixPolicy(m_mainCamera.getProjection().invert());
 
-    cbShadows shadowsData;
-    shadowsData.mWorld = m_world.identity();
-    shadowsData.mView = m_world.identity();
-    shadowsData.mProjection = m_world.identity();
-
-    shadowsData.mLightView = myGraphicsApi->matrixPolicy(m_pLight->getViewMatrix());
-    shadowsData.mLightProjection = myGraphicsApi->matrixPolicy(m_pLight->getProjectionMatrix());
-
     myGraphicsApi->updateConstantBuffer(&lightningData, m_pCB_Lightning);
     myGraphicsApi->updateConstantBuffer(&inverseData, m_pCB_InverseMat);
-    myGraphicsApi->updateConstantBuffer(&shadowsData, m_pCB_Shadows);
 
     //Set textures
     myGraphicsApi->setShaderResourceView(m_pGbuffer_RT->getRenderTexture(0), 0);
@@ -654,7 +699,6 @@ namespace gaEngineSDK {
     myGraphicsApi->setShaderResourceView(m_pGbuffer_RT->getRenderTexture(3), 2);
     myGraphicsApi->setShaderResourceView(m_pAddition_RT->getRenderTexture(0), 3);
     myGraphicsApi->setShaderResourceView(m_pGbuffer_RT->getRenderTexture(2), 4);
-    myGraphicsApi->setShaderResourceView(m_pDepth_RT->getRenderTexture(0), 5);
 
     m_mySAQ->setSAQ();
   }
@@ -680,10 +724,11 @@ namespace gaEngineSDK {
     myGraphicsApi->clearYourRenderTarget(m_pDepth_RT, m_rgbaGray);
     myGraphicsApi->clearYourDepthStencilView(m_pDepth_RT);
 
+    auto light = m_pLightActor->getComponent<Lights>();
     //Update CB
     cbMatrixBuffer matrixData;
-    matrixData.mProjection = myGraphicsApi->matrixPolicy(m_pLight->getProjectionMatrix());
-    matrixData.mView = myGraphicsApi->matrixPolicy(m_pLight->getViewMatrix());
+    matrixData.mProjection = myGraphicsApi->matrixPolicy(light->getProjectionMatrix());
+    matrixData.mView = myGraphicsApi->matrixPolicy(light->getViewMatrix());
     matrixData.mWorld = m_world.identity();
 
     //Update CB.

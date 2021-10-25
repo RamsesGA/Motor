@@ -4,6 +4,7 @@
 * Made by: Ramses Guerrero Ambriz.
 */
 
+#define SHADOW_BIAS 0.001
 //----------------------------------------------------------------------------
 Texture2D baseColor : register(t0);
 Texture2D metallic : register(t1);
@@ -11,8 +12,10 @@ Texture2D roughness : register(t2);
 Texture2D normal : register(t3);
 Texture2D emissive : register(t4);
 Texture2D opacity : register(t5);
+Texture2D shadowTexture : register(t6);
 
 SamplerState simpleSampler : register(s0);
+SamplerState sampleTypeClamp : register(s1);
 
 //----------------------------------------------------------------------------
 cbuffer linkToBufferCamera : register(b0)
@@ -33,6 +36,14 @@ cbuffer linkToBufferModelData : register(b2)
   matrix bonesTransform[200];
 }
 
+cbuffer linkToBufferShadows : register(b3)
+{
+  matrix worldMatrix;
+  matrix viewMatrix;
+  matrix projectionMatrix;
+  matrix lightViewMatrix;
+  matrix lightProjectionMatrix;
+}
 
 //----------------------------------------------------------------------------
 struct VS_INPUT
@@ -48,10 +59,11 @@ struct VS_INPUT
 
 struct PS_INPUT
 {
-  float4 position  : SV_POSITION;
-  float3 posView   : TEXCOORD0;
+  float4 position : SV_POSITION;
+  float3 posView : TEXCOORD0;
   float2 texCoords : TEXCOORD1;
-  float3x3 TBN     : TEXCOORD2;
+  float3x3 TBN : TEXCOORD2;
+  float4 posWorld : COLOR0;
 };
 
 struct PS_OUTPUT 
@@ -68,17 +80,27 @@ struct PS_OUTPUT
 PS_INPUT vs_gBuffer(VS_INPUT input)
 {
   PS_INPUT output = (PS_INPUT)0;
+  
+  matrix boneTrans = bonesTransform[input.boneIds[0]] * input.boneWeights[0];
 
-  matrix newMatWorld;
-  newMatWorld[0] = float4(1, 0, 0, 0);
-  newMatWorld[1] = float4(0, 1, 0, 0);
-  newMatWorld[2] = float4(0, 0, 1, 0);
-  newMatWorld[3] = objectPosition;
+  boneTrans += bonesTransform[input.boneIds[1]] * input.boneWeights[1];
+  boneTrans += bonesTransform[input.boneIds[2]] * input.boneWeights[2];
+  boneTrans += bonesTransform[input.boneIds[3]] * input.boneWeights[3];
+  
+  float4 position = mul(input.position, boneTrans);
 
-  matrix matWV = mul(newMatWorld, modelMatrix);
+  matrix matWV = mul(mWorld, modelMatrix);
+  
+  output.posWorld = mul(position, matWV);
+  output.posWorld = mul(output.posWorld, lightViewMatrix);
+  output.posWorld = mul(output.posWorld, lightProjectionMatrix);
+  
   matWV = mul(matWV, mView);
+  
+  output.position = mul(position, matWV);
 
-  output.position = mul(input.position, matWV);
+  //output.position = mul(input.position, matWV);
+  
   output.posView = output.position.xyz;
 
   output.position = mul(output.position, mProjection);
@@ -98,15 +120,39 @@ PS_INPUT vs_gBuffer(VS_INPUT input)
 PS_OUTPUT ps_gBuffer(PS_INPUT input) : SV_Target
 {
   PS_OUTPUT output = (PS_OUTPUT)0;
+  
+  //Shadow
+  float localShadow = 1.0f;
 
-  output.position          = float4(input.posView, 1.0f);
+  //float4 shadowPos = mul(input.posWorld, lightViewMatrix);
+  //
+  //float4 shadowClipPos = mul(shadowPos, lightProjectionMatrix);
+  //shadowClipPos /= shadowClipPos.w;
+  float4 shadowClipPos = input.posWorld;
+  shadowClipPos /= shadowClipPos.w;
 
-  output.normal.xyz        = 2.0f * normal.Sample(simpleSampler, input.texCoords) - 1.0f;
-  output.normal.xyz        = normalize(mul(output.normal.xyz, input.TBN));
+  float2 shadowTexCoords = 0.5f + (shadowClipPos.xy * 0.5f);
+  shadowTexCoords.x = shadowClipPos.x / 2.0f + 0.5f;
+  shadowTexCoords.y = -shadowClipPos.y / 2.0f + 0.5f;
 
-  output.normal.w          = roughness.Sample(simpleSampler, input.texCoords).x;
-  output.diffColor.xyz     = baseColor.Sample(simpleSampler, input.texCoords).xyz;
-  output.diffColor.w       = metallic.Sample(simpleSampler, input.texCoords).x;
+  float finalShadow = shadowTexture.Sample(sampleTypeClamp, shadowTexCoords.xy).x;
+
+  float currentDepth = shadowClipPos.z - SHADOW_BIAS;
+
+  localShadow = currentDepth < finalShadow ? 0.0f : 1.0f;
+
+  if (currentDepth < finalShadow) { 
+    //localShadow = 0.0f;
+  }
+
+  output.position = float4(input.posView, localShadow);
+
+  output.normal.xyz = 2.0f * normal.Sample(simpleSampler, input.texCoords) - 1.0f;
+  output.normal.xyz = normalize(mul(output.normal.xyz, input.TBN));
+
+  output.normal.w = roughness.Sample(simpleSampler, input.texCoords).x;
+  output.diffColor.xyz = baseColor.Sample(simpleSampler, input.texCoords).xyz;
+  output.diffColor.w = metallic.Sample(simpleSampler, input.texCoords).x;
   output.emissiveColor.xyz = emissive.Sample(simpleSampler, input.texCoords).xyz;
 
   return (output);

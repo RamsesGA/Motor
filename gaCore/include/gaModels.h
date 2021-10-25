@@ -84,6 +84,9 @@ namespace gaEngineSDK {
     */
     Vector<Mesh> m_vMeshes;
 
+    /*
+    * @brief .
+    */
     Vector<String> m_vMeshName;
 
     /*

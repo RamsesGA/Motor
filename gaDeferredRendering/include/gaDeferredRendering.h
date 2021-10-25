@@ -111,6 +111,12 @@ namespace gaEngineSDK {
     * @brief .
     */
     void
+    CS_SSAO();
+
+    /*
+    * @brief .
+    */
+    void
     blurH_Pass(void* texture);
 
     /*
@@ -258,7 +264,7 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    SPtr<Lights> m_pLight;
+    SPtr<Actor> m_pLightActor;
   };
 
   /***************************************************************************/

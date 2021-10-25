@@ -81,6 +81,18 @@ namespace gaEngineSDK {
 
     Vector3
     getEulerRotation();
+
+    Vector3
+    getFront();
+
+    Vector3
+    getRight();
+
+    Vector3
+    getUp();
+
+    Vector3
+    getLookAt();
     
     /*************************************************************************/
     /**

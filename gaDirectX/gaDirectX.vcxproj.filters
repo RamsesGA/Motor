@@ -42,9 +42,15 @@
     <ClInclude Include="include\gaRenderTargetDX.h">
       <Filter>Archivos de origen\GraphicApi</Filter>
     </ClInclude>
+    <ClInclude Include="include\gaComputeShaderDX.h">
+      <Filter>Archivos de origen\GraphicApi</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gaGraphicsApiDX.cpp">
+      <Filter>Archivos de origen\GraphicApi</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaComputeShaderDX.cpp">
       <Filter>Archivos de origen\GraphicApi</Filter>
     </ClCompile>
   </ItemGroup>

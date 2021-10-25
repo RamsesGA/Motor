@@ -155,7 +155,7 @@ namespace FILTER {
     kFilterComparisionMinMagMipLinear = 0x95,
     kFilterComparisionAnisotropic = 0xd5
   };
-}
+};
 
 namespace TEXTURE_ADDRESS {
   enum E {
@@ -165,7 +165,7 @@ namespace TEXTURE_ADDRESS {
     kTextureAddressBorder = 4,
     kTextureAddressMirrorOnce = 5
   };
-}
+};
 
 namespace COMPARISON {
   enum E {
@@ -178,7 +178,17 @@ namespace COMPARISON {
     kComparisonGreaterEqual = 7,
     kComparisonAlways = 8
   };
-}
+};
+
+namespace TEXTURE_BIND_FLAGS {
+  enum E {
+    kDefault = 0,
+    kBindShaderResource  = 0x8L,
+    kBindRenderTarget    = 0x20L,
+    kBindDepthStencil    = 0x40L,
+    kBindUnorderedAccess = 0x80L
+  };
+};
 
 struct SAMPLER_DESC {
   FILTER::E          myFilter;
@@ -193,14 +203,14 @@ struct SAMPLER_DESC {
   float              myMaxLOD;
 };
 
-struct CPU_ACCESS {
+namespace CPU_ACCESS {
   enum E {
     kCpuAccessRead = 1,
     kCpuAccessWrite = 2
   };
 };
 
-struct USAGE {
+namespace USAGE {
   enum E {
     kUsageDefault = 0,
     kUsageDynamic = 1,

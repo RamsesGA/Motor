@@ -65,6 +65,12 @@ namespace gaEngineSDK {
     */
     ID3D11DepthStencilState* m_pDepthStencilState = nullptr;
 
+    /**
+    * @brief .
+    */
+    ID3D11UnorderedAccessView* m_pUAV = nullptr;
+
+
     friend class GraphicsApiDX;
     friend class RenderTargetDX;
   };

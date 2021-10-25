@@ -34,6 +34,7 @@ bld/
 [Bb]in/data/models/spartan
 [Bb]in/data/models/ugandan
 [Bb]in/data/models/vela
+[Bb]in/data/models/stranger
 [Bb]in/data/textures/2B
 [Bb]in/data/textures/scene
 [Bb]in/data/textures/grimoires
@@ -41,6 +42,7 @@ bld/
 [Bb]in/data/textures/spartan
 [Bb]in/data/textures/ugandan
 [Bb]in/data/textures/vela
+[Bb]in/data/textures/stranger
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/

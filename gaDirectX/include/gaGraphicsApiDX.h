@@ -103,6 +103,11 @@ namespace gaEngineSDK {
                          const WString& namePS, 
                          const String& entryPointPS) override;
 
+    Shaders*
+    createComputeShaderProgram(const WString& fileName,
+                               const String& entryPoint,
+                               const String& versionCS = "cs_4_0") override;
+
     SPtr<VertexShader>
     loadVertexShaderFromFile(const char* vertexFilePath,
                              const char* vertexMainFuntion,
@@ -126,6 +131,12 @@ namespace gaEngineSDK {
     createConstantBuffer(const uint32 bufferSize, 
                          CPU_ACCESS::E typeCpu, 
                          USAGE::E typeUsage) override;
+
+    Textures*
+    createComputeBuffer(const uint32 bufferSize,
+                        TEXTURE_BIND_FLAGS::E typeBindFlag =
+                        TEXTURE_BIND_FLAGS::kBindUnorderedAccess,
+                        USAGE::E typeUsage = USAGE::kUsageDefault) override;
 
     Textures*
     createTexture(const uint32 width, 
@@ -152,7 +163,9 @@ namespace gaEngineSDK {
                        float scale = 1.0f,
                        bool depth = false,
                        TEXTURE_FORMAT::E typeTexture =
-                       TEXTURE_FORMAT::E::kR16G16B16A16Float) override;
+                       TEXTURE_FORMAT::E::kR16G16B16A16Float,
+                       TEXTURE_BIND_FLAGS::E typeBindFlag = 
+                       TEXTURE_BIND_FLAGS::kDefault) override;
     void
     createMipMaps(WeakSPtr<RenderTarget> renderTarg) override;
 
