@@ -7,6 +7,9 @@
     <Filter Include="Archivos de origen\GraphicApi">
       <UniqueIdentifier>{499d514a-e3f9-41a9-873b-beb3ee06bddd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Compute">
+      <UniqueIdentifier>{a2a9c890-d153-46c6-ba73-14e0f6fa6a95}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gaConstantBufferDX.h">
@@ -42,16 +45,22 @@
     <ClInclude Include="include\gaRenderTargetDX.h">
       <Filter>Archivos de origen\GraphicApi</Filter>
     </ClInclude>
+    <ClInclude Include="include\gaComputeBufferDX.h">
+      <Filter>Archivos de origen\Compute</Filter>
+    </ClInclude>
     <ClInclude Include="include\gaComputeShaderDX.h">
-      <Filter>Archivos de origen\GraphicApi</Filter>
+      <Filter>Archivos de origen\Compute</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gaGraphicsApiDX.cpp">
       <Filter>Archivos de origen\GraphicApi</Filter>
     </ClCompile>
+    <ClCompile Include="src\gaComputeBufferDX.cpp">
+      <Filter>Archivos de origen\Compute</Filter>
+    </ClCompile>
     <ClCompile Include="src\gaComputeShaderDX.cpp">
-      <Filter>Archivos de origen\GraphicApi</Filter>
+      <Filter>Archivos de origen\Compute</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

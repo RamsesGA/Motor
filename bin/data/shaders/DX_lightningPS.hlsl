@@ -161,9 +161,9 @@ float4 ps_main(PS_INPUT input) : SV_Target0
   //  ambientLighting = (siColor * specular_F0) + diffuseAmbient;
   //}
 
-  float4 finalColor = float4(pow((1.0f - shadowValue) * (diffuse.xyz * NdL * lightIntensity) + 
-                                 (emissive.xyz * emissiveIntensity) + (specular), 1.0f / gamma), 1.0f);
-								 
-  finalColor = finalColor * ao;
+  float4 finalColor = float4(pow(((1.0f - shadowValue) * 
+                                  (diffuse.xyz * NdL * lightIntensity) + 
+                                  (emissive.xyz * emissiveIntensity) + 
+                                  (specular))* ao, 1.0f / gamma), 1.0f);
   return finalColor;
 }

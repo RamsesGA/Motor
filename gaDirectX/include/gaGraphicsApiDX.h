@@ -18,9 +18,10 @@
 
 #include "gaPrerequisitesCore.h"
 
-using sf::WindowHandle;
-
 namespace gaEngineSDK {
+  using  std::make_shared;
+  using sf::WindowHandle;
+
   /*
   * @brief This class is a child of the Graphic Api parent class,
   *      all comments on members or methods are found in their respective .h.
@@ -64,6 +65,20 @@ namespace gaEngineSDK {
     Matrix4x4
     matrixPolicy(const Matrix4x4& mat4x4) override;
 
+    void
+    dispatch(uint32 threadGroupCountX, 
+             uint32 threadGroupCountY, 
+             uint32 threadGroupCountZ) override;
+
+    void
+    desbindUAV(uint32 startSlot, uint32 numUAV = 1) override;
+
+    void
+    desbindRT() override;
+
+    void
+    desbindSRV(uint32 startSlot = 0) override;
+
     /*************************************************************************/
     /**
     * Updates methods.
@@ -72,6 +87,9 @@ namespace gaEngineSDK {
 
     void
     updateConstantBuffer(const void* srcData, WeakSPtr<ConstantBuffer> updateDataCB) override;
+
+    void
+    updateComputeBuffer(const void* srcData, WeakSPtr<ComputeBuffer> computeBuffer) override;
 
     /*************************************************************************/
     /**
@@ -132,8 +150,9 @@ namespace gaEngineSDK {
                          CPU_ACCESS::E typeCpu, 
                          USAGE::E typeUsage) override;
 
-    Textures*
+    SPtr<ComputeBuffer>
     createComputeBuffer(const uint32 bufferSize,
+                        const uint32 numElements,
                         TEXTURE_BIND_FLAGS::E typeBindFlag =
                         TEXTURE_BIND_FLAGS::kBindUnorderedAccess,
                         USAGE::E typeUsage = USAGE::kUsageDefault) override;
@@ -219,6 +238,11 @@ namespace gaEngineSDK {
                           const uint32 numViews = 1) override;
 
     void
+    csSetShaderResource(void* renderTexture,
+                        const uint32 startSlot,
+                        const uint32 numViews = 1) override;
+
+    void
     setRenderTarget(WeakSPtr<Textures> renderTarget, 
                     WeakSPtr<Textures> depthStencil) override;
 
@@ -273,6 +297,29 @@ namespace gaEngineSDK {
 
     void
     setConstBufferBones(WeakSPtr<ConstantBuffer> cbBones) override;
+
+    void
+    setComputeUAV(WeakSPtr<ComputeBuffer> pComBuff,
+                  uint32 startSlot = 0, 
+                  uint32 numUAV = 1) override;
+
+    void
+    setRtUAV(WeakSPtr<RenderTarget> pCompBuffRT,
+             uint32 startSlot = 0,
+             uint32 numUAV = 1) override;
+
+    void
+    setComputeShader(WeakSPtr<Shaders> shader) override;
+
+    void
+    setCSConstantBuffer(WeakSPtr<ConstantBuffer> constBuffer,
+                        const uint32 startSlot,
+                        const uint32 numBuffers = 1) override;
+
+    void
+    setCSSampler(WeakSPtr<SamplerState> sampler,
+                 uint32 startSlot,
+                 uint32 numSamplers = 1) override;
 
     /*************************************************************************/
     /**

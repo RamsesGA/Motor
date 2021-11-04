@@ -40,6 +40,7 @@ namespace gaEngineSDK {
   class VertexShader;
   class PixelShader;
   class RenderTarget;
+  class ComputeBuffer;
 
   /**
   * @brief Parent class where we can add
@@ -135,6 +136,25 @@ namespace gaEngineSDK {
       return Matrix4x4();
     };
 
+    virtual void
+    dispatch(uint32 threadGroupCountX, uint32 threadGroupCountY, uint32 threadGroupCountZ) {
+      GA_UNREFERENCED_PARAMETER(threadGroupCountX);
+      GA_UNREFERENCED_PARAMETER(threadGroupCountY);
+      GA_UNREFERENCED_PARAMETER(threadGroupCountZ);
+    };
+
+    virtual void
+    desbindUAV(uint32 startSlot, uint32 numUAV = 1) {
+      GA_UNREFERENCED_PARAMETER(startSlot);
+      GA_UNREFERENCED_PARAMETER(numUAV);
+    };
+
+    virtual void
+    desbindRT() {};
+
+    virtual void
+    desbindSRV(uint32 startSlot = 0) {};
+
     /*************************************************************************/
     /**
     * Updates methods.
@@ -150,6 +170,11 @@ namespace gaEngineSDK {
     virtual void
     updateConstantBuffer(const void* srcData, WeakSPtr<ConstantBuffer> updateDataCB) {
       GA_UNREFERENCED_PARAMETER(srcData); GA_UNREFERENCED_PARAMETER(updateDataCB);
+    };
+
+    virtual void
+    updateComputeBuffer(const void* srcData, WeakSPtr<ComputeBuffer> computeBuffer) {
+      GA_UNREFERENCED_PARAMETER(srcData); GA_UNREFERENCED_PARAMETER(computeBuffer);
     };
 
     /*************************************************************************/
@@ -220,7 +245,7 @@ namespace gaEngineSDK {
     virtual Shaders*
     createComputeShaderProgram(const WString& fileName,
                                const String& entryPoint,
-                               const String& versionCS = "cs_4_0") {
+                               const String& versionCS = "cs_5_0") {
       GA_UNREFERENCED_PARAMETER(fileName);
       GA_UNREFERENCED_PARAMETER(entryPoint);
       GA_UNREFERENCED_PARAMETER(versionCS);
@@ -304,8 +329,9 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    virtual Textures*
-    createComputeBuffer(const uint32 bufferSize, 
+    virtual SPtr<ComputeBuffer>
+    createComputeBuffer(const uint32 bufferSize,
+                        const uint32 numElements,
                         TEXTURE_BIND_FLAGS::E typeBindFlag = 
                         TEXTURE_BIND_FLAGS::kBindUnorderedAccess, 
                         USAGE::E typeUsage = USAGE::kUsageDefault) {
@@ -523,6 +549,15 @@ namespace gaEngineSDK {
       GA_UNREFERENCED_PARAMETER(numViews);
     };
 
+    virtual void
+    csSetShaderResource(void* renderTexture,
+                        const uint32 startSlot,
+                        const uint32 numViews = 1) {
+      GA_UNREFERENCED_PARAMETER(renderTexture);
+      GA_UNREFERENCED_PARAMETER(startSlot);
+      GA_UNREFERENCED_PARAMETER(numViews);
+    };
+
     /**
     * @brief Function to save the information of the render target.
     * @param .
@@ -667,6 +702,47 @@ namespace gaEngineSDK {
     virtual void
     setConstBufferBones(WeakSPtr<ConstantBuffer> cbBones) {
       GA_UNREFERENCED_PARAMETER(cbBones);
+    };
+
+    virtual void
+    setComputeUAV(WeakSPtr<ComputeBuffer> pComBuff,
+                  uint32 startSlot = 0,
+                  uint32 numUAV = 1) {
+      GA_UNREFERENCED_PARAMETER(pComBuff);
+      GA_UNREFERENCED_PARAMETER(startSlot);
+      GA_UNREFERENCED_PARAMETER(numUAV);
+    };
+
+    virtual void
+    setRtUAV(WeakSPtr<RenderTarget> pCompBuffRT,
+             uint32 startSlot = 0,
+             uint32 numUAV = 1) {
+      GA_UNREFERENCED_PARAMETER(pCompBuffRT);
+      GA_UNREFERENCED_PARAMETER(startSlot);
+      GA_UNREFERENCED_PARAMETER(numUAV);
+    };
+
+    virtual void
+    setComputeShader(WeakSPtr<Shaders> shader) {
+      GA_UNREFERENCED_PARAMETER(shader);
+    };
+
+    virtual void
+    setCSConstantBuffer(WeakSPtr<ConstantBuffer> constBuffer,
+                        const uint32 startSlot,
+                        const uint32 numBuffers = 1) {
+      GA_UNREFERENCED_PARAMETER(constBuffer);
+      GA_UNREFERENCED_PARAMETER(startSlot);
+      GA_UNREFERENCED_PARAMETER(numBuffers);
+    };
+
+    virtual void
+    setCSSampler(WeakSPtr<SamplerState> sampler,
+                 uint32 startSlot,
+                 uint32 numSamplers = 1) {
+      GA_UNREFERENCED_PARAMETER(sampler);
+      GA_UNREFERENCED_PARAMETER(startSlot);
+      GA_UNREFERENCED_PARAMETER(numSamplers);
     };
 
     /*************************************************************************/

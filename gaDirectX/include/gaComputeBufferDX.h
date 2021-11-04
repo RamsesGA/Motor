@@ -4,36 +4,22 @@
 #include <d3dcompiler.h>
 #include <d3d11shader.h>
 #include <gaPrerequisitesCore.h>
-#include <gaComputeShader.h>
+#include <gaComputeBuffer.h>
 
 namespace gaEngineSDK {
-  class ComputeShaderDX final : public ComputeShader
+  class ComputeBufferDX final : public ComputeBuffer
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
     */
     /*************************************************************************/
-    ComputeShaderDX() = default;
+    ComputeBufferDX() = default;
 
-    ~ComputeShaderDX() = default;
+    ~ComputeBufferDX() = default;
 
-    /*************************************************************************/
-    /**
-    * Methods.
-    */
-    /*************************************************************************/
-
-    /*
-    * @brief .
-    */
-    bool
-    compileComputeShaderFromFile(const WString& fileName,
-                                 const String& entryPoint,
-                                 const String& versionCS);
-
-   protected:
+  protected:
     /*************************************************************************/
     /**
     * Members.
@@ -43,12 +29,22 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    ID3D11ComputeShader* m_pComputeShaderDX = nullptr;
+    uint32 m_offset = 0;
 
     /*
     * @brief .
     */
-    ID3DBlob* m_pBlob = nullptr;
+    ID3D11Buffer* m_pComputeBuffer = nullptr;
+
+    /*
+    * @brief .
+    */
+    Vector<ID3D11ShaderResourceView*> m_vpComputeSRV;
+
+    /*
+    * @brief .
+    */
+    ID3D11UnorderedAccessView* m_pComputeUAV = nullptr;
 
     friend class GraphicsApiDX;
   };

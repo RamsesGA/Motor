@@ -178,6 +178,7 @@
     <ClInclude Include="include\gaBaseRenderer.h" />
     <ClInclude Include="include\gaCamera.h" />
     <ClInclude Include="include\gaComponent.h" />
+    <ClInclude Include="include\gaComputeBuffer.h" />
     <ClInclude Include="include\gaComputeShader.h" />
     <ClInclude Include="include\gaConstantBuffer.h" />
     <ClInclude Include="include\gaGraphicsApi.h" />

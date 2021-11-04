@@ -2,6 +2,7 @@
 
 #include <d3d11.h>
 #include <gaTextures.h>
+#include <gaComputeBufferDX.h>
 
 namespace gaEngineSDK {
   class TexturesDX final : public Textures
@@ -70,6 +71,10 @@ namespace gaEngineSDK {
     */
     ID3D11UnorderedAccessView* m_pUAV = nullptr;
 
+    /**
+    * @brief .
+    */
+    SPtr<ComputeBufferDX> m_pCompBuff;
 
     friend class GraphicsApiDX;
     friend class RenderTargetDX;

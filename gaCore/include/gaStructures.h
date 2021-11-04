@@ -37,7 +37,9 @@ struct cbWorld {
 struct cbSSAO {
   Vector2 mViewportDimensions;
   Vector2 mNothing;
+};
 
+struct cbSSAO2 {
   float mSample_radius;
   float mIntensity;
   float mScale;
@@ -88,16 +90,6 @@ struct cbShadows {
   Matrix4x4 mProjection;
   Matrix4x4 mLightView;
   Matrix4x4 mLightProjection;
-};
-
-struct cbLight {
-  Vector3 lightPosition;
-  float padding;
-};
-
-struct cbLight2 {
-  Vector4 ambientColor;
-  Vector4 diffuseColor;
 };
 
 struct cbInverse {

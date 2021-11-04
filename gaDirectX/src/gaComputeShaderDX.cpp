@@ -21,6 +21,7 @@ namespace gaEngineSDK {
 
     if (FAILED(hr)) {
       if (pErrorBlob) {
+        OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
         pErrorBlob->Release();
         return false;
       }

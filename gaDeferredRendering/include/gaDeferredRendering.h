@@ -87,6 +87,9 @@ namespace gaEngineSDK {
     createBlurSSAO();
 
     void
+    createCSBlurSSAO();
+
+    void
     createBlurDepth();
 
     /*************************************************************************/
@@ -119,11 +122,17 @@ namespace gaEngineSDK {
     void
     blurH_Pass(void* texture);
 
+    void
+    csBlurHPass(void* texture);
+
     /*
     * @brief .
     */
     void
     blurV_Pass(void* texture);
+
+    void
+    csBlurVPass(void* texture);
 
     /*
     * @brief .
@@ -148,6 +157,36 @@ namespace gaEngineSDK {
     */
     void
     depthPass();
+
+    /*
+    * @brief .
+    */
+    void
+    defaultLight();
+
+    /*
+    * @brief .
+    */
+    void
+    createSamplers();
+
+    /*
+    * @brief .
+    */
+    void
+    createRenderTargets();
+
+    /*
+    * @brief .
+    */
+    void
+    createBuffers();
+
+    /*
+    * @brief .
+    */
+    void
+    loadShadersFiles();
 
    protected:
     /*************************************************************************/
@@ -175,17 +214,32 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    Vector4 m_rgbaBlue = {0.0f, 0.0f, (120.0f / 255.0f), 255.0f};
+    Vector4 m_rgbaMagenta = { (207.0f / 255.0f), (52.0f / 255.0f), (118.0f / 255.0f), 255.0f };
 
     /*
     * @brief .
     */
-    Vector4 m_rgbaGray = {(184.0f / 255.0f), (184.0f / 255.0f), (184.0f / 255.0f), 255.0f};
+    Vector4 m_rgbaCyan = { 0.0f, (255.0f / 255.0f), (255.0f / 255.0f), 255.0f };
 
     /*
     * @brief .
     */
-    Vector4 m_rgbaGray2 = {(127.0f / 255.0f), (127.0f / 255.0f), (127.0f / 255.0f), 255.0f};
+    Vector4 m_rgbaOrange = { (255.0f / 255.0f), (165.0f / 255.0f), 0.0f, 255.0f };
+
+    /*
+    * @brief .
+    */
+    Vector4 m_rgbaGreen = { 0.0f, (255.0f / 255.0f), 0.0f, 255.0f };
+
+    /*
+    * @brief .
+    */
+    Vector4 m_rgbaBlue = { 0.0f, 0.0f, (255.0f / 255.0f), 255.0f };
+
+    /*
+    * @brief .
+    */
+    Vector4 m_rgbaYellow = { (255.0f / 255.0f), (255.0f / 255.0f), 0.0f, 255.0f };
 
     /*
     * @brief Variables with the information of the
@@ -198,27 +252,37 @@ namespace gaEngineSDK {
     * @brief Variable that saves the data of the shaders to be read.
     */
     SPtr<Shaders> m_pGBuffer_Shader;
-    SPtr<Shaders> m_pSSAO_Shader;
-    SPtr<Shaders> m_pBlurH_Shader;
-    SPtr<Shaders> m_pBlurV_Shader;
+    //SPtr<Shaders> m_pSSAO_Shader;
+    //SPtr<Shaders> m_pBlurH_Shader;
+    //SPtr<Shaders> m_pBlurV_Shader;
     SPtr<Shaders> m_pLightning_Shader;
-    SPtr<Shaders> m_pAddition_Shader;
-    SPtr<Shaders> m_pAdditionDepth_Shader;
+    //SPtr<Shaders> m_pAddition_Shader;
+    //SPtr<Shaders> m_pAdditionDepth_Shader;
     SPtr<Shaders> m_pDepth_Shader;
+
+    //Compute shaders
+    SPtr<Shaders> m_pCS_SSAO;
+    SPtr<Shaders> m_pCS_BlurH;
+    SPtr<Shaders> m_pCS_BlurV;
 
     /*
     * @brief Members for renter targets.
     */
     SPtr<RenderTarget> m_pGbuffer_RT;
-    SPtr<RenderTarget> m_pSSAO_RT;
-    SPtr<RenderTarget> m_pBlurH_RT;
-    SPtr<RenderTarget> m_pBlurV_RT;
-    SPtr<RenderTarget> m_pAddition_RT;
-    SPtr<RenderTarget> m_pAdditionShadow_RT;
+    //SPtr<RenderTarget> m_pSSAO_RT;
+    //SPtr<RenderTarget> m_pBlurH_RT;
+    //SPtr<RenderTarget> m_pBlurV_RT;
+    //SPtr<RenderTarget> m_pAddition_RT;
+    //SPtr<RenderTarget> m_pAdditionShadow_RT;
     SPtr<RenderTarget> m_pLightning_RT;
 
     //Depth map
     SPtr<RenderTarget> m_pDepth_RT;
+
+    //Compute
+    SPtr<RenderTarget> m_pCompSSAO_RT;
+    SPtr<RenderTarget> m_pCompBlurH_RT;
+    SPtr<RenderTarget> m_pCompBlurV_RT;
 
     /*
     * @brief Variable that stores the CB data.
@@ -227,14 +291,13 @@ namespace gaEngineSDK {
     SPtr<ConstantBuffer> m_pCB_BufferWorld;
     SPtr<ConstantBuffer> m_pCB_BufferBones;
     SPtr<ConstantBuffer> m_pCB_SSAO;
+    SPtr<ConstantBuffer> m_pCB_SSAO2;
     SPtr<ConstantBuffer> m_pCB_ViewPortDimension;
     SPtr<ConstantBuffer> m_pCB_Lightning;
     SPtr<ConstantBuffer> m_pCB_MipLevels;
 
     //Depth map
     SPtr<ConstantBuffer> m_pCB_Depth;
-    SPtr<ConstantBuffer> m_pCB_Light;
-    SPtr<ConstantBuffer> m_pCB_Light2;
     SPtr<ConstantBuffer> m_pCB_InverseMat;
     SPtr<ConstantBuffer> m_pCB_Shadows;
 
@@ -242,13 +305,13 @@ namespace gaEngineSDK {
     * @brief .
     */
     SPtr<SamplerState> m_pSampler;
+    SPtr<SamplerState> m_pCSSampler;
     SPtr<SamplerState> m_pSampleStateClamp;
 
     /*
     * @brief Variable that stores the vertex layout data.
     */
     SPtr<InputLayout> m_pVertexLayout;
-
     SPtr<InputLayout> m_pDepthLayout;
 
     /*

@@ -1,5 +1,6 @@
 #include <exception>
 #include <gaMatrix4x4.h>
+#include <comdef.h>
 
 #include "gaGraphicsApiDX.h"
 #include "gaConstantBufferDX.h"
@@ -12,6 +13,7 @@
 #include "gaRenderTargetDX.h"
 #include "stb_image.h"
 #include "gaComputeShaderDX.h"
+#include "gaComputeBufferDX.h"
 
 namespace gaEngineSDK {
   HRESULT
@@ -181,6 +183,8 @@ namespace gaEngineSDK {
     }
 
     if (FAILED(hr)) {
+      _com_error err(hr);
+      LPCTSTR errMsg = err.ErrorMessage();
       return false;
     }
 
@@ -192,6 +196,8 @@ namespace gaEngineSDK {
 
     //We check that everything goes well, if we do not send an error.
     if (FAILED(hr)) {
+      _com_error err(hr);
+      LPCTSTR errMsg = err.ErrorMessage();
       delete backBuffer;
       return false;
     }
@@ -202,6 +208,8 @@ namespace gaEngineSDK {
                                               &backBuffer->m_vRenderTargetView[0]);
 
     if (FAILED(hr)) {
+      _com_error err(hr);
+      LPCTSTR errMsg = err.ErrorMessage();
       delete backBuffer;
       return false;
     }
@@ -229,6 +237,8 @@ namespace gaEngineSDK {
     hr = m_pd3dDevice->CreateTexture2D(&textureDesc, nullptr, &depthStencil->m_pTexture);
 
     if (FAILED(hr)) {
+      _com_error err(hr);
+      LPCTSTR errMsg = err.ErrorMessage();
       delete backBuffer;
       delete depthStencil;
       return false;
@@ -246,6 +256,8 @@ namespace gaEngineSDK {
 
     //We check that everything goes well, if we do not send an error.
     if (FAILED(hr)) {
+      _com_error err(hr);
+      LPCTSTR errMsg = err.ErrorMessage();
       delete backBuffer;
       delete depthStencil;
       return false;
@@ -342,6 +354,43 @@ namespace gaEngineSDK {
     return temp;
   }
 
+  void 
+  GraphicsApiDX::dispatch(uint32 threadGroupCountX, 
+                          uint32 threadGroupCountY,
+                          uint32 threadGroupCountZ) {
+    m_pDeviceContext->Dispatch(threadGroupCountX, threadGroupCountY, threadGroupCountZ);
+  }
+
+  void 
+  GraphicsApiDX::desbindUAV(uint32 startSlot, uint32 numUAV) {
+    ID3D11UnorderedAccessView* UAV_NULL = nullptr;
+    m_pDeviceContext->CSSetUnorderedAccessViews(startSlot, numUAV, &UAV_NULL, 0);
+  }
+
+  void 
+  GraphicsApiDX::desbindRT() {
+    static ID3D11RenderTargetView* newRT[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT];
+
+    for (uint32 i = 0; i < D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT; ++i) {
+      newRT[i] = nullptr;
+    }
+
+    m_pDeviceContext->OMSetRenderTargets(D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT, 
+                                         newRT, 
+                                         nullptr);
+  }
+
+  void 
+  GraphicsApiDX::desbindSRV(uint32 startSlot) {
+    ID3D11ShaderResourceView* pSRV = nullptr;
+
+    m_pDeviceContext->VSSetShaderResources(startSlot, 1, &pSRV);
+
+    m_pDeviceContext->PSSetShaderResources(startSlot, 1, &pSRV);
+
+    m_pDeviceContext->CSSetShaderResources(startSlot, 1, &pSRV);
+  }
+
   /***************************************************************************/
   /**
   * Updates.
@@ -358,6 +407,22 @@ namespace gaEngineSDK {
       m_pDeviceContext->UpdateSubresource(constBuff->m_pConstantBuffer, 
                                           0, 
                                           nullptr, 
+                                          srcData,
+                                          0,
+                                          0);
+    }
+  }
+
+  void 
+  GraphicsApiDX::updateComputeBuffer(const void* srcData,
+                                     WeakSPtr<ComputeBuffer> computeBuffer) {
+    auto cb = computeBuffer.lock().get();
+    if (nullptr != cb) {
+      ComputeBufferDX* constBuff = reinterpret_cast<ComputeBufferDX*>(cb);
+
+      m_pDeviceContext->UpdateSubresource(constBuff->m_pComputeBuffer,
+                                          0,
+                                          nullptr,
                                           srcData,
                                           0,
                                           0);
@@ -458,6 +523,8 @@ namespace gaEngineSDK {
 
     //We check that everything goes well, if we do not send an error.
     if (FAILED(hr)) {
+      _com_error err(hr);
+      LPCTSTR errMsg = err.ErrorMessage();
       delete shaders;
       return nullptr;
     }
@@ -471,6 +538,8 @@ namespace gaEngineSDK {
 
     //Finally we return the data in case of not getting an error.
     if (FAILED(hr)) {
+      _com_error err(hr);
+      LPCTSTR errMsg = err.ErrorMessage();
       delete shaders;
       return nullptr;
     }
@@ -483,6 +552,8 @@ namespace gaEngineSDK {
 
     //We check that everything goes well, if we do not send an error.
     if (FAILED(hr)) {
+      _com_error err(hr);
+      LPCTSTR errMsg = err.ErrorMessage();
       delete shaders;
       return nullptr;
     }
@@ -494,6 +565,8 @@ namespace gaEngineSDK {
 
     //Finally we return the data in case of not getting an error.
     if (FAILED(hr)) {
+      _com_error err(hr);
+      LPCTSTR errMsg = err.ErrorMessage();
       shaders->m_pVSBlob->Release();
       delete shaders;
       return nullptr;
@@ -507,11 +580,6 @@ namespace gaEngineSDK {
                                             const String& entryPoint,
                                             const String& versionCS) {
     ShadersDX* shaders = new ShadersDX();
-
-    if (!(AnalyzeVertexShaderDX(fileName))) {
-      delete shaders;
-      return nullptr;
-    }
 
     shaders->m_pComputeShader.reset(new ComputeShaderDX());
 
@@ -534,6 +602,8 @@ namespace gaEngineSDK {
                                                    m_pComputeShaderDX);
 
     if (FAILED(hr)) {
+      _com_error err(hr);
+      LPCTSTR errMsg = err.ErrorMessage();
       delete shaders;
       return nullptr;
     }
@@ -583,6 +653,8 @@ namespace gaEngineSDK {
         hr = m_pd3dDevice->CreateBuffer(&bd, &InitData, &VB->m_pVertexBuffer);
 
         if (FAILED(hr)) {
+          _com_error err(hr);
+          LPCTSTR errMsg = err.ErrorMessage();
           delete VB;
           return nullptr;
         }
@@ -593,6 +665,8 @@ namespace gaEngineSDK {
         hr = m_pd3dDevice->CreateBuffer(&bd, nullptr, &VB->m_pVertexBuffer);
 
         if (FAILED(hr)) {
+          _com_error err(hr);
+          LPCTSTR errMsg = err.ErrorMessage();
           delete VB;
           return nullptr;
         }
@@ -641,6 +715,8 @@ namespace gaEngineSDK {
         hr = m_pd3dDevice->CreateBuffer(&bd, &InitData, &IB->m_pIndexBuffer);
 
         if (FAILED(hr)) {
+          _com_error err(hr);
+          LPCTSTR errMsg = err.ErrorMessage();
           delete IB;
           return nullptr;
         }
@@ -650,6 +726,8 @@ namespace gaEngineSDK {
         hr = m_pd3dDevice->CreateBuffer(&bd, nullptr, &IB->m_pIndexBuffer);
 
         if (FAILED(hr)) {
+          _com_error err(hr);
+          LPCTSTR errMsg = err.ErrorMessage();
           delete IB;
           return nullptr;
         }
@@ -677,6 +755,8 @@ namespace gaEngineSDK {
 
     //Finally we return the data in case of not getting an error.
     if (FAILED(hr)) {
+      _com_error err(hr);
+      LPCTSTR errMsg = err.ErrorMessage();
       delete constantBuffer;
       return nullptr;
     }
@@ -732,6 +812,8 @@ namespace gaEngineSDK {
 
     //Finally we return the data in case of not getting an error.
     if (FAILED(hr)) {
+      _com_error err(hr);
+      LPCTSTR errMsg = err.ErrorMessage();
       delete constantBuffer;
       return nullptr;
     }
@@ -739,17 +821,17 @@ namespace gaEngineSDK {
     return constantBuffer;
   }
 
-  Textures*
+  SPtr<ComputeBuffer>
   GraphicsApiDX::createComputeBuffer(const uint32 bufferSize,
+                                     const uint32 numElements,
                                      TEXTURE_BIND_FLAGS::E typeBindFlag,
                                      USAGE::E typeUsage) {
-    ConstantBufferDX* constantBuffer = new ConstantBufferDX();
+    ComputeBufferDX* constantBuffer = new ComputeBufferDX();
     
-    auto* texture = new TexturesDX();
-
     D3D11_BUFFER_DESC bufferInfo;
-
+    ZeroMemory(&bufferInfo, sizeof(bufferInfo));
     //Bind flag
+    /*
     switch (typeBindFlag) {
       case TEXTURE_BIND_FLAGS::kBindShaderResource:
         bufferInfo.BindFlags = D3D11_BIND_SHADER_RESOURCE;
@@ -767,6 +849,8 @@ namespace gaEngineSDK {
         bufferInfo.BindFlags = D3D11_BIND_UNORDERED_ACCESS;
         break;
     }
+    */
+    bufferInfo.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS;
     bufferInfo.ByteWidth = bufferSize;
     bufferInfo.CPUAccessFlags = 0;
     bufferInfo.MiscFlags = 0;
@@ -791,8 +875,10 @@ namespace gaEngineSDK {
 
     HRESULT hr = m_pd3dDevice->CreateBuffer(&bufferInfo,
                                             nullptr,
-                                            &constantBuffer->m_pConstantBuffer);
+                                            &constantBuffer->m_pComputeBuffer);
     if (FAILED(hr)) {
+      _com_error err(hr);
+      LPCTSTR errMsg = err.ErrorMessage();
       delete constantBuffer;
       return nullptr;
     }
@@ -800,17 +886,19 @@ namespace gaEngineSDK {
     D3D11_BUFFER_UAV uavInfo;
     uavInfo.FirstElement = 0;
     uavInfo.Flags = 0;
-    uavInfo.NumElements = bufferSize;
+    uavInfo.NumElements = numElements;
 
     D3D11_UNORDERED_ACCESS_VIEW_DESC uavInfo2;
-    uavInfo2.Format = DXGI_FORMAT_R32_FLOAT;
+    uavInfo2.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
     uavInfo2.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
     uavInfo2.Buffer = uavInfo;
 
-    hr = m_pd3dDevice->CreateUnorderedAccessView(constantBuffer->m_pConstantBuffer,
+    hr = m_pd3dDevice->CreateUnorderedAccessView(constantBuffer->m_pComputeBuffer,
                                                  &uavInfo2,
-                                                 &texture->m_pUAV);
+                                                 &constantBuffer->m_pComputeUAV);
     if (FAILED(hr)) {
+      _com_error err(hr);
+      LPCTSTR errMsg = err.ErrorMessage();
       delete constantBuffer;
       return nullptr;
     }
@@ -826,12 +914,19 @@ namespace gaEngineSDK {
     srvInfo2.ViewDimension = D3D_SRV_DIMENSION_BUFFER;
     srvInfo2.Buffer = srvInfo;
 
-    texture->m_vShaderResourceView.resize(1);
-
-    hr = m_pd3dDevice->CreateShaderResourceView(constantBuffer->m_pConstantBuffer,
+    constantBuffer->m_vpComputeSRV.resize(1);
+    hr = m_pd3dDevice->CreateShaderResourceView(constantBuffer->m_pComputeBuffer,
                                                 &srvInfo2,
-                                                &texture->m_vShaderResourceView[0]);
-    return texture;
+                                                &constantBuffer->m_vpComputeSRV[0]);
+
+    if (FAILED(hr)) {
+      _com_error err(hr);
+      LPCTSTR errMsg = err.ErrorMessage();
+      delete constantBuffer;
+      return nullptr;
+    }
+    
+    return SPtr<ComputeBuffer>(constantBuffer);
   }
 
   Textures*
@@ -864,6 +959,8 @@ namespace gaEngineSDK {
     hr = m_pd3dDevice->CreateTexture2D(&textureDesc, nullptr, &texture->m_pTexture);
 
     if (FAILED(hr)) {
+      _com_error err(hr);
+      LPCTSTR errMsg = err.ErrorMessage();
       delete texture;
       return nullptr;
     }
@@ -876,11 +973,11 @@ namespace gaEngineSDK {
                                                 nullptr,
                                                 &texture->m_vRenderTargetView[0]);
       if (FAILED(hr)) {
+        _com_error err(hr);
+        LPCTSTR errMsg = err.ErrorMessage();
         delete texture;
         return nullptr;
       }
-
-      return texture;
     }
 
     //DepthStencilView
@@ -897,11 +994,11 @@ namespace gaEngineSDK {
 
       //We check that everything goes well, if we do not send an error.
       if (FAILED(hr)) {
+        _com_error err(hr);
+        LPCTSTR errMsg = err.ErrorMessage();
         delete texture;
         return nullptr;
       }
-
-      return texture;
     }
 
     //ShaderResourceView
@@ -915,11 +1012,11 @@ namespace gaEngineSDK {
       
       //We check that everything goes well, if we do not send an error.
       if (FAILED(hr)) {
+        _com_error err(hr);
+        LPCTSTR errMsg = err.ErrorMessage();
         delete texture;
         return nullptr;
       }
-
-      return texture;
     }
     
     //UAV (Unordered Access View)
@@ -1082,6 +1179,8 @@ namespace gaEngineSDK {
 
     //Finally we return the data in case of not getting an error.
     if (FAILED(hr)) {
+      _com_error err(hr);
+      LPCTSTR errMsg = err.ErrorMessage();
       delete samplerState;
       return nullptr;
     }
@@ -1222,6 +1321,8 @@ namespace gaEngineSDK {
 
     //Checamos que todo salga bien, si no mandamos un error
     if (FAILED(hr)) {
+      _com_error err(hr);
+      LPCTSTR errMsg = err.ErrorMessage();
       delete inputLayout;
       return nullptr;
     }
@@ -1245,6 +1346,7 @@ namespace gaEngineSDK {
       numRenderTargets = 1;
     }
 
+    HRESULT hr;
     RenderTargetDX* newRT = new RenderTargetDX;
     newRT->m_renderTarget.m_vShaderResourceView.resize(numRenderTargets);
     newRT->m_renderTarget.m_vRenderTargetView.resize(numRenderTargets);
@@ -1689,7 +1791,41 @@ namespace gaEngineSDK {
       newRT->m_mipLevel = mipLevels;
 
       // Create the texture
-      m_pd3dDevice->CreateTexture2D(&textureDesc, nullptr, &newRT->m_renderTarget.m_pTexture);
+      hr = m_pd3dDevice->CreateTexture2D(&textureDesc, nullptr, &newRT->m_renderTarget.m_pTexture);
+
+      if (FAILED(hr)) {
+        _com_error err(hr);
+        LPCTSTR errMsg = err.ErrorMessage();
+        delete &newRT->m_renderTarget.m_pTexture;
+        return nullptr;
+      }
+
+      //
+      if ((TEXTURE_BIND_FLAGS::kDefault != typeBindFlag) &&
+          (TEXTURE_BIND_FLAGS::kBindUnorderedAccess == typeBindFlag)) {
+        newRT->m_renderTarget.m_pCompBuff = make_shared<ComputeBufferDX>();
+
+        D3D11_BUFFER_UAV uavInfo;
+        uavInfo.FirstElement = 0;
+        uavInfo.Flags = 0;
+        uavInfo.NumElements = numRenderTargets;
+
+        D3D11_UNORDERED_ACCESS_VIEW_DESC uavInfo2;
+        uavInfo2.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+        uavInfo2.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2D;
+        uavInfo2.Buffer = uavInfo;
+
+        hr = m_pd3dDevice->CreateUnorderedAccessView(
+                                   newRT->m_renderTarget.m_pTexture,
+                                   &uavInfo2,
+                                   &newRT->m_renderTarget.m_pCompBuff->m_pComputeUAV);
+        if (FAILED(hr)) {
+          _com_error err(hr);
+          LPCTSTR errMsg = err.ErrorMessage();
+          delete &newRT->m_renderTarget.m_pCompBuff;
+          return nullptr;
+        }
+      }
 
       /*
       * Map's Render Target
@@ -1700,9 +1836,15 @@ namespace gaEngineSDK {
       renderTargetViewDesc.Texture2D.MipSlice = 0;
 
       // Create the render target view.
-      m_pd3dDevice->CreateRenderTargetView(newRT->m_renderTarget.m_pTexture,
-                                           &renderTargetViewDesc,
-                                           &newRT->m_renderTarget.m_vRenderTargetView[i]);
+      hr = m_pd3dDevice->CreateRenderTargetView(newRT->m_renderTarget.m_pTexture,
+                                                &renderTargetViewDesc,
+                                                &newRT->m_renderTarget.m_vRenderTargetView[i]);
+      if (FAILED(hr)) {
+        _com_error err(hr);
+        LPCTSTR errMsg = err.ErrorMessage();
+        return nullptr;
+      }
+
       /*
       *  Map's Shader Resource View
       */
@@ -1714,9 +1856,16 @@ namespace gaEngineSDK {
       shaderResourceViewDesc.Texture2D.MipLevels = mipLevels;
 
       // Create the shader resource view.
-      m_pd3dDevice->CreateShaderResourceView(newRT->m_renderTarget.m_pTexture,
-                                             &shaderResourceViewDesc,
-                                             &newRT->m_renderTarget.m_vShaderResourceView[i]);
+      hr =  m_pd3dDevice->CreateShaderResourceView(
+                          newRT->m_renderTarget.m_pTexture,
+                          &shaderResourceViewDesc,
+                          &newRT->m_renderTarget.m_vShaderResourceView[i]);
+
+      if (FAILED(hr)) {
+        _com_error err(hr);
+        LPCTSTR errMsg = err.ErrorMessage();
+        return nullptr;
+      }
     }
 
     if (depth) {
@@ -1898,6 +2047,17 @@ namespace gaEngineSDK {
 
     if (nullptr != shaderResource) {
       m_pDeviceContext->PSSetShaderResources(startSlot, numViews, &shaderResource);
+    }
+  }
+
+  void 
+  GraphicsApiDX::csSetShaderResource(void* renderTexture, 
+                                     const uint32 startSlot, 
+                                     const uint32 numViews) {
+    ID3D11ShaderResourceView* shaderResource =
+                              reinterpret_cast<ID3D11ShaderResourceView*>(renderTexture);
+    if (nullptr != shaderResource) {
+      m_pDeviceContext->CSSetShaderResources(startSlot, numViews, &shaderResource);
     }
   }
 
@@ -2109,6 +2269,75 @@ namespace gaEngineSDK {
   void
   GraphicsApiDX::setConstBufferBones(WeakSPtr<ConstantBuffer> cbBones) {
     m_bonesBuffer = cbBones.lock();
+  }
+
+  void 
+  GraphicsApiDX::setComputeUAV(WeakSPtr<ComputeBuffer> pComBuff,
+                               uint32 startSlot, 
+                               uint32 numUAV) {
+    ComputeBuffer* tempCS = pComBuff.lock().get();
+    if (nullptr != tempCS) {
+      ComputeBufferDX* newCS = reinterpret_cast<ComputeBufferDX*>(tempCS);
+
+      m_pDeviceContext->CSSetUnorderedAccessViews(startSlot,
+                                                  numUAV,
+                                                  &newCS->m_pComputeUAV,
+                                                  nullptr);
+    }
+  }
+
+  void 
+  GraphicsApiDX::setRtUAV(WeakSPtr<RenderTarget> pCompBuffRT,
+                           uint32 startSlot, 
+                           uint32 numUAV) {
+    RenderTarget* tempCB = pCompBuffRT.lock().get();
+    if (nullptr != tempCB) {
+      RenderTargetDX* newRT = reinterpret_cast<RenderTargetDX*>(tempCB);
+      ComputeBufferDX* newCS = newRT->m_renderTarget.m_pCompBuff.get();
+
+      m_pDeviceContext->CSSetUnorderedAccessViews(startSlot,
+                                                  numUAV,
+                                                  &newCS->m_pComputeUAV,
+                                                  nullptr);
+    }
+  }
+
+  void 
+  GraphicsApiDX::setComputeShader(WeakSPtr<Shaders> shader) {
+    auto tempShader = shader.lock().get();
+    if (nullptr != tempShader) {
+      ShadersDX* shader = reinterpret_cast<ShadersDX*>(tempShader);
+
+      m_pDeviceContext->CSSetShader(shader->m_pComputeShader->m_pComputeShaderDX, nullptr, 0);
+    }
+  }
+
+  void
+  GraphicsApiDX::setCSConstantBuffer(WeakSPtr<ConstantBuffer> constBuffer,
+                                     const uint32 startSlot, 
+                                     const uint32 numBuffers) {
+    auto cb = constBuffer.lock().get();
+    if (nullptr != cb) {
+      ConstantBufferDX* cBuffer = reinterpret_cast<ConstantBufferDX*>(cb);
+
+      m_pDeviceContext->CSSetConstantBuffers(startSlot,
+                                             numBuffers,
+                                             &cBuffer->m_pConstantBuffer);
+    }
+  }
+
+
+
+  void
+  GraphicsApiDX::setCSSampler(WeakSPtr<SamplerState> sampler, 
+                              uint32 startSlot,
+                              uint32 numSamplers) {
+    auto tempSamp = sampler.lock().get();
+    if (nullptr != tempSamp) {
+      SamplerStateDX* samplerDX = reinterpret_cast<SamplerStateDX*>(tempSamp);
+
+      m_pDeviceContext->CSSetSamplers(startSlot, numSamplers, &samplerDX->m_pSamplerState);
+    }
   }
 
   /***************************************************************************/

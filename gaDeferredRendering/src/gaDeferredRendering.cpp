@@ -24,55 +24,12 @@ namespace gaEngineSDK {
     //We create the depth stencil view.
     m_pDepthStencil.reset(myGraphicsApi->getDefaultDepthStencil());
 
-    //We create the vertex shader and pixel shader.
-    m_pGBuffer_Shader.reset(myGraphicsApi->createShadersProgram(
-                                           L"data/shaders/DX_gBuffer.hlsl",
-                                           "vs_gBuffer",
-                                           L"data/shaders/DX_gBuffer.hlsl",
-                                           "ps_gBuffer"));
-
-    m_pSSAO_Shader.reset(myGraphicsApi->createShadersProgram(
-                                        L"data/shaders/DX_screenAlignedQuad.hlsl",
-                                        "vs_ssAligned",
-                                        L"data/shaders/DX_SSAO.hlsl",
-                                        "ps_ssao"));
-
-    m_pBlurH_Shader.reset(myGraphicsApi->createShadersProgram(
-                                         L"data/shaders/DX_screenAlignedQuad.hlsl",
-                                         "vs_ssAligned",
-                                         L"data/shaders/DX_gaussyan_blur.hlsl",
-                                         "ps_gaussian_blurH"));
-
-    m_pBlurV_Shader.reset(myGraphicsApi->createShadersProgram(
-                                         L"data/shaders/DX_screenAlignedQuad.hlsl",
-                                         "vs_ssAligned",
-                                         L"data/shaders/DX_gaussyan_blur.hlsl",
-                                         "ps_gaussian_blurV"));
-
-    m_pLightning_Shader.reset(myGraphicsApi->createShadersProgram(
-                                             L"data/shaders/DX_screenAlignedQuad.hlsl",
-                                             "vs_ssAligned",
-                                             L"data/shaders/DX_lightningPS.hlsl",
-                                             "ps_main"));
-
-    m_pAddition_Shader.reset(myGraphicsApi->createShadersProgram( 
-                                            L"data/shaders/DX_screenAlignedQuad.hlsl",
-                                            "vs_ssAligned",
-                                            L"data/shaders/DX_AdditionPS.hlsl",
-                                            "Add"));
-
-    m_pAdditionDepth_Shader = m_pAddition_Shader;
-
-    m_pDepth_Shader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_Depth.hlsl",
-                                                              "DepthVS",
-                                                              L"data/shaders/DX_Depth.hlsl",
-                                                              "DepthPS"));
-
     /*
-    * C O M P U T E
-    * S H A D E R
+    * L O A D
+    * S H A D E R S
+    * Z O N E
     */
-
+    loadShadersFiles();
 
     /*
     * C R E A T E
@@ -84,37 +41,26 @@ namespace gaEngineSDK {
 
     m_pDepthLayout.reset(myGraphicsApi->createInputLayout(m_pDepth_Shader));
 
+
+    /*
+    * ? ? ?
+    */
     //We create the vertex buffer.
     m_mesh->m_pVertexBuffer.reset(myGraphicsApi->createVertexBuffer(nullptr, sizeof(Matrices)));
 
     //We create the index buffer.
     m_mesh->m_pIndexBuffer.reset(myGraphicsApi->createIndexBuffer(nullptr, sizeof(ViewCB)));
+    /*
+    * ? ? ?
+    */
+
 
     /*
     * C R E A T E
     * B U F F E R S
     * Z O N E
     */
-    m_pCB_BufferCamera.reset(myGraphicsApi->createConstantBuffer(sizeof(cbCamera)));
-    m_pCB_BufferWorld.reset(myGraphicsApi->createConstantBuffer(sizeof(cbWorld)));
-    m_pCB_BufferBones.reset(myGraphicsApi->createConstantBuffer(sizeof(cbModelData)));
-    m_pCB_SSAO.reset(myGraphicsApi->createConstantBuffer(sizeof(cbSSAO)));
-    m_pCB_ViewPortDimension.reset(myGraphicsApi->createConstantBuffer(sizeof(cbViewportDimension)));
-    m_pCB_Lightning.reset(myGraphicsApi->createConstantBuffer(sizeof(cbLightning)));
-    m_pCB_MipLevels.reset(myGraphicsApi->createConstantBuffer(sizeof(cbMipLevels)));
-
-    //Depth
-    m_pCB_Depth.reset(myGraphicsApi->createConstantBuffer(sizeof(cbMatrixBuffer)));
-
-    //Shadow map
-    m_pCB_Shadows.reset(myGraphicsApi->createConstantBuffer(sizeof(cbShadows)));
-
-    m_pCB_Light.reset(myGraphicsApi->createConstantBuffer(sizeof(cbLight)));
-
-    m_pCB_Light2.reset(myGraphicsApi->createConstantBuffer(sizeof(cbLight2)));
-
-    //Inverse
-    m_pCB_InverseMat.reset(myGraphicsApi->createConstantBuffer(sizeof(cbInverse)));
+    createBuffers();
 
     /*
     * C R E A T E
@@ -122,53 +68,14 @@ namespace gaEngineSDK {
     * T A R G E TS
     * Z O N E
     */
-    m_pGbuffer_RT        = make_shared<RenderTarget>();
-    m_pSSAO_RT           = make_shared<RenderTarget>();
-    m_pBlurH_RT          = make_shared<RenderTarget>();
-    m_pBlurV_RT          = make_shared<RenderTarget>();
-    m_pAddition_RT       = make_shared<RenderTarget>();
-    m_pAdditionShadow_RT = make_shared<RenderTarget>();
-    m_pLightning_RT      = make_shared<RenderTarget>();
+    createRenderTargets();
 
-    //Depth
-    m_pDepth_RT = make_shared<RenderTarget>();
-
-    m_pGbuffer_RT        = myGraphicsApi->createRenderTarget(m_width, m_height, 1, 4);
-    m_pSSAO_RT           = myGraphicsApi->createRenderTarget(m_width, m_height);
-    m_pBlurH_RT          = myGraphicsApi->createRenderTarget(m_width, m_height);
-    m_pBlurV_RT          = myGraphicsApi->createRenderTarget(m_width, m_height);
-    m_pAddition_RT       = myGraphicsApi->createRenderTarget(m_width, m_height);
-    m_pAdditionShadow_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
-    m_pLightning_RT      = myGraphicsApi->createRenderTarget(m_width, m_height);
-
-    //Depth
-    m_pDepth_RT = myGraphicsApi->createRenderTarget(m_width,
-                                                    m_height, 
-                                                    1,
-                                                    1,
-                                                    1.0f,
-                                                    true,
-                                                    TEXTURE_FORMAT::E::kR16Float);
     /*
     * C R E A T E
     * S A M P L E R
     * Z O N E
     */
-    m_pSampler = myGraphicsApi->createSamplerState();
-
-    m_pSampleStateClamp = myGraphicsApi->createSamplerState(
-                                         FILTER::kFilterMinMagMipLinear,
-                                         TEXTURE_ADDRESS::kTextureAddressClamp,
-                                         COMPARISON::kComparisonAlways);
-
-
-    myGraphicsApi->setSamplerState(m_pSampler, 0);
-    myGraphicsApi->setSamplerState(m_pSampleStateClamp, 1);
-
-
-    //Create the one face of cube.
-    m_mySAQ.reset(new Plane());
-    m_mySAQ->createSAQ();
+    createSamplers();
 
     /*
     * S E T
@@ -181,35 +88,11 @@ namespace gaEngineSDK {
     * C R E A T E
     * L I G H T
     */
-    SPtr<Lights> lightCompo = make_shared<Lights>(Vector3(0.0f, 80.0f, -68.0f),
-                                                  Vector3(0.0f, 80.0f, 0.0f));
+    defaultLight();
 
-    //Light info
-    lightCompo->setAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
-    lightCompo->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
-
-    lightCompo->setIntensity(2.0f);
-    lightCompo->setEmissiveIntensity(1.5f);
-
-    auto myRSRCMG = ResourceManager::instancePtr();
-    auto mySceneGraph = SceneGraph::instancePtr();
-
-    SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/basicModels/sphere.fbx");
-
-    SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
-    myStaticMesh->m_pModel = myModel;
-
-    //Creating actor
-    m_pLightActor.reset(new Actor("LightActor"));
-    m_pLightActor->setIsSelected(true);
-    m_pLightActor->setComponent(lightCompo);
-    m_pLightActor->setComponent(myStaticMesh);
-
-    auto transform = m_pLightActor->getComponent<Transform>();
-    transform->setScale(Vector3(5.0f, 5.0f, 5.0f));
-    transform->setPosition(Vector3(0.0f, 80.0f, -68.0f));
-
-    mySceneGraph->createNewActor(m_pLightActor, SPtr<SceneNode>(nullptr));
+    //Create the one face of cube.
+    m_mySAQ.reset(new Plane());
+    m_mySAQ->createSAQ();
   }
 
   void
@@ -234,20 +117,19 @@ namespace gaEngineSDK {
     * P A S S E S
     * Z O N E
     */
+    
+    //Shadow
     depthPass();
 
+    //Geometry
     gbufferPass();
-    //SSAO_Pass();
 
+    //Ambient occlusion and blur
     CS_SSAO();
+    csBlurHPass(m_pCompSSAO_RT->getRenderTexture(0));
+    csBlurVPass(m_pCompBlurH_RT->getRenderTexture(0));
 
-    //Blur AO
-    createBlurSSAO();
-
-    //Blur Shadow
-    createBlurDepth();
-
-    //Final pass
+    //Light
     lightningPass();
 
     //We save a viewport.
@@ -389,30 +271,44 @@ namespace gaEngineSDK {
 
   void
   DeferredRendering::createBlurSSAO() {
-    blurH_Pass(m_pSSAO_RT->getRenderTexture(0));
-    blurV_Pass(m_pSSAO_RT->getRenderTexture(0));
+    //blurH_Pass(m_pSSAO_RT->getRenderTexture(0));
+    //blurV_Pass(m_pSSAO_RT->getRenderTexture(0));
+    //
+    //additionPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
+    //
+    //for (uint32 i = 0; i < 2; ++i) {
+    //  blurH_Pass(m_pAddition_RT->getRenderTexture(0));
+    //  blurV_Pass(m_pAddition_RT->getRenderTexture(0));
+    //  additionPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
+    //}
+  }
 
-    additionPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
-
-    for (uint32 i = 0; i < 2; ++i) {
-      blurH_Pass(m_pAddition_RT->getRenderTexture(0));
-      blurV_Pass(m_pAddition_RT->getRenderTexture(0));
-      additionPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
-    }
+  void 
+  DeferredRendering::createCSBlurSSAO() {
+    //csBlurHPass(m_pCompSSAO_RT->getRenderTexture(0));
+    //csBlurVPass(m_pCompSSAO_RT->getRenderTexture(0));
+    //
+    //additionPass(m_pCompBlurH_RT->getRenderTexture(0), m_pCompBlurV_RT->getRenderTexture(0));
+    //
+    //for (uint32 i = 0; i < 2; ++i) {
+    //  csBlurHPass(m_pAddition_RT->getRenderTexture(0));
+    //  csBlurVPass(m_pAddition_RT->getRenderTexture(0));
+    //  additionPass(m_pCompBlurH_RT->getRenderTexture(0), m_pCompBlurV_RT->getRenderTexture(0));
+    //}
   }
 
   void
   DeferredRendering::createBlurDepth() {
-    blurH_Pass(m_pDepth_RT->getRenderTexture(0));
-    blurV_Pass(m_pDepth_RT->getRenderTexture(0));
-
-    additionDepthPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
-
-    for (uint32 i = 0; i < 2; ++i) {
-      blurH_Pass(m_pAdditionShadow_RT->getRenderTexture(0));
-      blurV_Pass(m_pAdditionShadow_RT->getRenderTexture(0));
-      additionDepthPass(m_pBlurH_RT->getRenderTexture(0), m_pBlurV_RT->getRenderTexture(0));
-    }
+    //csBlurHPass(m_pDepth_RT->getRenderTexture(0));
+    //csBlurVPass(m_pDepth_RT->getRenderTexture(0));
+    //
+    //additionDepthPass(m_pCompBlurH_RT->getRenderTexture(0), m_pCompBlurV_RT->getRenderTexture(0));
+    //
+    //for (uint32 i = 0; i < 2; ++i) {
+    //  csBlurHPass(m_pAdditionShadow_RT->getRenderTexture(0));
+    //  csBlurVPass(m_pAdditionShadow_RT->getRenderTexture(0));
+    //  additionDepthPass(m_pCompBlurH_RT->getRenderTexture(0), m_pCompBlurV_RT->getRenderTexture(0));
+    //}
   }
 
   /***************************************************************************/
@@ -442,7 +338,7 @@ namespace gaEngineSDK {
     myGraphicsApi->setYourPSConstantBuffers(m_pCB_Shadows, 3);
 
     //Clear
-    myGraphicsApi->clearYourRenderTarget(m_pGbuffer_RT, m_rgbaBlue);
+    myGraphicsApi->clearYourRenderTarget(m_pGbuffer_RT, m_rgbaCyan);
     myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
 
     cbCamera cameraInfo;
@@ -472,14 +368,18 @@ namespace gaEngineSDK {
 
     //Render model
     mySceneGraph->render();
+
+    //Des bind
+    myGraphicsApi->desbindRT();
+    myGraphicsApi->desbindSRV(6);
   }
 
   void 
   DeferredRendering::SSAO_Pass() {
     auto myGraphicsApi = g_graphicApi().instancePtr();
 
-    myGraphicsApi->setRenderTarget(m_pSSAO_RT);
-    myGraphicsApi->setShaders(m_pSSAO_Shader);
+    //myGraphicsApi->setRenderTarget(m_pSSAO_RT);
+    //myGraphicsApi->setShaders(m_pSSAO_Shader);
 
     //VS CB
     myGraphicsApi->setYourVSConstantBuffers(m_pCB_BufferCamera, 0);
@@ -489,20 +389,19 @@ namespace gaEngineSDK {
     myGraphicsApi->setYourPSConstantBuffers(m_pCB_SSAO, 2);
 
     //Clear
-    myGraphicsApi->clearYourRenderTarget(m_pSSAO_RT, m_rgbaBlue);
+    //myGraphicsApi->clearYourRenderTarget(m_pSSAO_RT, m_rgbaBlue);
     myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
 
     //Update CB
-    cbSSAO ssaoData;
-    ssaoData.mBias = 0.08000f;
-    ssaoData.mIntensity = 2.0f;
-    ssaoData.mNothing = { 0.0f, 0.0f };
-    ssaoData.mSample_radius = 10.0f;
-    ssaoData.mScale = 1.0f;
+    //cbSSAO ssaoData;
+    //ssaoData.mBias = 0.08000f;
+    //ssaoData.mIntensity = 2.0f;
+    //ssaoData.mNothing = Vector2(0.0f, 0.0f);
+    //ssaoData.mSample_radius = 10.0f;
+    //ssaoData.mScale = 1.0f;
+    //ssaoData.mViewportDimensions = { (float)m_width, (float)m_height };
 
-    ssaoData.mViewportDimensions = { (float)m_width, (float)m_height };
-
-    myGraphicsApi->updateConstantBuffer(&ssaoData, m_pCB_SSAO);
+    //myGraphicsApi->updateConstantBuffer(&ssaoData, m_pCB_SSAO);
 
     //Set textures
     myGraphicsApi->setShaderResourceView(m_pGbuffer_RT->getRenderTexture(2), 0);
@@ -513,15 +412,54 @@ namespace gaEngineSDK {
 
   void
   DeferredRendering::CS_SSAO() {
+    auto myGraphicsApi = g_graphicApi().instancePtr();
 
+    //Set textures of G buffer to SSAO
+    myGraphicsApi->csSetShaderResource(m_pGbuffer_RT->getRenderTexture(2), 0);
+    myGraphicsApi->csSetShaderResource(m_pGbuffer_RT->getRenderTexture(1), 1);
+
+    //Set UAV views
+    myGraphicsApi->setRtUAV(m_pCompSSAO_RT, 0);
+
+    //Set compute shader
+    myGraphicsApi->setComputeShader(m_pCS_SSAO);
+
+    //Update CB
+    cbSSAO ssaoInfo;
+    ssaoInfo.mViewportDimensions = { (float)m_width, (float)m_height };
+    ssaoInfo.mNothing = Vector2(0.0f, 0.0f);
+
+    cbSSAO2 ssaoInfo2;
+    ssaoInfo2.mSample_radius = 10.0f;
+    ssaoInfo2.mIntensity = 2.0f;
+    ssaoInfo2.mScale = 1.0f;
+    ssaoInfo2.mBias = 0.08000f;
+
+    myGraphicsApi->updateConstantBuffer(&ssaoInfo, m_pCB_SSAO);
+    myGraphicsApi->updateConstantBuffer(&ssaoInfo2, m_pCB_SSAO2);
+
+    //Set constant buffers
+    myGraphicsApi->setCSConstantBuffer(m_pCB_SSAO, 0);
+    myGraphicsApi->setCSConstantBuffer(m_pCB_SSAO2, 1);
+
+    //Clear RT
+    myGraphicsApi->clearYourRenderTarget(m_pCompSSAO_RT, m_rgbaOrange);
+
+    //Dispatch
+    myGraphicsApi->dispatch((m_width / 32), (m_height / 32), 1);
+
+    //Des binds
+    myGraphicsApi->desbindUAV(0);
+    myGraphicsApi->desbindSRV(0);
+    myGraphicsApi->desbindSRV(1);
   }
 
   void
   DeferredRendering::blurH_Pass(void* texture) {
     auto myGraphicsApi = g_graphicApi().instancePtr();
 
-    myGraphicsApi->setRenderTarget(m_pBlurH_RT);
-    myGraphicsApi->setShaders(m_pBlurH_Shader);
+    //myGraphicsApi->setRenderTarget(m_pBlurH_RT);
+    //myGraphicsApi->setShaders(m_pBlurH_Shader);
 
     //VS CB
     myGraphicsApi->setYourVSConstantBuffers(m_pCB_BufferCamera, 0);
@@ -531,7 +469,7 @@ namespace gaEngineSDK {
     myGraphicsApi->setYourPSConstantBuffers(m_pCB_ViewPortDimension, 2);
 
     //Clear RT
-    myGraphicsApi->clearYourRenderTarget(m_pBlurH_RT, m_rgbaBlue);
+    //myGraphicsApi->clearYourRenderTarget(m_pBlurH_RT, m_rgbaBlue);
     myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
 
     //Update CB
@@ -548,11 +486,44 @@ namespace gaEngineSDK {
   }
 
   void 
+  DeferredRendering::csBlurHPass(void* texture) {
+    auto myGraphicsApi = g_graphicApi().instancePtr();
+
+    myGraphicsApi->csSetShaderResource(texture, 0);
+
+    //Set UAV views
+    myGraphicsApi->setRtUAV(m_pCompBlurH_RT, 0);
+
+    //Set compute shader
+    myGraphicsApi->setComputeShader(m_pCS_BlurH);
+
+    //Update CB
+    cbViewportDimension viewportDimenData;
+    viewportDimenData.viewportDimensions = { (float)m_width, (float)m_height };
+    viewportDimenData.mNothing = { 0.0f, 0.0f };
+
+    myGraphicsApi->updateConstantBuffer(&viewportDimenData, m_pCB_ViewPortDimension);
+
+    //Set constant buffers
+    myGraphicsApi->setCSConstantBuffer(m_pCB_ViewPortDimension, 0);
+
+    //Clear RT
+    myGraphicsApi->clearYourRenderTarget(m_pCompBlurH_RT, m_rgbaGreen);
+
+    //Dispatch
+    myGraphicsApi->dispatch((m_width / 32), (m_height / 32), 1);
+
+    //Des binds
+    myGraphicsApi->desbindUAV(0);
+    myGraphicsApi->desbindSRV(0);
+  }
+
+  void
   DeferredRendering::blurV_Pass(void* texture) {
     auto myGraphicsApi = g_graphicApi().instancePtr();
 
-    myGraphicsApi->setRenderTarget(m_pBlurV_RT);
-    myGraphicsApi->setShaders(m_pBlurV_Shader);
+    //myGraphicsApi->setRenderTarget(m_pBlurV_RT);
+    //myGraphicsApi->setShaders(m_pBlurV_Shader);
 
     //VS CB
     myGraphicsApi->setYourVSConstantBuffers(m_pCB_BufferCamera, 0);
@@ -562,7 +533,7 @@ namespace gaEngineSDK {
     myGraphicsApi->setYourPSConstantBuffers(m_pCB_ViewPortDimension, 2);
 
     //Clear RT
-    myGraphicsApi->clearYourRenderTarget(m_pBlurV_RT, m_rgbaBlue);
+    //myGraphicsApi->clearYourRenderTarget(m_pBlurV_RT, m_rgbaBlue);
     myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
 
     //Update CB
@@ -579,71 +550,124 @@ namespace gaEngineSDK {
   }
 
   void 
-  DeferredRendering::additionPass(void* texture1, void* texture2) {
+  DeferredRendering::csBlurVPass(void* texture) {
     auto myGraphicsApi = g_graphicApi().instancePtr();
 
-    myGraphicsApi->setRenderTarget(m_pAddition_RT);
-    myGraphicsApi->setShaders(m_pAddition_Shader);
+    myGraphicsApi->csSetShaderResource(texture, 0);
 
-    //VS CB
-    myGraphicsApi->setYourVSConstantBuffers(m_pCB_BufferCamera, 0);
-    myGraphicsApi->setYourVSConstantBuffers(m_pCB_BufferWorld, 1);
+    //Set UAV views
+    myGraphicsApi->setRtUAV(m_pCompBlurV_RT, 0);
 
-    //PS CB
-    myGraphicsApi->setYourPSConstantBuffers(m_pCB_MipLevels, 2);
-
-    //Clean
-    myGraphicsApi->clearYourRenderTarget(m_pAddition_RT, m_rgbaBlue);
-    myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
+    //Set compute shader
+    myGraphicsApi->setComputeShader(m_pCS_BlurV);
 
     //Update CB
-    cbMipLevels mipLevelsData;
-    mipLevelsData.mipLevel0 = 1;
-    mipLevelsData.mipLevel1 = 1;
-    mipLevelsData.mipLevel2 = 1;
-    mipLevelsData.mipLevel3 = 1;
+    cbViewportDimension viewportDimenData;
+    viewportDimenData.viewportDimensions = { (float)m_width, (float)m_height };
+    viewportDimenData.mNothing = { 0.0f, 0.0f };
 
-    myGraphicsApi->updateConstantBuffer(&mipLevelsData, m_pCB_MipLevels);
+    myGraphicsApi->updateConstantBuffer(&viewportDimenData, m_pCB_ViewPortDimension);
 
-    //Set textures
-    myGraphicsApi->setShaderResourceView(texture1, 0);
-    myGraphicsApi->setShaderResourceView(texture2, 1);
+    //Set constant buffers
+    myGraphicsApi->setCSConstantBuffer(m_pCB_ViewPortDimension, 0);
 
-    m_mySAQ->setSAQ();
+    //Clear RT
+    myGraphicsApi->clearYourRenderTarget(m_pCompBlurV_RT, m_rgbaBlue);
+
+    //Dispatch
+    myGraphicsApi->dispatch((m_width / 32), (m_height / 32), 1);
+
+    //Des binds
+    myGraphicsApi->desbindUAV(0);
+    myGraphicsApi->desbindSRV(0);
+  }
+
+  void
+  DeferredRendering::additionPass(void* texture1, void* texture2) {
+    //auto myGraphicsApi = g_graphicApi().instancePtr();
+    //
+    ////Des bind
+    //myGraphicsApi->desbindRT();
+    //myGraphicsApi->desbindSRV(0);
+    //myGraphicsApi->desbindSRV(1);
+    //
+    //myGraphicsApi->setRenderTarget(m_pAddition_RT);
+    //myGraphicsApi->setShaders(m_pAddition_Shader);
+    //
+    ////VS CB
+    //myGraphicsApi->setYourVSConstantBuffers(m_pCB_BufferCamera, 0);
+    //myGraphicsApi->setYourVSConstantBuffers(m_pCB_BufferWorld, 1);
+    //
+    ////PS CB
+    //myGraphicsApi->setYourPSConstantBuffers(m_pCB_MipLevels, 2);
+    //
+    ////Clean
+    //myGraphicsApi->clearYourRenderTarget(m_pAddition_RT, m_rgbaGreen);
+    //myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
+    //
+    ////Update CB
+    //cbMipLevels mipLevelsData;
+    //mipLevelsData.mipLevel0 = 1;
+    //mipLevelsData.mipLevel1 = 1;
+    //mipLevelsData.mipLevel2 = 1;
+    //mipLevelsData.mipLevel3 = 1;
+    //
+    //myGraphicsApi->updateConstantBuffer(&mipLevelsData, m_pCB_MipLevels);
+    //
+    ////Set textures
+    //myGraphicsApi->setShaderResourceView(texture1, 0);
+    //myGraphicsApi->setShaderResourceView(texture2, 1);
+    //
+    //m_mySAQ->setSAQ();
+    //
+    ////Des bind
+    //myGraphicsApi->desbindRT();
+    //myGraphicsApi->desbindSRV(0);
+    //myGraphicsApi->desbindSRV(1);
   }
 
   void 
   DeferredRendering::additionDepthPass(void* texture1, void* texture2) {
-    auto myGraphicsApi = g_graphicApi().instancePtr();
-
-    myGraphicsApi->setRenderTarget(m_pAdditionShadow_RT);
-    myGraphicsApi->setShaders(m_pAdditionDepth_Shader);
-
-    //VS CB
-    myGraphicsApi->setYourVSConstantBuffers(m_pCB_BufferCamera, 0);
-    myGraphicsApi->setYourVSConstantBuffers(m_pCB_BufferWorld, 1);
-
-    //PS CB
-    myGraphicsApi->setYourPSConstantBuffers(m_pCB_MipLevels, 2);
-
-    //Clear
-    myGraphicsApi->clearYourRenderTarget(m_pAdditionShadow_RT, m_rgbaBlue);
-    myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
-
-    //Update CB
-    cbMipLevels mipLevelsData;
-    mipLevelsData.mipLevel0 = 1;
-    mipLevelsData.mipLevel1 = 1;
-    mipLevelsData.mipLevel2 = 1;
-    mipLevelsData.mipLevel3 = 1;
-
-    myGraphicsApi->updateConstantBuffer(&mipLevelsData, m_pCB_MipLevels);
-
-    //Set textures
-    myGraphicsApi->setShaderResourceView(texture1, 0);
-    myGraphicsApi->setShaderResourceView(texture2, 1);
-
-    m_mySAQ->setSAQ();
+    //auto myGraphicsApi = g_graphicApi().instancePtr();
+    //
+    ////Des bind
+    //myGraphicsApi->desbindRT();
+    //myGraphicsApi->desbindSRV(0);
+    //myGraphicsApi->desbindSRV(1);
+    //
+    //myGraphicsApi->setRenderTarget(m_pAdditionShadow_RT);
+    //myGraphicsApi->setShaders(m_pAdditionDepth_Shader);
+    //
+    ////VS CB
+    //myGraphicsApi->setYourVSConstantBuffers(m_pCB_BufferCamera, 0);
+    //myGraphicsApi->setYourVSConstantBuffers(m_pCB_BufferWorld, 1);
+    //
+    ////PS CB
+    //myGraphicsApi->setYourPSConstantBuffers(m_pCB_MipLevels, 2);
+    //
+    ////Clear
+    //myGraphicsApi->clearYourRenderTarget(m_pAdditionShadow_RT, m_rgbaBlue);
+    //myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
+    //
+    ////Update CB
+    //cbMipLevels mipLevelsData;
+    //mipLevelsData.mipLevel0 = 1;
+    //mipLevelsData.mipLevel1 = 1;
+    //mipLevelsData.mipLevel2 = 1;
+    //mipLevelsData.mipLevel3 = 1;
+    //
+    //myGraphicsApi->updateConstantBuffer(&mipLevelsData, m_pCB_MipLevels);
+    //
+    ////Set textures
+    //myGraphicsApi->setShaderResourceView(texture1, 0);
+    //myGraphicsApi->setShaderResourceView(texture2, 1);
+    //
+    //m_mySAQ->setSAQ();
+    //
+    ////Des bind
+    //myGraphicsApi->desbindRT();
+    //myGraphicsApi->desbindSRV(0);
+    //myGraphicsApi->desbindSRV(1);
   }
 
   void
@@ -664,7 +688,7 @@ namespace gaEngineSDK {
     myGraphicsApi->setYourPSConstantBuffers(m_pCB_InverseMat, 3);
 
     //Clean RT
-    myGraphicsApi->clearYourRenderTargetView(m_pRenderTargetView, m_rgbaBlue);
+    myGraphicsApi->clearYourRenderTargetView(m_pRenderTargetView, m_rgbaYellow);
     myGraphicsApi->clearYourDepthStencilView(m_pDepthStencil);
 
     auto light = m_pLightActor->getComponent<Lights>();
@@ -697,10 +721,16 @@ namespace gaEngineSDK {
     myGraphicsApi->setShaderResourceView(m_pGbuffer_RT->getRenderTexture(0), 0);
     myGraphicsApi->setShaderResourceView(m_pGbuffer_RT->getRenderTexture(1), 1);
     myGraphicsApi->setShaderResourceView(m_pGbuffer_RT->getRenderTexture(3), 2);
-    myGraphicsApi->setShaderResourceView(m_pAddition_RT->getRenderTexture(0), 3);
+    myGraphicsApi->setShaderResourceView(m_pCompBlurV_RT->getRenderTexture(0), 3);
     myGraphicsApi->setShaderResourceView(m_pGbuffer_RT->getRenderTexture(2), 4);
 
     m_mySAQ->setSAQ();
+
+    myGraphicsApi->desbindSRV(0);
+    myGraphicsApi->desbindSRV(1);
+    myGraphicsApi->desbindSRV(2);
+    myGraphicsApi->desbindSRV(3);
+    myGraphicsApi->desbindSRV(4);
   }
 
   void 
@@ -721,7 +751,7 @@ namespace gaEngineSDK {
     myGraphicsApi->setYourVSConstantBuffers(m_pCB_BufferBones, 1);
 
     //Clear m_rgbaGray
-    myGraphicsApi->clearYourRenderTarget(m_pDepth_RT, m_rgbaGray);
+    myGraphicsApi->clearYourRenderTarget(m_pDepth_RT, m_rgbaMagenta);
     myGraphicsApi->clearYourDepthStencilView(m_pDepth_RT);
 
     auto light = m_pLightActor->getComponent<Lights>();
@@ -736,5 +766,217 @@ namespace gaEngineSDK {
 
     //Render model
     mySceneGraph->render();
+
+    //Des bind
+    myGraphicsApi->desbindRT();
+  }
+
+  /***************************************************************************/
+  /**
+  * .
+  */
+  /***************************************************************************/
+
+  void
+  DeferredRendering::defaultLight() {
+    SPtr<Lights> lightCompo = make_shared<Lights>(Vector3(0.0f, 80.0f, -68.0f),
+      Vector3(0.0f, 80.0f, 0.0f));
+
+    //Light info
+    lightCompo->setAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
+    lightCompo->setDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+    lightCompo->setIntensity(2.0f);
+    lightCompo->setEmissiveIntensity(1.5f);
+
+    auto myRSRCMG = ResourceManager::instancePtr();
+    auto mySceneGraph = SceneGraph::instancePtr();
+
+    SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/basicModels/sphere.fbx");
+
+    SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
+    myStaticMesh->m_pModel = myModel;
+
+    //Creating actor
+    m_pLightActor.reset(new Actor("LightActor"));
+    m_pLightActor->setIsSelected(true);
+    m_pLightActor->setComponent(lightCompo);
+    m_pLightActor->setComponent(myStaticMesh);
+
+    auto transform = m_pLightActor->getComponent<Transform>();
+    transform->setScale(Vector3(5.0f, 5.0f, 5.0f));
+    transform->setPosition(Vector3(0.0f, 80.0f, -68.0f));
+
+    mySceneGraph->createNewActor(m_pLightActor, SPtr<SceneNode>(nullptr));
+  }
+
+  void
+  DeferredRendering::createSamplers() {
+    auto myGraphicsApi = g_graphicApi().instancePtr();
+
+    m_pSampler = myGraphicsApi->createSamplerState();
+
+    m_pSampleStateClamp = myGraphicsApi->createSamplerState(
+                                         FILTER::kFilterMinMagMipLinear,
+                                         TEXTURE_ADDRESS::kTextureAddressClamp,
+                                         COMPARISON::kComparisonAlways);
+
+    myGraphicsApi->setSamplerState(m_pSampler, 0);
+    myGraphicsApi->setSamplerState(m_pSampleStateClamp, 1);
+
+    m_pCSSampler = myGraphicsApi->createSamplerState();
+    //Set sampler
+    myGraphicsApi->setCSSampler(m_pCSSampler, 0);
+  }
+
+  void
+  DeferredRendering::createRenderTargets() {
+    auto myGraphicsApi = g_graphicApi().instancePtr();
+
+    m_pGbuffer_RT        = make_shared<RenderTarget>();
+    //m_pSSAO_RT           = make_shared<RenderTarget>();
+    //m_pBlurH_RT          = make_shared<RenderTarget>();
+    //m_pBlurV_RT          = make_shared<RenderTarget>();
+    //m_pAddition_RT       = make_shared<RenderTarget>();
+    //m_pAdditionShadow_RT = make_shared<RenderTarget>();
+    m_pLightning_RT      = make_shared<RenderTarget>();
+
+    //Depth
+    m_pDepth_RT = make_shared<RenderTarget>();
+
+    //Compute
+    m_pCompSSAO_RT = make_shared<RenderTarget>();
+
+    m_pGbuffer_RT        = myGraphicsApi->createRenderTarget(m_width, m_height, 1, 4);
+    //m_pSSAO_RT           = myGraphicsApi->createRenderTarget(m_width, m_height);
+    //m_pBlurH_RT          = myGraphicsApi->createRenderTarget(m_width, m_height);
+    //m_pBlurV_RT          = myGraphicsApi->createRenderTarget(m_width, m_height);
+    //m_pAddition_RT       = myGraphicsApi->createRenderTarget(m_width, m_height);
+    //m_pAdditionShadow_RT = myGraphicsApi->createRenderTarget(m_width, m_height);
+    m_pLightning_RT      = myGraphicsApi->createRenderTarget(m_width, m_height);
+
+    //Depth
+    m_pDepth_RT = myGraphicsApi->createRenderTarget(m_width,
+                                                    m_height, 
+                                                    1,
+                                                    1,
+                                                    1.0f,
+                                                    true,
+                                                    TEXTURE_FORMAT::E::kR16Float);
+    //Compute
+    m_pCompSSAO_RT = myGraphicsApi->createRenderTarget(
+                                    m_width,
+                                    m_height, 
+                                    1,
+                                    1,
+                                    1.0f,
+                                    false,
+                                    TEXTURE_FORMAT::E::kR32G32B32A32Float,
+                                    TEXTURE_BIND_FLAGS::kBindUnorderedAccess);
+
+    m_pCompBlurH_RT = myGraphicsApi->createRenderTarget(
+                                     m_width,
+                                     m_height, 
+                                     1,
+                                     1,
+                                     1.0f,
+                                     false,
+                                     TEXTURE_FORMAT::E::kR32G32B32A32Float,
+                                     TEXTURE_BIND_FLAGS::kBindUnorderedAccess);
+
+    m_pCompBlurV_RT = myGraphicsApi->createRenderTarget(
+                                     m_width,
+                                     m_height, 
+                                     1,
+                                     1,
+                                     1.0f,
+                                     false,
+                                     TEXTURE_FORMAT::E::kR32G32B32A32Float,
+                                     TEXTURE_BIND_FLAGS::kBindUnorderedAccess);
+  }
+
+  void
+  DeferredRendering::createBuffers() {
+    auto myGraphicsApi = g_graphicApi().instancePtr();
+
+    m_pCB_BufferCamera.reset(myGraphicsApi->createConstantBuffer(sizeof(cbCamera)));
+    m_pCB_BufferWorld.reset(myGraphicsApi->createConstantBuffer(sizeof(cbWorld)));
+    m_pCB_BufferBones.reset(myGraphicsApi->createConstantBuffer(sizeof(cbModelData)));
+    m_pCB_SSAO.reset(myGraphicsApi->createConstantBuffer(sizeof(cbSSAO)));
+    m_pCB_SSAO2.reset(myGraphicsApi->createConstantBuffer(sizeof(cbSSAO2)));
+    m_pCB_ViewPortDimension.reset(myGraphicsApi->createConstantBuffer(sizeof(cbViewportDimension)));
+    m_pCB_Lightning.reset(myGraphicsApi->createConstantBuffer(sizeof(cbLightning)));
+    m_pCB_MipLevels.reset(myGraphicsApi->createConstantBuffer(sizeof(cbMipLevels)));
+
+    //Depth
+    m_pCB_Depth.reset(myGraphicsApi->createConstantBuffer(sizeof(cbMatrixBuffer)));
+    m_pCB_Shadows.reset(myGraphicsApi->createConstantBuffer(sizeof(cbShadows)));
+
+    //Inverse
+    m_pCB_InverseMat.reset(myGraphicsApi->createConstantBuffer(sizeof(cbInverse)));
+  }
+
+  void
+  DeferredRendering::loadShadersFiles() {
+    auto myGraphicsApi = g_graphicApi().instancePtr();
+
+    //We create the vertex shader and pixel shader.
+    m_pGBuffer_Shader.reset(myGraphicsApi->createShadersProgram(
+                                           L"data/shaders/DX_gBuffer.hlsl",
+                                           "vs_gBuffer",
+                                           L"data/shaders/DX_gBuffer.hlsl",
+                                           "ps_gBuffer"));
+
+    //m_pSSAO_Shader.reset(myGraphicsApi->createShadersProgram(
+    //                                    L"data/shaders/DX_screenAlignedQuad.hlsl",
+    //                                    "vs_ssAligned",
+    //                                    L"data/shaders/DX_SSAO.hlsl",
+    //                                    "ps_ssao"));
+    //
+    //m_pBlurH_Shader.reset(myGraphicsApi->createShadersProgram(
+    //                                     L"data/shaders/DX_screenAlignedQuad.hlsl",
+    //                                     "vs_ssAligned",
+    //                                     L"data/shaders/DX_gaussyan_blur.hlsl",
+    //                                     "ps_gaussian_blurH"));
+    //
+    //m_pBlurV_Shader.reset(myGraphicsApi->createShadersProgram(
+    //                                     L"data/shaders/DX_screenAlignedQuad.hlsl",
+    //                                     "vs_ssAligned",
+    //                                     L"data/shaders/DX_gaussyan_blur.hlsl",
+    //                                     "ps_gaussian_blurV"));
+
+    m_pLightning_Shader.reset(myGraphicsApi->createShadersProgram(
+                                             L"data/shaders/DX_screenAlignedQuad.hlsl",
+                                             "vs_ssAligned",
+                                             L"data/shaders/DX_lightningPS.hlsl",
+                                             "ps_main"));
+
+    //m_pAdditionDepth_Shader.reset(myGraphicsApi->createShadersProgram(
+    //                                             L"data/shaders/DX_screenAlignedQuad.hlsl",
+    //                                             "vs_ssAligned",
+    //                                             L"data/shaders/DX_AdditionPS.hlsl",
+    //                                             "Add"));
+
+    m_pDepth_Shader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_Depth.hlsl",
+                                                              "DepthVS",
+                                                              L"data/shaders/DX_Depth.hlsl",
+                                                              "DepthPS"));
+    /*
+    * C O M P U T E
+    * S H A D E R
+    */
+
+    //Ambient occlusion
+    m_pCS_SSAO.reset(myGraphicsApi->createComputeShaderProgram(
+                                    L"data/shaders/computeShaders/CS_SSAO.hlsl",
+                                    "cs_SSAO"));
+
+    //Blurs
+    m_pCS_BlurH.reset(myGraphicsApi->createComputeShaderProgram(
+                                     L"data/shaders/computeShaders/CS_GaussianBlurs.hlsl",
+                                     "cs_gaussian_blurH"));
+    m_pCS_BlurV.reset(myGraphicsApi->createComputeShaderProgram(
+                                     L"data/shaders/computeShaders/CS_GaussianBlurs.hlsl",
+                                     "cs_gaussian_blurV"));
   }
 }

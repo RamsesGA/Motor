@@ -46,7 +46,7 @@
     <Filter Include="Archivos de origen\Transform">
       <UniqueIdentifier>{be25cc86-c4c0-4566-acf6-2c611ba9b317}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Archivos de origen\ComputeShader">
+    <Filter Include="Archivos de origen\Compute">
       <UniqueIdentifier>{198e55a5-1228-4f0f-8434-43093913ff93}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -152,7 +152,10 @@
       <Filter>Archivos de origen\Transform</Filter>
     </ClInclude>
     <ClInclude Include="include\gaComputeShader.h">
-      <Filter>Archivos de origen\ComputeShader</Filter>
+      <Filter>Archivos de origen\Compute</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaComputeBuffer.h">
+      <Filter>Archivos de origen\Compute</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

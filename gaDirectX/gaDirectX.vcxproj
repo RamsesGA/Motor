@@ -169,6 +169,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\gaComputeBufferDX.h" />
     <ClInclude Include="include\gaComputeShaderDX.h" />
     <ClInclude Include="include\gaConstantBufferDX.h" />
     <ClInclude Include="include\gaGraphicsApiDX.h" />
@@ -183,6 +184,7 @@
     <ClInclude Include="include\gaVertexShaderDX.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\gaComputeBufferDX.cpp" />
     <ClCompile Include="src\gaComputeShaderDX.cpp" />
     <ClCompile Include="src\gaGraphicsApiDX.cpp" />
   </ItemGroup>
