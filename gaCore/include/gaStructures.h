@@ -19,6 +19,7 @@ using namespace gaEngineSDK;
 /*****************************************************************************/
 
 const int32 maxBones = 200;
+const uint32 totalPixels = 256;
 
 /*
 * C O N S T A N T

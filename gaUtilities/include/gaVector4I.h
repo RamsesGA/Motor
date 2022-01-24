@@ -40,7 +40,7 @@ namespace gaEngineSDK {
     * @return Determine the angle between vectors.
     */
     int32
-      dotProduct(const Vector4I& vector)const;
+    dotProduct(const Vector4I& vector)const;
     
     /***********************************************************************/
     /**
@@ -54,7 +54,7 @@ namespace gaEngineSDK {
     * @return We return true if it is small, otherwise it is false.
     */
     bool
-      operator<(const Vector4I& vector);
+    operator<(const Vector4I& vector);
     
     /**
     * @brief Check if one vector is greater than another, based on X, Y.
@@ -62,7 +62,7 @@ namespace gaEngineSDK {
     * @return We return true if it is greater, otherwise it is false.
     */
     bool
-      operator>(const Vector4I& vector);
+    operator>(const Vector4I& vector);
     
     /**
     * @brief We match the values of one vector in another.
@@ -70,7 +70,7 @@ namespace gaEngineSDK {
     * @return New value for the vector.
     */
     Vector4I&
-      operator=(const Vector4I& vector);
+    operator=(const Vector4I& vector);
     
     /**
     * @brief Compares this vector against another
@@ -78,7 +78,7 @@ namespace gaEngineSDK {
     * @return True if the vectors are equal, otherwise false.
     */
     bool
-      operator==(const Vector4I& vector);
+    operator==(const Vector4I& vector);
     
     /**
     * @brief We add the value of a saved vector and yours.
@@ -86,7 +86,7 @@ namespace gaEngineSDK {
     * @return New value for the vector.
     */
     Vector4I
-      operator+(const Vector4I& vector)const;
+    operator+(const Vector4I& vector)const;
     
     /**
     * @brief We add the value of your current vector and accept another vector.
@@ -94,7 +94,7 @@ namespace gaEngineSDK {
     * @return New value for the first vector.
     */
     Vector4I&
-      operator+=(const Vector4I& vector);
+    operator+=(const Vector4I& vector);
     
     /**
     * @brief We subtract the value of one vector with another.
@@ -102,7 +102,7 @@ namespace gaEngineSDK {
     * @return New value for the vector.
     */
     Vector4I
-      operator-(const Vector4I& vector)const;
+    operator-(const Vector4I& vector)const;
     
     /**
     * @brief We subtract the value of the current vector with another.
@@ -110,7 +110,7 @@ namespace gaEngineSDK {
     * @return New value for the first vector.
     */
     Vector4I&
-      operator-=(const Vector4I& vector);
+    operator-=(const Vector4I& vector);
     
     /**
     * @brief We multiply the value of one vector with an integer.
@@ -118,7 +118,7 @@ namespace gaEngineSDK {
     * @return New value for the vector.
     */
     Vector4I
-      operator*(const int32 val)const;
+    operator*(const int32 val)const;
     
     /**
     * @brief We multiply the value of the current vector with an integer.
@@ -126,7 +126,7 @@ namespace gaEngineSDK {
     * @return New value for the first vector.
     */
     Vector4I&
-      operator*=(const int32 val);
+    operator*=(const int32 val);
     
     /**
     * @brief We multiply the value of one vector with another.
@@ -134,7 +134,7 @@ namespace gaEngineSDK {
     * @return New value for the vector.
     */
     Vector4I
-      operator*(const Vector4I& vector)const;
+    operator*(const Vector4I& vector)const;
     
     /**
     * @brief Obtain a specific component.
@@ -142,7 +142,7 @@ namespace gaEngineSDK {
     * @return Copy of that component.
     */
     int32&
-      operator[](uint32 index);
+    operator[](uint32 index);
     
     /***********************************************************************/
     /**

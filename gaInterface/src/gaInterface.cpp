@@ -57,6 +57,7 @@ namespace gaEngineSDK {
     imguiFile();
     imguiScenegraph();
     imguiModelsInfo();
+    imguiCurrentFPS();
 
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -254,9 +255,12 @@ namespace gaEngineSDK {
   Interface::imguiScenegraph() {
     auto mySceneGraph = SceneGraph::instancePtr();
 
-    if (ImGui::Begin("Scene graph", nullptr, ImGuiWindowFlags_NoTitleBar |
-                                             ImGuiWindowFlags_AlwaysVerticalScrollbar |
-                                             ImGuiWindowFlags_NoMove)) {
+    ImGuiTreeNodeFlags myFlags = ImGuiWindowFlags_NoTitleBar |
+                                 ImGuiWindowFlags_AlwaysVerticalScrollbar |
+                                 ImGuiWindowFlags_NoMove |
+                                 ImGuiWindowFlags_NoResize;
+
+    if (ImGui::Begin("Scene graph", nullptr, myFlags)) {
       textColoredCentered("-Scene graph-", Vector3(255.0f, 165.0f, 0.0f));
       ImGui::Separator();
 
@@ -329,8 +333,12 @@ namespace gaEngineSDK {
     
     auto object = mySceneGraph->m_nodeSelected->getActorNode().get();
 
-    if (ImGui::Begin("Model information", nullptr, ImGuiWindowFlags_NoTitleBar |
-                                                   ImGuiWindowFlags_AlwaysVerticalScrollbar)) {
+    ImGuiTreeNodeFlags myFlags = ImGuiWindowFlags_NoTitleBar |
+                                 ImGuiWindowFlags_AlwaysVerticalScrollbar |
+                                 ImGuiWindowFlags_NoMove |
+                                 ImGuiWindowFlags_NoResize;
+
+    if (ImGui::Begin("Model information", nullptr, myFlags)) {
       /*
       * S T A R T
       * I N F O
@@ -361,6 +369,32 @@ namespace gaEngineSDK {
       materialsInterface();
 
       
+      ImGui::End();
+    }
+  }
+
+  void
+  Interface::imguiCurrentFPS() {
+    ImGuiTreeNodeFlags myFlags = ImGuiWindowFlags_NoTitleBar |
+                                 ImGuiWindowFlags_NoMove | 
+                                 ImGuiWindowFlags_NoResize | 
+                                 ImGuiWindowFlags_NoBackground | 
+                                 ImGuiWindowFlags_NoScrollbar;
+
+    if (ImGui::Begin("Frames Per Second", nullptr, myFlags)) {
+      ImGuiIO& io = ImGui::GetIO();
+      float fps = (1.0f / io.DeltaTime);
+
+      //ImGui::Text("-Frames Per Second - - ", fps);
+      ImGui::Text("%.3f - ms", (1000.0f / ImGui::GetIO().Framerate));
+      ImGui::Separator();
+
+      ImGui::Text("%.1f - FPS", ImGui::GetIO().Framerate);
+      ImGui::Separator();
+
+      ImGui::Text("%.1f - 1.0 and DeltaTime", fps);
+      ImGui::Separator();
+
       ImGui::End();
     }
   }

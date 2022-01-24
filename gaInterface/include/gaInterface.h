@@ -96,6 +96,9 @@ namespace gaEngineSDK {
     void
     imguiModelsInfo();
 
+    void
+    imguiCurrentFPS();
+
     /*************************************************************************/
     /**
     * Members.

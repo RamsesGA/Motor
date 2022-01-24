@@ -49,6 +49,12 @@
     <Filter Include="Archivos de origen\Compute">
       <UniqueIdentifier>{198e55a5-1228-4f0f-8434-43093913ff93}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\BaseAudio">
+      <UniqueIdentifier>{6cae7ed1-54d3-4a3e-bafb-06181547de39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\BaseOmniverse">
+      <UniqueIdentifier>{f40fe6d3-79ac-4c49-bc2e-8baa78ea3772}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\gaConstantBuffer.h">
@@ -157,6 +163,12 @@
     <ClInclude Include="include\gaComputeBuffer.h">
       <Filter>Archivos de origen\Compute</Filter>
     </ClInclude>
+    <ClInclude Include="include\gaBaseAudio.h">
+      <Filter>Archivos de origen\BaseAudio</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaBaseOmniConnect.h">
+      <Filter>Archivos de origen\BaseOmniverse</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gaBaseApp.cpp">
@@ -215,6 +227,12 @@
     </ClCompile>
     <ClCompile Include="src\gaTransform.cpp">
       <Filter>Archivos de origen\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaBaseAudio.cpp">
+      <Filter>Archivos de origen\BaseAudio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaBaseOmniConnect.cpp">
+      <Filter>Archivos de origen\BaseOmniverse</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

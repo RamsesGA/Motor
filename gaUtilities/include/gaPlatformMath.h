@@ -4,7 +4,6 @@
 #include "gaRadians.h"
 
 namespace gaEngineSDK {
-
   class GA_UTILITY_EXPORT PlatformMath
   {
    public:

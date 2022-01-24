@@ -134,7 +134,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>GA_CORE_EXPORTS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GA_CORE_EXPORTS;_DEBUG;_CONSOLE;BOOST_ALL_DYN_LINK;TBB_USE_DEBUG=1;_CRT_SECURE_NO_WARNINGS;DEBUG;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>./include/;./include/Externals/;$(DEVLIBS)/SFML/include;$(DEVLIBS)/Assimp/include;$(SolutionDir)gaUtilities/include</AdditionalIncludeDirectories>
@@ -172,8 +172,10 @@
     <ClInclude Include="include\gaActor.h" />
     <ClInclude Include="include\gaAnimations.h" />
     <ClInclude Include="include\gaBaseApp.h" />
+    <ClInclude Include="include\gaBaseAudio.h" />
     <ClInclude Include="include\gaBaseInputs.h" />
     <ClInclude Include="include\gaBaseInterface.h" />
+    <ClInclude Include="include\gaBaseOmniConnect.h" />
     <ClInclude Include="include\gaBasePhysics.h" />
     <ClInclude Include="include\gaBaseRenderer.h" />
     <ClInclude Include="include\gaCamera.h" />
@@ -210,8 +212,10 @@
     <ClCompile Include="src\gaActor.cpp" />
     <ClCompile Include="src\gaAnimations.cpp" />
     <ClCompile Include="src\gaBaseApp.cpp" />
+    <ClCompile Include="src\gaBaseAudio.cpp" />
     <ClCompile Include="src\gaBaseInputs.cpp" />
     <ClCompile Include="src\gaBaseInterface.cpp" />
+    <ClCompile Include="src\gaBaseOmniConnect.cpp" />
     <ClCompile Include="src\gaBasePhysics.cpp" />
     <ClCompile Include="src\gaBaseRenderer.cpp" />
     <ClCompile Include="src\gaCamera.cpp" />

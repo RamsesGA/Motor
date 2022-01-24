@@ -780,7 +780,7 @@ namespace gaEngineSDK {
   void
   DeferredRendering::defaultLight() {
     SPtr<Lights> lightCompo = make_shared<Lights>(Vector3(0.0f, 80.0f, -68.0f),
-      Vector3(0.0f, 80.0f, 0.0f));
+                                                  Vector3(0.0f, 80.0f, 0.0f));
 
     //Light info
     lightCompo->setAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
@@ -950,13 +950,11 @@ namespace gaEngineSDK {
                                              "vs_ssAligned",
                                              L"data/shaders/DX_lightningPS.hlsl",
                                              "ps_main"));
-
     //m_pAdditionDepth_Shader.reset(myGraphicsApi->createShadersProgram(
     //                                             L"data/shaders/DX_screenAlignedQuad.hlsl",
     //                                             "vs_ssAligned",
     //                                             L"data/shaders/DX_AdditionPS.hlsl",
     //                                             "Add"));
-
     m_pDepth_Shader.reset(myGraphicsApi->createShadersProgram(L"data/shaders/DX_Depth.hlsl",
                                                               "DepthVS",
                                                               L"data/shaders/DX_Depth.hlsl",

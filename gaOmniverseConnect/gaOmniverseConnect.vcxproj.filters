@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Archivos de orgen">
+      <UniqueIdentifier>{73378189-374c-40cf-9fb9-a29449953c9b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\gaOmniConnect.h">
+      <Filter>Archivos de orgen</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaPrerequisitesOmniConnect.h">
+      <Filter>Archivos de orgen</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaStdHeadersOmniverse.h">
+      <Filter>Archivos de orgen</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\gaOmniConnect.cpp">
+      <Filter>Archivos de orgen</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

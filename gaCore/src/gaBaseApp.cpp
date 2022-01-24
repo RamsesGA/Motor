@@ -6,6 +6,7 @@
 #include "gaBaseRenderer.h"
 #include "gaBaseInterface.h"
 #include "gaBasePhysics.h"
+#include "gaBaseOmniConnect.h"
 #include "gaResourceManager.h"
 
 namespace gaEngineSDK {
@@ -49,6 +50,11 @@ namespace gaEngineSDK {
 
     //We save a viewport.
     myGraphicsApi->setViewports(m_width, m_height);
+
+    /*
+    * O M N I V E R S E
+    */
+    omniverseTest();
 
     while (m_sfmlWindow.isOpen()) {
       Event event;
@@ -109,8 +115,8 @@ namespace gaEngineSDK {
     }
 
     using fnProt = GraphicsApi * (*)();
-    fnProt graphicsApiFunc = reinterpret_cast<fnProt>
-                                              (GetProcAddress(hInstance, "createGraphicApi"));
+    fnProt graphicsApiFunc = reinterpret_cast<fnProt>(GetProcAddress(hInstance, 
+                                                                     "createGraphicApi"));
     //In case of error
     if (!(graphicsApiFunc)) {
       return -1;
@@ -136,8 +142,8 @@ namespace gaEngineSDK {
     }
 
     using fnBR = BaseRenderer * (*)();
-    fnBR baseRendApiFunc = reinterpret_cast<fnBR>(GetProcAddress
-                                                  (hInstance, "createBaseRenderer"));
+    fnBR baseRendApiFunc = reinterpret_cast<fnBR>(GetProcAddress(hInstance, 
+                                                                 "createBaseRenderer"));
     //In case of error
     if (!(baseRendApiFunc)) {
       return -1;
@@ -151,7 +157,9 @@ namespace gaEngineSDK {
     * B A S E
     * I N T E R F A C E
     */
-    hInstance = LoadLibraryExA("gaInterface_d.dll", nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
+    hInstance = LoadLibraryExA("gaInterface_d.dll", 
+                               nullptr, 
+                               LOAD_WITH_ALTERED_SEARCH_PATH);
 
     //In case of error
     if (!(hInstance)) {
@@ -159,7 +167,8 @@ namespace gaEngineSDK {
     }
 
     using fnBI = BaseInterface * (*)();
-    fnBI baseInter = reinterpret_cast<fnBI>(GetProcAddress(hInstance, "createNewInterface"));
+    fnBI baseInter = reinterpret_cast<fnBI>(GetProcAddress(hInstance, 
+                                                           "createNewInterface"));
 
     //In case of error
     if (!(baseInter)) {
@@ -182,7 +191,8 @@ namespace gaEngineSDK {
     }
 
     using fnBInputs = BaseInputs * (*)();
-    fnBInputs baseInputs = reinterpret_cast<fnBInputs>(GetProcAddress(hInstance, "newInputs"));
+    fnBInputs baseInputs = reinterpret_cast<fnBInputs>(GetProcAddress(hInstance, 
+                                                                      "newInputs"));
 
     //In case of error
     if (!(baseInputs)) {
@@ -215,6 +225,32 @@ namespace gaEngineSDK {
     BasePhysics::startUp();
     BasePhysics* newBPhys = basePhys();
     g_basePhysics().setObject(newBPhys);
+
+    /*
+    * B A S E
+    * O M N I V E R S E
+    */
+    hInstance = LoadLibraryExA("gaOmniverseConnect_d.dll", 
+                               nullptr, 
+                               LOAD_WITH_ALTERED_SEARCH_PATH);
+    
+    //In case of error
+    if (!(hInstance)) {
+      return -1;
+    }
+    
+    using fnBOmni = BaseOmniConnect * (*)();
+    fnBOmni baseOmni = reinterpret_cast<fnBOmni>(GetProcAddress(hInstance, 
+                                                                "createOmniConnect"));
+    
+    //In case of error
+    if (!(baseOmni)) {
+      return -1;
+    }
+    
+    BaseOmniConnect::startUp();
+    BaseOmniConnect* newBOmni = baseOmni();
+    g_baseOmniConnect().setObject(newBOmni);
 
     /*
     * M O D U L E
@@ -253,7 +289,26 @@ namespace gaEngineSDK {
     }
   }
 
-  void 
+  void
+  BaseApp::omniverseTest() {
+    auto myOmniverse = g_baseOmniConnect().instancePtr();
+    String destinationPath = "http://localhost:8080/omniverse://127.0.0.1/Users/adminram";
+
+    if (!(myOmniverse->startOmniverse())) {
+      std::cout << "\nError, can not start Omniverse\n";
+      exit(1);
+    }
+
+    //Create the USD model in Omniverse.
+    const String stageUrl = myOmniverse->createOmniverseScene(destinationPath, "testscene");
+
+    if (stageUrl.empty()) {
+      std::cout << "\nError, can not create Omniverse scene\n";
+      exit(1);
+    }
+  }
+
+  void
   BaseApp::createWindow(String windowTitle) {
     m_windowSize.x = m_width;
     m_windowSize.y = m_height;

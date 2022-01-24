@@ -80,10 +80,10 @@ namespace gaEngineSDK {
   * @brief
   */
   template<typename K,
-    typename V,
-    typename P = std::less<K>,
-    typename A = std::allocator<std::pair<const K, V>>>
-    using Map = std::map<K, V, P, A>;
+           typename V,
+           typename P = std::less<K>,
+           typename A = std::allocator<std::pair<const K, V>>>
+  using Map = std::map<K, V, P, A>;
 
   /**
   * @brief
@@ -95,9 +95,9 @@ namespace gaEngineSDK {
   * @brief
   */
   template<typename T,
-    typename P = std::less<T>,
-    typename A = std::allocator<T>>
-    using Set = std::set<T, P, A>;
+           typename P = std::less<T>,
+           typename A = std::allocator<T>>
+  using Set = std::set<T, P, A>;
 
   /**
   * @brief

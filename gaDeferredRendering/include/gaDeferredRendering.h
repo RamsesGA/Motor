@@ -158,6 +158,12 @@ namespace gaEngineSDK {
     void
     depthPass();
 
+    /*************************************************************************/
+    /*
+    * .
+    */
+    /*************************************************************************/
+
     /*
     * @brief .
     */
@@ -302,7 +308,7 @@ namespace gaEngineSDK {
     SPtr<ConstantBuffer> m_pCB_Shadows;
 
     /*
-    * @brief .
+    * @brief Samplers.
     */
     SPtr<SamplerState> m_pSampler;
     SPtr<SamplerState> m_pCSSampler;

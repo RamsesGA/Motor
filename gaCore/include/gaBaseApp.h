@@ -76,6 +76,9 @@ namespace gaEngineSDK {
     void
     handleWindowEvents(Event& windowEvent, const float& deltaTime);
 
+    void
+    omniverseTest();
+
     /*************************************************************************/
     /*
     * On Methods (virtual).
