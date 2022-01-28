@@ -162,6 +162,12 @@ namespace gaEngineSDK {
     SPtr<IndexBuffer>
     getIndexBuffer();
 
+    SPtr<Vertex>
+    getVertexData();
+
+    SPtr<uint32>
+    getIndex();
+
     /*************************************************************************/
     /*
     * Members.

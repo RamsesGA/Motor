@@ -96,6 +96,37 @@ namespace gaEngineSDK {
     }
   }
 
+  void 
+  OmniConnect::createGeoMeshWithModel(WeakSPtr<Actor> model) {
+    auto localModel = model.lock();
+    if (nullptr != localModel) {
+      SPtr<Actor> newModel(localModel);
+
+      modelToGeoMesh(newModel);
+    }
+    else {
+      cout << "\nError to create GeoMesh with Model\n";
+    }
+  }
+
+  bool 
+  OmniConnect::openUSDFiles(String rute) {
+    m_stage = UsdStage::Open(rute);
+
+    if (!(m_stage)) {
+      failNotify("Error, can not open the USD stage on path: ", rute.c_str());
+      return false;
+    }
+
+    {
+      unique_lock<mutex> lk(m_logMutex);
+      cout << "\nStage opened success on path --> " << rute << endl;
+    }
+
+    m_rootPrimPath = SdfPath::AbsoluteRootPath();
+    return true;
+  }
+
   /***************************************************************************/
   /**
   * Omniverse Methods.
@@ -275,6 +306,157 @@ namespace gaEngineSDK {
     if (m_omniverseLoggingEnabled) {
       puts(message);
     }
+  }
+
+  /***************************************************************************/
+  /**
+  * Omniverse Methods.
+  */
+  /***************************************************************************/
+
+  PXR_INTERNAL_NS::UsdGeomMesh 
+  OmniConnect::modelToGeoMesh(WeakSPtr<Actor> model) {
+    auto localModel = model.lock();
+
+    //Set the model token
+    String modelName(localModel->getActorName());
+
+    modelName.append(to_string(1));
+
+    //_tokens->box);
+    SdfPath modelPrimPath = m_rootPrimPath.AppendChild(TfToken(modelName));
+
+    //Define the path in the stage
+    UsdGeomMesh localGeoMesh = UsdGeomMesh::Define(m_stage, modelPrimPath);
+
+    if (!localGeoMesh) {
+      return localGeoMesh;
+    }
+
+    //Set orientation
+    localGeoMesh.CreateOrientationAttr(VtValue(UsdGeomTokens->rightHanded));
+
+    auto myModel = localModel->getComponent<StaticMesh>()->m_pModel;
+
+    //Get the meshes num
+    uint32 numMeshes = myModel->getSizeMeshes();
+
+    for (uint32 i = 0; i < numMeshes; ++i) {
+      //Set the mesh token
+      String meshName("mesh_" + localModel->getActorName());
+
+      meshName.append(to_string(i));
+
+      //_tokens->box);
+      SdfPath meshPrimPath = modelPrimPath.AppendChild(TfToken(meshName));
+
+      //Define the mesh path as a geom mesh, the path is a child of model
+      UsdGeomMesh tempGeoMesh = UsdGeomMesh::Define(m_stage, meshPrimPath);
+
+      if (!tempGeoMesh) {
+        return tempGeoMesh;
+      }
+
+      //Set orientation
+      tempGeoMesh.CreateOrientationAttr(VtValue(UsdGeomTokens->rightHanded));
+
+      /*
+      * Obtain all vertices
+      */
+      int32 numVertices = myModel->getMesh(i).getVertices();
+      auto vertexData = myModel->getMesh(i).getVertexData();
+      auto vertexData2 = vertexData.get();
+
+      VtArray<GfVec3f> points;
+
+      points.resize(numVertices);
+
+      for (int32 j = 0; j < numVertices; ++j) {
+        auto vec = vertexData2[j].position;
+        points[j] = GfVec3f(vec.x, vec.y, vec.z);
+      }
+
+      //Set the vertex points to GeomMesh
+      tempGeoMesh.CreatePointsAttr(VtValue(points));
+
+      /*
+      * Obtain all indices
+      */
+      int32 numIndices = myModel->getMesh(i).getNumIndices();
+      auto indices = myModel->getMesh(i).getVecIndex();
+      VtArray<int32> vecIndices;
+
+      vecIndices.resize(numIndices);
+
+      for (int32 j = 0; j < numIndices; ++j) {
+        vecIndices[j] = indices[j];
+      }
+
+      //Set the index to GeomMesh
+      tempGeoMesh.CreateFaceVertexIndicesAttr(VtValue(vecIndices));
+
+      /*
+      * Obtain all vertex normals
+      */
+      int32 numNormals = myModel->getMesh(i).getVertices();
+      VtArray<GfVec3f> meshNormals;
+      meshNormals.resize(numVertices);
+
+      for (int32 j = 0; j < numVertices; ++j) {
+        auto norm = vertexData2[j].normal;
+        meshNormals[j] = GfVec3f(norm.x, norm.y, norm.z);
+      }
+
+      //Set the vertex normals to GeomMesh
+      tempGeoMesh.CreateNormalsAttr(VtValue(meshNormals));
+
+      //Add face vertex count
+      VtArray<int32> faceVertexCounts;
+
+      //numIndices
+      faceVertexCounts.resize(numIndices / 3);
+
+      std::fill(faceVertexCounts.begin(), faceVertexCounts.end(), 3);
+
+      tempGeoMesh.CreateFaceVertexCountsAttr(VtValue(faceVertexCounts));
+
+      //Set the color on the Model
+      UsdPrim meshPrim = tempGeoMesh.GetPrim();
+      UsdAttribute displayColorAttr = tempGeoMesh.CreateDisplayColorAttr();
+
+      {
+        VtVec3fArray valueArray;
+        GfVec3f rgbFace(0.463f, 0.725f, 0.0f);
+
+        valueArray.push_back(rgbFace);
+        displayColorAttr.Set(valueArray);
+      }
+
+      //Set the UVs values for the model
+      UsdGeomPrimvar attr2 = tempGeoMesh.CreatePrimvar(_tokens->st,
+                                                       SdfValueTypeNames->TexCoord2fArray);
+      {
+        int32 uvCount = myModel->getMesh(i).getVertices();
+        VtVec2fArray valueArray;
+
+        valueArray.resize(uvCount);
+
+        for (int32 j = 0; j < uvCount; ++j) {
+          auto uv = vertexData2[j].texCoords;
+          valueArray[j].Set(uv.vec);
+        }
+
+        bool status = attr2.Set(valueArray);
+      }
+
+      attr2.SetInterpolation(UsdGeomTokens->vertex);
+    }
+
+    //Commit the changes to the USD
+    m_stage->Save();
+    omniUsdLiveProcess();
+
+    return localGeoMesh;
   }
 
   void

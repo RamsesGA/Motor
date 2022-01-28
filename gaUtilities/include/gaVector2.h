@@ -145,7 +145,13 @@ namespace gaEngineSDK {
     */
     /*************************************************************************/
 
-    float x = 0.0f;
-    float y = 0.0f;
+    union {
+      struct {
+        float x;
+        float y;
+      };
+
+      float vec[2];
+    };
   };
 }

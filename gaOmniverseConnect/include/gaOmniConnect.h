@@ -28,6 +28,10 @@
 #include <pxr/usd/usdShade/shader.h>
 #include <pxr/usd/usd/modelAPI.h>
 
+#include <gaActor.h>
+#include <gaModels.h>
+#include <gaStaticMesh.h>
+
 #include "gaPrerequisitesOmniConnect.h"
 
 PXR_NAMESPACE_USING_DIRECTIVE
@@ -68,7 +72,10 @@ TF_DEFINE_PRIVATE_TOKENS(_tokens,
                          (UsdPreviewSurface)
                          ((UsdShaderId, "UsdPreviewSurface"))
                          ((PrimStShaderId, "UsdPrimvarReader_float2"))
-                         (UsdUVTexture));
+                         (UsdUVTexture)
+                         (model)
+                         (mesh)
+                         (obj));
 
 using std::unique_lock;
 using std::mutex;
@@ -105,11 +112,23 @@ namespace gaEngineSDK {
     void
     printConnectedUsername(const String& stageUrl) override;
 
+    void
+    createGeoMeshWithModel(WeakSPtr<Actor> model) override;
+
+    bool
+    openUSDFiles(String rute) override;
+
     /*************************************************************************/
     /**
     * Omniverse Methods.
     */
     /*************************************************************************/
+
+    /*
+    * @brief Create a GeoMesh with one local model and save it.
+    */
+    static UsdGeomMesh
+    modelToGeoMesh(WeakSPtr<Actor> model);
 
     /*
     * @brief Create a default box and save the data and the stage in a ".usd".

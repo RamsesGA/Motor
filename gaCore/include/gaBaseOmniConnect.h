@@ -5,6 +5,10 @@
 #include "gaPrerequisitesCore.h"
 
 namespace gaEngineSDK {
+  class Actor;
+}
+
+namespace gaEngineSDK {
   class GA_CORE_EXPORT BaseOmniConnect : public Module<BaseOmniConnect>
   {
    public:
@@ -52,6 +56,17 @@ namespace gaEngineSDK {
     virtual void
     printConnectedUsername(const String& stageUrl) {};
 
+    /*
+    * @brief Create GeoMesh (Omniverse) with one local model.
+    */
+    virtual void
+    createGeoMeshWithModel(WeakSPtr<Actor> model) {};
+
+    /*
+    * @brief Open the file USD
+    */
+    virtual bool
+    openUSDFiles(String rute) { return false; };
   };
 
   /***************************************************************************/

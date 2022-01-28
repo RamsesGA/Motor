@@ -1,9 +1,11 @@
 #include <gaGraphicsApi.h>
 #include <imgui.h>
+#include <imfilebrowser.h>
 #include <imgui_impl_win32.h>
 #include <imgui_impl_dx11.h>
 #include <gaStaticMesh.h>
 #include <gaModels.h>
+#include <gaBaseOmniConnect.h>
 
 #include "gaInterface.h"
 
@@ -205,13 +207,14 @@ namespace gaEngineSDK {
 
   void
   Interface::imguiFile() {
+    auto myOmniverse = g_baseOmniConnect().instancePtr();
     if (ImGui::BeginMainMenuBar()) {
       if (ImGui::BeginMenu("File")) {
         if (ImGui::MenuItem("New", "CTRL+N")) {
 
         }
         if (ImGui::MenuItem("Open", "CTRL+O")) {
-
+          openFiles();
         }
         if (ImGui::MenuItem("Save", "CTRL+S")) {
 
@@ -220,6 +223,7 @@ namespace gaEngineSDK {
 
         }
         ImGui::Separator();
+
         if (ImGui::MenuItem("Exit", "CTRL+E")) {
           exit(0);
         }
@@ -398,4 +402,10 @@ namespace gaEngineSDK {
       ImGui::End();
     }
   }
+
+  void 
+  Interface::openFiles() {
+    //myOmniverse->openUSDFiles("http://localhost:8080/omniverse://127.0.0.1/Users/gaEngine/test.usd");
+  }
+
 }

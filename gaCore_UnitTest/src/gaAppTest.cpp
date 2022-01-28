@@ -7,6 +7,7 @@
 #include <gaStaticMesh.h>
 #include <gaResourceManager.h>
 #include <gaLights.h>
+#include <gaBaseOmniConnect.h>
 
 #include "gaAppTest.h"
 
@@ -43,9 +44,9 @@ AppTest::onCreate() {
   */
   /***************************************************************************/
   
-  createScene();
-  //createNodePod();
-  createNodeVela();
+  //createScene();
+  createNodePod();
+  //createNodeVela();
   //createNodeTwoB();
   //createNodeUgandan();
   //createNodeGrimoires();
@@ -78,6 +79,11 @@ AppTest::createNodePod() {
 
   //Adding the actor to node root
   mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+
+  //Create the GeoMesh
+  auto myOmniverse = g_baseOmniConnect().instancePtr();
+
+  myOmniverse->createGeoMeshWithModel(actor);
 }
 
 void
@@ -100,6 +106,11 @@ AppTest::createNodeVela() {
 
   //Adding the actor to node root
   mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+
+  //Create the GeoMesh
+  auto myOmniverse = g_baseOmniConnect().instancePtr();
+
+  myOmniverse->createGeoMeshWithModel(actor);
 }
 
 void
@@ -122,6 +133,11 @@ AppTest::createNodeTwoB() {
 
   //Adding the actor to node root
   mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+
+  //Create the GeoMesh
+  auto myOmniverse = g_baseOmniConnect().instancePtr();
+
+  myOmniverse->createGeoMeshWithModel(actor);
 }
 
 void
@@ -144,6 +160,11 @@ AppTest::createNodeUgandan() {
 
   //Adding the actor to node root
   mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+
+  //Create the GeoMesh
+  auto myOmniverse = g_baseOmniConnect().instancePtr();
+
+  myOmniverse->createGeoMeshWithModel(actor);
 }
 
 void 
@@ -166,6 +187,11 @@ AppTest::createNodeGrimoires() {
 
   //Adding the actor to node root
   mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+
+  //Create the GeoMesh
+  auto myOmniverse = g_baseOmniConnect().instancePtr();
+
+  myOmniverse->createGeoMeshWithModel(actor);
 }
 
 void 
@@ -239,6 +265,11 @@ AppTest::createNodeRamlethalSwords() {
 
   //Adding the actor to node root
   mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+
+  //Create the GeoMesh
+  auto myOmniverse = g_baseOmniConnect().instancePtr();
+
+  myOmniverse->createGeoMeshWithModel(actor);
 }
 
 void

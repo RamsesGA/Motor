@@ -351,6 +351,7 @@ namespace gaEngineSDK {
 
   uint32
   Mesh::getVertices() {
+    m_numVertices = m_vVertices.size();
     return m_numVertices;
   }
 
@@ -369,4 +370,15 @@ namespace gaEngineSDK {
   Mesh::getIndexBuffer() {
     return m_pIndexBuffer;
   }
+
+  SPtr<Vertex> 
+  Mesh::getVertexData() {
+    return m_vertexData;
+  }
+
+  SPtr<uint32>
+  Mesh::getIndex() {
+    return m_pIndex;
+  }
+
 }

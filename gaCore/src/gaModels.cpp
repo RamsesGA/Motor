@@ -139,7 +139,7 @@ namespace gaEngineSDK {
 
   uint32
   Models::getSizeMeshes() {
-    return m_vMeshes.size();
+    return (uint32)m_vMeshes.size();
   }
 
   /***************************************************************************/

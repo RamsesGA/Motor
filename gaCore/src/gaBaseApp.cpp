@@ -19,6 +19,13 @@ namespace gaEngineSDK {
     
     initSys();
 
+    /*
+    * O M N I V E R S E
+    * C R E A T E
+    * S T A G E
+    */
+    omniverseTest();
+    
     onCreate();
     
     bool shoudClose = false;
@@ -50,11 +57,6 @@ namespace gaEngineSDK {
 
     //We save a viewport.
     myGraphicsApi->setViewports(m_width, m_height);
-
-    /*
-    * O M N I V E R S E
-    */
-    omniverseTest();
 
     while (m_sfmlWindow.isOpen()) {
       Event event;
@@ -292,7 +294,7 @@ namespace gaEngineSDK {
   void
   BaseApp::omniverseTest() {
     auto myOmniverse = g_baseOmniConnect().instancePtr();
-    String destinationPath = "http://localhost:8080/omniverse://127.0.0.1/Users/adminram";
+    String destinationPath = "http://localhost:8080/omniverse://127.0.0.1/Users/gaEngine";
 
     if (!(myOmniverse->startOmniverse())) {
       std::cout << "\nError, can not start Omniverse\n";
@@ -300,12 +302,14 @@ namespace gaEngineSDK {
     }
 
     //Create the USD model in Omniverse.
-    const String stageUrl = myOmniverse->createOmniverseScene(destinationPath, "testscene");
+    const String stageUrl = myOmniverse->createOmniverseScene(destinationPath, "test");
 
     if (stageUrl.empty()) {
       std::cout << "\nError, can not create Omniverse scene\n";
       exit(1);
     }
+
+    myOmniverse->openUSDFiles("http://localhost:8080/omniverse://127.0.0.1/Users/gaEngine/test.usd");
   }
 
   void

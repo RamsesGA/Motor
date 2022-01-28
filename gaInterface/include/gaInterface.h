@@ -99,6 +99,9 @@ namespace gaEngineSDK {
     void
     imguiCurrentFPS();
 
+    void
+    openFiles();
+
     /*************************************************************************/
     /**
     * Members.
