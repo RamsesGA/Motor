@@ -101,6 +101,11 @@ namespace gaEngineSDK {
     */
     bool m_isSelected = false;
 
+    /*
+    * @brief Save the sdf path of Omniverse info.
+    */
+    String m_sdfPathOmni = "";
+
    private:
     /*************************************************************************/
     /**

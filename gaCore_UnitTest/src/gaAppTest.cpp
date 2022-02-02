@@ -52,6 +52,9 @@ AppTest::onCreate() {
   //createNodeGrimoires();
   //createNodeRamlethalSwords();
   //createNodeStranger();
+
+  auto myOmniverse = g_baseOmniConnect().instancePtr();
+  myOmniverse->saveSceneGraphToUSD();
 }
 
 /*****************************************************************************/
@@ -79,11 +82,6 @@ AppTest::createNodePod() {
 
   //Adding the actor to node root
   mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
-
-  //Create the GeoMesh
-  auto myOmniverse = g_baseOmniConnect().instancePtr();
-
-  myOmniverse->createGeoMeshWithModel(actor);
 }
 
 void
@@ -265,11 +263,6 @@ AppTest::createNodeRamlethalSwords() {
 
   //Adding the actor to node root
   mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
-
-  //Create the GeoMesh
-  auto myOmniverse = g_baseOmniConnect().instancePtr();
-
-  myOmniverse->createGeoMeshWithModel(actor);
 }
 
 void

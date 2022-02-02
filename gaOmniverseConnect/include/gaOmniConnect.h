@@ -31,6 +31,10 @@
 #include <gaActor.h>
 #include <gaModels.h>
 #include <gaStaticMesh.h>
+#include <gaSceneGraph.h>
+#include <gaTransform.h>
+#include <gaDegrees.h>
+#include <gaQuaternions.h>
 
 #include "gaPrerequisitesOmniConnect.h"
 
@@ -109,14 +113,29 @@ namespace gaEngineSDK {
     String
     createOmniverseScene(const String& destinationPath, const String& stageName) override;
 
+    bool
+    openUSDFiles(String rute) override;
+
     void
     printConnectedUsername(const String& stageUrl) override;
 
     void
     createGeoMeshWithModel(WeakSPtr<Actor> model) override;
 
-    bool
-    openUSDFiles(String rute) override;
+    void
+    updateObjects(WeakSPtr<SceneNode> myNode) override;
+
+    void
+    updateOmniverseToGa() override;
+
+    void
+    updateGaToOmniverse() override;
+
+    void
+    saveSceneGraphToUSD() override;
+
+    void
+    saveObjectToUSD(WeakSPtr<SceneNode> child, String& name, String& parent) override;
 
     /*************************************************************************/
     /**
@@ -129,6 +148,12 @@ namespace gaEngineSDK {
     */
     static UsdGeomMesh
     modelToGeoMesh(WeakSPtr<Actor> model);
+
+    /*
+    * @brief .
+    */
+    static UsdGeomMesh
+    modelToGeoMesh(WeakSPtr<Models> model, SdfPath& primitivePath);
 
     /*
     * @brief Create a default box and save the data and the stage in a ".usd".
@@ -153,7 +178,8 @@ namespace gaEngineSDK {
     /*
     * @brief Shut down Omniverse connection.
     */
-    static void shutdownOmniverse();
+    static void 
+    shutdownOmniverse();
 
     /*
     * @brief Omniverse Log callback.
@@ -202,6 +228,34 @@ namespace gaEngineSDK {
     */
     static void
     createEmptyFolder(const String & emptyFolderPath);
+
+    /*
+    * @brief .
+    */
+    static void
+    setTransformComponents(UsdGeomXformable& xTransform,
+                           Vector3& position,
+                           Vector3& rotation,
+                           Vector3& scale);
+
+    /*
+    * @brief .
+    */
+    static void
+    setOp(UsdGeomXformable& xTransform,
+          UsdGeomXformOp& op,
+          UsdGeomXformOp::Type opType,
+          const GfVec3d& value,
+          const UsdGeomXformOp::Precision precision);
+
+    /*
+    * @brief .
+    */
+    void
+    getTransformComponents(UsdGeomXformable& usdXForm,
+                           Vector3& position,
+                           Vector3& rotation,
+                           Vector3& scale);
 
     /*************************************************************************/
     /**

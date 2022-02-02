@@ -1,6 +1,7 @@
 #pragma once
 
 #include <gaModule.h>
+#include <gaSceneGraph.h>
 
 #include "gaPrerequisitesCore.h"
 
@@ -63,10 +64,40 @@ namespace gaEngineSDK {
     createGeoMeshWithModel(WeakSPtr<Actor> model) {};
 
     /*
-    * @brief Open the file USD
+    * @brief Open the file USD.
     */
     virtual bool
     openUSDFiles(String rute) { return false; };
+
+    /*
+    * @brief Update for Omniverse.
+    */
+    virtual void
+    updateObjects(WeakSPtr<SceneNode> myNode) {};
+
+    /*
+    * @brief Update for Omniverse.
+    */
+    virtual void
+    updateOmniverseToGa() {};
+
+    /*
+    * @brief Update for Omniverse.
+    */
+    virtual void
+    updateGaToOmniverse() {};
+
+    /*
+    * @brief .
+    */
+    virtual void
+    saveSceneGraphToUSD() {};
+
+    /*
+    * @brief Save my scene to USD file.
+    */
+    virtual void
+    saveObjectToUSD(WeakSPtr<SceneNode> child, String& name, String& parent) {};
   };
 
   /***************************************************************************/

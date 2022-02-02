@@ -47,7 +47,8 @@ namespace gaEngineSDK {
 
     cout << "\ndestination path - - >" << stageUrl << endl;
     {
-      //Delete the old version of this file on Omniverse and wait for the operation to complete
+      //Delete the old version of this file on Omniverse 
+      //and wait for the operation to complete
       unique_lock<mutex> lk(m_logMutex);
       cout << "\nWaiting for " << stageUrl << " to delete... " << endl;
     }
@@ -72,6 +73,24 @@ namespace gaEngineSDK {
     //Always a good idea to declare your up-ness
     UsdGeomSetStageUpAxis(m_stage, UsdGeomTokens->y);
     return stageUrl;
+  }
+
+  bool 
+  OmniConnect::openUSDFiles(String rute) {
+    m_stage = UsdStage::Open(rute);
+
+    if (!(m_stage)) {
+      failNotify("Error, can not open the USD stage on path: ", rute.c_str());
+      return false;
+    }
+
+    {
+      unique_lock<mutex> lk(m_logMutex);
+      cout << "\nStage opened success on path --> " << rute << endl;
+    }
+
+    m_rootPrimPath = SdfPath::AbsoluteRootPath();
+    return true;
   }
 
   void
@@ -109,22 +128,201 @@ namespace gaEngineSDK {
     }
   }
 
-  bool 
-  OmniConnect::openUSDFiles(String rute) {
-    m_stage = UsdStage::Open(rute);
+  void 
+  OmniConnect::updateObjects(WeakSPtr<SceneNode> myNode) {
+    auto localNode = myNode.lock();
 
-    if (!(m_stage)) {
-      failNotify("Error, can not open the USD stage on path: ", rute.c_str());
-      return false;
+    SdfPath localPath = SdfPath(localNode->m_sdfPathOmni);
+
+    //Call this to wait for all pending live updates to complete.
+    omniUsdLiveWaitForPendingUpdates();
+
+    if (!(localPath.IsEmpty())) {
+      auto primitive = m_stage->GetPrimAtPath(localPath);
+
+      //Looking for a Geo mesh model.
+      if ((primitive) && (primitive.IsA<UsdGeomXformable>())) {
+        //UsdGeomMesh localMesh(primitive);
+
+        auto localComponent = localNode->getActorNode()->getComponent<Transform>();
+
+        if (nullptr != localComponent) {
+          UsdGeomXformable usdXForm(primitive);
+
+          Vector3 localPosition = localComponent->getPosition();
+          Vector3 localRotation;
+          Vector3 localScale = localComponent->getScale();
+
+          getTransformComponents(usdXForm, localPosition, localRotation, localScale);
+
+          localComponent->setPosition(localPosition);
+
+          localComponent->setRotation(Quaternions(Degrees(localRotation.x), 
+                                                  Degrees(localRotation.y),
+                                                  Degrees(localRotation.z),
+                                                  Degrees(0)));
+          
+          localComponent->setScale(localScale);
+          
+          localComponent->update(0.0f);
+        }
+      }
     }
 
-    {
-      unique_lock<mutex> lk(m_logMutex);
-      cout << "\nStage opened success on path --> " << rute << endl;
+    for (auto childNode : localNode->getChildNodes()) {
+      updateObjects(childNode);
+    }
+  }
+
+  void 
+  OmniConnect::updateOmniverseToGa() {
+    //In case the stage is null.
+    if (!(m_isStartUp) || !(m_stage)) {
+      return;
     }
 
-    m_rootPrimPath = SdfPath::AbsoluteRootPath();
-    return true;
+    //Call this to wait for all pending live updates to complete.
+    omniUsdLiveWaitForPendingUpdates();
+
+    auto mySceneGraph = SceneGraph::instancePtr();
+
+    updateObjects(mySceneGraph->m_root);
+
+    omniUsdLiveProcess();
+  }
+
+  void
+  OmniConnect::updateGaToOmniverse() {
+    //In case the stage is null.
+    if (!(m_isStartUp) || !(m_stage)) {
+      return;
+    }
+
+    //Call this to wait for all pending live updates to complete.
+    omniUsdLiveWaitForPendingUpdates();
+
+    auto mySceneGraph = SceneGraph::instancePtr();
+
+    //Need to access to my local scene graph
+    auto node = mySceneGraph->m_nodeSelected;
+
+    if (!(node)) {
+      return;
+    }
+
+    //Check if exist in Omniverse in this moment.
+    if (node != mySceneGraph->m_root) {
+      SdfPath localPath = SdfPath(node->m_sdfPathOmni);
+
+      if (!(localPath.IsEmpty())) {
+        auto primitive = m_stage->GetPrimAtPath(localPath);
+
+        //Looking for a Geo mesh model.
+        if ((primitive) && (primitive.IsA<UsdGeomMesh>())) {
+          UsdGeomMesh localMesh(primitive);
+
+          auto localComponent = node->getActorNode()->getComponent<Transform>();
+
+          if (nullptr != localComponent) {
+            UsdGeomXformable usdXForm(localMesh);
+
+            Vector3 localPosition = localComponent->getPosition();
+            Vector3 localRotation = localComponent->getEulerRotation();
+            Vector3 localScale = localComponent->getScale();
+
+            setTransformComponents(usdXForm, localPosition, localRotation, localScale);
+          }
+        }
+      }
+    }
+
+    //Commit the changes to the USD
+    m_stage->Save();
+    //omniUsdLiveProcess();
+  }
+
+  void
+  OmniConnect::saveSceneGraphToUSD() {
+    //In case that is not initialize.
+    if (!(m_isStartUp) || !(m_stage)) {
+      return;
+    }
+
+    //Clean the actual root.
+    m_stage->GetRootLayer()->ClearDefaultPrim();
+
+    //Obtain the true root of the scene.
+    SdfPath rootPrimitivePath = SdfPath::AbsoluteRootPath();
+
+    //Create the transform for the root.
+    UsdGeomXform::Define(m_stage, m_rootPrimPath);
+
+    auto mySceneGraph = SceneGraph::instancePtr();
+    auto actualRoot = mySceneGraph->m_root;
+
+    //Define the SDF path to the actual root and actualize the root primitive path.
+    actualRoot->m_sdfPathOmni = rootPrimitivePath.GetString();
+    m_rootPrimPath = rootPrimitivePath;
+
+    uint32 childNums = 0;
+    omniUsdLiveWaitForPendingUpdates();
+    
+    for (auto child : actualRoot->getChildNodes()) {
+      String childName("model_");
+      childName.append(to_string(++childNums));
+
+      saveObjectToUSD(child, childName, actualRoot->m_sdfPathOmni);
+    }
+
+    m_stage->Save();
+    omniUsdLiveProcess();
+  }
+
+  void
+  OmniConnect::saveObjectToUSD(WeakSPtr<SceneNode> child, String& name, String& parent) {
+    auto localChild = child.lock();
+    if (("" == name) || ("" == parent) || (nullptr == localChild)) {
+      cout << "\nError save object, name, parent or localChild are empty\n";
+      return;
+    }
+
+    //Convert String to SdfPath.
+    SdfPath parentPath = SdfPath(parent);
+    SdfPath primitivePath = parentPath.AppendChild(TfToken(name));
+
+    localChild->m_sdfPathOmni = primitivePath.GetString();
+
+    /*
+    
+    if () {
+
+    }
+    */
+
+    auto getCompo = localChild->getActorNode()->getComponent<Transform>();
+    auto getModel = localChild->getActorNode()->getComponent<StaticMesh>();
+
+    if ((nullptr != getModel) || (nullptr != getModel->m_pModel)) {
+      auto localUsdMesh = modelToGeoMesh(getModel->m_pModel, primitivePath);
+      UsdGeomXformable xTransform(localUsdMesh);
+
+      Vector3 tempPosition = getCompo->getPosition();
+      Vector3 tempRotation = getCompo->getEulerRotation();
+      Vector3 tempScale = getCompo->getScale();
+
+      setTransformComponents(xTransform, tempPosition, tempRotation, tempScale);
+    }
+
+    uint32 numChild = 0;
+    for (auto forChild : localChild->getChildNodes()) {
+      String childName("mesh_");
+
+      childName.append(to_string(++numChild));
+
+      String tempStr = primitivePath.GetString();
+
+      saveObjectToUSD(forChild, childName, tempStr);
+    }
   }
 
   /***************************************************************************/
@@ -165,7 +363,8 @@ namespace gaEngineSDK {
     String boxName("box_");
     boxName.append(to_string(boxNumber));
 
-    SdfPath boxPrimPath = m_rootPrimPath.AppendChild(TfToken(boxName));//_tokens->box);
+    //_tokens->box);
+    SdfPath boxPrimPath = m_rootPrimPath.AppendChild(TfToken(boxName));
     UsdGeomMesh mesh = UsdGeomMesh::Define(m_stage, boxPrimPath);
 
     if (!mesh) {
@@ -253,7 +452,7 @@ namespace gaEngineSDK {
     return mesh;
   }
 
-  void 
+  void
   OmniConnect::OmniClientConnectionStatusCallbackImpl(void* userData, 
                                                       const char* url, 
                                                       OmniClientConnectionStatus status) noexcept {
@@ -319,7 +518,7 @@ namespace gaEngineSDK {
     auto localModel = model.lock();
 
     //Set the model token
-    String modelName(localModel->getActorName());
+    String modelName("model_");
 
     modelName.append(to_string(1));
 
@@ -343,7 +542,7 @@ namespace gaEngineSDK {
 
     for (uint32 i = 0; i < numMeshes; ++i) {
       //Set the mesh token
-      String meshName("mesh_" + localModel->getActorName());
+      String meshName("mesh_");
 
       meshName.append(to_string(i));
 
@@ -457,6 +656,175 @@ namespace gaEngineSDK {
     omniUsdLiveProcess();
 
     return localGeoMesh;
+  }
+
+  UsdGeomMesh
+  OmniConnect::modelToGeoMesh(WeakSPtr<Models> model, SdfPath& primitivePath) {
+    UsdGeomMesh geoModel = UsdGeomMesh::Define(m_stage, primitivePath);
+    if (!(geoModel)) {
+      cout << "\nError, model to geo mesh is null\n";
+      return geoModel;
+    }
+
+    auto localModel = model.lock();
+    if (nullptr == localModel) {
+      cout << "\nError, localModel is null\n";
+      return geoModel;
+    }
+
+    //Define the orientation.
+    geoModel.CreateOrientationAttr(VtValue(UsdGeomTokens->rightHanded));
+
+    //Get meshes size.
+    uint32 numMeshes = localModel->getSizeMeshes();
+
+    int32 numVertices = 0;
+    int32 numIndices = 0;
+    int32 currentIndex = 0;
+    int32 maxIndexes = 0;
+    int32 currentVertexIndex = 0;
+    int32 currentIndexVectorIndex = 0;
+
+    //Obtain the num vertex and indexes of all meshes.
+    for (uint32 i = 0; i < numMeshes; ++i) {
+      numVertices += localModel->getMesh(i).getVertices();
+      numIndices += localModel->getMesh(i).getNumIndices();
+    }
+
+    //Create each array for all things.
+    VtArray<GfVec3f> points;
+    points.resize(numVertices);
+
+    VtArray<int32> vecIndices;
+    vecIndices.resize(numIndices);
+
+    Vector<VtArray<int32>> vecIndices2;
+    vecIndices2.resize(numMeshes);
+
+    int32 uvCounter = numVertices;
+    VtVec2fArray valueArray;
+    valueArray.resize(uvCounter);
+
+    int32 numNormals = numVertices;
+    VtArray<GfVec3f> normalMeshes;
+    normalMeshes.resize(numVertices);
+
+    //Subsets zone
+    for (uint32 i = 0; i < numMeshes; ++i) {
+      auto vertexData2 = localModel->getMesh(i).getVertexData();
+      auto vertexData = vertexData2.get();
+
+      auto currentNumVertex = localModel->getMesh(i).getVertices();
+      auto currentNumIndex = localModel->getMesh(i).getNumIndices();
+
+      for (uint32 j = 0; j < currentNumVertex; ++j) {
+        //Vertices
+        auto vertex = vertexData[j].position;
+
+        points[currentVertexIndex] = GfVec3f(vertex.x, vertex.y, vertex.z);
+
+        //Normals
+        auto normals = vertexData[j].normal;
+        normalMeshes[currentVertexIndex] = GfVec3f(normals.x, normals.y, normals.z);
+        
+        //UVs
+        auto uv = vertexData[j].texCoords;
+        valueArray[currentVertexIndex].Set(uv.vec);
+
+        ++currentVertexIndex;
+      }
+
+      //Calculate indices for each triangle.
+      auto indices = localModel->getMesh(i).getVecIndex();
+
+      vecIndices2[i].resize(currentNumIndex);
+      for (uint32 j = 0; j < currentNumIndex; ++j) {
+        auto index = indices[j] + currentIndex;
+
+        if (index > maxIndexes) {
+          maxIndexes = index;
+        }
+
+        vecIndices[currentIndexVectorIndex] = vecIndices2[i][j] = index;
+
+        ++currentIndexVectorIndex;
+      }
+
+      currentIndex = maxIndexes + 1;
+    }
+
+    /*
+    * S E T
+    * I N F O
+    * Z O N E
+    */
+
+    //Positions.
+    geoModel.CreatePointsAttr(VtValue(points));
+
+    //Index.
+    geoModel.CreateFaceVertexIndicesAttr(VtValue(vecIndices));
+
+    //Normals.
+    geoModel.CreateNormalsAttr(VtValue(normalMeshes));
+
+    //Add face vertex counts.
+    VtArray<int32> faceVertexCounts;
+
+    //Faces = num index / 3 (3 points per face).
+    faceVertexCounts.resize(numIndices / 3);
+    std::fill(faceVertexCounts.begin(), faceVertexCounts.end(), 3);
+    geoModel.CreateFaceVertexCountsAttr(VtValue(faceVertexCounts));
+
+    //Set the color on the Model
+    UsdPrim meshPrim = geoModel.GetPrim();
+
+    UsdAttribute displayColorAttr = geoModel.CreateDisplayColorAttr();
+    {
+      VtVec3fArray valueArray;
+      GfVec3f rgbFace(0.463f, 0.725f, 0.0f);
+      valueArray.push_back(rgbFace);
+      displayColorAttr.Set(valueArray);
+    }
+    UsdGeomPrimvar attribute = geoModel.CreatePrimvar(_tokens->st, 
+                                                      SdfValueTypeNames->TexCoord2dArray);
+    bool status = attribute.Set(valueArray);
+
+    attribute.SetInterpolation(UsdGeomTokens->vertex);
+
+    //Last face saved, change after to saved the faces of current mesh.
+    uint32 last = 0;
+
+    //Create the subsets.
+    for (uint32 i = 0; i < numMeshes; ++i) {
+      String meshName("mesh_");
+
+      meshName.append(to_string(i));
+
+      VtArray<int32> faceVertexCounts;
+
+      //Get the num of faces of mesh.
+      uint32 size = localModel->getMesh(i).getNumIndices() / 3; 
+
+      faceVertexCounts.resize(size);
+
+      for (uint32 j = 0; j < size; ++j) {
+        faceVertexCounts[j] = j + last;
+      }
+
+      last += size;
+
+      //Create the subset.
+      UsdGeomSubset::CreateGeomSubset(geoModel, 
+                                      TfToken(meshName), 
+                                      UsdGeomTokens->face, faceVertexCounts);
+    }
+
+    //Commit the changes to the USD
+    m_stage->Save();
+    omniUsdLiveProcess();
+
+    return geoModel;
   }
 
   void
@@ -717,6 +1085,143 @@ namespace gaEngineSDK {
       unique_lock<mutex> lk(m_logMutex);
       cout << "finished [" << omniClientGetResultString(localResult) << "]" << endl;
     }
+  }
+
+  void
+  OmniConnect::setTransformComponents(UsdGeomXformable& xTransform,
+                                      Vector3& position,
+                                      Vector3& rotation,
+                                      Vector3& scale) {
+    /*
+    * Op = operation (maybe).
+    */
+
+    //Get the xTransform.
+    bool resetXTransformStack = false;
+    Vector<UsdGeomXformOp> xTransformOps = xTransform.GetOrderedXformOps(&resetXTransformStack);
+
+    //Define storage for the different xform ops that Omniverse Kit likes to use.
+    UsdGeomXformOp translateOp;
+    UsdGeomXformOp rotateOp;
+    UsdGeomXformOp scaleOp;
+
+    //Get the current xform op values
+    for (size_t i = 0; i < xTransformOps.size(); ++i) {
+      switch (xTransformOps[i].GetOpType()) {
+        case UsdGeomXformOp::TypeTranslate:
+          translateOp = xTransformOps[i];
+          break;
+
+        case UsdGeomXformOp::TypeRotateZYX:
+          rotateOp = xTransformOps[i];
+          break;
+
+        case UsdGeomXformOp::TypeScale:
+          scaleOp = xTransformOps[i];
+          break;
+      }
+    }
+
+    GfVec3d gfPosition = { position.x, position.y, position.z };
+    GfVec3f gfRotZYX = { rotation.x, rotation.y, rotation.z };
+    GfVec3f gfScale = { scale.x, scale.y, scale.z };
+
+    setOp(xTransform,
+          translateOp, 
+          UsdGeomXformOp::TypeTranslate, 
+          gfPosition, 
+          UsdGeomXformOp::Precision::PrecisionDouble);
+
+    setOp(xTransform,
+          rotateOp,
+          UsdGeomXformOp::TypeRotateZYX, 
+          gfRotZYX, 
+          UsdGeomXformOp::Precision::PrecisionFloat);
+
+    setOp(xTransform,
+          scaleOp, 
+          UsdGeomXformOp::TypeScale, 
+          gfScale, 
+          UsdGeomXformOp::Precision::PrecisionFloat);
+
+    //Make sure the xform op order is correct (translate, rotate, scale).
+    Vector<UsdGeomXformOp> xFormOpsReordered;
+
+    xFormOpsReordered.push_back(translateOp);
+    xFormOpsReordered.push_back(rotateOp);
+    xFormOpsReordered.push_back(scaleOp);
+
+    xTransform.SetXformOpOrder(xFormOpsReordered);
+  }
+
+  void 
+  OmniConnect::setOp(UsdGeomXformable& xTransform,
+                     UsdGeomXformOp& op,
+                     UsdGeomXformOp::Type opType, 
+                     const GfVec3d& value, 
+                     const UsdGeomXformOp::Precision precision) {
+    if (!(op)) {
+      op = xTransform.AddXformOp(opType, precision);
+      unique_lock<mutex> lk(m_logMutex);
+      cout << "\nAdding " << UsdGeomXformOp::GetOpTypeToken(opType) << endl;
+    }
+
+    if (op.GetPrecision() == UsdGeomXformOp::Precision::PrecisionFloat) {
+      op.Set(GfVec3f(value));
+    }
+    else {
+      op.Set(value);
+    }
+
+    unique_lock<mutex> lk(m_logMutex);
+    cout << "\nSetting " << UsdGeomXformOp::GetOpTypeToken(opType) << endl;
+  }
+
+  void
+  OmniConnect::getTransformComponents(UsdGeomXformable& usdXForm, 
+                                      Vector3& position, 
+                                      Vector3& rotation, 
+                                      Vector3& scale) {
+    bool resetXForm = false;
+    Vector<UsdGeomXformOp> usdXFormOp = usdXForm.GetOrderedXformOps(&resetXForm);
+
+    //Define storage for the different xform ops that Omniverse Kit likes to use.
+    UsdGeomXformOp translateOp;
+    UsdGeomXformOp rotateOp;
+    UsdGeomXformOp scaleOp;
+
+    GfVec3d gfPosition(0);
+    GfVec3f gfRotZYX(0);
+    GfVec3f gfScale(1);
+
+    //Get the current xform op values
+    for (size_t i = 0; i < usdXFormOp.size(); ++i) {
+      switch (usdXFormOp[i].GetOpType()) {
+        case UsdGeomXformOp::TypeTranslate:
+          translateOp = usdXFormOp[i];
+          translateOp.Get(&gfPosition);
+          break;
+        
+        case UsdGeomXformOp::TypeRotateZYX:
+          rotateOp = usdXFormOp[i];
+          rotateOp.Get(&gfRotZYX);
+          break;
+        
+        case UsdGeomXformOp::TypeScale:
+          scaleOp = usdXFormOp[i];
+          scaleOp.Get(&gfScale);
+          break;
+      }
+    }
+
+    auto pos = gfPosition.data();
+    position = { (float)pos[0], (float)pos[1], (float)pos[2] };
+
+    auto rot = gfRotZYX.data();
+    rotation = { (float)rot[0], (float)rot[1], (float)rot[2] };
+
+    auto scal = gfScale.data();
+    scale = { (float)scal[0], (float)scal[1], (float)scal[2] };
   }
 
 }

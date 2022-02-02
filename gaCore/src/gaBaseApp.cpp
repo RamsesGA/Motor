@@ -24,6 +24,7 @@ namespace gaEngineSDK {
     * C R E A T E
     * S T A G E
     */
+    auto myOmniverse = g_baseOmniConnect().instancePtr();
     omniverseTest();
     
     onCreate();
@@ -86,6 +87,8 @@ namespace gaEngineSDK {
 
       deltaTime.restart();
 
+      myOmniverse->updateOmniverseToGa();
+
       myInputs->update(trueDeltaTime);
       myRenderer->update(trueDeltaTime);
       myInterface->update(trueDeltaTime);
@@ -94,6 +97,8 @@ namespace gaEngineSDK {
       myRenderer->render();
       myInterface->render();
       onRender();
+
+      myOmniverse->updateGaToOmniverse();
     }
 
     return 0;
@@ -300,6 +305,9 @@ namespace gaEngineSDK {
       std::cout << "\nError, can not start Omniverse\n";
       exit(1);
     }
+
+    //Print the username for the server
+    myOmniverse->printConnectedUsername(destinationPath);
 
     //Create the USD model in Omniverse.
     const String stageUrl = myOmniverse->createOmniverseScene(destinationPath, "test");
