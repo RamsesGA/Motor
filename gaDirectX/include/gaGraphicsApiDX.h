@@ -59,6 +59,15 @@ namespace gaEngineSDK {
     Textures*
     loadTextureFromFile(String srcFile) override;
 
+    Vector<SPtr<Textures>>
+    loadCompressedTexture(String srcFile) override;
+
+    SPtr<Textures>
+    createTextureFromArray(unsigned char* format,
+                           unsigned int width,
+                           unsigned int height,
+                           unsigned int channels) override;
+
     void
     unbindOGL() override;
 

@@ -23,9 +23,9 @@ namespace gaEngineSDK {
     * O M N I V E R S E
     * C R E A T E
     * S T A G E
+    * auto myOmniverse = g_baseOmniConnect().instancePtr();
+    * omniverseTest();
     */
-    auto myOmniverse = g_baseOmniConnect().instancePtr();
-    omniverseTest();
     
     onCreate();
     
@@ -87,7 +87,7 @@ namespace gaEngineSDK {
 
       deltaTime.restart();
 
-      myOmniverse->updateOmniverseToGa();
+      //myOmniverse->updateOmniverseToGa();
 
       myInputs->update(trueDeltaTime);
       myRenderer->update(trueDeltaTime);
@@ -98,7 +98,7 @@ namespace gaEngineSDK {
       myInterface->render();
       onRender();
 
-      myOmniverse->updateGaToOmniverse();
+      //myOmniverse->updateGaToOmniverse();
     }
 
     return 0;
@@ -115,12 +115,12 @@ namespace gaEngineSDK {
                                          LOAD_WITH_ALTERED_SEARCH_PATH);
     //HINSTANCE hInstance = LoadLibraryExA("gaOpenGL_d.dll", nullptr,
     //                                     LOAD_WITH_ALTERED_SEARCH_PATH);
-
+    
     //In case of error
     if (!(hInstance)) {
       return -1;
     }
-
+    
     using fnProt = GraphicsApi * (*)();
     fnProt graphicsApiFunc = reinterpret_cast<fnProt>(GetProcAddress(hInstance, 
                                                                      "createGraphicApi"));
@@ -128,10 +128,34 @@ namespace gaEngineSDK {
     if (!(graphicsApiFunc)) {
       return -1;
     }
-
+    
     GraphicsApi::startUp();
     GraphicsApi* graphicApi = graphicsApiFunc();
     g_graphicApi().setObject(graphicApi);
+
+    /*
+    * D 3 D 1 2
+    */
+
+    //HINSTANCE hInstance = LoadLibraryExA("gaDirect3D_12_d.dll",
+    //                                     nullptr,
+    //                                     LOAD_WITH_ALTERED_SEARCH_PATH);
+    ////In case of error
+    //if (!(hInstance)) {
+    //  return -1;
+    //}
+    //
+    //using fnProt = GraphicsApi * (*)();
+    //fnProt graphicsApiFunc = reinterpret_cast<fnProt>(GetProcAddress(hInstance, 
+    //                                                                 "createGraphicApiD3D12"));
+    ////In case of error
+    //if (!(graphicsApiFunc)) {
+    //  return -1;
+    //}
+    //
+    //GraphicsApi::startUp();
+    //GraphicsApi* graphicApi = graphicsApiFunc();
+    //g_graphicApi().setObject(graphicApi);
 
     /*
     * B A S E

@@ -1,0 +1,69 @@
+#pragma once
+
+#include "gaRenderTarget.h"
+#include "gaD3D12Textures.h"
+
+namespace gaEngineSDK {
+  class D3D12RenderTarget final : public RenderTarget
+  {
+  public:
+    /*************************************************************************/
+    /**
+    * Constructor and destructor.
+    */
+    /*************************************************************************/
+    D3D12RenderTarget() = default;
+
+    ~D3D12RenderTarget() = default;
+
+    /*************************************************************************/
+    /**
+    * Methods.
+    */
+    /*************************************************************************/
+
+    /*
+    * @brief .
+    */
+    void*
+    getRenderTexture(uint32 index = 0) override { 
+      //if ((index >= m_renderTarget.m_vShaderResourceView.size()) || (0 > index)) {
+      //  return m_renderTarget.m_vShaderResourceView[0];
+      //}
+      //
+      //return m_renderTarget.m_vShaderResourceView[index];
+    };
+
+    void*
+    getDepthStencilView() override {
+      //return m_pDepthStencilV;
+    }
+
+  protected:
+    /*************************************************************************/
+    /**
+    * Members.
+    */
+    /*************************************************************************/
+
+    /*
+    * @brief .
+    * TexturesDX m_renderTarget;
+    */
+    
+
+    /*
+    * @brief .
+    * ID3D11Texture2D* m_pTextureDepthSV = nullptr;
+    */
+    
+
+    /*
+    * @brief .
+    * ID3D11DepthStencilView* m_pDepthStencilV = nullptr;
+    */
+    
+
+    friend class D3D12GraphicsApi;
+  };
+}

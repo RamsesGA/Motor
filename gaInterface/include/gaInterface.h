@@ -102,6 +102,9 @@ namespace gaEngineSDK {
     void
     openFiles();
 
+    void
+    descompressImages();
+
     /*************************************************************************/
     /**
     * Members.

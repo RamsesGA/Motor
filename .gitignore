@@ -35,6 +35,7 @@ bld/
 [Bb]in/data/models/ugandan
 [Bb]in/data/models/vela
 [Bb]in/data/models/stranger
+[Bb]in/data/models/marco
 [Bb]in/data/textures/2B
 [Bb]in/data/textures/scene
 [Bb]in/data/textures/grimoires
@@ -43,6 +44,8 @@ bld/
 [Bb]in/data/textures/ugandan
 [Bb]in/data/textures/vela
 [Bb]in/data/textures/stranger
+[Bb]in/data/textures/marco
+[Bb]in/data\textures\ramlethal
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/

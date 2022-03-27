@@ -160,5 +160,25 @@ namespace gaEngineSDK {
     * @brief .
     */
     String m_typeTexture;
+
+    /*
+    * @brief .
+    */
+    uint32 m_width;
+
+    /*
+    * @brief .
+    */
+    uint32 m_height;
+
+    /*
+    * @brief .
+    */
+    uint32 m_channels;
+
+    /*
+    * @brief .
+    */
+    uint32 m_mipLevel;
   };
 }

@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Archivos de origen">
+      <UniqueIdentifier>{1b573a53-e3a2-4644-8102-5281563d49e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\GraphicApi">
+      <UniqueIdentifier>{f6bc9d54-acda-4df9-81d5-059101941010}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\More">
+      <UniqueIdentifier>{66ff500d-b9e6-484f-97e0-d7212e4a233f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\gaD3D12Prerequisites.h">
+      <Filter>Archivos de origen\More</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaD3D21VertexShader.h">
+      <Filter>Archivos de origen\GraphicApi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaD3D12ConstantBuffer.h">
+      <Filter>Archivos de origen\GraphicApi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaD3D12GraphicApi.h">
+      <Filter>Archivos de origen\GraphicApi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaD3D12IndexBuffer.h">
+      <Filter>Archivos de origen\GraphicApi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaD3D12InputLayout.h">
+      <Filter>Archivos de origen\GraphicApi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaD3D12PixelShader.h">
+      <Filter>Archivos de origen\GraphicApi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaD3D12RenderTarget.h">
+      <Filter>Archivos de origen\GraphicApi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaD3D12SamplerState.h">
+      <Filter>Archivos de origen\GraphicApi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaD3D12Shaders.h">
+      <Filter>Archivos de origen\GraphicApi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaD3D12Textures.h">
+      <Filter>Archivos de origen\GraphicApi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaD3D12VertexBuffer.h">
+      <Filter>Archivos de origen\GraphicApi</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaStructuresRayTracing.h">
+      <Filter>Archivos de origen\More</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaD3D12DeviceResources.h">
+      <Filter>Archivos de origen\More</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\gaGraphicApiD3D12.cpp">
+      <Filter>Archivos de origen\GraphicApi</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gaD3D12DeviceResources.cpp">
+      <Filter>Archivos de origen\More</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

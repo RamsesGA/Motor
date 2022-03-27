@@ -343,6 +343,124 @@ namespace gaEngineSDK {
     return texture;
   }
 
+  Vector<SPtr<Textures>>
+  GraphicsApiDX::loadCompressedTexture(String srcFile) {
+    SPtr<Textures> newTexture;
+
+    int32 width = 0;
+    int32 height = 0;
+    int32 channels = 0;
+
+    unsigned char* localImg = stbi_load(srcFile.c_str(), &width, &height, &channels, 4);
+
+    int32 size = width * height;
+    int32 sizeAndChannels = size * 4;
+
+    unsigned char* localAO = new unsigned char[sizeAndChannels];
+    unsigned char* localMetal = new unsigned char[sizeAndChannels];
+    unsigned char* localRough = new unsigned char[sizeAndChannels];
+
+    uint32 index = 0;
+
+    for (uint32 i = 0; i < size; ++i) {
+      index = i * 4;
+
+      localAO[index] = localImg[index];
+      localAO[index + 1] = localImg[index];
+      localAO[index + 2] = localImg[index];
+      localAO[index + 3] = 255;
+
+      localMetal[index] = localImg[index + 1];
+      localMetal[index + 1] = localImg[index + 1];
+      localMetal[index + 2] = localImg[index + 1];
+      localMetal[index + 3] = 255;
+
+      localRough[index] = localImg[index + 2];
+      localRough[index + 1] = localImg[index + 2];
+      localRough[index + 2] = localImg[index + 2];
+      localRough[index + 3] = 255;
+    }
+
+    Vector<SPtr<Textures>> m_vTextures;
+
+    String name = "AO";
+    newTexture = createTextureFromArray(localAO, width, height, 4);
+    newTexture->m_textureName = name;
+    m_vTextures.push_back(newTexture);
+
+    name = "Metal";
+    newTexture = createTextureFromArray(localMetal, width, height, 4);
+    newTexture->m_textureName = name;
+    m_vTextures.push_back(newTexture);
+
+    name = "Roughness";
+    newTexture = createTextureFromArray(localRough, width, height, 4);
+    newTexture->m_textureName = name;
+    m_vTextures.push_back(newTexture);
+
+    return m_vTextures;
+  }
+
+  SPtr<Textures> 
+  GraphicsApiDX::createTextureFromArray(unsigned char* format, 
+                                        unsigned int width,
+                                        unsigned int height,
+                                        unsigned int channels) {
+    auto* localTexture = new TexturesDX();
+
+    CD3D11_TEXTURE2D_DESC desc;
+    ZeroMemory(&desc, sizeof(desc));
+    desc.Width = width;
+    desc.Height = height;
+    desc.MipLevels = 1;
+    desc.ArraySize = 1;
+    desc.SampleDesc.Count = 1;
+    desc.SampleDesc.Quality = 0;
+    desc.Usage = D3D11_USAGE_DEFAULT;
+    desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+    desc.MiscFlags = 0;
+    desc.CPUAccessFlags = 0;
+    desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+
+    auto lenght = width * height * 4;
+    localTexture->m_channels = channels;
+    localTexture->m_width = width;
+    localTexture->m_height = height;
+    localTexture->m_mipLevel = desc.MipLevels;
+
+    //Texture data
+    D3D11_SUBRESOURCE_DATA initData;
+    ZeroMemory(&initData, sizeof(initData));
+    initData.pSysMem = format;
+    initData.SysMemPitch = width * channels;
+    initData.SysMemSlicePitch = width * height * channels;
+
+    if (FAILED(m_pd3dDevice->CreateTexture2D(&desc, &initData, &localTexture->m_pTexture))) {
+      delete localTexture;
+      stbi_image_free(format);
+      return nullptr;
+    }
+
+    //Shader resource data
+    CD3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+    ZeroMemory(&srvDesc, sizeof(srvDesc));
+    srvDesc.Format = desc.Format;;
+    srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+    srvDesc.Texture2D.MostDetailedMip = 0;
+    srvDesc.Texture2D.MipLevels = desc.MipLevels;
+
+    localTexture->m_vShaderResourceView.resize(desc.MipLevels);
+    if (FAILED(m_pd3dDevice->CreateShaderResourceView(localTexture->m_pTexture,
+                                                      &srvDesc,
+                                                      &localTexture->m_vShaderResourceView[0]))) {
+      delete localTexture;
+      stbi_image_free(format);
+      return nullptr;
+    }
+
+    return SPtr<Textures>(localTexture);
+  }
+
   void
   GraphicsApiDX::unbindOGL() {}
 

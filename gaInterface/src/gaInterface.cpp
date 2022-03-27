@@ -60,6 +60,7 @@ namespace gaEngineSDK {
     imguiScenegraph();
     imguiModelsInfo();
     imguiCurrentFPS();
+    //descompressImages();
 
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -406,6 +407,47 @@ namespace gaEngineSDK {
   void 
   Interface::openFiles() {
     //myOmniverse->openUSDFiles("http://localhost:8080/omniverse://127.0.0.1/Users/gaEngine/test.usd");
+  }
+
+  bool isFirtsTime = true;
+  Vector<SPtr<Textures>> vTextures;
+
+  void
+  Interface::descompressImages() {
+    ImGuiTreeNodeFlags myFlags = ImGuiWindowFlags_NoTitleBar |
+                                 ImGuiWindowFlags_AlwaysVerticalScrollbar;
+
+    if (ImGui::Begin("Des compress Images", nullptr, myFlags)) {
+      /*
+      * S T A R T
+      * I N F O
+      */
+      textColoredCentered("-Des compress-", Vector3(255.0f, 165.0f, 0.0f));
+      ImGui::Separator();
+
+      auto myGraphicsApi = g_graphicApi().instancePtr();
+      String nameTexture;
+
+      if (isFirtsTime) {
+        //vTextures = myGraphicsApi->loadCompressedTexture("data/textures/marco/testCompress.png");
+        vTextures = myGraphicsApi->loadCompressedTexture("data/textures/marco/pruebame.gat");
+        isFirtsTime = false;
+      }
+
+      uint32 sizeTextures = vTextures.size();
+      for (uint32 i = 0; i < sizeTextures; ++i) {
+        if (nullptr != vTextures.at(i)) {
+          nameTexture = vTextures.at(i)->m_textureName;
+          ImGui::Text(nameTexture.c_str());
+
+          ImTextureID id = vTextures[i]->getTexture();
+          ImGui::Image(id, ImVec2(120, 120));
+          ImGui::Separator();
+        }
+      }
+
+      ImGui::End();
+    }
   }
 
 }

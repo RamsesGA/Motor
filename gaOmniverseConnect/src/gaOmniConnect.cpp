@@ -331,7 +331,7 @@ namespace gaEngineSDK {
   */
   /***************************************************************************/
 
-  PXR_INTERNAL_NS::UsdGeomMesh 
+  UsdGeomMesh 
   OmniConnect::createBox(int32 boxNumber) {
     //Create a simple box in USD with normals and UV information
     static double h = 50.0;
@@ -563,15 +563,14 @@ namespace gaEngineSDK {
       * Obtain all vertices
       */
       int32 numVertices = myModel->getMesh(i).getVertices();
-      auto vertexData = myModel->getMesh(i).getVertexData();
-      auto vertexData2 = vertexData.get();
+      auto vertexData = myModel->getMesh(i).getVecVertex();
 
       VtArray<GfVec3f> points;
 
       points.resize(numVertices);
 
       for (int32 j = 0; j < numVertices; ++j) {
-        auto vec = vertexData2[j].position;
+        auto vec = vertexData[j].position;
         points[j] = GfVec3f(vec.x, vec.y, vec.z);
       }
 
@@ -602,7 +601,7 @@ namespace gaEngineSDK {
       meshNormals.resize(numVertices);
 
       for (int32 j = 0; j < numVertices; ++j) {
-        auto norm = vertexData2[j].normal;
+        auto norm = vertexData[j].normal;
         meshNormals[j] = GfVec3f(norm.x, norm.y, norm.z);
       }
 
@@ -641,7 +640,7 @@ namespace gaEngineSDK {
         valueArray.resize(uvCount);
 
         for (int32 j = 0; j < uvCount; ++j) {
-          auto uv = vertexData2[j].texCoords;
+          auto uv = vertexData[j].texCoords;
           valueArray[j].Set(uv.vec);
         }
 
@@ -711,9 +710,7 @@ namespace gaEngineSDK {
 
     //Subsets zone
     for (uint32 i = 0; i < numMeshes; ++i) {
-      auto vertexData2 = localModel->getMesh(i).getVertexData();
-      auto vertexData = vertexData2.get();
-
+      auto vertexData = localModel->getMesh(i).getVecVertex();
       auto currentNumVertex = localModel->getMesh(i).getVertices();
       auto currentNumIndex = localModel->getMesh(i).getNumIndices();
 

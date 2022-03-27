@@ -32,6 +32,10 @@ AppTest::onRender() {
 
 void
 AppTest::onCreate() {
+
+  /*
+  * D 3 D 1 1
+  */
   auto myGraphicsApi = g_graphicApi().instancePtr();
 
   //We send the window to the API.
@@ -44,17 +48,24 @@ AppTest::onCreate() {
   */
   /***************************************************************************/
   
-  //createScene();
-  createNodePod();
+  createScene();
+  //createNodePod();
   //createNodeVela();
   //createNodeTwoB();
   //createNodeUgandan();
   //createNodeGrimoires();
   //createNodeRamlethalSwords();
   //createNodeStranger();
+  //createNodesMarco();
+  //createNodesMarco2();
 
-  auto myOmniverse = g_baseOmniConnect().instancePtr();
-  myOmniverse->saveSceneGraphToUSD();
+  //auto myOmniverse = g_baseOmniConnect().instancePtr();
+  //myOmniverse->saveSceneGraphToUSD();
+
+  /*
+  * D 3 D 1 2
+  */
+  //myGraphicsApi->initDevice(m_sfmlWindow.getSystemHandle());
 }
 
 /*****************************************************************************/
@@ -82,6 +93,9 @@ AppTest::createNodePod() {
 
   //Adding the actor to node root
   mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+
+  //auto myOmniverse = g_baseOmniConnect().instancePtr();
+  //myOmniverse->createGeoMeshWithModel(actor);
 }
 
 void
@@ -104,11 +118,6 @@ AppTest::createNodeVela() {
 
   //Adding the actor to node root
   mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
-
-  //Create the GeoMesh
-  auto myOmniverse = g_baseOmniConnect().instancePtr();
-
-  myOmniverse->createGeoMeshWithModel(actor);
 }
 
 void
@@ -131,11 +140,6 @@ AppTest::createNodeTwoB() {
 
   //Adding the actor to node root
   mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
-
-  //Create the GeoMesh
-  auto myOmniverse = g_baseOmniConnect().instancePtr();
-
-  myOmniverse->createGeoMeshWithModel(actor);
 }
 
 void
@@ -158,11 +162,6 @@ AppTest::createNodeUgandan() {
 
   //Adding the actor to node root
   mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
-
-  //Create the GeoMesh
-  auto myOmniverse = g_baseOmniConnect().instancePtr();
-
-  myOmniverse->createGeoMeshWithModel(actor);
 }
 
 void 
@@ -185,11 +184,6 @@ AppTest::createNodeGrimoires() {
 
   //Adding the actor to node root
   mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
-
-  //Create the GeoMesh
-  auto myOmniverse = g_baseOmniConnect().instancePtr();
-
-  myOmniverse->createGeoMeshWithModel(actor);
 }
 
 void 
@@ -283,6 +277,50 @@ AppTest::createNodeStranger() {
 
   //Creating actor
   SPtr<Actor> actor(new Actor("The Stranger"));
+  actor->setIsSelected(true);
+  actor->setComponent(newComponent);
+
+  //Adding the actor to node root
+  mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+}
+
+void
+AppTest::createNodesMarco() {
+  auto mySceneGraph = SceneGraph::instancePtr();
+  auto myRSRCMG = ResourceManager::instancePtr();
+
+  SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/basicModels/cube.fbx");
+
+  SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
+  myStaticMesh->m_pModel = myModel;
+
+  //Creating the component
+  SPtr<Component> newComponent(myStaticMesh);
+
+  //Creating actor
+  SPtr<Actor> actor(new Actor("Box_v2"));
+  actor->setIsSelected(true);
+  actor->setComponent(newComponent);
+
+  //Adding the actor to node root
+  mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+}
+
+void
+AppTest::createNodesMarco2() {
+  auto mySceneGraph = SceneGraph::instancePtr();
+  auto myRSRCMG = ResourceManager::instancePtr();
+
+  SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/marco/BattleDroid.fbx");
+
+  SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
+  myStaticMesh->m_pModel = myModel;
+
+  //Creating the component
+  SPtr<Component> newComponent(myStaticMesh);
+
+  //Creating actor
+  SPtr<Actor> actor(new Actor("BattleDroid"));
   actor->setIsSelected(true);
   actor->setComponent(newComponent);
 

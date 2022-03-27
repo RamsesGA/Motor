@@ -82,7 +82,10 @@ namespace gaEngineSDK {
     * @return true or false.
     */
     virtual bool
-    initDevice(sf::WindowHandle hWnd) { GA_UNREFERENCED_PARAMETER(hWnd);  return false; };
+    initDevice(sf::WindowHandle hWnd) { 
+      GA_UNREFERENCED_PARAMETER(hWnd); 
+      return false; 
+    };
 
     /**
     * @brief Function to send to draw the indices of a declared object.
@@ -118,6 +121,25 @@ namespace gaEngineSDK {
     virtual Textures*
     loadTextureFromFile(String srcFile) {
       GA_UNREFERENCED_PARAMETER(srcFile);
+      return nullptr;
+    };
+
+    virtual Vector<SPtr<Textures>>
+    loadCompressedTexture(String srcFile) {
+      GA_UNREFERENCED_PARAMETER(srcFile);
+      Vector<SPtr<Textures>> temp;
+      return temp;
+    };
+
+    virtual SPtr<Textures>
+    createTextureFromArray(unsigned char* format,
+                           unsigned int width,
+                           unsigned int height,
+                           unsigned int channels) {
+      GA_UNREFERENCED_PARAMETER(format);
+      GA_UNREFERENCED_PARAMETER(width);
+      GA_UNREFERENCED_PARAMETER(height);
+      GA_UNREFERENCED_PARAMETER(channels);
       return nullptr;
     };
 
