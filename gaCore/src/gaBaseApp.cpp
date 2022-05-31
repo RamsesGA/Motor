@@ -19,25 +19,19 @@ namespace gaEngineSDK {
     
     initSys();
 
-    /*
-    * O M N I V E R S E
-    * C R E A T E
-    * S T A G E
-    * auto myOmniverse = g_baseOmniConnect().instancePtr();
-    * omniverseTest();
-    */
-    
     onCreate();
-    
-    bool shoudClose = false;
-    float trueDeltaTime = 0.0f;
-    Clock deltaTime;
 
     /*
-    * Init Renderer
+    * Init Renderer D3D11
     */
     auto myRenderer = g_baseRenderer().instancePtr();
     myRenderer->init(m_width, m_height);
+
+    /*
+    * Init Renderer D3D12
+    */
+    //auto myD3D12Renderer = g_baseRenderer().instancePtr();
+    //myD3D12Renderer->init(m_width, m_height);
 
     /*
     * Init ImGui
@@ -58,6 +52,12 @@ namespace gaEngineSDK {
 
     //We save a viewport.
     myGraphicsApi->setViewports(m_width, m_height);
+
+    bool shoudClose = false;
+    float trueDeltaTime = 0.0f;
+    Clock deltaTime;
+
+    auto myOmniverse = g_baseOmniConnect().instancePtr();
 
     while (m_sfmlWindow.isOpen()) {
       Event event;
@@ -87,18 +87,36 @@ namespace gaEngineSDK {
 
       deltaTime.restart();
 
-      //myOmniverse->updateOmniverseToGa();
+      /*
+      * O M N I V E R S E
+      * C R E A T E
+      * S T A G E
+      */
+      if (myInterface->m_startOmniverse) {
+        myInterface->m_startOmniverse = false;
+
+        if (!(m_initOmni)) {
+          omniverseTest();
+          m_initOmni = true;
+        }
+
+        myInterface->m_isRunningOmniverse = true;
+      }
+      
+      if (myInterface->m_isRunningOmniverse) {
+        myOmniverse->updateOmniverseToGa();
+      }
 
       myInputs->update(trueDeltaTime);
       myRenderer->update(trueDeltaTime);
+      //myD3D12Renderer->update(trueDeltaTime);
       myInterface->update(trueDeltaTime);
       onUpdate(trueDeltaTime);
 
       myRenderer->render();
+      //myD3D12Renderer->render();
       myInterface->render();
       onRender();
-
-      //myOmniverse->updateGaToOmniverse();
     }
 
     return 0;
@@ -107,182 +125,66 @@ namespace gaEngineSDK {
   int32
   BaseApp::initSys() {
     /*
-    * G R A P H I C S
-    * A P I
+    * D 3 D 1 1
+    * 
+    * typeFn = 0
     */
-    HINSTANCE hInstance = LoadLibraryExA("gaDirectX_d.dll",
-                                         nullptr,
-                                         LOAD_WITH_ALTERED_SEARCH_PATH);
-    //HINSTANCE hInstance = LoadLibraryExA("gaOpenGL_d.dll", nullptr,
-    //                                     LOAD_WITH_ALTERED_SEARCH_PATH);
-    
-    //In case of error
-    if (!(hInstance)) {
+    if (!(loadDlls("gaDirectX_d.dll", "createGraphicApi", 0))) {
       return -1;
     }
-    
-    using fnProt = GraphicsApi * (*)();
-    fnProt graphicsApiFunc = reinterpret_cast<fnProt>(GetProcAddress(hInstance, 
-                                                                     "createGraphicApi"));
-    //In case of error
-    if (!(graphicsApiFunc)) {
-      return -1;
-    }
-    
-    GraphicsApi::startUp();
-    GraphicsApi* graphicApi = graphicsApiFunc();
-    g_graphicApi().setObject(graphicApi);
-
-    /*
-    * D 3 D 1 2
-    */
-
-    //HINSTANCE hInstance = LoadLibraryExA("gaDirect3D_12_d.dll",
-    //                                     nullptr,
-    //                                     LOAD_WITH_ALTERED_SEARCH_PATH);
-    ////In case of error
-    //if (!(hInstance)) {
-    //  return -1;
-    //}
-    //
-    //using fnProt = GraphicsApi * (*)();
-    //fnProt graphicsApiFunc = reinterpret_cast<fnProt>(GetProcAddress(hInstance, 
-    //                                                                 "createGraphicApiD3D12"));
-    ////In case of error
-    //if (!(graphicsApiFunc)) {
-    //  return -1;
-    //}
-    //
-    //GraphicsApi::startUp();
-    //GraphicsApi* graphicApi = graphicsApiFunc();
-    //g_graphicApi().setObject(graphicApi);
-
+        
     /*
     * B A S E
     * R E N D E R E R
     * D E F E R R E D
     * R E N D E R I N G
     * A P I
+    * 
+    * typeFn = 1
     */
-    hInstance = LoadLibraryExA("gaDeferredRendering_d.dll",
-                               nullptr,
-                               LOAD_WITH_ALTERED_SEARCH_PATH);
-    //In case of error
-    if (!(hInstance)) {
+    if (!(loadDlls("gaDeferredRendering_d.dll", "createBaseRenderer", 1))) {
       return -1;
     }
-
-    using fnBR = BaseRenderer * (*)();
-    fnBR baseRendApiFunc = reinterpret_cast<fnBR>(GetProcAddress(hInstance, 
-                                                                 "createBaseRenderer"));
-    //In case of error
-    if (!(baseRendApiFunc)) {
-      return -1;
-    }
-
-    BaseRenderer::startUp();
-    BaseRenderer* newBR = baseRendApiFunc();
-    g_baseRenderer().setObject(newBR);
 
     /*
     * B A S E
     * I N T E R F A C E
+    * 
+    * typeFn = 2
     */
-    hInstance = LoadLibraryExA("gaInterface_d.dll", 
-                               nullptr, 
-                               LOAD_WITH_ALTERED_SEARCH_PATH);
-
-    //In case of error
-    if (!(hInstance)) {
+    if (!(loadDlls("gaInterface_d.dll", "createNewInterface", 2))) {
       return -1;
     }
-
-    using fnBI = BaseInterface * (*)();
-    fnBI baseInter = reinterpret_cast<fnBI>(GetProcAddress(hInstance, 
-                                                           "createNewInterface"));
-
-    //In case of error
-    if (!(baseInter)) {
-      return -1;
-    }
-
-    BaseInterface::startUp();
-    BaseInterface* newBI = baseInter();
-    g_baseInterface().setObject(newBI);
 
     /*
     * B A S E
     * I N P U T S
+    * 
+    * typeFn = 3
     */
-    hInstance = LoadLibraryExA("gaInputs_d.dll", nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
-
-    //In case of error
-    if (!(hInstance)) {
+    if (!(loadDlls("gaInputs_d.dll", "newInputs", 3))) {
       return -1;
     }
-
-    using fnBInputs = BaseInputs * (*)();
-    fnBInputs baseInputs = reinterpret_cast<fnBInputs>(GetProcAddress(hInstance, 
-                                                                      "newInputs"));
-
-    //In case of error
-    if (!(baseInputs)) {
-      return -1;
-    }
-
-    BaseInputs::startUp();
-    BaseInputs* newBInputs = baseInputs();
-    g_baseInputs().setObject(newBInputs);
-
-    /*
-    * B A S E
-    * P H Y S I C S
-    */
-    hInstance = LoadLibraryExA("gaPhysics_d.dll", nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
-
-    //In case of error
-    if (!(hInstance)) {
-      return -1;
-    }
-
-    using fnBPhys = BasePhysics * (*)();
-    fnBPhys basePhys = reinterpret_cast<fnBPhys>(GetProcAddress(hInstance, "newPhysics"));
-
-    //In case of error
-    if (!(basePhys)) {
-      return -1;
-    }
-
-    BasePhysics::startUp();
-    BasePhysics* newBPhys = basePhys();
-    g_basePhysics().setObject(newBPhys);
-
+    
     /*
     * B A S E
     * O M N I V E R S E
+    * 
+    * typeFn = 4
     */
-    hInstance = LoadLibraryExA("gaOmniverseConnect_d.dll", 
-                               nullptr, 
-                               LOAD_WITH_ALTERED_SEARCH_PATH);
-    
-    //In case of error
-    if (!(hInstance)) {
+    if (!(loadDlls("gaOmniverseConnect_d.dll", "createOmniConnect", 4))) {
       return -1;
     }
-    
-    using fnBOmni = BaseOmniConnect * (*)();
-    fnBOmni baseOmni = reinterpret_cast<fnBOmni>(GetProcAddress(hInstance, 
-                                                                "createOmniConnect"));
-    
-    //In case of error
-    if (!(baseOmni)) {
-      return -1;
-    }
-    
-    BaseOmniConnect::startUp();
-    BaseOmniConnect* newBOmni = baseOmni();
-    g_baseOmniConnect().setObject(newBOmni);
 
+    /*
+    * P H Y S I C S
+    *
+    * typeFn = 5
+    */
+    //if (!(loadDlls("gaPhysics_d.dll", "newPhysics"))) {
+    //  return -1;
+    //}
+    
     /*
     * M O D U L E
     * I N I T I A L I Z A T I O N
@@ -292,6 +194,132 @@ namespace gaEngineSDK {
 
     return 0;
   }
+
+  bool
+  BaseApp::loadDlls(String nameDll, String nameDllFunc, uint32 typeFn) {
+    HINSTANCE hInstance = LoadLibraryExA(nameDll.c_str(),
+                                         nullptr,
+                                         LOAD_WITH_ALTERED_SEARCH_PATH);
+    //In case of error
+    if (!(hInstance)) {
+      return false;
+    }
+
+    /*
+    * G R A P H I C S
+    * A P I
+    */
+    if (0 == typeFn) {
+      using fn0 = GraphicsApi * (*)();
+      fn0 apiFunc = reinterpret_cast<fn0>(GetProcAddress(hInstance, 
+                                                         nameDllFunc.c_str()));
+      //In case of error
+      if (!(apiFunc)) {
+        return false;
+      }
+
+      GraphicsApi::startUp();
+      GraphicsApi* graphicApi = apiFunc();
+      g_graphicApi().setObject(graphicApi);
+    }
+
+    /*
+    * D E F E R R E D
+    * R E N D E R I N G
+    */
+    if (1 == typeFn) {
+      using fn1 = BaseRenderer * (*)();
+      fn1 baseRendApiFunc = reinterpret_cast<fn1>(GetProcAddress(hInstance,
+                                                                 nameDllFunc.c_str()));
+      //In case of error
+      if (!(baseRendApiFunc)) {
+        return false;
+      }
+      
+      BaseRenderer::startUp();
+      BaseRenderer* newBR = baseRendApiFunc();
+      g_baseRenderer().setObject(newBR);
+    }
+
+    /*
+    * I N T E R F A C E
+    */
+    if (2 == typeFn) {
+      using fn2 = BaseInterface * (*)();
+      fn2 baseInter = reinterpret_cast<fn2>(GetProcAddress(hInstance, 
+                                                           nameDllFunc.c_str()));
+      //In case of error
+      if (!(baseInter)) {
+        return false;
+      }
+
+      BaseInterface::startUp();
+      BaseInterface* newBI = baseInter();
+      g_baseInterface().setObject(newBI);
+    }
+
+    /*
+    * I N P U T S
+    */
+    if (3 == typeFn) {
+      using fn3 = BaseInputs * (*)();
+      fn3 baseInputs = reinterpret_cast<fn3>(GetProcAddress(hInstance, 
+                                                            nameDllFunc.c_str()));
+      //In case of error
+      if (!(baseInputs)) {
+        return false;
+      }
+
+      BaseInputs::startUp();
+      BaseInputs* newBInputs = baseInputs();
+      g_baseInputs().setObject(newBInputs);
+    }
+
+    /*
+    * O M N I V E R S E
+    */
+    if (4 == typeFn) {
+      using fn4 = BaseOmniConnect * (*)();
+      fn4 baseOmni = reinterpret_cast<fn4>(GetProcAddress(hInstance,
+                                                          nameDllFunc.c_str()));
+      //In case of error
+      if (!(baseOmni)) {
+        return false;
+      }
+
+      BaseOmniConnect::startUp();
+      BaseOmniConnect* newBOmni = baseOmni();
+      g_baseOmniConnect().setObject(newBOmni);
+    }
+
+    /*
+    * P H Y S I C S
+    */
+    if (5 == typeFn) {
+      using fn5 = BasePhysics * (*)();
+      fn5 basePhys = reinterpret_cast<fn5>(GetProcAddress(hInstance, 
+                                                          nameDllFunc.c_str()));
+      //In case of error
+      if (!(basePhys)) {
+        return false;
+      }
+
+      BasePhysics::startUp();
+      BasePhysics* newBPhys = basePhys();
+      g_basePhysics().setObject(newBPhys);
+    }
+  }
+
+  void
+  BaseApp::createWindow(String windowTitle) {
+    m_windowSize.x = m_width;
+    m_windowSize.y = m_height;
+
+    m_sfmlWindow.create(VideoMode(m_windowSize.x, m_windowSize.y), windowTitle);
+  }
+
+  void 
+  BaseApp::resize(int32 , int32 ) { }
 
   void 
   BaseApp::handleWindowEvents(Event& windowEvent, const float& deltaTime) {
@@ -323,7 +351,7 @@ namespace gaEngineSDK {
   void
   BaseApp::omniverseTest() {
     auto myOmniverse = g_baseOmniConnect().instancePtr();
-    String destinationPath = "http://localhost:8080/omniverse://127.0.0.1/Users/gaEngine";
+    String destinationPath = "http://localhost:8080/omniverse://127.0.0.1/Users/gaEngine/";
 
     if (!(myOmniverse->startOmniverse())) {
       std::cout << "\nError, can not start Omniverse\n";
@@ -341,17 +369,8 @@ namespace gaEngineSDK {
       exit(1);
     }
 
-    myOmniverse->openUSDFiles("http://localhost:8080/omniverse://127.0.0.1/Users/gaEngine/test.usd");
+    myOmniverse->openNewUSDFile("http://localhost:8080/omniverse://127.0.0.1/Users/gaEngine/test.usd");
+
+    myOmniverse->saveSceneGraphToUSD();
   }
-
-  void
-  BaseApp::createWindow(String windowTitle) {
-    m_windowSize.x = m_width;
-    m_windowSize.y = m_height;
-
-    m_sfmlWindow.create(VideoMode(m_windowSize.x, m_windowSize.y), windowTitle);
-  }
-
-  void 
-  BaseApp::resize(int32 , int32 ) { }
 }

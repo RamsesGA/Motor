@@ -40,6 +40,12 @@ namespace gaEngineSDK {
     void
     addNewMesh(Mesh newMesh);
 
+    void
+    addNewMesh(Vector<Mesh> vMeshes);
+
+    Mesh
+    createVertexData(Vertex* vertexInfo, uint32 numVertexes);
+
     Mesh&
     getMesh(uint32 index);
 

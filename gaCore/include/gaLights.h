@@ -39,13 +39,25 @@ namespace gaEngineSDK {
     setAmbientColor(float r, float g, float b, float a);
 
     void
+    setAmbientColor(Vector4 rgba);
+
+    void
     setDiffuseColor(float r, float g, float b, float a);
+
+    void
+    setDiffuseColor(Vector4 rgba);
 
     void
     setPosition(float x, float y, float z);
 
     void
+    setPosition(Vector3 xyz);
+
+    void
     setLookAt(float x, float y, float z);
+
+    void
+    setLookAt(Vector3 xyz);
 
     void
     setIntensity(float value);

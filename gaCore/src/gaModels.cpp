@@ -108,7 +108,7 @@ namespace gaEngineSDK {
     createDirectories(file);
 
     g_animInfo = m_animInfo;
-    g_vAnimationData =m_vAnimationData;
+    g_vAnimationData = m_vAnimationData;
     g_vMeshes.resize(m_vModelData.size());
     g_vMeshes = m_vMeshes;
     g_mMaterials = m_mMaterials;
@@ -128,8 +128,40 @@ namespace gaEngineSDK {
   }
 
   void
+  Models::addNewMesh(Vector<Mesh> vMeshes) {
+    uint32 size = vMeshes.size();
+    for (uint32 i = 0; i < size; ++i) {
+      m_vMeshes.push_back(vMeshes[i]);
+    }
+
+    m_vModelData.resize(vMeshes.size());
+  }
+
+  void
   Models::addNewMesh(Mesh newMesh) {
     m_vMeshes.push_back(newMesh);
+  }
+
+  Mesh
+  Models::createVertexData(Vertex* vertexInfo, uint32 numVertexes) {
+    Mesh tempMesh;
+    SkeletalMesh* skeletal = new SkeletalMesh;
+
+    for (uint32 i = 0; i < numVertexes; ++i) {
+      for (uint32 j = 0; j < 4; ++j) {
+        vertexInfo[i].boneWeights[j] = 1;
+      }
+    }
+
+    SPtr<Vertex> SPtrVertexData(vertexInfo);
+
+    tempMesh.m_skeletalMesh.reset(skeletal);
+    tempMesh.setVertexData(SPtrVertexData);
+
+    tempMesh.m_bonesTransforms.clear();
+    tempMesh.m_bonesTransforms.resize(skeletal->numBones);
+
+    return tempMesh;
   }
 
   Mesh&

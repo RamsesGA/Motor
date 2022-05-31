@@ -19,7 +19,7 @@
 #include "gaPrerequisitesCore.h"
 
 namespace gaEngineSDK {
-  using  std::make_shared;
+  using std::make_shared;
   using sf::WindowHandle;
 
   /*

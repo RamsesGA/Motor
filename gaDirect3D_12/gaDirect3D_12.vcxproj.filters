@@ -54,9 +54,15 @@
     <ClInclude Include="include\gaD3D12DeviceResources.h">
       <Filter>Archivos de origen\More</Filter>
     </ClInclude>
+    <ClInclude Include="include\d3dx12.h">
+      <Filter>Archivos de origen\More</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaHelper.h">
+      <Filter>Archivos de origen\More</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\gaGraphicApiD3D12.cpp">
+    <ClCompile Include="src\gaD3D12GraphicApi.cpp">
       <Filter>Archivos de origen\GraphicApi</Filter>
     </ClCompile>
     <ClCompile Include="src\gaD3D12DeviceResources.cpp">

@@ -1,17 +1,18 @@
-#include <gaGraphicsApi.h>
 #include <imgui.h>
-#include <imfilebrowser.h>
-#include <imgui_impl_win32.h>
-#include <imgui_impl_dx11.h>
-#include <gaStaticMesh.h>
 #include <gaModels.h>
+#include <gaStaticMesh.h>
+#include <gaGraphicsApi.h>
+#include <imfilebrowser.h>
+#include <imgui_impl_dx11.h>
+#include <imgui_impl_win32.h>
 #include <gaBaseOmniConnect.h>
+#include <gaRenderTarget.h>
 
 #include "gaInterface.h"
 
 /*
 * ImGui notes
-* io.WantCaptureMouse, if it is 0 it means that your pointer is 
+* io.WantCaptureMouse, if it is 0 it means that your pointer is
 *                      outside a window and if it is 1 it is inverse of 0.
 */
 
@@ -38,6 +39,8 @@ namespace gaEngineSDK {
 
     m_text.resize(500);
     m_size = 100.0f;
+
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
   }
 
   void 
@@ -56,10 +59,13 @@ namespace gaEngineSDK {
     * F O R
     * I M G U I
     */
+    //imguiDocking();
     imguiFile();
     imguiScenegraph();
     imguiModelsInfo();
     imguiCurrentFPS();
+
+    //Function to know decompressImages is working
     //descompressImages();
 
     ImGui::Render();
@@ -135,6 +141,7 @@ namespace gaEngineSDK {
     ImGui::Separator();
 
     auto transform = object->getComponent<Transform>();
+
     auto position = transform->getPosition();
     auto rotation = transform->getEulerRotation();
     auto scale = transform->getScale();
@@ -146,10 +153,22 @@ namespace gaEngineSDK {
     ImGui::DragFloat3("-Scale-", &scale.x);
     ImGui::Separator();
 
-    //Sets
-    transform->setPosition(position);
-    transform->setEulerRotation(rotation);
-    transform->setScale(scale);
+    if ((position != transform->getPosition()) || 
+        (rotation != transform->getEulerRotation()) || 
+        (scale != transform->getScale())) {
+      //Sets
+      transform->setPosition(position);
+      transform->setEulerRotation(rotation);
+      transform->setScale(scale);
+
+      auto myInterface = g_baseInterface().instancePtr();
+
+      if (myInterface->m_isRunningOmniverse) {
+        auto myOmniverse = g_baseOmniConnect().instancePtr();
+
+        myOmniverse->updateGaToOmniverse();
+      }
+    }
   }
 
   /***************************************************************************/
@@ -207,21 +226,113 @@ namespace gaEngineSDK {
   /***************************************************************************/
 
   void
+  Interface::imguiDocking() {
+    ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+    /*
+    static bool opt_fullscreen = true;
+    static bool opt_padding = false;
+    static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+    
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | 
+                                    ImGuiWindowFlags_NoDocking;
+
+    if (opt_fullscreen) {
+      const ImGuiViewport* viewport = ImGui::GetMainViewport();
+
+      ImGui::SetNextWindowPos(viewport->WorkPos);
+      ImGui::SetNextWindowSize(viewport->WorkSize);
+      ImGui::SetNextWindowViewport(viewport->ID);
+      ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+      ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+
+      window_flags |= ImGuiWindowFlags_NoTitleBar | 
+                      ImGuiWindowFlags_NoCollapse | 
+                      ImGuiWindowFlags_NoResize | 
+                      ImGuiWindowFlags_NoMove;
+
+      window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus |
+                      ImGuiWindowFlags_NoNavFocus;
+    }
+    else {
+      dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
+    }
+
+    if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) {
+      window_flags |= ImGuiWindowFlags_NoBackground;
+    }
+
+    if (!opt_padding) {
+      ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+    }
+
+    static bool show_app_dockspace = true;
+    bool* isOpen = &show_app_dockspace;
+    ImGui::Begin("DockSpace Demo", isOpen, window_flags);
+
+    if (!opt_padding) {
+      ImGui::PopStyleVar();
+    }
+    if (opt_fullscreen) {
+      ImGui::PopStyleVar(2);
+    }
+
+    ImGuiIO& io = ImGui::GetIO();
+    if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
+      ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+
+      ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+    }
+    else {
+      showDockingDisabledMessage();
+    }
+
+    if (ImGui::BeginMenuBar()) {
+      if (ImGui::BeginMenu("Options")) {
+        ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
+        ImGui::MenuItem("Padding", NULL, &opt_padding);
+        ImGui::Separator();
+
+        if (ImGui::MenuItem("Flag: NoSplit", "", (dockspace_flags & ImGuiDockNodeFlags_NoSplit) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoSplit; }
+        if (ImGui::MenuItem("Flag: NoResize", "", (dockspace_flags & ImGuiDockNodeFlags_NoResize) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoResize; }
+        if (ImGui::MenuItem("Flag: NoDockingInCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_NoDockingInCentralNode) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoDockingInCentralNode; }
+        if (ImGui::MenuItem("Flag: AutoHideTabBar", "", (dockspace_flags & ImGuiDockNodeFlags_AutoHideTabBar) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_AutoHideTabBar; }
+        if (ImGui::MenuItem("Flag: PassthruCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0, opt_fullscreen)) { dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode; }
+        ImGui::Separator();
+
+        if (ImGui::MenuItem("Close", NULL, false, isOpen != NULL)) {
+          *isOpen = false;
+        }
+        ImGui::EndMenu();
+      }
+
+      helpMarker(
+        "When docking is enabled, you can ALWAYS dock MOST window into another! Try it now!" "\n"
+        "- Drag from window title bar or their tab to dock/undock." "\n"
+        "- Drag from window menu button (upper-left button) to undock an entire node (all windows)." "\n"
+        "- Hold SHIFT to disable docking (if io.ConfigDockingWithShift == false, default)" "\n"
+        "- Hold SHIFT to enable docking (if io.ConfigDockingWithShift == true)" "\n"
+        "This demo app has nothing to do with enabling docking!" "\n\n"
+        "This demo app only demonstrate the use of ImGui::DockSpace() which allows you to manually create a docking node _within_ another window." "\n\n"
+        "Read comments in ShowExampleAppDockSpace() for more details.");
+
+      ImGui::EndMenuBar();
+    }
+
+    ImGui::End();
+    */
+  }
+
+  void
   Interface::imguiFile() {
-    auto myOmniverse = g_baseOmniConnect().instancePtr();
     if (ImGui::BeginMainMenuBar()) {
       if (ImGui::BeginMenu("File")) {
         if (ImGui::MenuItem("New", "CTRL+N")) {
-
         }
         if (ImGui::MenuItem("Open", "CTRL+O")) {
-          openFiles();
         }
         if (ImGui::MenuItem("Save", "CTRL+S")) {
-
         }
-        if (ImGui::MenuItem("Save Ass", "CTRL+A")) {
-
+        if (ImGui::MenuItem("Save As", "CTRL+A")) {
         }
         ImGui::Separator();
 
@@ -251,6 +362,18 @@ namespace gaEngineSDK {
         }
         ImGui::EndMenu();
       }
+      if (ImGui::BeginMenu("Omniverse")) {
+        if (ImGui::MenuItem("Start Omniverse")) {
+          m_startOmniverse = true;
+        }
+        if (ImGui::MenuItem("Stop Omniverse")) {
+          m_isRunningOmniverse = false;
+        }
+        if (ImGui::MenuItem("Open USD")) {
+          openFiles();
+        }
+        ImGui::EndMenu();
+      }
 
       ImGui::EndMainMenuBar();
     }
@@ -260,18 +383,16 @@ namespace gaEngineSDK {
   Interface::imguiScenegraph() {
     auto mySceneGraph = SceneGraph::instancePtr();
 
-    ImGuiTreeNodeFlags myFlags = ImGuiWindowFlags_NoTitleBar |
-                                 ImGuiWindowFlags_AlwaysVerticalScrollbar |
-                                 ImGuiWindowFlags_NoMove |
-                                 ImGuiWindowFlags_NoResize;
+    ImGuiTreeNodeFlags myFlags = ImGuiWindowFlags_AlwaysVerticalScrollbar;
 
     if (ImGui::Begin("Scene graph", nullptr, myFlags)) {
       textColoredCentered("-Scene graph-", Vector3(255.0f, 165.0f, 0.0f));
       ImGui::Separator();
 
       imguiShowTreeNodes("nodeChild", mySceneGraph->m_root);
+
+      ImGui::End();
     }
-    ImGui::End();
   }
 
   void
@@ -292,7 +413,7 @@ namespace gaEngineSDK {
 
     if (nullptr == node->getParentNode().lock()) {
       flags |= ImGuiTreeNodeFlags_DefaultOpen;
-      ImGui::SetNextTreeNodeOpen(true);
+      ImGui::SetNextItemOpen(true);
     }
     
     if (!(hasChildren)) {
@@ -338,10 +459,7 @@ namespace gaEngineSDK {
     
     auto object = mySceneGraph->m_nodeSelected->getActorNode().get();
 
-    ImGuiTreeNodeFlags myFlags = ImGuiWindowFlags_NoTitleBar |
-                                 ImGuiWindowFlags_AlwaysVerticalScrollbar |
-                                 ImGuiWindowFlags_NoMove |
-                                 ImGuiWindowFlags_NoResize;
+    ImGuiTreeNodeFlags myFlags = ImGuiWindowFlags_AlwaysVerticalScrollbar;
 
     if (ImGui::Begin("Model information", nullptr, myFlags)) {
       /*
@@ -381,9 +499,8 @@ namespace gaEngineSDK {
   void
   Interface::imguiCurrentFPS() {
     ImGuiTreeNodeFlags myFlags = ImGuiWindowFlags_NoTitleBar |
-                                 ImGuiWindowFlags_NoMove | 
-                                 ImGuiWindowFlags_NoResize | 
                                  ImGuiWindowFlags_NoBackground | 
+                                 ImGuiWindowFlags_AlwaysVerticalScrollbar |
                                  ImGuiWindowFlags_NoScrollbar;
 
     if (ImGui::Begin("Frames Per Second", nullptr, myFlags)) {
@@ -406,17 +523,20 @@ namespace gaEngineSDK {
 
   void 
   Interface::openFiles() {
-    //myOmniverse->openUSDFiles("http://localhost:8080/omniverse://127.0.0.1/Users/gaEngine/test.usd");
+    auto myOmniverse = g_baseOmniConnect().instancePtr();
+
+    //myOmniverse->loadUSDFiles("http://localhost:8080/omniverse://26.134.3.202/Users/testtestFoder/test.usd");
+    myOmniverse->loadUSDFiles("http://localhost:8080/omniverse://127.0.0.1/Users/gaEngine/test.usd");
   }
 
   bool isFirtsTime = true;
   Vector<SPtr<Textures>> vTextures;
-
+  
   void
   Interface::descompressImages() {
     ImGuiTreeNodeFlags myFlags = ImGuiWindowFlags_NoTitleBar |
                                  ImGuiWindowFlags_AlwaysVerticalScrollbar;
-
+  
     if (ImGui::Begin("Des compress Images", nullptr, myFlags)) {
       /*
       * S T A R T
@@ -424,30 +544,29 @@ namespace gaEngineSDK {
       */
       textColoredCentered("-Des compress-", Vector3(255.0f, 165.0f, 0.0f));
       ImGui::Separator();
-
+  
       auto myGraphicsApi = g_graphicApi().instancePtr();
       String nameTexture;
-
+  
       if (isFirtsTime) {
         //vTextures = myGraphicsApi->loadCompressedTexture("data/textures/marco/testCompress.png");
         vTextures = myGraphicsApi->loadCompressedTexture("data/textures/marco/pruebame.gat");
         isFirtsTime = false;
       }
-
+  
       uint32 sizeTextures = vTextures.size();
       for (uint32 i = 0; i < sizeTextures; ++i) {
         if (nullptr != vTextures.at(i)) {
           nameTexture = vTextures.at(i)->m_textureName;
           ImGui::Text(nameTexture.c_str());
-
+  
           ImTextureID id = vTextures[i]->getTexture();
           ImGui::Image(id, ImVec2(120, 120));
           ImGui::Separator();
         }
       }
-
+  
       ImGui::End();
     }
   }
-
 }

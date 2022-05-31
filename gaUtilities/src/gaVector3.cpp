@@ -123,4 +123,16 @@ namespace gaEngineSDK {
   Vector3::operator[](uint32 index) {
     return (&x)[index];
   }
+
+  bool 
+  Vector3::operator!=(const Vector3& vector) {
+    if ((x != vector.x) ||
+        (y != vector.y)||
+        (z != vector.z)) {
+      return true;
+    }
+
+    return false;
+  }
+
 }

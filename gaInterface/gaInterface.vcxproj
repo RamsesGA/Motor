@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imconfig.h" />
+    <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imfilebrowser.h" />
     <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imgui.h" />
     <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imgui_impl_dx11.h" />
     <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imgui_impl_win32.h" />

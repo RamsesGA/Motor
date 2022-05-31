@@ -45,13 +45,19 @@ namespace gaEngineSDK {
     for (auto& mesh : m_pModel->m_vMeshes) {
       auto temp = m_pMyActor->getComponent<Transform>();
       
+      //Setting the transform information for models.
       if (nullptr != temp) {
         auto transform = myGraphicApi->matrixPolicy(temp->getTransform());
-        m_pModel->m_vModelData[meshNum].modelMatrix = transform;
+
+        if (0 != m_pModel->m_vModelData.size()) {
+          m_pModel->m_vModelData[meshNum].modelMatrix = transform;
+        }
       }
 
-      myGraphicApi->updateConstantBuffer(&m_pModel->m_vModelData[meshNum],
-                                         myGraphicApi->getConstBufferBones());
+      if (0 != m_pModel->m_vModelData.size()) {
+        myGraphicApi->updateConstantBuffer(&m_pModel->m_vModelData[meshNum],
+                                           myGraphicApi->getConstBufferBones());
+      }
 
       if (!(m_pModel->m_vMeshes[meshNum].m_vTextures.empty())) {
         myGraphicApi->setShaderResourceView(m_pModel->m_vMeshes[meshNum].m_vTextures, 0, 1);

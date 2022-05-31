@@ -1,9 +1,21 @@
 #pragma once
 
+#include <dxgi.h>
+#include <d3d12.h>
+#include <dxgi1_6.h>
+#include <d3dcommon.h>
+#include <dxgiformat.h>
+#include <d3dcompiler.h>
+#include <dxgidebug.h>
+#include <Windows.Foundation.h>
+#include <wrl\wrappers\corewrappers.h>
+#include <wrl\client.h>
+
 #include "gaRenderTarget.h"
-#include "gaD3D12Textures.h"
 
 namespace gaEngineSDK {
+  using namespace Microsoft::WRL;
+
   class D3D12RenderTarget final : public RenderTarget
   {
   public:
@@ -26,18 +38,10 @@ namespace gaEngineSDK {
     * @brief .
     */
     void*
-    getRenderTexture(uint32 index = 0) override { 
-      //if ((index >= m_renderTarget.m_vShaderResourceView.size()) || (0 > index)) {
-      //  return m_renderTarget.m_vShaderResourceView[0];
-      //}
-      //
-      //return m_renderTarget.m_vShaderResourceView[index];
-    };
+    getRenderTexture(uint32 index = 0) override { };
 
     void*
-    getDepthStencilView() override {
-      //return m_pDepthStencilV;
-    }
+    getDepthStencilView() override { }
 
   protected:
     /*************************************************************************/
@@ -46,23 +50,9 @@ namespace gaEngineSDK {
     */
     /*************************************************************************/
 
-    /*
-    * @brief .
-    * TexturesDX m_renderTarget;
-    */
-    
+    const static size_t MAX_BACK_BUFFER_COUNT = 3;
 
-    /*
-    * @brief .
-    * ID3D11Texture2D* m_pTextureDepthSV = nullptr;
-    */
-    
-
-    /*
-    * @brief .
-    * ID3D11DepthStencilView* m_pDepthStencilV = nullptr;
-    */
-    
+    Microsoft::WRL::ComPtr<ID3D12Resource> m_renderTargets[MAX_BACK_BUFFER_COUNT];
 
     friend class D3D12GraphicsApi;
   };

@@ -85,6 +85,9 @@ namespace gaEngineSDK {
     /*************************************************************************/
 
     void
+    imguiDocking();
+
+    void
     imguiFile();
 
     void
@@ -103,7 +106,7 @@ namespace gaEngineSDK {
     openFiles();
 
     void
-    descompressImages();
+    descompressImages() override;
 
     /*************************************************************************/
     /**

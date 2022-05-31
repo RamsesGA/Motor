@@ -40,7 +40,7 @@ namespace gaEngineSDK {
 
     /*
     * @brief Run is the function that starts the
-    *      entire creation and initialization process.
+    *        entire creation and initialization process.
     * @param windowTitle, assigning a name.
     * @param sizeX, screen size x.
     * @param sizeY, screen size y.
@@ -55,6 +55,9 @@ namespace gaEngineSDK {
     */
     int32
     initSys();
+
+    bool
+    loadDlls(String nameDll, String nameDllFunc, uint32 typeFn);
 
    protected:
     /*
@@ -110,12 +113,14 @@ namespace gaEngineSDK {
     virtual void
     onCreate() { };
 
-   protected:
+  protected:
     /*************************************************************************/
     /*
     * Members.
     */
     /*************************************************************************/
+
+    bool m_initOmni = false;
 
     /*
     * @param Members with screen size.

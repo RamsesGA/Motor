@@ -65,6 +65,19 @@ namespace gaEngineSDK {
     */
     /*************************************************************************/
 
+    virtual void
+    clear(WeakSPtr<RenderTarget> pRt,
+          const float& r,
+          const float& g,
+          const float& b,
+          const float& a){
+      GA_UNREFERENCED_PARAMETER(pRt);
+      GA_UNREFERENCED_PARAMETER(r);
+      GA_UNREFERENCED_PARAMETER(g);
+      GA_UNREFERENCED_PARAMETER(b);
+      GA_UNREFERENCED_PARAMETER(a);
+    };
+
     /**
     * @brief Save the class itself in an instance.
     * @param api pointer.
@@ -807,6 +820,15 @@ namespace gaEngineSDK {
     */
     virtual void*
     getDeviceContext() { return nullptr; };
+
+    /*
+    * 
+    * D 3 D 1 2   -   G E T S
+    * 
+    */
+
+    virtual SPtr<RenderTarget>
+    getD3D12RenderTarget() { return nullptr; };
 
     /*************************************************************************/
     /**

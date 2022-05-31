@@ -105,14 +105,5 @@ class AppTest : public BaseApp
   * @brief .
   */
   void
-  createNodesMarco();
-
-  void
-  createNodesMarco2();
-
-  /*
-  * @brief .
-  */
-  void
   createScene();
 };

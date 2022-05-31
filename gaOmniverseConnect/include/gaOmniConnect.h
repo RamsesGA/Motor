@@ -30,11 +30,13 @@
 
 #include <gaActor.h>
 #include <gaModels.h>
+#include <gaLights.h>
+#include <gaDegrees.h>
+#include <gaTransform.h>
 #include <gaStaticMesh.h>
 #include <gaSceneGraph.h>
-#include <gaTransform.h>
-#include <gaDegrees.h>
 #include <gaQuaternions.h>
+#include <gaResourceManager.h>
 
 #include "gaPrerequisitesOmniConnect.h"
 
@@ -103,7 +105,7 @@ namespace gaEngineSDK {
 
     /*************************************************************************/
     /**
-    * Omniverse virtual Methods.
+    * Virtual Methods.
     */
     /*************************************************************************/
 
@@ -113,53 +115,38 @@ namespace gaEngineSDK {
     String
     createOmniverseScene(const String& destinationPath, const String& stageName) override;
 
-    bool
-    openUSDFiles(String rute) override;
-
-    void
-    printConnectedUsername(const String& stageUrl) override;
-
     void
     createGeoMeshWithModel(WeakSPtr<Actor> model) override;
 
-    void
-    updateObjects(WeakSPtr<SceneNode> myNode) override;
+    bool
+    loadUSDFiles(const String& rute) override;
+
+    bool
+    openNewUSDFile(const String& rute) override;
 
     void
-    updateOmniverseToGa() override;
-
-    void
-    updateGaToOmniverse() override;
-
+    printConnectedUsername(const String& stageUrl) override;
+    
     void
     saveSceneGraphToUSD() override;
 
     void
     saveObjectToUSD(WeakSPtr<SceneNode> child, String& name, String& parent) override;
 
+    void
+    updateGaToOmniverse() override;
+
+    void
+    updateOmniverseToGa() override;
+
+    void
+    updateObjects(WeakSPtr<SceneNode> myNode) override;
+
     /*************************************************************************/
     /**
-    * Omniverse Methods.
+    * Methods.
     */
     /*************************************************************************/
-
-    /*
-    * @brief Create a GeoMesh with one local model and save it.
-    */
-    static UsdGeomMesh
-    modelToGeoMesh(WeakSPtr<Actor> model);
-
-    /*
-    * @brief .
-    */
-    static UsdGeomMesh
-    modelToGeoMesh(WeakSPtr<Models> model, SdfPath& primitivePath);
-
-    /*
-    * @brief Create a default box and save the data and the stage in a ".usd".
-    */
-    static UsdGeomMesh
-    createBox(int32 boxNumber = 0);
 
     /*
     * @brief Check the connection status.
@@ -176,12 +163,6 @@ namespace gaEngineSDK {
     failNotify(const char* msg, const char* detail = nullptr, ...);
 
     /*
-    * @brief Shut down Omniverse connection.
-    */
-    static void 
-    shutdownOmniverse();
-
-    /*
     * @brief Omniverse Log callback.
     */
     static void 
@@ -189,15 +170,11 @@ namespace gaEngineSDK {
                 const char* component,
                 OmniClientLogLevel level, const char* message);
 
-    
-
     /*
-    * @brief This function will add a commented checkpoint to a file on Nucleus if:
-    *        Live mode is disabled (live checkpoints are ill-supported)
-    *        The Nucleus server supports checkpoints
+    * @brief Shut down Omniverse connection.
     */
-    static void
-    checkpointFile(const char* stageUrl, const char* comment);
+    static void 
+    shutdownOmniverse();
 
     /*
     * @brief Check if the URL exists.
@@ -206,10 +183,24 @@ namespace gaEngineSDK {
     isValidOmniURL(const String& maybeURL);
 
     /*
-    * @brief Create a light in scene.
+    * @brief This function will add a commented checkpoint to a file on Nucleus if:
+    *        Live mode is disabled (live checkpoints are ill-supported)
+    *        The Nucleus server supports checkpoints
     */
     static void
-    createLight();
+    checkpointFile(const char* stageUrl, const char* comment);
+    
+    /*
+    * @brief Create a GeoMesh with one local model and save it.
+    */
+    static UsdGeomMesh
+    modelToGeoMesh(WeakSPtr<Actor> model);
+
+    /*
+    * @brief .
+    */
+    static UsdGeomMesh
+    modelToGeoMesh(WeakSPtr<Models> model, SdfPath& primitivePath);
 
     /*
     * @brief Load materials from Omniverse server.
@@ -218,16 +209,40 @@ namespace gaEngineSDK {
     uploadMaterial(const String& destinationPath);
 
     /*
-    * @brief Bind the material to a geometry.
+    * @brief Create a default box and save the data and the stage in a ".usd".
+    */
+    static UsdGeomMesh
+    createBox(int32 boxNumber = 0);
+
+    /*
+    * @brief Create a light in scene.
     */
     static void
-    createMaterial(UsdGeomMesh meshIn);
+    createLight();
+
+    /*
+    * @brief .
+    */
+    static UsdPrim
+		createLightFromComponent(Lights* newLight, SdfPath& parentPath);
+
+    /*
+    * @brief .
+    */
+    static UsdPrim
+    createDirectLight(Lights* newLight, SdfPath& parentPath);
 
     /*
     * @brief Creates a folder.
     */
     static void
     createEmptyFolder(const String & emptyFolderPath);
+
+    /*
+    * @brief Bind the material to a geometry.
+    */
+    static void
+    createMaterial(UsdGeomMesh meshIn);
 
     /*
     * @brief .
@@ -256,13 +271,12 @@ namespace gaEngineSDK {
                            Vector3& position,
                            Vector3& rotation,
                            Vector3& scale);
-
+  private:
     /*************************************************************************/
     /**
     * Members.
     */
     /*************************************************************************/
-  private:
 
     /*
     * @brief Omniverse logging is noisy, only enable it if verbose mode (-v).

@@ -60,8 +60,18 @@ namespace gaEngineSDK {
   }
 
   void
+  Lights::setAmbientColor(Vector4 rgba) {
+    m_ambientColor = rgba;
+  }
+
+  void
   Lights::setDiffuseColor(float r, float g, float b, float a) {
     m_diffuseColor = Vector4(r, g, b, a);
+  }
+
+  void
+  Lights::setDiffuseColor(Vector4 rgba) {
+    m_diffuseColor = rgba;
   }
 
   void 
@@ -70,8 +80,18 @@ namespace gaEngineSDK {
   }
 
   void
+  Lights::setPosition(Vector3 xyz) {
+    m_pLightCamera->setEye(xyz);
+  }
+
+  void
   Lights::setLookAt(float x, float y, float z) {
     m_pLightCamera->setLookAt(Vector3(x, y, z));
+  }
+
+  void
+  Lights::setLookAt(Vector3 xyz) {
+    m_pLightCamera->setLookAt(xyz);
   }
 
   void

@@ -52,12 +52,6 @@ namespace gaEngineSDK {
     };
 
     /*
-    * @brief Print the current user online.
-    */
-    virtual void
-    printConnectedUsername(const String& stageUrl) {};
-
-    /*
     * @brief Create GeoMesh (Omniverse) with one local model.
     */
     virtual void
@@ -67,25 +61,19 @@ namespace gaEngineSDK {
     * @brief Open the file USD.
     */
     virtual bool
-    openUSDFiles(String rute) { return false; };
+    loadUSDFiles(const String& rute) { return false; };
 
     /*
-    * @brief Update for Omniverse.
+    * @brief .
     */
-    virtual void
-    updateObjects(WeakSPtr<SceneNode> myNode) {};
+    virtual bool
+    openNewUSDFile(const String& rute) { return false; };
 
     /*
-    * @brief Update for Omniverse.
+    * @brief Print the current user online.
     */
     virtual void
-    updateOmniverseToGa() {};
-
-    /*
-    * @brief Update for Omniverse.
-    */
-    virtual void
-    updateGaToOmniverse() {};
+    printConnectedUsername(const String& stageUrl) {};
 
     /*
     * @brief .
@@ -98,6 +86,24 @@ namespace gaEngineSDK {
     */
     virtual void
     saveObjectToUSD(WeakSPtr<SceneNode> child, String& name, String& parent) {};
+
+    /*
+    * @brief Update for Omniverse.
+    */
+    virtual void
+    updateGaToOmniverse() {};
+
+    /*
+    * @brief Update for Omniverse.
+    */
+    virtual void
+    updateOmniverseToGa() {};
+
+    /*
+    * @brief Update for Omniverse.
+    */
+    virtual void
+    updateObjects(WeakSPtr<SceneNode> myNode) {};
   };
 
   /***************************************************************************/

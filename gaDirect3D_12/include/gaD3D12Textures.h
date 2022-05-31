@@ -74,6 +74,8 @@ namespace gaEngineSDK {
     * @brief .
     * ID3D11UnorderedAccessView* m_pUAV = nullptr;
     */
+
+
     
 
     friend class D3D12GraphicsApi;

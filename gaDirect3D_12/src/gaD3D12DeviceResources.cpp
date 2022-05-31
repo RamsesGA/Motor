@@ -1,3 +1,4 @@
+/*
 #include "gaD3D12DeviceResources.h"
 
 namespace gaEngineSDK {
@@ -36,3 +37,4 @@ namespace gaEngineSDK {
   }
 
 }
+*/

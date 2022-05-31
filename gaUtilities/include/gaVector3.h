@@ -155,6 +155,9 @@ namespace gaEngineSDK {
     float&
     operator[](uint32 index);
 
+    bool
+    operator!=(const Vector3& vector);
+
     /*************************************************************************/
     /**
     * Members

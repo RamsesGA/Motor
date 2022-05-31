@@ -74,6 +74,12 @@ namespace gaEngineSDK {
     void
     defaultCamera() override;
 
+    /*
+    * @brief .
+    */
+    void
+    updateLocalLight(Lights* newLight) override;
+
     /*************************************************************************/
     /*
     * Info passes.

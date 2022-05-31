@@ -63,6 +63,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gaDirect3D_12", "gaDirect3D
 		{231901D2-5FE0-43DD-8C38-C54D0F6F02EE} = {231901D2-5FE0-43DD-8C38-C54D0F6F02EE}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gaD3D12Renderer", "gaD3D12Renderer\gaD3D12Renderer.vcxproj", "{9534574C-5393-4127-AF42-675A8FB3E037}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_DLL|x64 = Debug_DLL|x64
@@ -283,6 +285,22 @@ Global
 		{B6588410-4C93-4A13-818F-1D16D61C04AE}.Release|x64.Build.0 = Release|x64
 		{B6588410-4C93-4A13-818F-1D16D61C04AE}.Release|x86.ActiveCfg = Release|Win32
 		{B6588410-4C93-4A13-818F-1D16D61C04AE}.Release|x86.Build.0 = Release|Win32
+		{9534574C-5393-4127-AF42-675A8FB3E037}.Debug_DLL|x64.ActiveCfg = Debug|x64
+		{9534574C-5393-4127-AF42-675A8FB3E037}.Debug_DLL|x64.Build.0 = Debug|x64
+		{9534574C-5393-4127-AF42-675A8FB3E037}.Debug_DLL|x86.ActiveCfg = Debug|Win32
+		{9534574C-5393-4127-AF42-675A8FB3E037}.Debug_DLL|x86.Build.0 = Debug|Win32
+		{9534574C-5393-4127-AF42-675A8FB3E037}.Debug|x64.ActiveCfg = Debug|x64
+		{9534574C-5393-4127-AF42-675A8FB3E037}.Debug|x64.Build.0 = Debug|x64
+		{9534574C-5393-4127-AF42-675A8FB3E037}.Debug|x86.ActiveCfg = Debug|Win32
+		{9534574C-5393-4127-AF42-675A8FB3E037}.Debug|x86.Build.0 = Debug|Win32
+		{9534574C-5393-4127-AF42-675A8FB3E037}.Release_DLL|x64.ActiveCfg = Release|x64
+		{9534574C-5393-4127-AF42-675A8FB3E037}.Release_DLL|x64.Build.0 = Release|x64
+		{9534574C-5393-4127-AF42-675A8FB3E037}.Release_DLL|x86.ActiveCfg = Release|Win32
+		{9534574C-5393-4127-AF42-675A8FB3E037}.Release_DLL|x86.Build.0 = Release|Win32
+		{9534574C-5393-4127-AF42-675A8FB3E037}.Release|x64.ActiveCfg = Release|x64
+		{9534574C-5393-4127-AF42-675A8FB3E037}.Release|x64.Build.0 = Release|x64
+		{9534574C-5393-4127-AF42-675A8FB3E037}.Release|x86.ActiveCfg = Release|Win32
+		{9534574C-5393-4127-AF42-675A8FB3E037}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

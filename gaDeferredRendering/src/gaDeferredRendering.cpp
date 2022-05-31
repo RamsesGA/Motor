@@ -1,8 +1,8 @@
-#include <gaGraphicsApi.h>
 #include <gaPlane.h>
+#include <gaStaticMesh.h>
+#include <gaGraphicsApi.h>
 #include <gaRenderTarget.h>
 #include <gaBaseInterface.h>
-#include <gaStaticMesh.h>
 
 #include "gaDeferredRendering.h"
 
@@ -673,6 +673,7 @@ namespace gaEngineSDK {
   void
   DeferredRendering::lightningPass() {
     auto myGraphicsApi = g_graphicApi().instancePtr();
+    auto myInterface = g_baseInterface().instancePtr();
 
     myGraphicsApi->setRenderTarget(m_pRenderTargetView);
     myGraphicsApi->setShaders(m_pLightning_Shader);
@@ -769,6 +770,21 @@ namespace gaEngineSDK {
 
     //Des bind
     myGraphicsApi->desbindRT();
+  }
+
+  void
+  DeferredRendering::updateLocalLight(Lights* newLigth){
+    SPtr<Lights> lightCompo;
+
+    lightCompo->setAmbientColor(newLigth->getAmbientColor());
+    lightCompo->setDiffuseColor(newLigth->getDiffuseColor());
+    lightCompo->setEmissiveIntensity(newLigth->getEmissiveIntensity());
+    lightCompo->setIntensity(newLigth->getIntensity());
+    lightCompo->setLookAt(newLigth->getLookAt());
+    lightCompo->setPosition(newLigth->getPosition());
+
+
+    m_pLightActor->setComponent(lightCompo);
   }
 
   /***************************************************************************/

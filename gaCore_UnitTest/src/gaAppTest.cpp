@@ -8,6 +8,7 @@
 #include <gaResourceManager.h>
 #include <gaLights.h>
 #include <gaBaseOmniConnect.h>
+#include <gaBaseInterface.h>
 
 #include "gaAppTest.h"
 
@@ -32,6 +33,10 @@ AppTest::onRender() {
 
 void
 AppTest::onCreate() {
+  /*
+  * D 3 D 1 2
+  */
+  //myGraphicsApi->initDevice(m_sfmlWindow.getSystemHandle());
 
   /*
   * D 3 D 1 1
@@ -40,7 +45,7 @@ AppTest::onCreate() {
 
   //We send the window to the API.
   myGraphicsApi->initDevice(m_sfmlWindow.getSystemHandle());
-
+  
   /***************************************************************************/
   /*
   * Loading models.
@@ -48,24 +53,14 @@ AppTest::onCreate() {
   */
   /***************************************************************************/
   
-  createScene();
-  //createNodePod();
+  //createScene();
+  createNodePod();
   //createNodeVela();
   //createNodeTwoB();
   //createNodeUgandan();
   //createNodeGrimoires();
   //createNodeRamlethalSwords();
   //createNodeStranger();
-  //createNodesMarco();
-  //createNodesMarco2();
-
-  //auto myOmniverse = g_baseOmniConnect().instancePtr();
-  //myOmniverse->saveSceneGraphToUSD();
-
-  /*
-  * D 3 D 1 2
-  */
-  //myGraphicsApi->initDevice(m_sfmlWindow.getSystemHandle());
 }
 
 /*****************************************************************************/
@@ -277,50 +272,6 @@ AppTest::createNodeStranger() {
 
   //Creating actor
   SPtr<Actor> actor(new Actor("The Stranger"));
-  actor->setIsSelected(true);
-  actor->setComponent(newComponent);
-
-  //Adding the actor to node root
-  mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
-}
-
-void
-AppTest::createNodesMarco() {
-  auto mySceneGraph = SceneGraph::instancePtr();
-  auto myRSRCMG = ResourceManager::instancePtr();
-
-  SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/basicModels/cube.fbx");
-
-  SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
-  myStaticMesh->m_pModel = myModel;
-
-  //Creating the component
-  SPtr<Component> newComponent(myStaticMesh);
-
-  //Creating actor
-  SPtr<Actor> actor(new Actor("Box_v2"));
-  actor->setIsSelected(true);
-  actor->setComponent(newComponent);
-
-  //Adding the actor to node root
-  mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
-}
-
-void
-AppTest::createNodesMarco2() {
-  auto mySceneGraph = SceneGraph::instancePtr();
-  auto myRSRCMG = ResourceManager::instancePtr();
-
-  SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/marco/BattleDroid.fbx");
-
-  SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
-  myStaticMesh->m_pModel = myModel;
-
-  //Creating the component
-  SPtr<Component> newComponent(myStaticMesh);
-
-  //Creating actor
-  SPtr<Actor> actor(new Actor("BattleDroid"));
   actor->setIsSelected(true);
   actor->setComponent(newComponent);
 

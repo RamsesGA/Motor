@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\d3dx12.h" />
     <ClInclude Include="include\gaD3D12ConstantBuffer.h" />
     <ClInclude Include="include\gaD3D12DeviceResources.h" />
     <ClInclude Include="include\gaD3D12GraphicApi.h" />
@@ -160,11 +161,12 @@
     <ClInclude Include="include\gaD3D12Textures.h" />
     <ClInclude Include="include\gaD3D12VertexBuffer.h" />
     <ClInclude Include="include\gaD3D21VertexShader.h" />
+    <ClInclude Include="include\gaHelper.h" />
     <ClInclude Include="include\gaStructuresRayTracing.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gaD3D12DeviceResources.cpp" />
-    <ClCompile Include="src\gaGraphicApiD3D12.cpp" />
+    <ClCompile Include="src\gaD3D12GraphicApi.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

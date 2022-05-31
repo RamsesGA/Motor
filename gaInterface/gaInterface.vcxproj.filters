@@ -18,6 +18,9 @@
     <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imconfig.h">
       <Filter>Archivos de origen\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imfilebrowser.h">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\..\DEVLIBS\ImGui\include\imgui.h">
       <Filter>Archivos de origen\ImGui</Filter>
     </ClInclude>

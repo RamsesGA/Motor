@@ -204,6 +204,18 @@ namespace gaEngineSDK {
     */
     SPtr<SkeletalMesh> m_skeletalMesh;
 
+    /*
+    * @brief Member to store vertex information.
+    */
+    Vector<Vertex> m_vVertices;
+
+    /*
+    * @brief Member to store index information.
+    */
+    Vector<uint32> m_vIndices;
+
+    Vector<SPtr<SamplerState>> m_vSamplers;
+
    private:
     /*
     * @brief .
@@ -224,16 +236,6 @@ namespace gaEngineSDK {
     * @brief .
     */
     Vector<Matrix4x4> m_bonesTransform;
-
-    /*
-    * @brief Member to store vertex information.
-    */
-    Vector<Vertex> m_vVertices;
-
-    /*
-    * @brief Member to store index information.
-    */
-    Vector<uint32> m_vIndices;
 
     /*
     * @brief .

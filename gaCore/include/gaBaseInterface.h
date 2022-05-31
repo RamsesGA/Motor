@@ -5,6 +5,8 @@
 #include "gaPrerequisitesCore.h"
 
 namespace gaEngineSDK {
+  class RenderTarget;
+
   class GA_CORE_EXPORT BaseInterface : public Module<BaseInterface>
   {
    public:
@@ -62,13 +64,16 @@ namespace gaEngineSDK {
     virtual void
     textEnter(wchar_t unicode) {};
 
-
-
-
+    virtual void
+    descompressImages() {};
 
     bool m_touchingImGui = false;
 
     void* m_windowsHandle = nullptr;
+
+    bool m_startOmniverse = false;
+
+    bool m_isRunningOmniverse = false;
   };
 
   /***************************************************************************/

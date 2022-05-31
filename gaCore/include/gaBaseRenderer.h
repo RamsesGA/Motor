@@ -17,6 +17,7 @@ namespace gaEngineSDK {
   class RenderTarget;
   class ConstantBuffer;
   class Plane;
+  class Lights;
 
   class GA_CORE_EXPORT BaseRenderer : public Module<BaseRenderer>
   {
@@ -80,6 +81,12 @@ namespace gaEngineSDK {
     */
     virtual void
     defaultCamera() {};
+
+    /*
+    * @brief .
+    */
+    virtual void
+    updateLocalLight(Lights* newLight) {};
   };
 
   /***************************************************************************/

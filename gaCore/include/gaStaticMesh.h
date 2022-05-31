@@ -19,6 +19,8 @@ namespace gaEngineSDK {
     /*************************************************************************/
     StaticMesh() = default;
 
+    StaticMesh(WeakSPtr<Models> newModel);
+
     ~StaticMesh() = default;
 
     /*************************************************************************/
