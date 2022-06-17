@@ -106,6 +106,10 @@ namespace gaEngineSDK {
   /***************************************************************************/
 
   GraphicsApiDX::~GraphicsApiDX() {
+    SAFE_RELEASE(m_pd3dDevice);
+    SAFE_RELEASE(m_pSwapChain);
+    SAFE_RELEASE(m_pDeviceContext);
+
     delete m_pDepthStencil;
     delete m_pBackBuffer;
   }

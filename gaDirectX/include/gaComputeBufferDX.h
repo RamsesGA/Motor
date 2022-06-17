@@ -17,7 +17,17 @@ namespace gaEngineSDK {
     /*************************************************************************/
     ComputeBufferDX() = default;
 
-    ~ComputeBufferDX() = default;
+    ~ComputeBufferDX() {
+      SAFE_RELEASE(m_pComputeBuffer);
+      SAFE_RELEASE(m_pComputeUAV);
+
+      if (0 != m_vpComputeSRV.size()) {
+        uint32 tempSize = m_vpComputeSRV.size();
+        for (uint32 i = 0; i < tempSize; ++i) {
+          SAFE_RELEASE(m_vpComputeSRV[i]);
+        }
+      }
+    }
 
   protected:
     /*************************************************************************/

@@ -10,6 +10,7 @@ namespace gaEngineSDK {
                            const Radians& Y, 
                            const Radians& Z, 
                            const Radians& W) {
+    W;
     float fSinPitch = Math::fastSin(X.valueRadians() * 0.5f);
     float fCosPitch = Math::fastCos(X.valueRadians() * 0.5f);
     float fSinYaw = Math::fastSin(Y.valueRadians() * 0.5f);
@@ -29,6 +30,7 @@ namespace gaEngineSDK {
                            const Degrees& Y, 
                            const Degrees& Z,
                            const Degrees& W) {
+    W;
     float fSinPitch = Math::fastSin(X.valueRadians() * 0.5f);
     float fCosPitch = Math::fastCos(X.valueRadians() * 0.5f);
     float fSinYaw = Math::fastSin(Y.valueRadians() * 0.5f);

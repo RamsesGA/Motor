@@ -5,7 +5,7 @@
 namespace gaEngineSDK {
   class RenderTarget
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
@@ -13,6 +13,7 @@ namespace gaEngineSDK {
     /*************************************************************************/
     RenderTarget() = default;
 
+    virtual
     ~RenderTarget() = default;
 
     /*************************************************************************/

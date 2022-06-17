@@ -6,18 +6,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\gaOmniConnect.h">
-      <Filter>Archivos de orgen</Filter>
-    </ClInclude>
     <ClInclude Include="include\gaPrerequisitesOmniConnect.h">
       <Filter>Archivos de orgen</Filter>
     </ClInclude>
-    <ClInclude Include="include\gaStdHeadersOmniverse.h">
+    <ClInclude Include="include\gaOmniverseConnect.h">
       <Filter>Archivos de orgen</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\gaOmniConnect.cpp">
+    <ClCompile Include="src\gaOmniverseConnect.cpp">
       <Filter>Archivos de orgen</Filter>
     </ClCompile>
   </ItemGroup>

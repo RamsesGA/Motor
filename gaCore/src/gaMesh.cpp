@@ -6,7 +6,12 @@
 using std::memcpy;
 
 namespace gaEngineSDK {
-  void 
+
+  Mesh::~Mesh() {
+    delete m_cbModelData;
+  }
+
+  void
   Mesh::setUpMesh(Vector<Vertex> pVertices, Vector<uint32> pIndices, 
                   Vector<Textures*> textures) {
     m_vVertices = pVertices;

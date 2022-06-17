@@ -107,55 +107,73 @@ namespace gaEngineSDK {
     * @brief .
     */
     virtual void
-    init(uint32 maxChannels) {};
+    init(uint32 maxChannels) {
+      GA_UNREFERENCED_PARAMETER(maxChannels);
+    };
 
     /*
     * @brief .
     */
     virtual void
-    createAudioSrc(audioSRC *source) {};
+    createAudioSrc(audioSRC *source) {
+      GA_UNREFERENCED_PARAMETER(source);
+    };
 
     /*
     * @brief .
     */
     virtual void
-    destroyAudioSrc(audioSRC* source) {};
+    destroyAudioSrc(audioSRC* source) {
+      GA_UNREFERENCED_PARAMETER(source);
+    };
 
     /*
     * @brief .
     */
     virtual void
-    playAudio(audioSRC* source) {};
+    playAudio(audioSRC* source) {
+      GA_UNREFERENCED_PARAMETER(source);
+    };
 
     /*
     * @brief .
     */
     virtual void
-    playAudioOneShot(audioSRC* source) {};
+    playAudioOneShot(audioSRC* source) {
+      GA_UNREFERENCED_PARAMETER(source);
+    };
 
     /*
     * @brief .
     */
     virtual void
-    playAudioLoop(audioSRC* source) {};
+    playAudioLoop(audioSRC* source) {
+      GA_UNREFERENCED_PARAMETER(source);
+    };
 
     /*
     * @brief .
     */
     virtual void
-    pauseAudio(audioSRC* source) {};
+    pauseAudio(audioSRC* source) {
+      GA_UNREFERENCED_PARAMETER(source);
+    };
 
     /*
     * @brief .
     */
     virtual void
-    stopAudio(audioSRC* source) {};
+    stopAudio(audioSRC* source) {
+      GA_UNREFERENCED_PARAMETER(source);
+    };
 
     /*
     * @brief .
     */
     virtual void
-    updateSrcState(audioSRC* source) {};
+    updateSrcState(audioSRC* source) {
+      GA_UNREFERENCED_PARAMETER(source);
+    };
 
     /*************************************************************************/
     /**
@@ -167,7 +185,10 @@ namespace gaEngineSDK {
     * @brief .
     */
     virtual void
-    setAudioSrc(audioSRC* source, audio* newAudio) {};
+    setAudioSrc(audioSRC* source, audio* newAudio) {
+      GA_UNREFERENCED_PARAMETER(source);
+      GA_UNREFERENCED_PARAMETER(newAudio);
+    };
 
     /*
     * @brief .
@@ -177,43 +198,68 @@ namespace gaEngineSDK {
                 String data,
                 int32 numberOfSamplers,
                 int32 sampleRate,
-                AUDIO_TYPE::E type) {};
+                AUDIO_TYPE::E type) {
+      GA_UNREFERENCED_PARAMETER(source);
+      GA_UNREFERENCED_PARAMETER(data);
+      GA_UNREFERENCED_PARAMETER(numberOfSamplers);
+      GA_UNREFERENCED_PARAMETER(sampleRate);
+      GA_UNREFERENCED_PARAMETER(type);
+    };
 
     /*
     * @brief .
     */
     virtual void
-    setAudioAttributes(audioSRC* source, float volume, bool loop, Vector3 position) {};
+    setAudioAttributes(audioSRC* source, float volume, bool loop, Vector3 position) {
+      GA_UNREFERENCED_PARAMETER(source);
+      GA_UNREFERENCED_PARAMETER(volume);
+      GA_UNREFERENCED_PARAMETER(loop);
+      GA_UNREFERENCED_PARAMETER(position);
+    };
 
     /*
     * @brief .
     */
     virtual void
-    setAudioVolume(audioSRC* source, float volume) {};
+    setAudioVolume(audioSRC* source, float volume) {
+      GA_UNREFERENCED_PARAMETER(source);
+      GA_UNREFERENCED_PARAMETER(volume);
+    };
 
     /*
     * @brief .
     */
     virtual void
-    setAudioLoop(audioSRC* source, bool loop) {};
+    setAudioLoop(audioSRC* source, bool loop) {
+      GA_UNREFERENCED_PARAMETER(source);
+      GA_UNREFERENCED_PARAMETER(loop);
+    };
 
     /*
     * @brief .
     */
     virtual void
-    setAudio3D_Position(audioSRC* source, Vector3 position) {};
+    setAudio3D_Position(audioSRC* source, Vector3 position) {
+      GA_UNREFERENCED_PARAMETER(source);
+      GA_UNREFERENCED_PARAMETER(position);
+    };
 
     /*
     * @brief .
     */
     virtual void
-    setListenerVolume(float volume) {};
+    setListenerVolume(float volume) {
+      GA_UNREFERENCED_PARAMETER(volume);
+    };
 
     /*
     * @brief .
     */
     virtual void
-    setListener3D_PositionOrientation(Vector3 position, Quaternions rotation) {};
+    setListener3D_PositionOrientation(Vector3 position, Quaternions rotation) {
+      GA_UNREFERENCED_PARAMETER(position);
+      GA_UNREFERENCED_PARAMETER(rotation);
+    };
   };
 
   /***************************************************************************/

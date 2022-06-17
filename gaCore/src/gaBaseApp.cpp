@@ -6,8 +6,8 @@
 #include "gaBaseRenderer.h"
 #include "gaBaseInterface.h"
 #include "gaBasePhysics.h"
-#include "gaBaseOmniConnect.h"
 #include "gaResourceManager.h"
+#include "gaBaseOmniConnect.h"
 
 namespace gaEngineSDK {
   int32 
@@ -61,10 +61,10 @@ namespace gaEngineSDK {
 
     while (m_sfmlWindow.isOpen()) {
       Event event;
+      MSG msg;
 
       trueDeltaTime = deltaTime.getElapsedTime().asSeconds();
 
-      MSG msg;
       while (PeekMessageW(&msg, m_sfmlWindow.getSystemHandle(), 0, 0, PM_REMOVE)) {
         TranslateMessage(&msg);
         DispatchMessageW(&msg);
@@ -87,34 +87,18 @@ namespace gaEngineSDK {
 
       deltaTime.restart();
 
-      /*
-      * O M N I V E R S E
-      * C R E A T E
-      * S T A G E
-      */
-      if (myInterface->m_startOmniverse) {
-        myInterface->m_startOmniverse = false;
-
-        if (!(m_initOmni)) {
-          omniverseTest();
-          m_initOmni = true;
-        }
-
-        myInterface->m_isRunningOmniverse = true;
-      }
-      
-      if (myInterface->m_isRunningOmniverse) {
-        myOmniverse->updateOmniverseToGa();
+      if (myOmniverse->getIsLiveSync()) {
+        myOmniverse->updateOmniToGa();
       }
 
+      //myD3D12Renderer->update(trueDeltaTime);
       myInputs->update(trueDeltaTime);
       myRenderer->update(trueDeltaTime);
-      //myD3D12Renderer->update(trueDeltaTime);
       myInterface->update(trueDeltaTime);
       onUpdate(trueDeltaTime);
 
-      myRenderer->render();
       //myD3D12Renderer->render();
+      myRenderer->render();
       myInterface->render();
       onRender();
     }
@@ -130,6 +114,7 @@ namespace gaEngineSDK {
     * typeFn = 0
     */
     if (!(loadDlls("gaDirectX_d.dll", "createGraphicApi", 0))) {
+      std::cout << "Error, Direct X dll did not load\n";
       return -1;
     }
         
@@ -143,6 +128,7 @@ namespace gaEngineSDK {
     * typeFn = 1
     */
     if (!(loadDlls("gaDeferredRendering_d.dll", "createBaseRenderer", 1))) {
+      std::cout << "Error, Deferred Rendering dll did not load\n";
       return -1;
     }
 
@@ -153,6 +139,7 @@ namespace gaEngineSDK {
     * typeFn = 2
     */
     if (!(loadDlls("gaInterface_d.dll", "createNewInterface", 2))) {
+      std::cout << "Error, Interface dll did not load\n";
       return -1;
     }
 
@@ -163,6 +150,7 @@ namespace gaEngineSDK {
     * typeFn = 3
     */
     if (!(loadDlls("gaInputs_d.dll", "newInputs", 3))) {
+      std::cout << "Error, Inputs dll did not load\n";
       return -1;
     }
     
@@ -173,6 +161,7 @@ namespace gaEngineSDK {
     * typeFn = 4
     */
     if (!(loadDlls("gaOmniverseConnect_d.dll", "createOmniConnect", 4))) {
+      std::cout << "Error, Omniverse dll did not load\n";
       return -1;
     }
 
@@ -221,6 +210,8 @@ namespace gaEngineSDK {
       GraphicsApi::startUp();
       GraphicsApi* graphicApi = apiFunc();
       g_graphicApi().setObject(graphicApi);
+
+      return true;
     }
 
     /*
@@ -239,6 +230,8 @@ namespace gaEngineSDK {
       BaseRenderer::startUp();
       BaseRenderer* newBR = baseRendApiFunc();
       g_baseRenderer().setObject(newBR);
+
+      return true;
     }
 
     /*
@@ -256,6 +249,8 @@ namespace gaEngineSDK {
       BaseInterface::startUp();
       BaseInterface* newBI = baseInter();
       g_baseInterface().setObject(newBI);
+
+      return true;
     }
 
     /*
@@ -273,6 +268,8 @@ namespace gaEngineSDK {
       BaseInputs::startUp();
       BaseInputs* newBInputs = baseInputs();
       g_baseInputs().setObject(newBInputs);
+
+      return true;
     }
 
     /*
@@ -286,10 +283,12 @@ namespace gaEngineSDK {
       if (!(baseOmni)) {
         return false;
       }
-
+    
       BaseOmniConnect::startUp();
       BaseOmniConnect* newBOmni = baseOmni();
       g_baseOmniConnect().setObject(newBOmni);
+
+      return true;
     }
 
     /*
@@ -307,7 +306,11 @@ namespace gaEngineSDK {
       BasePhysics::startUp();
       BasePhysics* newBPhys = basePhys();
       g_basePhysics().setObject(newBPhys);
+
+      return true;
     }
+
+    return false;
   }
 
   void
@@ -323,6 +326,7 @@ namespace gaEngineSDK {
 
   void 
   BaseApp::handleWindowEvents(Event& windowEvent, const float& deltaTime) {
+    deltaTime;
     auto myRenderer = g_baseRenderer().instancePtr();
     auto myInterface = g_baseInterface().instancePtr();
 
@@ -343,34 +347,50 @@ namespace gaEngineSDK {
         myInterface->textEnter(windowEvent.text.unicode);
         break;
 
+      case Event::KeyPressed:
+        myInterface->onKeyPressed(windowEvent.key.alt,
+                                  windowEvent.key.control,
+                                  windowEvent.key.shift,
+                                  windowEvent.key.system,
+                                  windowEvent.key.code);
+        break;
+
+      case Event::KeyReleased:
+        myInterface->onKeyReleased(windowEvent.key.alt,
+                                   windowEvent.key.control,
+                                   windowEvent.key.shift,
+                                   windowEvent.key.system,
+                                   windowEvent.key.code);
+        break;
+
       default:
         break;
     }
   }
 
-  void
-  BaseApp::omniverseTest() {
-    auto myOmniverse = g_baseOmniConnect().instancePtr();
-    String destinationPath = "http://localhost:8080/omniverse://127.0.0.1/Users/gaEngine/";
-
-    if (!(myOmniverse->startOmniverse())) {
-      std::cout << "\nError, can not start Omniverse\n";
-      exit(1);
-    }
-
-    //Print the username for the server
-    myOmniverse->printConnectedUsername(destinationPath);
-
-    //Create the USD model in Omniverse.
-    const String stageUrl = myOmniverse->createOmniverseScene(destinationPath, "test");
-
-    if (stageUrl.empty()) {
-      std::cout << "\nError, can not create Omniverse scene\n";
-      exit(1);
-    }
-
-    myOmniverse->openNewUSDFile("http://localhost:8080/omniverse://127.0.0.1/Users/gaEngine/test.usd");
-
-    myOmniverse->saveSceneGraphToUSD();
-  }
+  //void
+  //BaseApp::omniverseTest() {
+  //  auto myOmniverse = g_baseOmniConnect().instancePtr();
+  //  String destinationPath = "http://localhost:8080/omniverse://127.0.0.1/Users/gaEngine/";
+  //
+  //  if (!(myOmniverse->startOmni())) {
+  //  std::cout << "\nError, can not start Omniverse\n";
+  //  exit(1);
+  //}
+  //
+  //  //Print the username for the server
+  //  myOmniverse->connectedUsername(destinationPath);
+  //
+  //  //Create the USD model in Omniverse.
+  //  const String stageUrl = myOmniverse->createOmniScene(destinationPath, "test");
+  //
+  //  if (stageUrl.empty()) {
+  //    std::cout << "\nError, can not create Omniverse scene\n";
+  //    exit(1);
+  //  }
+  //
+  //  myOmniverse->openNewUSD("http://localhost:8080/omniverse://127.0.0.1/Users/gaEngine/test.usd");
+  //
+  //  myOmniverse->saveSGToUSD();
+  //}
 }

@@ -14,7 +14,7 @@ namespace gaEngineSDK {
 
   Animations g_animInfo;
 
-  Vector<Mesh> g_vMeshes;
+  Vector<SPtr<Mesh>> g_vMeshes;
 
   Vector<String> g_vMeshName;
 
@@ -43,14 +43,17 @@ namespace gaEngineSDK {
   * @param Assimp variable with the mesh information.
   * @param Assimp variable with scene information.
   */
-  Mesh
+  SPtr<Mesh>
   processMesh(aiMesh* pAMesh, const aiScene* pAScene);
 
   /*
   * @brief .
   */
-  Mesh
-  processBonesInfo(aiMesh* pAMesh, Vertex* vertexInfo, uint32 numVertexes, Mesh paramMesh);
+  SPtr<Mesh>
+  processBonesInfo(aiMesh* pAMesh, 
+                   Vertex* vertexInfo, 
+                   uint32 numVertexes,
+                   WeakSPtr<Mesh> paramMesh);
 
   /*
   * @brief .
@@ -128,23 +131,23 @@ namespace gaEngineSDK {
   }
 
   void
-  Models::addNewMesh(Vector<Mesh> vMeshes) {
+  Models::addNewMesh(Vector<WeakSPtr<Mesh>> vMeshes) {
     uint32 size = vMeshes.size();
     for (uint32 i = 0; i < size; ++i) {
-      m_vMeshes.push_back(vMeshes[i]);
+      m_vMeshes.push_back(vMeshes[i].lock());
     }
 
-    m_vModelData.resize(vMeshes.size());
+    m_vModelData.resize(size);
   }
 
   void
-  Models::addNewMesh(Mesh newMesh) {
-    m_vMeshes.push_back(newMesh);
+  Models::addNewMesh(WeakSPtr<Mesh> newMesh) {
+    m_vMeshes.push_back(newMesh.lock());
   }
 
-  Mesh
+  SPtr<Mesh>
   Models::createVertexData(Vertex* vertexInfo, uint32 numVertexes) {
-    Mesh tempMesh;
+    SPtr<Mesh> tempMesh = make_shared<Mesh>();
     SkeletalMesh* skeletal = new SkeletalMesh;
 
     for (uint32 i = 0; i < numVertexes; ++i) {
@@ -155,16 +158,16 @@ namespace gaEngineSDK {
 
     SPtr<Vertex> SPtrVertexData(vertexInfo);
 
-    tempMesh.m_skeletalMesh.reset(skeletal);
-    tempMesh.setVertexData(SPtrVertexData);
+    tempMesh->m_skeletalMesh.reset(skeletal);
+    tempMesh->setVertexData(SPtrVertexData);
 
-    tempMesh.m_bonesTransforms.clear();
-    tempMesh.m_bonesTransforms.resize(skeletal->numBones);
+    tempMesh->m_bonesTransforms.clear();
+    tempMesh->m_bonesTransforms.resize(skeletal->numBones);
 
     return tempMesh;
   }
 
-  Mesh&
+  SPtr<Mesh>
   Models::getMesh(uint32 index) {
     return m_vMeshes.at(index);
   }
@@ -201,13 +204,13 @@ namespace gaEngineSDK {
     }
   }
 
-  Mesh 
+  SPtr<Mesh>
   processMesh(aiMesh* pAMesh, const aiScene* pAScene) {
     //Data to fill
     Vector<uint32> indices;
     Vector<Vertex> vVertices;
 
-    Mesh newMesh;
+    SPtr<Mesh> newMesh = make_shared<Mesh>();
 
     vVertices.resize(pAMesh->mNumVertices);
 
@@ -273,13 +276,17 @@ namespace gaEngineSDK {
       searchTextures(pAMesh, pAScene);
     }
 
-    newMesh.setUpMesh(vVertices, indices, g_vTextures);
+    newMesh->setUpMesh(vVertices, indices, g_vTextures);
     g_vTextures.clear();
+
     return newMesh;
   }
 
-  Mesh
-  processBonesInfo(aiMesh* pAMesh, Vertex* vertexInfo, uint32 numVertexes, Mesh paramMesh) {
+  SPtr<Mesh>
+  processBonesInfo(aiMesh* pAMesh, 
+                   Vertex* vertexInfo,
+                   uint32 numVertexes, 
+                   WeakSPtr<Mesh> paramMesh) {
     SkeletalMesh* skeletal = new SkeletalMesh;
 
     if (0 < pAMesh->mNumBones) {
@@ -330,13 +337,20 @@ namespace gaEngineSDK {
 
     SPtr<Vertex> SPtrVertexData(vertexInfo);
 
-    paramMesh.m_skeletalMesh.reset(skeletal);
-    paramMesh.setVertexData(SPtrVertexData);
+    auto tempParamMesh = paramMesh.lock();
 
-    paramMesh.m_bonesTransforms.clear();
-    paramMesh.m_bonesTransforms.resize(skeletal->numBones);
+    if (nullptr == tempParamMesh) {
+      tempParamMesh = make_shared<Mesh>();
+      tempParamMesh->m_skeletalMesh = make_shared<SkeletalMesh>();
+    }
 
-    return paramMesh;
+    tempParamMesh->m_skeletalMesh.reset(skeletal);
+    tempParamMesh->setVertexData(SPtrVertexData);
+
+    tempParamMesh->m_bonesTransforms.clear();
+    tempParamMesh->m_bonesTransforms.resize(skeletal->numBones);
+
+    return tempParamMesh;
   }
 
   void

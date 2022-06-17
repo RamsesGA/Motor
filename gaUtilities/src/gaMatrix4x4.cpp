@@ -336,7 +336,6 @@ namespace gaEngineSDK {
   
   Matrix4x4
   Matrix4x4::invert() {
-    float tempParamMatrix[4][4];
     float inverseMatrix[4][4];
     Matrix4x4 matrix;
   

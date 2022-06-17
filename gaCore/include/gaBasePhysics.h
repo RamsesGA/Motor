@@ -36,13 +36,19 @@ namespace gaEngineSDK {
     * @brief .
     */
     virtual void
-    init(uint32 width, uint32 height, void* hwndHandle) {};
+    init(uint32 width, uint32 height, void* hwndHandle) {
+      GA_UNREFERENCED_PARAMETER(width);
+      GA_UNREFERENCED_PARAMETER(height);
+      GA_UNREFERENCED_PARAMETER(hwndHandle);
+    };
 
     /*
     * @brief .
     */
     virtual void
-    update(const float& deltaTime) {};
+    update(const float& deltaTime) {
+      GA_UNREFERENCED_PARAMETER(deltaTime);
+    };
   };
 
   /***************************************************************************/

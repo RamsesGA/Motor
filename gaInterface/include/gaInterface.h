@@ -7,6 +7,7 @@
 
 namespace gaEngineSDK {
   using std::to_string;
+  using std::cout;
 
   class Interface final : public BaseInterface
   {
@@ -20,6 +21,12 @@ namespace gaEngineSDK {
     Interface() = default;
 
     ~Interface() = default;
+
+    /*************************************************************************/
+    /**
+    * Inheritance.
+    */
+    /*************************************************************************/
 
     /*
     * @brief .
@@ -39,6 +46,12 @@ namespace gaEngineSDK {
     void
     render() override;
 
+    /*************************************************************************/
+    /**
+    * Methods.
+    */
+    /*************************************************************************/
+
     /*
     * @brief .
     */
@@ -57,6 +70,9 @@ namespace gaEngineSDK {
     void
     materialsInterface();
 
+    /*
+    * @brief .
+    */
     void
     transformInterface();
 
@@ -78,6 +94,12 @@ namespace gaEngineSDK {
     void
     textEnter(wchar_t unicode) override;
 
+    void
+    onKeyPressed(bool alt, bool ctrl, bool shift, bool sys, int32 code) override;
+
+    void
+    onKeyReleased(bool alt, bool ctrl, bool shift, bool sys, int32 code) override;
+
     /*************************************************************************/
     /**
     * Methods for ImGui.
@@ -88,7 +110,7 @@ namespace gaEngineSDK {
     imguiDocking();
 
     void
-    imguiFile();
+    imguiOptionsBar();
 
     void
     imguiScenegraph();
@@ -103,16 +125,77 @@ namespace gaEngineSDK {
     imguiCurrentFPS();
 
     void
-    openFiles();
+    omniverseWindow();
 
     void
     descompressImages() override;
 
     /*************************************************************************/
     /**
+    * Methods for models.
+    */
+    /*************************************************************************/
+
+    /*
+    * @brief .
+    */
+    void
+    createNodePod();
+    
+    /*
+    * @brief .
+    */
+    void
+    createNodeVela();
+    
+    /*
+    * @brief .
+    */
+    void
+    createNode2B();
+    
+    /*
+    * @brief .
+    */
+    void
+    createNodeKnucles();
+    
+    /*
+    * @brief .
+    */
+    void
+    createNodeGrimoires();
+    
+    /*
+    * @brief .
+    */
+    void
+    createNodeRamlethalSwords();
+    
+    /*
+    * @brief .
+    */
+    void
+    createNodeStranger();
+    
+    /*
+    * @brief .
+    */
+    void
+    createNodePlane();
+
+    /*************************************************************************/
+    /**
     * Members.
     */
     /*************************************************************************/
+
+    bool m_showOmniImGui = false;
+
+    /*
+    * @brief .
+    */
+    float m_size;
 
     /*
     * @brief .
@@ -124,9 +207,20 @@ namespace gaEngineSDK {
     */
     uint32 m_height = 0;
 
+    /*
+    * @brief .
+    */
     String m_text;
 
-    float m_size;
+    /*
+    * @brief .
+    */
+    String m_omniFolderPath;
+
+    /*
+    * @brief .
+    */
+    String m_omniStageName;
   };
 
   /***************************************************************************/

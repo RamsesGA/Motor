@@ -29,7 +29,7 @@ namespace gaEngineSDK {
 
   class GraphicsApiDX final : public GraphicsApi
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
@@ -351,7 +351,7 @@ namespace gaEngineSDK {
     void*
     getDeviceContext() override;
 
-   private:
+  private:
     /*************************************************************************/
     /**
     * Members.

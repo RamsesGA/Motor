@@ -43,8 +43,11 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    void
+    SPtr<SceneNode>
     createNewActor(WeakSPtr<Actor> actor, WeakSPtr<SceneNode> parent);
+
+    void
+    clearSceneGraph();
 
     /*************************************************************************/
     /**

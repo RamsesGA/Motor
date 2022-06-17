@@ -1,9 +1,11 @@
 #pragma once
 
+#include "gaPrerequisitesCore.h"
+
 namespace gaEngineSDK {
   class ComputeShader
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor.

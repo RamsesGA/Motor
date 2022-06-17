@@ -8,7 +8,7 @@
 namespace gaEngineSDK {
   class ShadersDX final : public Shaders
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
@@ -16,9 +16,14 @@ namespace gaEngineSDK {
     /*************************************************************************/
     ShadersDX() = default;
 
-    ~ShadersDX() = default;
+    ~ShadersDX() {
+      SAFE_RELEASE(m_pVertexShader);
+      SAFE_RELEASE(m_pVSBlob);
+      SAFE_RELEASE(m_pPixelShader);
+      SAFE_RELEASE(m_pPSBlob);
+    };
 
-   protected:
+  protected:
     /*************************************************************************/
     /**
     * Members.

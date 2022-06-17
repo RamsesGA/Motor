@@ -1,9 +1,11 @@
 #pragma once
 
+#include "gaPrerequisitesCore.h"
+
 namespace gaEngineSDK {
   class VertexBuffer
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor.

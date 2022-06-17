@@ -5,7 +5,7 @@
 namespace gaEngineSDK {
   class PixelShader
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
@@ -14,6 +14,6 @@ namespace gaEngineSDK {
     PixelShader() = default;
 
     virtual
-    ~PixelShader() {};
+    ~PixelShader() = default;
   };
 }

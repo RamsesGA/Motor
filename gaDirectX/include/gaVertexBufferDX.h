@@ -5,7 +5,7 @@
 namespace gaEngineSDK {
   class VertexBufferDX final : public VertexBuffer
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
@@ -13,9 +13,11 @@ namespace gaEngineSDK {
     /*************************************************************************/
     VertexBufferDX() = default;
 
-    ~VertexBufferDX() = default;
+    ~VertexBufferDX() {
+      SAFE_RELEASE(m_pVertexBuffer);
+    };
 
-   protected:
+  protected:
     /*************************************************************************/
     /**
     * Members.

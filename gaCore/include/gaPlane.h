@@ -1,4 +1,5 @@
 #pragma once
+#pragma warning( disable: 4251 )
 
 #include <gaVector3.h>
 #include <gaVector4.h>

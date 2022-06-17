@@ -6,7 +6,7 @@
 namespace gaEngineSDK {
   class ConstantBufferDX final : public ConstantBuffer
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
@@ -14,10 +14,11 @@ namespace gaEngineSDK {
     /*************************************************************************/
     ConstantBufferDX() = default;
 
-    virtual
-    ~ConstantBufferDX() = default;
+    ~ConstantBufferDX() {
+      SAFE_RELEASE(m_pConstantBuffer);
+    }
 
-   protected:
+  protected:
     /*************************************************************************/
     /**
     * Members

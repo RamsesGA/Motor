@@ -1,4 +1,5 @@
 #pragma once
+#pragma warning( disable: 4251 )
 
 #include "gaPrerequisitesCore.h"
 
@@ -7,7 +8,7 @@ namespace gaEngineSDK {
 
   class GA_CORE_EXPORT Component
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
@@ -29,7 +30,9 @@ namespace gaEngineSDK {
     * @param deltaTime, time elapsed since the last frame.
     */
     virtual void
-    update(const float& deltaTime) { };
+    update(const float& deltaTime) {
+      GA_UNREFERENCED_PARAMETER(deltaTime);
+    };
 
     /*
     * @brief Component information rendering.
@@ -37,6 +40,6 @@ namespace gaEngineSDK {
     virtual void
     render() { };
 
-    SPtr<Actor> m_pMyActor;
+    WeakSPtr<Actor> m_pMyActor;
   };
 }

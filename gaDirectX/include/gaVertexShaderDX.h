@@ -6,7 +6,7 @@
 namespace gaEngineSDK {
   class VertexShaderDX final : public VertexShader
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
@@ -14,9 +14,12 @@ namespace gaEngineSDK {
     /*************************************************************************/
     VertexShaderDX() = default;
 
-    ~VertexShaderDX() = default;
+    ~VertexShaderDX() {
+      SAFE_RELEASE(m_pVertexShader);
+      SAFE_RELEASE(m_pVSBlob);
+    };
 
-   protected:
+  protected:
     /*************************************************************************/
     /**
     * Members.

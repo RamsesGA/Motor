@@ -1,4 +1,5 @@
 #pragma once
+#pragma warning( disable: 4251 )
 
 #include <gaTransform.h>
 
@@ -9,24 +10,31 @@ namespace gaEngineSDK {
   using std::dynamic_pointer_cast;
   using std::make_shared;
 
-  class GA_CORE_EXPORT Actor
+  class GA_CORE_EXPORT Actor : public std::enable_shared_from_this<Actor>
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
     */
     /*************************************************************************/
-    
-    Actor(String actorName);
-    
-    ~Actor() = default;
+
+    Actor() = default;
+
+    ~Actor() {
+      if (0 != m_vComponents.size()) {
+        m_vComponents.clear();
+      }
+    }
     
     /*************************************************************************/
     /**
     * Methods.
     */
     /*************************************************************************/
+
+    void
+    init(String actorName);
     
     void
     removeComponent();
@@ -82,7 +90,7 @@ namespace gaEngineSDK {
     void
     setComponent(WeakSPtr<Component> compoInfo);
     
-   protected:
+  protected:
     /*************************************************************************/
     /**
     * Members.
@@ -92,7 +100,7 @@ namespace gaEngineSDK {
     /*
     * @brief Bool to indicate if the actor is selected.
     */
-    bool m_isSelected = false;
+    bool m_isSelected;
 
     /*
     * @brief String with the actor's name.

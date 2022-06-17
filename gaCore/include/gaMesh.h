@@ -1,4 +1,5 @@
 #pragma once
+#pragma warning( disable: 4251 )
 
 #include <gaQuaternions.h>
 
@@ -38,7 +39,7 @@ namespace gaEngineSDK {
     /*************************************************************************/
     Mesh() = default;
 
-    ~Mesh() = default;
+    ~Mesh();
 
     /*************************************************************************/
     /*

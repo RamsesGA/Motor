@@ -29,8 +29,8 @@ namespace gaEngineSDK {
       uint32 meshNum = 0;
 
       for (auto& mesh : m_pModel->m_vMeshes) {
-        mesh.m_cbModelData = &m_pModel->m_vModelData[meshNum];
-        mesh.animated(m_timeOfAnimation, currentAnimation, m_pModel->m_animInfo.m_pStrModelNodes);
+        mesh->m_cbModelData = &m_pModel->m_vModelData[meshNum];
+        mesh->animated(m_timeOfAnimation, currentAnimation, m_pModel->m_animInfo.m_pStrModelNodes);
         ++meshNum;
       }
     }
@@ -43,11 +43,11 @@ namespace gaEngineSDK {
     uint32 meshNum = 0;
 
     for (auto& mesh : m_pModel->m_vMeshes) {
-      auto temp = m_pMyActor->getComponent<Transform>();
+      auto tempTransform = m_pMyActor.lock()->getComponent<Transform>();
       
       //Setting the transform information for models.
-      if (nullptr != temp) {
-        auto transform = myGraphicApi->matrixPolicy(temp->getTransform());
+      if (nullptr != tempTransform) {
+        auto transform = myGraphicApi->matrixPolicy(tempTransform->getTransform());
 
         if (0 != m_pModel->m_vModelData.size()) {
           m_pModel->m_vModelData[meshNum].modelMatrix = transform;
@@ -59,14 +59,14 @@ namespace gaEngineSDK {
                                            myGraphicApi->getConstBufferBones());
       }
 
-      if (!(m_pModel->m_vMeshes[meshNum].m_vTextures.empty())) {
-        myGraphicApi->setShaderResourceView(m_pModel->m_vMeshes[meshNum].m_vTextures, 0, 1);
+      if (!(m_pModel->m_vMeshes[meshNum]->m_vTextures.empty())) {
+        myGraphicApi->setShaderResourceView(m_pModel->m_vMeshes[meshNum]->m_vTextures, 0, 1);
       }
 
-      myGraphicApi->setVertexBuffer(mesh.m_pVertexBuffer);
-      myGraphicApi->setIndexBuffer(mesh.m_pIndexBuffer);
+      myGraphicApi->setVertexBuffer(mesh->m_pVertexBuffer);
+      myGraphicApi->setIndexBuffer(mesh->m_pIndexBuffer);
 
-      myGraphicApi->drawIndex(mesh.getNumIndices());
+      myGraphicApi->drawIndex(mesh->getNumIndices());
       ++meshNum;
     }
   }

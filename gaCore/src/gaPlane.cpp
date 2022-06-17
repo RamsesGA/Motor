@@ -7,7 +7,7 @@ namespace gaEngineSDK {
   Plane::createSAQ() {
     auto myGraphicsApi = g_graphicApi().instancePtr();
     Models* newModel = new Models();
-    Mesh* newMesh = new Mesh();
+    SPtr<Mesh> newMesh = std::make_shared<Mesh>();
 
     Vertex* meshVertex = new Vertex[4];
     meshVertex[0].position = { -1.0f, -1.0f, 0.0f, 1.0f };
@@ -45,7 +45,7 @@ namespace gaEngineSDK {
     SPtr<IndexBuffer> tempIB(myGraphicsApi->createIndexBuffer(meshIndex, sizeof(uint32) * 6));
     newMesh->setIndexBuffer(tempIB);
 
-    newModel->addNewMesh(*newMesh);
+    newModel->addNewMesh(newMesh);
     m_SAQ.reset(newModel);
   }
 
@@ -54,8 +54,8 @@ namespace gaEngineSDK {
     auto myGraphicsApi = g_graphicApi().instancePtr();
     auto mesh = m_SAQ->getMesh(0);
 
-    myGraphicsApi->setVertexBuffer(mesh.getVertexBuffer());
-    myGraphicsApi->setIndexBuffer(mesh.getIndexBuffer());
+    myGraphicsApi->setVertexBuffer(mesh->getVertexBuffer());
+    myGraphicsApi->setIndexBuffer(mesh->getIndexBuffer());
     myGraphicsApi->drawIndex(6);
   }
 }

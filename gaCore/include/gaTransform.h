@@ -20,7 +20,7 @@ namespace gaEngineSDK {
     
     Transform(const Quaternions& rotation, const Vector3& position, const Vector3& scale);
     
-    ~Transform() = default;
+    ~Transform() {};
 
     /*************************************************************************/
     /**

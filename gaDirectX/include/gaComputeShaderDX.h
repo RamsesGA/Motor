@@ -17,7 +17,10 @@ namespace gaEngineSDK {
     /*************************************************************************/
     ComputeShaderDX() = default;
 
-    ~ComputeShaderDX() = default;
+    ~ComputeShaderDX() {
+      SAFE_RELEASE(m_pComputeShaderDX);
+      SAFE_RELEASE(m_pBlob);
+    };
 
     /*************************************************************************/
     /**

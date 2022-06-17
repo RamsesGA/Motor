@@ -164,6 +164,7 @@ namespace gaEngineSDK {
   
   bool
   Degrees::operator<(const float& f) const {
+    f;
     return false;
   }
   

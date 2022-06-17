@@ -7,7 +7,7 @@
 namespace gaEngineSDK {
   class TexturesDX final : public Textures
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
@@ -15,7 +15,25 @@ namespace gaEngineSDK {
     /*************************************************************************/
     TexturesDX() = default;
 
-    ~TexturesDX() = default;
+    ~TexturesDX() {
+      SAFE_RELEASE(m_pTexture);
+      SAFE_RELEASE(m_pDepthStencilView);
+      SAFE_RELEASE(m_pDepthStencilState);
+      SAFE_RELEASE(m_pUAV);
+
+      if (0 != m_vShaderResourceView.size()) {
+        uint32 tempSize = m_vShaderResourceView.size();
+        for (uint32 i = 0; i < tempSize; ++i) {
+          SAFE_RELEASE(m_vShaderResourceView[i]);
+        }
+      }
+      if (0 != m_vRenderTargetView.size()) {
+        uint32 tempSize = m_vRenderTargetView.size();
+        for (uint32 i = 0; i < tempSize; ++i) {
+          SAFE_RELEASE(m_vRenderTargetView[i]);
+        }
+      }
+    };
 
     /*************************************************************************/
     /**
@@ -27,14 +45,14 @@ namespace gaEngineSDK {
     * @brief Return the shader resource view.
     */
     void*
-      getTexture(uint32 index = 0) override {
+    getTexture(uint32 index = 0) override {
       if ((index >= m_vShaderResourceView.size()) || (0 > index)) {
         return m_vShaderResourceView[0];
       }
       return m_vShaderResourceView[index];
     };
 
-   protected:
+  protected:
     /*************************************************************************/
     /**
     * Members.

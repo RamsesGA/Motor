@@ -123,7 +123,8 @@ namespace gaEngineSDK {
     */
     virtual void
     swapChainPresent(uint32 syncInterval = 0, uint32 flags = 0) {
-      GA_UNREFERENCED_PARAMETER(syncInterval); GA_UNREFERENCED_PARAMETER(flags);
+      GA_UNREFERENCED_PARAMETER(syncInterval); 
+      GA_UNREFERENCED_PARAMETER(flags);
     };
 
     /**
@@ -188,7 +189,9 @@ namespace gaEngineSDK {
     desbindRT() {};
 
     virtual void
-    desbindSRV(uint32 startSlot = 0) {};
+    desbindSRV(uint32 startSlot = 0) {
+      GA_UNREFERENCED_PARAMETER(startSlot);
+    };
 
     /*************************************************************************/
     /**
@@ -204,12 +207,14 @@ namespace gaEngineSDK {
     */
     virtual void
     updateConstantBuffer(const void* srcData, WeakSPtr<ConstantBuffer> updateDataCB) {
-      GA_UNREFERENCED_PARAMETER(srcData); GA_UNREFERENCED_PARAMETER(updateDataCB);
+      GA_UNREFERENCED_PARAMETER(srcData); 
+      GA_UNREFERENCED_PARAMETER(updateDataCB);
     };
 
     virtual void
     updateComputeBuffer(const void* srcData, WeakSPtr<ComputeBuffer> computeBuffer) {
-      GA_UNREFERENCED_PARAMETER(srcData); GA_UNREFERENCED_PARAMETER(computeBuffer);
+      GA_UNREFERENCED_PARAMETER(srcData); 
+      GA_UNREFERENCED_PARAMETER(computeBuffer);
     };
 
     /*************************************************************************/
@@ -225,12 +230,14 @@ namespace gaEngineSDK {
     */
     virtual void
     clearYourRenderTargetView(WeakSPtr<Textures> renderTarget, Vector4 rgba) {
-      GA_UNREFERENCED_PARAMETER(renderTarget); GA_UNREFERENCED_PARAMETER(rgba);
+      GA_UNREFERENCED_PARAMETER(renderTarget); 
+      GA_UNREFERENCED_PARAMETER(rgba);
     };
 
     virtual void
     clearYourRenderTarget(WeakSPtr<RenderTarget> renderTarget, Vector4 rgba) {
-      GA_UNREFERENCED_PARAMETER(renderTarget); GA_UNREFERENCED_PARAMETER(rgba);
+      GA_UNREFERENCED_PARAMETER(renderTarget); 
+      GA_UNREFERENCED_PARAMETER(rgba);
     };
 
     /**
@@ -298,7 +305,8 @@ namespace gaEngineSDK {
                              const char* shaderVersion) {
       GA_UNREFERENCED_PARAMETER(vertexFilePath);
       GA_UNREFERENCED_PARAMETER(vertexMainFuntion);
-      GA_UNREFERENCED_PARAMETER(shaderVersion); return nullptr;
+      GA_UNREFERENCED_PARAMETER(shaderVersion); 
+      return nullptr;
     };
 
     /**
@@ -324,7 +332,9 @@ namespace gaEngineSDK {
     */
     virtual VertexBuffer*
     createVertexBuffer(const void* data, const uint32 size) {
-      GA_UNREFERENCED_PARAMETER(data); GA_UNREFERENCED_PARAMETER(size); return nullptr;
+      GA_UNREFERENCED_PARAMETER(data); 
+      GA_UNREFERENCED_PARAMETER(size); 
+      return nullptr;
     };
 
     /**
@@ -335,7 +345,8 @@ namespace gaEngineSDK {
     */
     virtual IndexBuffer*
     createIndexBuffer(const void* data, const uint32 size) {
-      GA_UNREFERENCED_PARAMETER(data); GA_UNREFERENCED_PARAMETER(size);
+      GA_UNREFERENCED_PARAMETER(data);
+      GA_UNREFERENCED_PARAMETER(size);
       return nullptr;
     };
 
@@ -371,6 +382,7 @@ namespace gaEngineSDK {
                         TEXTURE_BIND_FLAGS::kBindUnorderedAccess, 
                         USAGE::E typeUsage = USAGE::kUsageDefault) {
       GA_UNREFERENCED_PARAMETER(bufferSize);
+      GA_UNREFERENCED_PARAMETER(numElements);
       GA_UNREFERENCED_PARAMETER(typeBindFlag);
       GA_UNREFERENCED_PARAMETER(typeUsage);
       return nullptr;
@@ -443,6 +455,7 @@ namespace gaEngineSDK {
       GA_UNREFERENCED_PARAMETER(scale);     
       GA_UNREFERENCED_PARAMETER(depth);
       GA_UNREFERENCED_PARAMETER(typeTexture);
+      GA_UNREFERENCED_PARAMETER(typeBindFlag);
       return nullptr;
     };
 
@@ -450,7 +463,9 @@ namespace gaEngineSDK {
     * @brief .
     */
     virtual void
-    createMipMaps(WeakSPtr<RenderTarget> renderTarg){ GA_UNREFERENCED_PARAMETER(renderTarg); };
+    createMipMaps(WeakSPtr<RenderTarget> renderTarg){ 
+      GA_UNREFERENCED_PARAMETER(renderTarg); 
+    };
 
     /*************************************************************************/
     /**
@@ -600,7 +615,8 @@ namespace gaEngineSDK {
     */
     virtual void
     setRenderTarget(WeakSPtr<Textures> renderTarget, WeakSPtr<Textures> depthStencil) {
-      GA_UNREFERENCED_PARAMETER(renderTarget); GA_UNREFERENCED_PARAMETER(depthStencil);
+      GA_UNREFERENCED_PARAMETER(renderTarget); 
+      GA_UNREFERENCED_PARAMETER(depthStencil);
     };
 
     virtual void
@@ -631,7 +647,8 @@ namespace gaEngineSDK {
     */
     virtual void
     setDepthStencil(WeakSPtr<Textures> depthStencil, const uint32 stencilRef) {
-      GA_UNREFERENCED_PARAMETER(depthStencil); GA_UNREFERENCED_PARAMETER(stencilRef);
+      GA_UNREFERENCED_PARAMETER(depthStencil); 
+      GA_UNREFERENCED_PARAMETER(stencilRef);
     };
 
     /**
@@ -670,7 +687,9 @@ namespace gaEngineSDK {
     * @param .
     */
     virtual void
-    setYourVS(WeakSPtr<Shaders> vertexShader) { GA_UNREFERENCED_PARAMETER(vertexShader); };
+    setYourVS(WeakSPtr<Shaders> vertexShader) { 
+      GA_UNREFERENCED_PARAMETER(vertexShader); 
+    };
 
     /**
     * @brief Function to call VSSetConstantBuffers.
@@ -692,7 +711,9 @@ namespace gaEngineSDK {
     * @param .
     */
     virtual void
-    setYourPS(WeakSPtr<Shaders> pixelShader) { GA_UNREFERENCED_PARAMETER(pixelShader); };
+    setYourPS(WeakSPtr<Shaders> pixelShader) { 
+      GA_UNREFERENCED_PARAMETER(pixelShader); 
+    };
 
     /**
     * @brief Function to call PSSetConstantBuffers.
@@ -716,8 +737,9 @@ namespace gaEngineSDK {
     * @param .
     */
     virtual void
-    setYourPSSampler(WeakSPtr<SamplerState> sampler, const uint32 startSlot,
-      const uint32 numSamplers) {
+    setYourPSSampler(WeakSPtr<SamplerState> sampler, 
+                     const uint32 startSlot,
+                     const uint32 numSamplers) {
       GA_UNREFERENCED_PARAMETER(sampler);
       GA_UNREFERENCED_PARAMETER(startSlot);
       GA_UNREFERENCED_PARAMETER(numSamplers);
@@ -728,7 +750,9 @@ namespace gaEngineSDK {
     * @param .
     */
     virtual void
-    setShaders(WeakSPtr<Shaders> shaders) { GA_UNREFERENCED_PARAMETER(shaders); };
+    setShaders(WeakSPtr<Shaders> shaders) {
+      GA_UNREFERENCED_PARAMETER(shaders); 
+    };
 
     /**
     * @brief Function to set constant buffer for bones.

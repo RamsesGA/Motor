@@ -6,7 +6,7 @@
 namespace gaEngineSDK {
   class RenderTargetDX final : public RenderTarget
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
@@ -14,7 +14,10 @@ namespace gaEngineSDK {
     /*************************************************************************/
     RenderTargetDX() = default;
 
-    ~RenderTargetDX() = default;
+    ~RenderTargetDX() {
+      SAFE_RELEASE(m_pTextureDepthSV);
+      SAFE_RELEASE(m_pDepthStencilV);
+    };
 
     /*************************************************************************/
     /**
@@ -39,7 +42,7 @@ namespace gaEngineSDK {
       return m_pDepthStencilV;
     }
 
-   protected:
+  protected:
     /*************************************************************************/
     /**
     * Members.

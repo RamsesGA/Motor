@@ -21,7 +21,7 @@ namespace gaEngineSDK {
 
   class GA_CORE_EXPORT BaseRenderer : public Module<BaseRenderer>
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
@@ -50,13 +50,18 @@ namespace gaEngineSDK {
     * @brief .
     */
     virtual void
-    init(uint32 width, uint32 height) {};
+    init(uint32 width, uint32 height) {
+      GA_UNREFERENCED_PARAMETER(width);
+      GA_UNREFERENCED_PARAMETER(height);
+    };
 
     /*
     * @brief .
     */
     virtual void
-    update(const float& deltaTime) {};
+    update(const float& deltaTime) {
+      GA_UNREFERENCED_PARAMETER(deltaTime);
+    };
 
     /*
     * @brief .
@@ -86,7 +91,9 @@ namespace gaEngineSDK {
     * @brief .
     */
     virtual void
-    updateLocalLight(Lights* newLight) {};
+    updateLocalLight(Lights* newLight) {
+      GA_UNREFERENCED_PARAMETER(newLight);
+    };
   };
 
   /***************************************************************************/

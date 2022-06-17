@@ -6,7 +6,7 @@
 namespace gaEngineSDK {
   class IndexBufferDX final : public IndexBuffer
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
@@ -14,9 +14,11 @@ namespace gaEngineSDK {
     /*************************************************************************/
     IndexBufferDX() = default;
 
-    ~IndexBufferDX() = default;
+    ~IndexBufferDX() {
+      SAFE_RELEASE(m_pIndexBuffer);
+    };
 
-   protected:
+  protected:
     /*************************************************************************/
     /**
     * Members.

@@ -1,4 +1,5 @@
 #pragma once
+#pragma warning( disable: 4251 )
 
 #include "gaPrerequisitesCore.h"
 #include "gaResource.h"
@@ -35,18 +36,21 @@ namespace gaEngineSDK {
     loadFromFile(const String& file) override;
     
     void
-    loadFromFile(const String& file, TYPE_TEXTURES::E typeTexture) override { }
+    loadFromFile(const String& file, TYPE_TEXTURES::E typeTexture) override {
+      GA_UNREFERENCED_PARAMETER(file);
+      GA_UNREFERENCED_PARAMETER(typeTexture);
+    }
 
     void
-    addNewMesh(Mesh newMesh);
+    addNewMesh(WeakSPtr<Mesh> newMesh);
 
     void
-    addNewMesh(Vector<Mesh> vMeshes);
+    addNewMesh(Vector<WeakSPtr<Mesh>> vMeshes);
 
-    Mesh
+    SPtr<Mesh>
     createVertexData(Vertex* vertexInfo, uint32 numVertexes);
 
-    Mesh&
+    SPtr<Mesh>
     getMesh(uint32 index);
 
     uint32
@@ -56,6 +60,11 @@ namespace gaEngineSDK {
     * @brief .
     */
     Map<String, SPtr<Materials>> m_mMaterials;
+
+    /*
+    * @brief Member to store a string of Meshes.
+    */
+    Vector<SPtr<Mesh>> m_vMeshes;
 
    protected:
     /*
@@ -84,11 +93,6 @@ namespace gaEngineSDK {
     * @brief .
     */
     Vector<cbModelData> m_vModelData;
-
-    /*
-    * @brief Member to store a string of Meshes.
-    */
-    Vector<Mesh> m_vMeshes;
 
     /*
     * @brief .

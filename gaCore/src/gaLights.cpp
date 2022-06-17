@@ -34,7 +34,8 @@ namespace gaEngineSDK {
 
   void
   Lights::update(const float& deltaTime) {
-    auto transform = m_pMyActor->getComponent<Transform>();
+    deltaTime;
+    auto transform = m_pMyActor.lock()->getComponent<Transform>();
 
     Vector3 eye = transform->getPosition();
     Vector3 lookAt = transform->getLookAt();

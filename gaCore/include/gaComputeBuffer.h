@@ -1,15 +1,17 @@
 #pragma once
 
+#include "gaPrerequisitesCore.h"
+
 namespace gaEngineSDK {
   class ComputeBuffer
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
     */
     /*************************************************************************/
-     ComputeBuffer() = default;
+    ComputeBuffer() = default;
 
     virtual
     ~ComputeBuffer() = default;

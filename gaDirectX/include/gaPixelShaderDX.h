@@ -6,7 +6,7 @@
 namespace gaEngineSDK {
   class PixelShaderDX final : public PixelShader
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
@@ -14,9 +14,12 @@ namespace gaEngineSDK {
     /*************************************************************************/
     PixelShaderDX() = default;
 
-    ~PixelShaderDX() = default;
+    ~PixelShaderDX() {
+      SAFE_RELEASE(m_pPixelShader);
+      SAFE_RELEASE(m_pPSBlob);
+    };
 
-   protected:
+  protected:
     /*************************************************************************/
     /**
     * Members.

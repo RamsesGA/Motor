@@ -7,8 +7,9 @@ namespace gaEngineSDK {
   SceneGraph::SceneGraph() { 
     m_root.reset(new SceneNode());
 
-    SPtr<Actor> newActor;
-    newActor.reset(new Actor("Root actor"));
+    SPtr<Actor> newActor = make_shared<Actor>();
+
+    newActor->init("Root Actor");
 
     m_root->setActorNode(newActor);
   }
@@ -23,17 +24,36 @@ namespace gaEngineSDK {
     m_root->render();
   }
 
-  void
+  SPtr<SceneNode>
   SceneGraph::createNewActor(WeakSPtr<Actor> actor, WeakSPtr<SceneNode> parent) {
-    if (nullptr == parent.lock().get()) {
-      m_root->createNewActorNode(actor, m_root);
-      return;
+    //auto localParent = parent.lock();
+    //
+    //if (nullptr == localParent.get()) {
+    //  return m_root->createNewActorNode(actor, m_root);
+    //}
+    //
+    //return localParent->createNewActorNode(actor, localParent);
+
+    auto localParent = parent.lock();
+    if (nullptr == localParent) {
+      return m_root->createNewActorNode(actor, m_root);
     }
 
-    m_root->createNewActorNode(actor, parent);
+    return m_root->createNewActorNode(actor, localParent);
   }
 
-  SceneGraph& 
+  void 
+  SceneGraph::clearSceneGraph() {
+    m_root->clearSceneNodes();
+    
+    m_root->getChildNodes().clear();
+
+    /*
+    * generar una luz para mover
+    */
+  }
+
+  SceneGraph&
   g_sceneGraph() {
     return SceneGraph::instance();
   }

@@ -5,7 +5,7 @@
 namespace gaEngineSDK {
   class SamplerState
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
@@ -14,6 +14,6 @@ namespace gaEngineSDK {
     SamplerState() = default;
 
     virtual
-    ~SamplerState() {};
+    ~SamplerState() = default;
   };
 }

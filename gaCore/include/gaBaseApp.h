@@ -79,8 +79,8 @@ namespace gaEngineSDK {
     void
     handleWindowEvents(Event& windowEvent, const float& deltaTime);
 
-    void
-    omniverseTest();
+    //void
+    //omniverseTest();
 
     /*************************************************************************/
     /*
@@ -99,7 +99,9 @@ namespace gaEngineSDK {
     * @param deltaTime, time elapsed since the last frame.
     */
     virtual void
-    onUpdate(float deltaTime) { };
+    onUpdate(float deltaTime) {
+      GA_UNREFERENCED_PARAMETER(deltaTime);
+    };
 
     /*
     * @brief Save new data, update other and clean old data.
@@ -119,8 +121,6 @@ namespace gaEngineSDK {
     * Members.
     */
     /*************************************************************************/
-
-    bool m_initOmni = false;
 
     /*
     * @param Members with screen size.

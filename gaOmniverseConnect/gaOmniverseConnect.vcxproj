@@ -19,12 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\gaOmniConnect.h" />
+    <ClInclude Include="include\gaOmniverseConnect.h" />
     <ClInclude Include="include\gaPrerequisitesOmniConnect.h" />
-    <ClInclude Include="include\gaStdHeadersOmniverse.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\gaOmniConnect.cpp" />
+    <ClCompile Include="src\gaOmniverseConnect.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

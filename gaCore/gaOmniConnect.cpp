@@ -3,12 +3,17 @@
 #include "gaOmniConnect.h"
 
 namespace gaEngineSDK {
-  bool OmniConnect::m_omniverseLoggingEnabled = false;
   bool OmniConnect::m_isStartUp = false;
+  bool OmniConnect::m_omniverseLoggingEnabled = false;
+  bool OmniConnect::m_isLiveSync = false;
 
-  mutex OmniConnect::m_logMutex = mutex();
-  UsdStageRefPtr OmniConnect::m_stage = nullptr;
-  SdfPath OmniConnect::m_rootPrimPath = SdfPath();
+  bool OmniConnect::m_currentURL = "";
+
+  bool OmniConnect::m_logMutex = mutex();
+
+  bool OmniConnect::m_stage = nullptr;
+
+  bool OmniConnect::m_rootPrimPath = SdfPath();
 
   /***************************************************************************/
   /**
@@ -21,7 +26,7 @@ namespace gaEngineSDK {
     //Register a function to be called whenever 
     //the library wants to print something to a log
     omniClientSetLogCallback(logCallback);
-
+    
     //The default log level is "Info", set it to "Debug" to see all messages
     omniClientSetLogLevel(eOmniClientLogLevel_Debug);
 
@@ -41,6 +46,20 @@ namespace gaEngineSDK {
 
     m_isStartUp = true;
     return true;
+  }
+
+  void
+  OmniConnect::shutdownOmniverse() {
+    //Calling this prior to shutdown ensures that all pending live updates complete.
+    omniUsdLiveWaitForPendingUpdates();
+
+    //The stage is a sophisticated object that needs to be destroyed properly.
+    //Since m_stage is a smart pointer we can just reset it.
+    m_stage.Reset();
+
+    omniClientShutdown();
+
+    m_isStartUp = false;
   }
 
   String 
@@ -558,20 +577,6 @@ namespace gaEngineSDK {
     if (m_omniverseLoggingEnabled) {
       puts(message);
     }
-  }
-
-  void
-  OmniConnect::shutdownOmniverse() {
-    //Calling this prior to shutdown ensures that all pending live updates complete.
-    omniUsdLiveWaitForPendingUpdates();
-
-    //The stage is a sophisticated object that needs to be destroyed properly.
-    //Since m_stage is a smart pointer we can just reset it.
-    m_stage.Reset();
-
-    omniClientShutdown();
-
-    m_isStartUp = false;
   }
 
   bool 

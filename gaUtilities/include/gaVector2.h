@@ -1,4 +1,5 @@
 #pragma once
+#pragma warning( disable: 4201 )
 
 #include "gaPrerequisitesUtilities.h"
 #include "gaMath.h"

@@ -7,6 +7,7 @@
 #include <imgui_impl_win32.h>
 #include <gaBaseOmniConnect.h>
 #include <gaRenderTarget.h>
+#include <gaResourceManager.h>
 
 #include "gaInterface.h"
 
@@ -32,13 +33,23 @@ namespace gaEngineSDK {
     ImGui_ImplWin32_Init(m_windowsHandle);
     ImGui_ImplDX11_Init((ID3D11Device*)myGraphicsApi->getDevice(), 
                         (ID3D11DeviceContext*)myGraphicsApi->getDeviceContext());
-
     ImGui::StyleColorsDark();
 
-    io.Fonts->AddFontFromFileTTF("data/misc/fonts/CoD.otf", 16.0f);
+    //io.Fonts->AddFontFromFileTTF("data/misc/fonts/CoD.otf", 16.0f);
 
+    /*
+    */
     m_text.resize(500);
     m_size = 100.0f;
+    /*
+    */
+
+    /*
+    */
+    m_omniFolderPath.resize(400);
+    m_omniStageName.resize(400);
+    /*
+    */
 
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
   }
@@ -60,10 +71,11 @@ namespace gaEngineSDK {
     * I M G U I
     */
     //imguiDocking();
-    imguiFile();
+    imguiOptionsBar();
     imguiScenegraph();
     imguiModelsInfo();
     imguiCurrentFPS();
+    omniverseWindow();
 
     //Function to know decompressImages is working
     //descompressImages();
@@ -108,8 +120,8 @@ namespace gaEngineSDK {
 
     //Cycle for selected meshes
     for (uint32 i = 0; i < sizeMeshes; ++i) {
-      textureSize = tempStaticMesh->m_pModel->getMesh(i).m_vTextures.size();
-      auto texturesInfo = tempStaticMesh->m_pModel->getMesh(i).m_vTextures;
+      textureSize = tempStaticMesh->m_pModel->getMesh(i)->m_vTextures.size();
+      auto texturesInfo = tempStaticMesh->m_pModel->getMesh(i)->m_vTextures;
 
       if (0 != textureSize) {
         nameMesh = "Mesh - ";
@@ -122,7 +134,7 @@ namespace gaEngineSDK {
           nameTexture = texturesInfo.at(j)->m_textureName;
           ImGui::Text(nameTexture.c_str());
 
-          ImTextureID id = tempStaticMesh->m_pModel->getMesh(i).m_vTextures[j]->getTexture();
+          ImTextureID id = tempStaticMesh->m_pModel->getMesh(i)->m_vTextures[j]->getTexture();
           ImGui::Image(id, ImVec2(120, 120));
           ImGui::Separator();
         }
@@ -131,7 +143,7 @@ namespace gaEngineSDK {
     }
   }
 
-  void 
+  void
   Interface::transformInterface() {
     auto mySceneGraph = SceneGraph::instancePtr();
 
@@ -156,17 +168,15 @@ namespace gaEngineSDK {
     if ((position != transform->getPosition()) || 
         (rotation != transform->getEulerRotation()) || 
         (scale != transform->getScale())) {
+
       //Sets
       transform->setPosition(position);
       transform->setEulerRotation(rotation);
       transform->setScale(scale);
 
-      auto myInterface = g_baseInterface().instancePtr();
-
-      if (myInterface->m_isRunningOmniverse) {
-        auto myOmniverse = g_baseOmniConnect().instancePtr();
-
-        myOmniverse->updateGaToOmniverse();
+      auto myOmniverse = g_baseOmniConnect().instancePtr();
+      if (myOmniverse->getIsLiveSync()) {
+        myOmniverse->updateGaToOmni();
       }
     }
   }
@@ -219,6 +229,24 @@ namespace gaEngineSDK {
     io.AddInputCharacterUTF16((USHORT)unicode);
   }
 
+  void 
+  Interface::onKeyPressed(bool alt, bool ctrl, bool shift, bool sys, int32 code) {
+    ImGuiIO& io = ImGui::GetIO();
+
+    if (code >= 0) {
+      io.KeysDown[static_cast<int32>(code)] = true;
+    }
+  }
+
+  void 
+  Interface::onKeyReleased(bool alt, bool ctrl, bool shift, bool sys, int32 code) {
+    ImGuiIO& io = ImGui::GetIO();
+
+    if (code >= 0) {
+      io.KeysDown[static_cast<int32>(code)] = false;
+    }
+  }
+
   /***************************************************************************/
   /**
   * Methods for ImGui.
@@ -228,105 +256,14 @@ namespace gaEngineSDK {
   void
   Interface::imguiDocking() {
     ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
-    /*
-    static bool opt_fullscreen = true;
-    static bool opt_padding = false;
-    static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
-    
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | 
-                                    ImGuiWindowFlags_NoDocking;
-
-    if (opt_fullscreen) {
-      const ImGuiViewport* viewport = ImGui::GetMainViewport();
-
-      ImGui::SetNextWindowPos(viewport->WorkPos);
-      ImGui::SetNextWindowSize(viewport->WorkSize);
-      ImGui::SetNextWindowViewport(viewport->ID);
-      ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-      ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-
-      window_flags |= ImGuiWindowFlags_NoTitleBar | 
-                      ImGuiWindowFlags_NoCollapse | 
-                      ImGuiWindowFlags_NoResize | 
-                      ImGuiWindowFlags_NoMove;
-
-      window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus |
-                      ImGuiWindowFlags_NoNavFocus;
-    }
-    else {
-      dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
-    }
-
-    if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) {
-      window_flags |= ImGuiWindowFlags_NoBackground;
-    }
-
-    if (!opt_padding) {
-      ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-    }
-
-    static bool show_app_dockspace = true;
-    bool* isOpen = &show_app_dockspace;
-    ImGui::Begin("DockSpace Demo", isOpen, window_flags);
-
-    if (!opt_padding) {
-      ImGui::PopStyleVar();
-    }
-    if (opt_fullscreen) {
-      ImGui::PopStyleVar(2);
-    }
-
-    ImGuiIO& io = ImGui::GetIO();
-    if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
-      ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-
-      ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-    }
-    else {
-      showDockingDisabledMessage();
-    }
-
-    if (ImGui::BeginMenuBar()) {
-      if (ImGui::BeginMenu("Options")) {
-        ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
-        ImGui::MenuItem("Padding", NULL, &opt_padding);
-        ImGui::Separator();
-
-        if (ImGui::MenuItem("Flag: NoSplit", "", (dockspace_flags & ImGuiDockNodeFlags_NoSplit) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoSplit; }
-        if (ImGui::MenuItem("Flag: NoResize", "", (dockspace_flags & ImGuiDockNodeFlags_NoResize) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoResize; }
-        if (ImGui::MenuItem("Flag: NoDockingInCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_NoDockingInCentralNode) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoDockingInCentralNode; }
-        if (ImGui::MenuItem("Flag: AutoHideTabBar", "", (dockspace_flags & ImGuiDockNodeFlags_AutoHideTabBar) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_AutoHideTabBar; }
-        if (ImGui::MenuItem("Flag: PassthruCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0, opt_fullscreen)) { dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode; }
-        ImGui::Separator();
-
-        if (ImGui::MenuItem("Close", NULL, false, isOpen != NULL)) {
-          *isOpen = false;
-        }
-        ImGui::EndMenu();
-      }
-
-      helpMarker(
-        "When docking is enabled, you can ALWAYS dock MOST window into another! Try it now!" "\n"
-        "- Drag from window title bar or their tab to dock/undock." "\n"
-        "- Drag from window menu button (upper-left button) to undock an entire node (all windows)." "\n"
-        "- Hold SHIFT to disable docking (if io.ConfigDockingWithShift == false, default)" "\n"
-        "- Hold SHIFT to enable docking (if io.ConfigDockingWithShift == true)" "\n"
-        "This demo app has nothing to do with enabling docking!" "\n\n"
-        "This demo app only demonstrate the use of ImGui::DockSpace() which allows you to manually create a docking node _within_ another window." "\n\n"
-        "Read comments in ShowExampleAppDockSpace() for more details.");
-
-      ImGui::EndMenuBar();
-    }
-
-    ImGui::End();
-    */
   }
 
   void
-  Interface::imguiFile() {
+  Interface::imguiOptionsBar() {
     if (ImGui::BeginMainMenuBar()) {
       if (ImGui::BeginMenu("File")) {
         if (ImGui::MenuItem("New", "CTRL+N")) {
+
         }
         if (ImGui::MenuItem("Open", "CTRL+O")) {
         }
@@ -342,17 +279,33 @@ namespace gaEngineSDK {
         ImGui::EndMenu();
       }
       if (ImGui::BeginMenu("Edit")) {
-        if (ImGui::MenuItem("Cut", "CTRL+X")) {
-
+        if (ImGui::MenuItem("Reset Scene graph")) {
+          auto mySceneGraph = SceneGraph::instancePtr();
+          mySceneGraph->clearSceneGraph();
         }
-        if (ImGui::MenuItem("Copy", "CTRL+C")) {
-
+        if (ImGui::MenuItem("Open POD")) {
+          createNodePod();
         }
-        if (ImGui::MenuItem("Paste", "CTRL+V")) {
-
+        if (ImGui::MenuItem("Open Vela")) {
+          createNodeVela();
         }
-        if (ImGui::MenuItem("Delete", "DEL")) {
-
+        if (ImGui::MenuItem("Open 2B")) {
+          createNode2B();
+        }
+        if (ImGui::MenuItem("Open Knuckles")) {
+          createNodeKnucles();
+        }
+        if (ImGui::MenuItem("Open Grimoires")) {
+          createNodeGrimoires();
+        }
+        if (ImGui::MenuItem("Open Ramlethal's swords")) {
+          createNodeRamlethalSwords();
+        }
+        if (ImGui::MenuItem("Open Exo stranger")) {
+          createNodeStranger();
+        }
+        if (ImGui::MenuItem("Open Plane")) {
+          createNodePlane();
         }
         ImGui::EndMenu();
       }
@@ -363,15 +316,35 @@ namespace gaEngineSDK {
         ImGui::EndMenu();
       }
       if (ImGui::BeginMenu("Omniverse")) {
-        if (ImGui::MenuItem("Start Omniverse")) {
-          m_startOmniverse = true;
+        auto myOmniverse = g_baseOmniConnect().instancePtr();
+
+        if (!(myOmniverse->getIsStartUp())) {
+          if (ImGui::Button("Start Omniverse")) {
+            if (!(myOmniverse->startOmni())) {
+              cout << "\nError, can not start Omniverse\n";
+            }
+
+            cout << "\nOmniverse Started\n";
+            m_showOmniImGui = true;
+          }
         }
-        if (ImGui::MenuItem("Stop Omniverse")) {
-          m_isRunningOmniverse = false;
+        else {
+          if (ImGui::Button("Stop Omniverse")) {
+            cout << "\n\nOmniverse stopped\n\n";
+            myOmniverse->shutdownOmni();
+            m_showOmniImGui = false;
+          }
+
+          ImGui::Checkbox("Show Omniverse Window", &m_showOmniImGui);
         }
-        if (ImGui::MenuItem("Open USD")) {
-          openFiles();
-        }
+        ImGui::Separator();
+
+        bool isOmniLog = myOmniverse->getOmniverseLogging();
+
+        ImGui::Checkbox("Active Log (Debug)", &isOmniLog);
+
+        myOmniverse->setOmniverseLog(isOmniLog);
+
         ImGui::EndMenu();
       }
 
@@ -383,7 +356,8 @@ namespace gaEngineSDK {
   Interface::imguiScenegraph() {
     auto mySceneGraph = SceneGraph::instancePtr();
 
-    ImGuiTreeNodeFlags myFlags = ImGuiWindowFlags_AlwaysVerticalScrollbar;
+    ImGuiTreeNodeFlags myFlags = ImGuiWindowFlags_AlwaysVerticalScrollbar | 
+                                 ImGuiWindowFlags_NoResize;
 
     if (ImGui::Begin("Scene graph", nullptr, myFlags)) {
       textColoredCentered("-Scene graph-", Vector3(255.0f, 165.0f, 0.0f));
@@ -522,12 +496,324 @@ namespace gaEngineSDK {
   }
 
   void 
-  Interface::openFiles() {
+  Interface::omniverseWindow() {
+    if (!(m_showOmniImGui)) {
+      return;
+    }
+
     auto myOmniverse = g_baseOmniConnect().instancePtr();
 
-    //myOmniverse->loadUSDFiles("http://localhost:8080/omniverse://26.134.3.202/Users/testtestFoder/test.usd");
-    myOmniverse->loadUSDFiles("http://localhost:8080/omniverse://127.0.0.1/Users/gaEngine/test.usd");
+    if (ImGui::Begin("Omniverse", &m_showOmniImGui)) {
+      ImGui::InputText("Folder Path", m_omniFolderPath.data(), 400);
+      ImGui::InputText("Stage Name", m_omniStageName.data(), 400);
+      
+      if (ImGui::Button("Default local path")) {
+        m_omniFolderPath = "http://localhost:8080/omniverse://127.0.0.1/Users/";
+        m_omniFolderPath.resize(400);
+      }
+      ImGui::Separator();
+
+      if (ImGui::Button("Create Stage (Sub meshes)")) {
+        const String stageUrl = myOmniverse->createOmniScene(m_omniFolderPath,
+                                                             m_omniStageName);
+        if (stageUrl.empty()) {
+          cout << "\nError, can not create Omniverse scene\n";
+        }
+        else {
+          //Print the username for the server
+          myOmniverse->connectedUsername(m_omniFolderPath + m_omniStageName);
+
+          myOmniverse->saveSGToUSD();
+        }
+      }
+      //ImGui::SameLine();
+      //if (ImGui::Button("Create Stage (Meshes)")) {
+      //  const String stageUrl = myOmniverse->createOmniScene(m_omniFolderPath,
+      //                                                       m_omniStageName);
+      //  if (stageUrl.empty()) {
+      //    cout << "\nError, can not create Omniverse scene\n";
+      //  }
+      //  else {
+      //    //Print the username for the server
+      //    myOmniverse->connectedUsername(m_omniFolderPath + m_omniStageName);
+      //  
+      //    myOmniverse->saveSGToUSD();
+      //  }
+      //}
+
+      ImGui::Separator();
+      if (ImGui::Button("Open Stage")) {
+        if (!(myOmniverse->openUSD(m_omniFolderPath, m_omniStageName))) {
+          cout << "\nError, can not open the USD\n";
+        }
+      }
+      ImGui::SameLine();
+      if (ImGui::Button("Get Scene")) {
+        myOmniverse->loadUSD();
+      }
+      ImGui::Separator();
+
+      /*
+      */
+      bool tempLiveSync = myOmniverse->getIsLiveSync();
+      bool isOmniLog = myOmniverse->getOmniverseLogging();
+
+      ImGui::Checkbox("Active Live Sync", &tempLiveSync);
+      ImGui::Checkbox("Active Log (Debug)", &isOmniLog);
+
+
+      myOmniverse->setIsLiveSync(tempLiveSync);
+      myOmniverse->setOmniverseLog(isOmniLog);
+      /*
+      */
+
+      ImGui::End();
+    }
   }
+
+  void
+  Interface::createNodePod() {
+    auto mySceneGraph = SceneGraph::instancePtr();
+    auto myRSRCMG = ResourceManager::instancePtr();
+  
+    SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/pod/Pod.fbx");
+  
+    SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
+    myStaticMesh->m_pModel = myModel;
+  
+    //Creating the component
+    SPtr<Component> newComponent(myStaticMesh);
+  
+    //Creating actor
+    SPtr<Actor> actor = make_shared<Actor>();
+    actor->init("Pod");
+    actor->setIsSelected(true);
+    actor->setComponent(newComponent);
+  
+    //Adding the actor to node root
+    mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+  }
+  
+  void
+  Interface::createNodeVela() {
+    auto mySceneGraph = SceneGraph::instancePtr();
+    auto myRSRCMG = ResourceManager::instancePtr();
+  
+    SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/vela/Vela2.fbx");
+  
+    SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
+    myStaticMesh->m_pModel = myModel;
+  
+    //Creating the component
+    SPtr<Component> newComponent(myStaticMesh);
+  
+    //Creating actor
+    SPtr<Actor> actor = make_shared<Actor>();
+    actor->init("Vela");
+    actor->setIsSelected(true);
+    actor->setComponent(newComponent);
+  
+    //Adding the actor to node root
+    mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+  }
+  
+  void
+  Interface::createNode2B() {
+    auto mySceneGraph = SceneGraph::instancePtr();
+  
+    SPtr<Models> myModel = make_shared<Models>();
+    myModel->loadFromFile("data/models/2B/2B.obj");
+  
+    SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
+    myStaticMesh->m_pModel = myModel;
+  
+    //Creating the component
+    SPtr<Component> newComponent(myStaticMesh);
+  
+    //Creating actor
+    SPtr<Actor> actor = make_shared<Actor>();
+    actor->init("2B");
+    actor->setIsSelected(true);
+    actor->setComponent(newComponent);
+  
+    //Adding the actor to node root
+    mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+  }
+  
+  void
+  Interface::createNodeKnucles() {
+    auto mySceneGraph = SceneGraph::instancePtr();
+    auto myRSRCMG = ResourceManager::instancePtr();
+  
+    SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/ugandan/Knuckles.fbx");
+  
+    SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
+    myStaticMesh->m_pModel = myModel;
+  
+    //Creating the component
+    SPtr<Component> newComponent(myStaticMesh);
+  
+    //Creating actor
+    SPtr<Actor> actor = make_shared<Actor>();
+    actor->init("Ugandan");
+    actor->setIsSelected(true);
+    actor->setComponent(newComponent);
+  
+    //Adding the actor to node root
+    mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+  }
+  
+  void 
+  Interface::createNodeGrimoires() {
+    auto mySceneGraph = SceneGraph::instancePtr();
+    auto myRSRCMG = ResourceManager::instancePtr();
+  
+    SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/grimoires/grimoires.fbx");
+  
+    SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
+    myStaticMesh->m_pModel = myModel;
+  
+    //Creating the component
+    SPtr<Component> newComponent(myStaticMesh);
+  
+    //Creating actor
+    SPtr<Actor> actor = make_shared<Actor>();
+    actor->init("Grimoires");
+    actor->setIsSelected(true);
+    actor->setComponent(newComponent);
+  
+    //Adding the actor to node root
+    mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+  }
+  
+  void 
+  Interface::createNodeRamlethalSwords() {
+    auto mySceneGraph = SceneGraph::instancePtr();
+    auto myRSRCMG = ResourceManager::instancePtr();
+  
+    SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/ramlethal/Ramlethal Sword.fbx");
+  
+    /*
+    * M A T E R I A L
+    * Z O N E
+    */
+    Vector<Textures*> vTextures;
+    SPtr<Materials> myMaterial = myRSRCMG->load<Materials>
+                                           ("data/textures/ramlethal/RamuSword_albedo.png", 
+                                            TYPE_TEXTURES::kAlbedo);
+    vTextures.push_back(myMaterial->m_pTexture);
+  
+    myMaterial = myRSRCMG->load<Materials>("data/textures/ramlethal/RamuSword_metallic.png",
+                                           TYPE_TEXTURES::kMetallic);
+    vTextures.push_back(myMaterial->m_pTexture);
+  
+    myMaterial = myRSRCMG->load<Materials>("data/textures/ramlethal/RamuSword_roughness.png",
+                                           TYPE_TEXTURES::kRoughness);
+    vTextures.push_back(myMaterial->m_pTexture);
+  
+    myMaterial = myRSRCMG->load<Materials>("data/textures/ramlethal/RamuSword_normal.png",
+                                           TYPE_TEXTURES::kNormal);
+    vTextures.push_back(myMaterial->m_pTexture);
+  
+    myMaterial = myRSRCMG->load<Materials>("data/textures/ramlethal/RamuSword_emissive.png",
+                                           TYPE_TEXTURES::kEmissive);
+    vTextures.push_back(myMaterial->m_pTexture);
+  
+    myMaterial = myRSRCMG->load<Materials>("data/textures/ramlethal/RamuSword_ao.png",
+                                           TYPE_TEXTURES::kAO);
+    vTextures.push_back(myMaterial->m_pTexture);
+  
+    /*
+    * M A T E R I A L
+    * Z O N E
+    * T O
+    * M E S H E S
+    */
+    uint32 sizeMeshes = myModel->getSizeMeshes();
+    uint32 sizeTextures = vTextures.size();
+    for (uint32 i = 0; i < sizeMeshes; ++i) {
+      for (uint32 j = 0; j < sizeTextures; ++j) {
+  
+        uint32 sizeMeshTex = myModel->getMesh(i)->m_vTextures.size();
+        if (sizeTextures == sizeMeshTex) {
+          myModel->getMesh(i)->m_vTextures[j] = vTextures[j];
+        }
+      }
+    }
+  
+    /*
+    * Z O N E
+    */
+    SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
+    myStaticMesh->m_pModel = myModel;
+  
+    //Creating the component
+    SPtr<Component> newComponent(myStaticMesh);
+  
+    //Creating actor
+    SPtr<Actor> actor = make_shared<Actor>();
+    actor->init("Sword");
+    actor->setIsSelected(true);
+    actor->setComponent(newComponent);
+  
+    //Adding the actor to node root
+    mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+  }
+  
+  void
+  Interface::createNodeStranger() {
+    auto mySceneGraph = SceneGraph::instancePtr();
+    auto myRSRCMG = ResourceManager::instancePtr();
+  
+    SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/stranger/The Stranger.fbx");
+  
+    /*
+    * Z O N E
+    */
+    SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
+    myStaticMesh->m_pModel = myModel;
+  
+    //Creating the component
+    SPtr<Component> newComponent(myStaticMesh);
+  
+    //Creating actor
+    SPtr<Actor> actor = make_shared<Actor>();
+    actor->init("Stranger");
+    actor->setIsSelected(true);
+    actor->setComponent(newComponent);
+  
+    //Adding the actor to node root
+    mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+  }
+  
+  void
+  Interface::createNodePlane() {
+    auto mySceneGraph = SceneGraph::instancePtr();
+    auto myRSRCMG = ResourceManager::instancePtr();
+  
+    SPtr<Models> myModel = myRSRCMG->load<Models>("data/models/basicModels/plano.fbx");
+  
+    SPtr<StaticMesh> myStaticMesh = make_shared<StaticMesh>();
+    myStaticMesh->m_pModel = myModel;
+  
+    //Creating the component
+    SPtr<Component> newComponent(myStaticMesh);
+  
+    //Creating actor
+    SPtr<Actor> actor = make_shared<Actor>();
+    actor->init("Plane");
+    actor->setIsSelected(true);
+    actor->setComponent(newComponent);
+  
+    //Adding the actor to node root
+    mySceneGraph->createNewActor(actor, SPtr<SceneNode>(nullptr));
+  }
+
+  /*
+  * D O - N O T
+  * T O
+  * U S E
+  */
 
   bool isFirtsTime = true;
   Vector<SPtr<Textures>> vTextures;

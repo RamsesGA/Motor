@@ -29,11 +29,13 @@ namespace gaEngineSDK {
 
   void 
   Transform::update(const float& deltaTime) {
+    deltaTime;
     Matrix4x4 mTemp;
 
-    if (nullptr != m_pMyActor->m_pParent) {
-      auto myParent = m_pMyActor->m_pParent;
-      auto parentTransform = m_pMyActor->getComponent<Transform>();
+    auto tempActor = m_pMyActor.lock();
+    if (nullptr != tempActor->m_pParent) {
+      auto myParent = tempActor->m_pParent;
+      auto parentTransform = tempActor->getComponent<Transform>();
 
       mTemp = parentTransform->m_mTransform;
     }
@@ -119,6 +121,10 @@ namespace gaEngineSDK {
     m_rotation.x = x;
     m_rotation.y = y;
     m_rotation.z = z;
+
+    m_eulerRot.x = x;
+    m_eulerRot.y = y;
+    m_eulerRot.z = z;
   }
 
   void 

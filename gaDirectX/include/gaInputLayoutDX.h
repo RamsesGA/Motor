@@ -6,7 +6,7 @@
 namespace gaEngineSDK {
   class InputLayoutDX final : public InputLayout
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
@@ -14,9 +14,14 @@ namespace gaEngineSDK {
     /*************************************************************************/
     InputLayoutDX() = default;
 
-    ~InputLayoutDX() = default;
+    ~InputLayoutDX() {
+      if (0 != m_inputLayoutByteLength) {
+        m_inputLayoutByteLength = 0;
+      }
+      SAFE_RELEASE(m_pVertexLayout);
+    };
 
-   protected:
+  protected:
     /*************************************************************************/
     /**
     * Members.

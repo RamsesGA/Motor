@@ -134,10 +134,14 @@ namespace gaEngineSDK {
     /*************************************************************************/
     Textures() = default;
 
+    virtual
     ~Textures() = default;
 
     virtual void*
-    getTexture(uint32 index = 0) { return nullptr; };
+    getTexture(uint32 index = 0) {
+      GA_UNREFERENCED_PARAMETER(index);
+      return nullptr;
+    };
 
     /*************************************************************************/
     /*
@@ -146,10 +150,15 @@ namespace gaEngineSDK {
     /*************************************************************************/
 
     void
-    loadFromFile(const String& file) override { }
+    loadFromFile(const String& file) override {
+      GA_UNREFERENCED_PARAMETER(file);
+    }
     
     void
-    loadFromFile(const String& file, TYPE_TEXTURES::E typeTexture) override {  }   
+    loadFromFile(const String& file, TYPE_TEXTURES::E typeTexture) override {
+      GA_UNREFERENCED_PARAMETER(file);
+      GA_UNREFERENCED_PARAMETER(typeTexture);
+    }   
 
     /*
     * @brief .

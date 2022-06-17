@@ -3,8 +3,6 @@
 // Multi platform array size
 #define HW_ARRAY_COUNT(array) (sizeof(array) / sizeof(array[0]))
 
-#include <gaBaseOmniConnect.h>
-
 #include <OmniClient.h>
 #include <OmniUsdLive.h>
 
@@ -31,6 +29,7 @@
 #include <gaActor.h>
 #include <gaModels.h>
 #include <gaLights.h>
+#include <gaModule.h>
 #include <gaDegrees.h>
 #include <gaTransform.h>
 #include <gaStaticMesh.h>
@@ -38,7 +37,20 @@
 #include <gaQuaternions.h>
 #include <gaResourceManager.h>
 
-#include "gaPrerequisitesOmniConnect.h"
+#include "gaPrerequisitesCore.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#ifdef _WIN32
+  #include <filesystem>
+  #include <conio.h>
+#else
+  #include <experimental/filesystem>
+#endif
+
+#include <mutex>
+#include <condition_variable>
 
 PXR_NAMESPACE_USING_DIRECTIVE
 
@@ -90,7 +102,7 @@ using std::endl;
 using std::to_string;
 
 namespace gaEngineSDK {
-  class OmniConnect final : public BaseOmniConnect
+  class GA_CORE_EXPORT OmniConnect : public Module<OmniConnect>
   {
   public:
     /*************************************************************************/
@@ -109,38 +121,41 @@ namespace gaEngineSDK {
     */
     /*************************************************************************/
 
-    bool
-    startOmniverse() override;
+    static bool
+    startOmniverse();
 
-    String
-    createOmniverseScene(const String& destinationPath, const String& stageName) override;
+    static void
+    shutdownOmniverse();
 
-    void
-    createGeoMeshWithModel(WeakSPtr<Actor> model) override;
+    static String
+    createOmniverseScene(const String& destinationPath, const String& stageName);
 
-    bool
-    loadUSDFiles(const String& rute) override;
+    static void
+    createGeoMeshWithModel(WeakSPtr<Actor> model);
 
-    bool
-    openNewUSDFile(const String& rute) override;
+    static bool
+    loadUSDFiles(const String& rute);
 
-    void
-    printConnectedUsername(const String& stageUrl) override;
+    static bool
+    openNewUSDFile(const String& rute);
+
+    static void
+    printConnectedUsername(const String& stageUrl);
     
-    void
-    saveSceneGraphToUSD() override;
+    static void
+    saveSceneGraphToUSD();
 
-    void
-    saveObjectToUSD(WeakSPtr<SceneNode> child, String& name, String& parent) override;
+    static void
+    saveObjectToUSD(WeakSPtr<SceneNode> child, String& name, String& parent);
 
-    void
-    updateGaToOmniverse() override;
+    static void
+    updateGaToOmniverse();
 
-    void
-    updateOmniverseToGa() override;
+    static void
+    updateOmniverseToGa();
 
-    void
-    updateObjects(WeakSPtr<SceneNode> myNode) override;
+    static void
+    updateObjects(WeakSPtr<SceneNode> myNode);
 
     /*************************************************************************/
     /**
@@ -165,16 +180,10 @@ namespace gaEngineSDK {
     /*
     * @brief Omniverse Log callback.
     */
-    static void 
+    static void
     logCallback(const char* threadName,
                 const char* component,
                 OmniClientLogLevel level, const char* message);
-
-    /*
-    * @brief Shut down Omniverse connection.
-    */
-    static void 
-    shutdownOmniverse();
 
     /*
     * @brief Check if the URL exists.
@@ -266,17 +275,16 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    void
+    static void
     getTransformComponents(UsdGeomXformable& usdXForm,
                            Vector3& position,
                            Vector3& rotation,
                            Vector3& scale);
-  private:
-    /*************************************************************************/
-    /**
-    * Members.
+
+    /*
+    * @brief Check if Omniverse is initialized.
     */
-    /*************************************************************************/
+    static bool m_isStartUp;
 
     /*
     * @brief Omniverse logging is noisy, only enable it if verbose mode (-v).
@@ -284,9 +292,21 @@ namespace gaEngineSDK {
     static bool m_omniverseLoggingEnabled;
 
     /*
-    * @brief Check if Omniverse is initialized.
+    * @brief .
     */
-    static bool m_isStartUp;
+    static bool m_isLiveSync;
+
+    /*
+    * @brief .
+    */
+    static String m_currentURL;
+
+  private:
+    /*************************************************************************/
+    /**
+    * Members.
+    */
+    /*************************************************************************/
 
     /*
     * @brief Making the logging reasonable.
@@ -303,16 +323,4 @@ namespace gaEngineSDK {
     */
     static SdfPath m_rootPrimPath;
   };
-
-  /***************************************************************************/
-  /**
-  * Export.
-  */
-  /***************************************************************************/
-
-  extern "C" GA_OMNICONNECT_EXPORT BaseOmniConnect *
-  createOmniConnect() {
-    OmniConnect* pOmniverse = new OmniConnect();
-    return pOmniverse;
-  }
 }

@@ -814,7 +814,8 @@ namespace gaEngineSDK {
     myStaticMesh->m_pModel = myModel;
 
     //Creating actor
-    m_pLightActor.reset(new Actor("LightActor"));
+    m_pLightActor = make_shared<Actor>();
+    m_pLightActor->init("LightActor");
     m_pLightActor->setIsSelected(true);
     m_pLightActor->setComponent(lightCompo);
     m_pLightActor->setComponent(myStaticMesh);

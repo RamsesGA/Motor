@@ -4,7 +4,10 @@
 #include "gaSceneNode.h"
 
 namespace gaEngineSDK {
-  Actor::Actor(String actorName) {
+  void 
+  Actor::init(String actorName) {
+    m_isSelected = false;
+
     m_actorName = actorName;
 
     SPtr<Transform> newTransform = make_shared<Transform>();
@@ -12,7 +15,7 @@ namespace gaEngineSDK {
     setComponent(newTransform);
   }
 
-  void 
+  void
   Actor::removeComponent() {}
 
   void 
@@ -64,7 +67,8 @@ namespace gaEngineSDK {
   void
   Actor::setComponent(WeakSPtr<Component> compoInfo) {
     SPtr<Component> comp(compoInfo.lock());
-    comp->m_pMyActor.reset(this);
+   
+    comp->m_pMyActor = weak_from_this();
 
     m_vComponents.push_back(comp);
   }

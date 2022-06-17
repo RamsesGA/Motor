@@ -48,6 +48,9 @@ namespace gaEngineSDK {
     void
     render();
 
+    void
+    clearSceneNodes();
+
     /*************************************************************************/
     /**
     * Sets.
@@ -81,7 +84,7 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    SPtr<Actor>
+    SPtr<Actor>&
     getActorNode();
 
     /*
@@ -93,7 +96,7 @@ namespace gaEngineSDK {
     /*
     * @brief .
     */
-    Vector<SPtr<SceneNode>>
+    Vector<SPtr<SceneNode>>&
     getChildNodes();
 
     /*

@@ -1,13 +1,8 @@
 #pragma once
 
 #include <gaModule.h>
-#include <gaSceneGraph.h>
 
 #include "gaPrerequisitesCore.h"
-
-namespace gaEngineSDK {
-  class Actor;
-}
 
 namespace gaEngineSDK {
   class GA_CORE_EXPORT BaseOmniConnect : public Module<BaseOmniConnect>
@@ -21,6 +16,7 @@ namespace gaEngineSDK {
 
     BaseOmniConnect() = default;
 
+    virtual
     ~BaseOmniConnect() = default;
 
     /*
@@ -37,73 +33,69 @@ namespace gaEngineSDK {
     */
     /*************************************************************************/
 
-    /*
-    * @brief Startup Omniverse.
-    */
     virtual bool
-    startOmniverse() { return false; };
+    startOmni() { return false; };
 
-    /*
-    * @brief Create a scene with format ".usd".
-    */
+    virtual void
+    shutdownOmni() {};
+
+    virtual void
+    connectedUsername(const String& stageUrl) {
+      GA_UNREFERENCED_PARAMETER(stageUrl);
+    };
+
     virtual String
-    createOmniverseScene(const String& destinationPath, const String& stageName) { 
+    createOmniScene(const String& folderPath, const String& stageName) {
+      GA_UNREFERENCED_PARAMETER(folderPath);
+      GA_UNREFERENCED_PARAMETER(stageName);
       return String();
     };
 
-    /*
-    * @brief Create GeoMesh (Omniverse) with one local model.
-    */
-    virtual void
-    createGeoMeshWithModel(WeakSPtr<Actor> model) {};
-
-    /*
-    * @brief Open the file USD.
-    */
     virtual bool
-    loadUSDFiles(const String& rute) { return false; };
+    openUSD(const String& folderPath, const String& stageName) {
+      GA_UNREFERENCED_PARAMETER(folderPath);
+      GA_UNREFERENCED_PARAMETER(stageName);
+      return false;
+    };
 
-    /*
-    * @brief .
-    */
     virtual bool
-    openNewUSDFile(const String& rute) { return false; };
+    loadUSD() {
+      return false; 
+    };
 
     /*
-    * @brief Print the current user online.
+    * @brief SG = SceneGraph.
     */
     virtual void
-    printConnectedUsername(const String& stageUrl) {};
+    saveSGToUSD() {};
 
-    /*
-    * @brief .
-    */
     virtual void
-    saveSceneGraphToUSD() {};
+    updateGaToOmni() {};
 
-    /*
-    * @brief Save my scene to USD file.
-    */
     virtual void
-    saveObjectToUSD(WeakSPtr<SceneNode> child, String& name, String& parent) {};
+    updateOmniToGa() {};
 
-    /*
-    * @brief Update for Omniverse.
-    */
-    virtual void
-    updateGaToOmniverse() {};
+    virtual bool
+    getIsStartUp() { return false; };
 
-    /*
-    * @brief Update for Omniverse.
-    */
-    virtual void
-    updateOmniverseToGa() {};
+    virtual bool
+    getOmniverseLogging() { return false; };
 
-    /*
-    * @brief Update for Omniverse.
-    */
+    virtual bool
+    getIsLiveSync() { return false; };
+
+    virtual String
+    getCurrentURL() { return String(); };
+
     virtual void
-    updateObjects(WeakSPtr<SceneNode> myNode) {};
+    setIsLiveSync(bool& isLive) {
+      GA_UNREFERENCED_PARAMETER(isLive);
+    };
+
+    virtual void
+    setOmniverseLog(bool& omniverseLog) {
+      GA_UNREFERENCED_PARAMETER(omniverseLog);
+    };
   };
 
   /***************************************************************************/

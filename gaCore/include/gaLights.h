@@ -16,12 +16,15 @@ namespace gaEngineSDK {
 
   class GA_CORE_EXPORT Lights : public Component
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
     */
     /*************************************************************************/
+
+    Lights() = default;
+
     Lights(Vector3 position, Vector3 lookAt);
 
     ~Lights() = default;

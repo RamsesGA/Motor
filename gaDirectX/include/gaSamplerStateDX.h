@@ -6,7 +6,7 @@
 namespace gaEngineSDK {
   class SamplerStateDX final : public SamplerState
   {
-   public:
+  public:
     /*************************************************************************/
     /**
     * Constructor and destructor.
@@ -14,9 +14,11 @@ namespace gaEngineSDK {
     /*************************************************************************/
     SamplerStateDX() = default;
 
-    ~SamplerStateDX() { SAFE_RELEASE(m_pSamplerState); };
+    ~SamplerStateDX() { 
+      SAFE_RELEASE(m_pSamplerState); 
+    };
 
-   protected:
+  protected:
     /*************************************************************************/
     /**
     * Members.

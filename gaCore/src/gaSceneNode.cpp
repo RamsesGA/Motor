@@ -20,6 +20,15 @@ namespace gaEngineSDK {
 
   SPtr<SceneNode>
   SceneNode::createNewActorNode(WeakSPtr<Actor> actor, WeakSPtr<SceneNode> parent) {
+    //SPtr<SceneNode> newNode;
+    //SPtr<SceneNode> localParent(this);
+    //
+    //newNode.reset(new SceneNode(actor, localParent));
+    //
+    //m_pChildNodes.push_back(newNode);
+    //
+    //return newNode;
+
     SPtr<SceneNode> newNode;
     newNode.reset(new SceneNode(actor, parent));
 
@@ -54,6 +63,16 @@ namespace gaEngineSDK {
     }
   }
 
+  void 
+  SceneNode::clearSceneNodes() {
+    uint32 sizeChilds = m_pChildNodes.size();
+    for (uint32 i = 0; i < sizeChilds; ++i) {
+      m_pChildNodes[i]->clearSceneNodes();
+
+      m_pChildNodes[i].reset();
+    }
+  }
+
   /***************************************************************************/
   /**
   * Sets.
@@ -81,7 +100,7 @@ namespace gaEngineSDK {
   */
   /***************************************************************************/
 
-  SPtr<Actor>
+  SPtr<Actor>&
   SceneNode::getActorNode() {
     return m_pActor;
   }
@@ -91,7 +110,7 @@ namespace gaEngineSDK {
     return m_pParentNode;
   }
 
-  Vector<SPtr<SceneNode>>
+  Vector<SPtr<SceneNode>>&
   SceneNode::getChildNodes() {
     return m_pChildNodes;
   }
